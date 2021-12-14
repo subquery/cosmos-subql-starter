@@ -1,0 +1,26 @@
+specVersion: "0.2.0"
+
+name: "Subql-Starter"
+version: "0.0.0"
+description: ""
+repository: "https://github.com/subquery/subql-starter"
+
+schema:
+  file: "./schema.graphql"
+
+network:
+  genesisHash: 'q4PIUU/W6KSxGM9wyowkSW+Ij8HuODDeM4USpA2ucWc='
+  endpoint: https://blockdaemon-terra-lcd.api.bdnodes.net:1317
+  chainId: columbus-5
+
+dataSources:
+  - kind: terra/Runtime
+    startBlock: 4724001
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleBlock
+          kind: terra/BlockHandler
+        - handler: handleEvent
+          kind: terra/EventHandler
+
