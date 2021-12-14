@@ -10,12 +10,12 @@ schema:
 
 network:
   genesisHash: 'q4PIUU/W6KSxGM9wyowkSW+Ij8HuODDeM4USpA2ucWc='
-  endpoint: https://blockdaemon-terra-lcd.api.bdnodes.net:1317
-  chainId: columbus-5
+  endpoint: https://bombay-lcd.terra.dev
+  chainId: bombay-12
 
 dataSources:
   - kind: terra/Runtime
-    startBlock: 4724001
+    startBlock: 6000000
     mapping:
       file: "./dist/index.js"
       handlers:
