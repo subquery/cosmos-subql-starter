@@ -1,9 +1,9 @@
 specVersion: "0.2.0"
 
-name: "Subql-Starter"
+name: "subqlstarter-terra"
 version: "0.0.0"
 description: ""
-repository: "https://github.com/subquery/subql-starter"
+repository: "https://github.com/developerinprogress/subqlstarter-terra"
 
 schema:
   file: "./schema.graphql"
@@ -23,4 +23,6 @@ dataSources:
           kind: terra/BlockHandler
         - handler: handleEvent
           kind: terra/EventHandler
+
+
 
