@@ -2,7 +2,7 @@
 
 This is a starter project for Indexing Terra using this[https://github.com/DeveloperInProgress/subql] terra subql/node module.
 
-#Setup
+# Setup
 
 1. clone this repository
 
