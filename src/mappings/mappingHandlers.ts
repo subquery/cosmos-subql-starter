@@ -8,11 +8,9 @@ export async function handleBlock(block: BlockInfo): Promise<void> {
 }
 
 export async function handleEvent(event: EventsByType, block: BlockInfo): Promise<void> {
-    if('transfer' in event){
-        const record = await StarterEntity.get(block.block.header.height);
-        record.sender = event['transfer']['sender'];
-        record.recipient = event['transfer']['recipient'];
-        record.amount = event['transfer']['amount'];
-        await record.save();
-    }
+    const record = await StarterEntity.get(block.block.header.height);
+    record.sender = event['transfer']['sender'];
+    record.recipient = event['transfer']['recipient'];
+    record.amount = event['transfer']['amount'];
+    await record.save();
 }
