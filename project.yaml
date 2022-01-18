@@ -10,7 +10,7 @@ schema:
 
 network:
   genesisHash: 'q4PIUU/W6KSxGM9wyowkSW+Ij8HuODDeM4USpA2ucWc='
-  endpoint: https://bombay-lcd.terra.dev
+  endpoint: https://bombay.stakesystems.io
   chainId: bombay-12
 
 dataSources:
@@ -23,6 +23,5 @@ dataSources:
           kind: terra/BlockHandler
         - handler: handleEvent
           kind: terra/EventHandler
-
-
-
+          filter:
+            type: transfer
