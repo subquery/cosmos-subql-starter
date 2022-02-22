@@ -1,6 +1,6 @@
 import {StarterEntity} from "../types";
 import { hashToHex } from '@terra-money/terra.js/dist/util';
-import { TerraEvent, TerraBlock } from '@subql/types';
+import { TerraEvent, TerraBlock } from '@subql/types-terra';
 
 export async function handleBlock(block: TerraBlock): Promise<void> {
     let record = new StarterEntity(block.block.block.header.height);

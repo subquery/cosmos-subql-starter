@@ -262,9 +262,9 @@
   "resolved" "https://registry.npmjs.org/@protobufjs/utf8/-/utf8-1.1.0.tgz"
   "version" "1.1.0"
 
-"@subql/types@file:../subql/packages/types":
-  "resolved" "file:../subql/packages/types"
-  "version" "0.11.0"
+"@subql/types-terra@file:../subql-terra/packages/types-terra":
+  "resolved" "file:../subql-terra/packages/types-terra"
+  "version" "0.0.1"
 
 "@terra-money/terra.js@^3.0.1":
   "integrity" "sha512-PEYaPs0p521njZyD6a7aH6KrXRKdj4+j7kboM4qGc8FS/lKPFQUgacsVSlbAK0sYX/tOhINvN7eudwRBwuJVhw=="
