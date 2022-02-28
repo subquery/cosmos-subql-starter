@@ -19,8 +19,8 @@
   "author": "Naveen Veluswamy",
   "license": "MIT",
   "devDependencies": {
+    "@subql/cli": "^0.21.1-0",
     "@subql/types-terra": "latest",
-    "@subql/cli": "latest",
     "@terra-money/terra.js": "^3.0.1",
     "typescript": "^4.1.3"
   },
