@@ -12,7 +12,7 @@ export async function handleTransferEvent(event: TerraEvent): Promise<void> {
   const starterTransfer = await StarterTransfer.get(
     event.block.block.header.height
   );
-  logger.info(JSON.stringify(event.event.transfer));
+  // logger.info(JSON.stringify(event.event.transfer));
   const {
     event: {
       transfer: { sender, recipient, amount },
