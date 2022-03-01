@@ -1,17 +1,26 @@
-import {StarterEntity} from "../types";
-import { hashToHex } from '@terra-money/terra.js/dist/util';
-import { TerraEvent, TerraBlock } from '@subql/types-terra';
+import { StarterBlock, StarterTransfer } from "../types";
+import { hashToHex } from "@terra-money/terra.js/dist/util";
+import { TerraEvent, TerraBlock } from "@subql/types-terra";
 
 export async function handleBlock(block: TerraBlock): Promise<void> {
-    let record = new StarterEntity(block.block.block.header.height);
-    record.hash = hashToHex(block.block.block_id.hash);
-    await record.save();
+  const starterBlock = new StarterBlock(hashToHex(block.block.block_id.hash));
+  starterBlock.height = block.block.block.header.height;
+  await starterBlock.save();
 }
 
-export async function handleEvent(event: TerraEvent): Promise<void> {
-    const record = await StarterEntity.get(event.block.block.header.height);
-    record.sender = event.event['transfer']['sender'];
-    record.recipient = event.event['transfer']['recipient'];
-    record.amount = event.event['transfer']['amount'];
-    await record.save();
+export async function handleTransferEvent(event: TerraEvent): Promise<void> {
+  const starterTransfer = await StarterTransfer.get(
+    event.block.block.header.height
+  );
+  logger.info(JSON.stringify(event.event.transfer));
+  const {
+    event: {
+      transfer: { sender, recipient, amount },
+    },
+  } = event;
+  starterTransfer.blockId = hashToHex(event.block.block_id.hash);
+  starterTransfer.sender = sender[0];
+  starterTransfer.recipient = recipient[0];
+  starterTransfer.amount = amount[0];
+  await starterTransfer.save();
 }

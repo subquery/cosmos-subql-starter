@@ -1,13 +1,14 @@
-type StarterEntity @entity {
+type StarterBlock @entity {
+  id: ID! #id is a required unique field
+  height: String!
+  transfers: [StarterTransfer]
+}
 
-  id: ID! #id is a required field
-
-  hash: String!
-
-  sender: [String]
-
-  recipient: [String]
-
-  amount: [String]
-
+type StarterTransfer @entity {
+  id: ID! #id is a required unique field
+  height: String!
+  block: StarterBlock
+  sender: String!
+  recipient: String!
+  amount: String!
 }
