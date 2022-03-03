@@ -10,12 +10,12 @@ schema:
 
 network:
   genesisHash: 'q4PIUU/W6KSxGM9wyowkSW+Ij8HuODDeM4USpA2ucWc='
-  endpoint: https://bombay.stakesystems.io
-  chainId: bombay-12
+  endpoint: 'https://terra.stakesystems.io'
+  chainId: 'columbus-5'
 
 dataSources:
   - kind: terra/Runtime
-    startBlock: 6000000
+    startBlock: 6694554
     mapping:
       file: "./dist/index.js"
       handlers:
