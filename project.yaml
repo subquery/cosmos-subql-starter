@@ -3,25 +3,26 @@ specVersion: "0.3.0"
 name: "subqlstarter-terra"
 version: "0.0.0"
 description: ""
-repository: "https://github.com/developerinprogress/subqlstarter-terra"
+repository: "https://github.com/stwiname/subqlstarter-terra"
 
 schema:
   file: "./schema.graphql"
 
 network:
   genesisHash: 'q4PIUU/W6KSxGM9wyowkSW+Ij8HuODDeM4USpA2ucWc='
-  endpoint: https://bombay.stakesystems.io
-  chainId: bombay-12
+  endpoint: 'https://terra.stakesystems.io'
+  chainId: 'columbus-5'
+  dictionary: 'https://api.subquery.network/sq/subquery/terra-dictionary'
 
 dataSources:
   - kind: terra/Runtime
-    startBlock: 6000000
+    startBlock: 6694554
     mapping:
       file: "./dist/index.js"
       handlers:
         - handler: handleBlock
           kind: terra/BlockHandler
-        - handler: handleEvent
+        - handler: handleTransferEvent
           kind: terra/EventHandler
           filter:
             type: transfer

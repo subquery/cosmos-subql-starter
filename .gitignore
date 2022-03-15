@@ -53,3 +53,6 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+
+.data
+dist

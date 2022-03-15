@@ -4,7 +4,7 @@
   "description": "This project can be use as a starting point for developing your SubQuery project",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc -b",
+    "build": "./node_modules/.bin/subql build",
     "prepack": "rm -rf dist && npm build",
     "test": "jest",
     "codegen": "./node_modules/.bin/subql codegen"
@@ -19,7 +19,7 @@
   "author": "Naveen Veluswamy",
   "license": "MIT",
   "devDependencies": {
-    "@subql/cli": "^0.21.1-0",
+    "@subql/cli": "latest",
     "@subql/types-terra": "latest",
     "@terra-money/terra.js": "^3.0.1",
     "typescript": "^4.1.3"
