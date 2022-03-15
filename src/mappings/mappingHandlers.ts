@@ -9,10 +9,11 @@ export async function handleBlock(block: TerraBlock): Promise<void> {
 }
 
 export async function handleTransferEvent(event: TerraEvent): Promise<void> {
+  logger.info(JSON.stringify(event.event));
   const starterTransfer = await StarterTransfer.get(
     event.block.block.header.height
   );
-  // logger.info(JSON.stringify(event.event.transfer));
+  logger.info(JSON.stringify(event.event.transfer));
   const {
     event: {
       transfer: { sender, recipient, amount },

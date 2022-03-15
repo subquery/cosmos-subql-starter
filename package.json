@@ -1,5 +1,5 @@
 {
-  "name": "subquerystarter-terra",
+  "name": "subquery-starter-terra",
   "version": "0.0.1",
   "description": "This project can be use as a starting point for developing your SubQuery project",
   "main": "dist/index.js",
@@ -7,7 +7,8 @@
     "build": "./node_modules/.bin/subql build",
     "prepack": "rm -rf dist && npm build",
     "test": "jest",
-    "codegen": "./node_modules/.bin/subql codegen"
+    "codegen": "./node_modules/.bin/subql codegen",
+    "start:docker": "docker-compose pull && docker-compose up --remove-orphans"
   },
   "homepage": "https://github.com/subquery/subql-starter",
   "repository": "github:subquery/subql-starter",
