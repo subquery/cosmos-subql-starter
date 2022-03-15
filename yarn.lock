@@ -23,7 +23,7 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@babel/runtime@^7.16.3":
+"@babel/runtime@^7.16.3", "@babel/runtime@^7.17.2":
   version "7.17.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.17.2.tgz#66f68591605e59da47523c631416b18508779941"
   integrity sha512-hzeyJyMA1YGdJTuWU0e/j4wKXrU4OMFvY2MSlaI9B7VQb0r5cxTE3EAIS2Q7Tn2RIcDkRvTA/v2JsAEhxe99uw==
@@ -512,12 +512,41 @@
     camelcase "^6.2.1"
     ip-regex "^4.3.0"
 
+"@polkadot/util@^8":
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-8.4.1.tgz#b84835c55585c8b5fc5608a99aa62ac815292ae7"
+  integrity sha512-8+wqHgFbFWI5TfrvtcL888w0nWvFpbTTYIcbpEw+zYGp3n1YZTAMMP26bXWAaQX5AttxynJRij7JP3ySxYY1fg==
+  dependencies:
+    "@babel/runtime" "^7.17.2"
+    "@polkadot/x-bigint" "8.4.1"
+    "@polkadot/x-global" "8.4.1"
+    "@polkadot/x-textdecoder" "8.4.1"
+    "@polkadot/x-textencoder" "8.4.1"
+    "@types/bn.js" "^5.1.0"
+    bn.js "^5.2.0"
+    ip-regex "^4.3.0"
+
+"@polkadot/x-bigint@8.4.1":
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/x-bigint/-/x-bigint-8.4.1.tgz#d3ccddd26cdc5413f5c722d8c53ec523299e3ff1"
+  integrity sha512-QVP0UMoM0nBD998s3ESeaoSiVMEnHK3x0CCqocKO4l7ADNw8lfWdDG7Bb0+ymNaFYGz2KgEWxkN0VhNEnXzo0w==
+  dependencies:
+    "@babel/runtime" "^7.17.2"
+    "@polkadot/x-global" "8.4.1"
+
 "@polkadot/x-global@7.9.2":
   version "7.9.2"
   resolved "https://registry.yarnpkg.com/@polkadot/x-global/-/x-global-7.9.2.tgz#b272b0a3bedaad3bcbf075ec4682abe68cf2a850"
   integrity sha512-JX5CrGWckHf1P9xKXq4vQCAuMUbL81l2hOWX7xeP8nv4caHEpmf5T1wD1iMdQBL5PFifo6Pg0V6/oZBB+bts7A==
   dependencies:
     "@babel/runtime" "^7.16.3"
+
+"@polkadot/x-global@8.4.1":
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/x-global/-/x-global-8.4.1.tgz#61def1f5962001200c17b9fde92f6837736b3c55"
+  integrity sha512-MQs89LKQrJwiXjV7dY2kDOPNaiWrwaQ/Fzg93ycB2xMCclRV1jRFRhnhTPJ8Ao79lhCCoazd7pXIyFgfifxdqg==
+  dependencies:
+    "@babel/runtime" "^7.17.2"
 
 "@polkadot/x-textdecoder@7.9.2":
   version "7.9.2"
@@ -527,6 +556,14 @@
     "@babel/runtime" "^7.16.3"
     "@polkadot/x-global" "7.9.2"
 
+"@polkadot/x-textdecoder@8.4.1":
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/x-textdecoder/-/x-textdecoder-8.4.1.tgz#5a227006d183f5ec3a8a331ca38e4969d24c4a97"
+  integrity sha512-qbSXyR2KvE1bO6QGsxWU3Yrx5e70rX2lwv0MHG++MyyNaDoBM3hjx14lF911bYRWXR6MW4eZ+0Nakn0oM5uSKw==
+  dependencies:
+    "@babel/runtime" "^7.17.2"
+    "@polkadot/x-global" "8.4.1"
+
 "@polkadot/x-textencoder@7.9.2":
   version "7.9.2"
   resolved "https://registry.yarnpkg.com/@polkadot/x-textencoder/-/x-textencoder-7.9.2.tgz#b32bfd6fbff8587c56452f58252a52d62bbcd5b9"
@@ -534,6 +571,14 @@
   dependencies:
     "@babel/runtime" "^7.16.3"
     "@polkadot/x-global" "7.9.2"
+
+"@polkadot/x-textencoder@8.4.1":
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/x-textencoder/-/x-textencoder-8.4.1.tgz#ea01733ce6b80821bf8af943a1d98878a9150af5"
+  integrity sha512-1UYuckNOk6NUk70Y/SGbK8oyGbqPlrny1x2OWoK/BT3/tyL2xKVV5TlXDOiFrX1PChbskXye5M8blCTYikFiJg==
+  dependencies:
+    "@babel/runtime" "^7.17.2"
+    "@polkadot/x-global" "8.4.1"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -588,18 +633,18 @@
   resolved "https://registry.npmjs.org/@protobufjs/utf8/-/utf8-1.1.0.tgz"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@subql/cli@^0.21.1-0":
-  version "0.21.1-0"
-  resolved "https://registry.yarnpkg.com/@subql/cli/-/cli-0.21.1-0.tgz#c5a218c3546caa2433214040d383e8c1d6cb0085"
-  integrity sha512-HmILwFrJAOmR6qUm9hryI0XppsCcDEect/Ny/eks2Xt/8eIJ3gl0TeCD8iIpOCgtwsmzs2t8KcS0BfJjM3ay+Q==
+"@subql/cli@latest":
+  version "0.22.0"
+  resolved "https://registry.yarnpkg.com/@subql/cli/-/cli-0.22.0.tgz#a4eb10e739e9508d0caf659252310fc7d63bbc1e"
+  integrity sha512-VULTgbKACOBiezZmtX6A4oSisRAuUpJ6kMJa/QcNVEdLQGTyEycsYiAJvOrxdHLTwSEGc/jJw9XIVCcYQ7698Q==
   dependencies:
     "@oclif/command" "^1.8.16"
     "@oclif/config" "^1.18.3"
     "@oclif/core" "^1.3.3"
     "@oclif/plugin-help" "^3.2.3"
-    "@subql/common" "0.18.1-0"
-    "@subql/common-substrate" "0.0.2-0"
-    "@subql/common-terra" "0.0.2-0"
+    "@subql/common" "0.19.0"
+    "@subql/common-substrate" "0.1.0"
+    "@subql/common-terra" "0.1.0"
     "@subql/validator" "0.4.6-0"
     "@types/ejs" "^3.1.0"
     "@types/inquirer" "^8.2.0"
@@ -638,12 +683,31 @@
     reflect-metadata "^0.1.13"
     sequelize "^6.6.2"
 
-"@subql/common-terra@0.0.2-0":
-  version "0.0.2-0"
-  resolved "https://registry.yarnpkg.com/@subql/common-terra/-/common-terra-0.0.2-0.tgz#ec0a3d8443047c965ca43eedf1bdb8d872d4f7af"
-  integrity sha512-d0gSmzSwC8bXCU9kQ6KxT04H3FEeDPecyQkfx4tpL8MdZDslH3HnmWXzeqmaCVFVghjsIIBabkTaOlrS1Qogmw==
+"@subql/common-substrate@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@subql/common-substrate/-/common-substrate-0.1.0.tgz#63a8e36d9ac0943060611eb0e2b0a0fa47f77292"
+  integrity sha512-hpSxWXBzf2SpYz3ABzMq4J3qAqYoMe4w4nfxV4NAyi2tq/6bftzos1/LZepUsGGWpFAJIyafgqORliAwx8o2iw==
   dependencies:
-    "@subql/types-terra" "0.0.2-0"
+    "@polkadot/util" "^8"
+    "@subql/common" "0.19.0"
+    "@subql/types" "0.14.0"
+    bn.js "4.11.6"
+    class-transformer "0.4.0"
+    class-validator "^0.13.1"
+    flatted "^3.2.2"
+    graphql "^15.7.2"
+    graphql-tag "^2.12.5"
+    js-yaml "^4.1.0"
+    pino "^6.13.3"
+    reflect-metadata "^0.1.13"
+    sequelize "^6.6.2"
+
+"@subql/common-terra@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@subql/common-terra/-/common-terra-0.1.0.tgz#901ae519cc27ede87e0d6fa6c078a8f2be5e4601"
+  integrity sha512-jstTmrx39xOOQ4TLAjO+5FvwipyTL346KdCS/qXWs1pDdcesfBN3SE2BgdQevQV1h3/uV6ZA4xOCQ9yUAVQj1Q==
+  dependencies:
+    "@subql/types-terra" "0.1.0"
     bn.js "4.11.6"
     class-transformer "0.4.0"
     class-validator "^0.13.1"
@@ -678,7 +742,36 @@
     sequelize "^6.15.0"
     tar "^6.1.11"
 
-"@subql/types-terra@0.0.2-0", "@subql/types-terra@latest":
+"@subql/common@0.19.0":
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/@subql/common/-/common-0.19.0.tgz#56a04332cb4c7124b8bb562cd8be7992ab57a28a"
+  integrity sha512-vfy1rEqBD9SZ/Fy3qrUEOAWk2ml1I3wGjSRlZKfKVAQy965F8ZXAQyYTBUssgyuX4x1Ryk14+ocK60kBfkDcYQ==
+  dependencies:
+    "@polkadot/util" "^8"
+    "@subql/x-vm2" "^3.9.3-0.1.0"
+    ansi-styles "^6.1.0"
+    bn.js "5.2.0"
+    chalk "^4.1.2"
+    class-transformer "0.5.1"
+    class-validator "^0.13.2"
+    detect-port "^1.3.0"
+    flatted "^3.2.5"
+    graphql "^15.8.0"
+    graphql-tag "^2.12.6"
+    ipfs-http-client "^52.0.3"
+    js-yaml "^4.1.0"
+    pino "^6.13.3"
+    reflect-metadata "^0.1.13"
+    rotating-file-stream "^3.0.2"
+    sequelize "^6.15.0"
+    tar "^6.1.11"
+
+"@subql/types-terra@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@subql/types-terra/-/types-terra-0.1.0.tgz#dadf058c37afe4c0c7b2e4a26ad9edcbdac6e845"
+  integrity sha512-MUiGhmYTm8qTm9z+HUw42Cdz5GTUPA5dESR0+8Xhbm/AZgDD6bbXD2hGBu1WnAd3Lf6jy9uv1tErL28h5pC88Q==
+
+"@subql/types-terra@latest":
   version "0.0.2-0"
   resolved "https://registry.yarnpkg.com/@subql/types-terra/-/types-terra-0.0.2-0.tgz#bfa3b351d9897bc02c5b1fab71c82d7956fa7e5b"
   integrity sha512-ucR9EXU6H+ixDFtzjAOVgmYZ+fuhLw9fEvTXeGz/09n1oxnC2QYWRAkzgWgbKyinkBv1d1gbNgnQgMs2nuIsvw==
@@ -747,6 +840,13 @@
   version "4.11.6"
   resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-4.11.6.tgz#c306c70d9358aaea33cd4eda092a742b9505967c"
   integrity sha512-pqr857jrp2kPuO9uRjZ3PwnJTjoQy+fcdxvBTvHm6dkmEL9q+hDD/2j/0ELOBPtPnS8LjCX0gI9nbl8lVkadpg==
+  dependencies:
+    "@types/node" "*"
+
+"@types/bn.js@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-5.1.0.tgz#32c5d271503a12653c62cf4d2b45e6eab8cebc68"
+  integrity sha512-QSSVYj7pYFN49kW77o2s9xTCwZ8F2xLbjLLSEVh8D2F4JUhZtPAGOFLTD+ffqksBx/u4cE/KImFjyhqCjn/LIA==
   dependencies:
     "@types/node" "*"
 
@@ -1335,7 +1435,7 @@ bn.js@4.11.6:
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-4.11.6.tgz#53344adb14617a13f6e8dd2ce28905d1c0ba3215"
   integrity sha1-UzRK2xRhehP26N0s4okF0cC6MhU=
 
-bn.js@5.2.0:
+bn.js@5.2.0, bn.js@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-5.2.0.tgz#358860674396c6997771a9d051fcc1b57d4ae002"
   integrity sha512-D7iWRBvnZE8ecXiLj/9wbxH7Tk79fAh8IHaTNq1RWRixsS02W+5qS+iE9yq6RYl0asXx5tw0bLhmT5pIfbSquw==
