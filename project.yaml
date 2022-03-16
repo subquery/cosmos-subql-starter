@@ -9,7 +9,7 @@ schema:
   file: "./schema.graphql"
 
 network:
-  endpoint: "http://terra.dc.thechainhub.com/"
+  endpoint: "http://terra.dc.thechainhub.com:1317"
   chainId: "columbus-5"
   dictionary: "https://api.subquery.network/sq/subquery/terra-dictionary"
 

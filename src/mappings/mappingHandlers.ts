@@ -9,19 +9,24 @@ export async function handleBlock(block: TerraBlock): Promise<void> {
 }
 
 export async function handleTransferEvent(event: TerraEvent): Promise<void> {
-  logger.info(JSON.stringify(event.event));
-  const starterTransfer = await StarterTransfer.get(
-    event.block.block.header.height
-  );
-  logger.info(JSON.stringify(event.event.transfer));
   const {
     event: {
       transfer: { sender, recipient, amount },
     },
   } = event;
-  starterTransfer.blockId = hashToHex(event.block.block_id.hash);
-  starterTransfer.sender = sender[0];
-  starterTransfer.recipient = recipient[0];
-  starterTransfer.amount = amount[0];
-  await starterTransfer.save();
+
+  //logger.info(JSON.stringify(event.eventransfer));
+
+  if (sender && recipient && amount) {
+    for (let i = 0; i < sender.length; i++) {
+      const starterTransfer = new StarterTransfer(
+        hashToHex(event.block.block_id.hash) + "-" + i
+      );
+      starterTransfer.blockId = hashToHex(event.block.block_id.hash);
+      starterTransfer.sender = sender[0];
+      starterTransfer.recipient = recipient[0];
+      starterTransfer.amount = amount[0];
+      await starterTransfer.save();
+    }
+  }
 }

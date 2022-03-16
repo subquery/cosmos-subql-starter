@@ -6,7 +6,6 @@ type StarterBlock @entity {
 
 type StarterTransfer @entity {
   id: ID! #id is a required unique field
-  height: String!
   block: StarterBlock
   sender: String!
   recipient: String!
