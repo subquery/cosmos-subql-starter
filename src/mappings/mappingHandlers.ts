@@ -23,9 +23,9 @@ export async function handleTransferEvent(event: TerraEvent): Promise<void> {
         hashToHex(event.block.block_id.hash) + "-" + i
       );
       starterTransfer.blockId = hashToHex(event.block.block_id.hash);
-      starterTransfer.sender = sender[0];
-      starterTransfer.recipient = recipient[0];
-      starterTransfer.amount = amount[0];
+      starterTransfer.sender = sender[i];
+      starterTransfer.recipient = recipient[i];
+      starterTransfer.amount = amount[i];
       await starterTransfer.save();
     }
   }
