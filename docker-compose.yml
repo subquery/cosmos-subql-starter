@@ -32,7 +32,6 @@ services:
     command:
       - -f=/app
       - --db-schema=app
-      - --batch-size=5
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://subquery-node:3000/ready']
       interval: 3s
@@ -46,8 +45,8 @@ services:
     depends_on:
       'postgres':
         condition: service_healthy
-      # 'subquery-node':
-      #   condition: service_healthy
+      'subquery-node-terra':
+        condition: service_healthy
     restart: always
     environment:
       DB_USER: postgres

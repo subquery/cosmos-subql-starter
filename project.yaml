@@ -1,27 +1,40 @@
 specVersion: "0.3.0"
 
-name: "subqlstarter-terra"
-version: "0.0.0"
-description: ""
-repository: "https://github.com/subquery/subqlstarter-terra"
+name: "terra-subql-starter"
+version: "0.0.1"
+description: "This project can be use as a starting point for developing your Terra based SubQuery project"
+repository: "https://github.com/subquery/terra-subql-starter"
 
 schema:
   file: "./schema.graphql"
 
 network:
-  endpoint: "http://terra.dc.thechainhub.com:1317"
-  chainId: "columbus-5"
-  dictionary: "https://api.subquery.network/sq/subquery/terra-dictionary"
+  chainId: "columbus-5" # Terra network code
+  endpoint: "wss://terra-columbus-5.api.onfinality.io/public-ws"
+  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+  dictionary: "https://api.subquery.network/sq/subquery/dictionary-terra-columbus-5"
 
 dataSources:
   - kind: terra/Runtime
-    startBlock: 6694554
+    startBlock: 6747920
     mapping:
       file: "./dist/index.js"
       handlers:
         - handler: handleBlock
           kind: terra/BlockHandler
-        - handler: handleTransferEvent
+        - handler: handleTransaction
+          kind: terra/TransactionHandler
+        - handler: handleEvent
           kind: terra/EventHandler
           filter:
             type: transfer
+            messageFilter:
+              type: "/terra.wasm.v1beta1.MsgExecuteContract"
+              values:
+                contract: "terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w"
+        - handler: handleMessage
+          kind: terra/MessageHandler
+          filter:
+            type: "/terra.wasm.v1beta1.MsgExecuteContract"
+            values:
+              contract: "terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w"
