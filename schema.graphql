@@ -7,7 +7,7 @@ type TransferEvent @entity {
   id: ID!
   blockHeight: BigInt!
   txHash: String!
-  sender: String!
+  sender: String
   recipient: String!
   amount: String!
 }
