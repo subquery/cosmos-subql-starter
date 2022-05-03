@@ -22,7 +22,7 @@ type Message @entity {
   id: ID!
   blockHeight: BigInt!
   txHash: String!
-  contract: String!
-  sender: String!
-  executeMsg: String!
+  fromAddress: String!
+  toAddress: String!
+  amount: String!
 }

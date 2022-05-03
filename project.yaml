@@ -1,40 +1,41 @@
-specVersion: "0.3.0"
 
-name: "terra-subql-starter"
-version: "0.0.1"
-description: "This project can be use as a starting point for developing your Terra based SubQuery project"
-repository: "https://github.com/subquery/terra-subql-starter"
-
+specVersion: 1.0.0
+name: terra-subql-starter
+version: 0.0.1
+runner:
+  node:
+    name: '@subql/node-cosmos'
+    version: '*'
+  query:
+    name: '@subql/query'
+    version: '*'
+description: >-
+  This project can be use as a starting point for developing your Cosmos based
+  SubQuery project
+repository: https://github.com/subquery/terra-subql-starter
 schema:
-  file: "./schema.graphql"
-
+  file: ./schema.graphql
 network:
-  chainId: "columbus-5" # Terra network code
-  endpoint: "wss://terra-columbus-5.api.onfinality.io/public-ws"
-  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-  dictionary: "https://api.subquery.network/sq/subquery/dictionary-terra-columbus-5"
+  chainId: cosmoshub-4
+  endpoint: https://rpc.cosmos.network:443
 
 dataSources:
-  - kind: terra/Runtime
-    startBlock: 6747920
+  - kind: cosmos/Runtime
+    startBlock: 10346000
     mapping:
       file: "./dist/index.js"
       handlers:
         - handler: handleBlock
-          kind: terra/BlockHandler
+          kind: cosmos/BlockHandler
         - handler: handleTransaction
-          kind: terra/TransactionHandler
+          kind: cosmos/TransactionHandler
         - handler: handleEvent
-          kind: terra/EventHandler
+          kind: cosmos/EventHandler
           filter:
             type: transfer
             messageFilter:
-              type: "/terra.wasm.v1beta1.MsgExecuteContract"
-              values:
-                contract: "terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w"
+              type: "/cosmos.bank.v1beta1.MsgSend"
         - handler: handleMessage
-          kind: terra/MessageHandler
+          kind: cosmos/MessageHandler
           filter:
-            type: "/terra.wasm.v1beta1.MsgExecuteContract"
-            values:
-              contract: "terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w"
+            type: "/cosmos.bank.v1beta1.MsgSend"

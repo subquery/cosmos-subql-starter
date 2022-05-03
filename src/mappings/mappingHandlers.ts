@@ -1,45 +1,42 @@
 import { Block, Message, Transaction, TransferEvent } from "../types";
 import {
-  TerraEvent,
-  TerraBlock,
-  TerraMessage,
-  TerraTransaction,
-} from "@subql/types-terra";
-import { MsgExecuteContract } from "@terra-money/terra.js";
+  CosmosEvent,
+  CosmosBlock,
+  CosmosMessage,
+  CosmosTransaction,
+} from "@subql/types-cosmos";
 
-export async function handleBlock(block: TerraBlock): Promise<void> {
-  const record = new Block(block.block.block_id.hash);
-  record.height = BigInt(block.block.block.header.height);
-  await record.save();
+export async function handleBlock(block: CosmosBlock): Promise<void> {
+
 }
 
-export async function handleTransaction(tx: TerraTransaction): Promise<void> {
-  const record = new Transaction(tx.tx.txhash);
-  record.blockHeight = BigInt(tx.block.block.block.header.height);
-  record.timestamp = tx.tx.timestamp;
+export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
+  const record = new Transaction(tx.tx.hash);
+  record.blockHeight = BigInt(tx.block.block.header.height);
+  record.timestamp = tx.block.block.header.time;
   await record.save();
 }
 
 export async function handleMessage(
-  msg: TerraMessage<MsgExecuteContract>
+  msg: CosmosMessage
 ): Promise<void> {
-  const record = new Message(`${msg.tx.tx.txhash}-${msg.idx}`);
-  record.blockHeight = BigInt(msg.block.block.block.header.height);
-  record.txHash = msg.tx.tx.txhash;
-  record.contract = msg.msg.toData().contract;
-  record.sender = msg.msg.toData().sender;
-  record.executeMsg = JSON.stringify(msg.msg.toData().execute_msg);
+  const record = new Message(`${msg.tx.tx.hash}-${msg.idx}`);
+  record.blockHeight = BigInt(msg.block.block.header.height);
+  record.txHash = msg.tx.tx.hash;
+  record.fromAddress = msg.msg.fromAddress;
+  record.toAddress = msg.msg.toAddress;
+  record.amount = JSON.stringify(msg.msg.amount);
   await record.save();
 }
 
 export async function handleEvent(
-  event: TerraEvent<MsgExecuteContract>
+  event: CosmosEvent
 ): Promise<void> {
   const record = new TransferEvent(
-    `${event.tx.tx.txhash}-${event.msg.idx}-${event.idx}`
+    `${event.tx.tx.hash}-${event.msg.idx}-${event.idx}`
   );
-  record.blockHeight = BigInt(event.block.block.block.header.height);
-  record.txHash = event.tx.tx.txhash;
+  record.blockHeight = BigInt(event.block.block.header.height);
+  record.txHash = event.tx.tx.hash;
   for (const attr of event.event.attributes) {
     switch (attr.key) {
       case "sender":

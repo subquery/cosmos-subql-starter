@@ -1,17 +1,17 @@
 {
-  "name": "terra-subquery-starter",
+  "name": "cosmos-subquery-starter",
   "version": "0.0.1",
   "description": "This project can be use as a starting point for developing your Terra based SubQuery project",
   "main": "dist/index.js",
   "scripts": {
-    "build": "./node_modules/.bin/subql build",
+    "build": "tsc -b",
     "prepack": "rm -rf dist && npm build",
     "test": "jest",
     "codegen": "./node_modules/.bin/subql codegen",
     "start:docker": "docker-compose pull && docker-compose up --remove-orphans"
   },
-  "homepage": "https://github.com/subquery/terra-subql-starter",
-  "repository": "github:subquery/terra-subql-starter",
+  "homepage": "https://github.com/subquery/cosmos-subql-starter",
+  "repository": "github:DeveloperInProgress/cosmos-subql-starter",
   "files": [
     "dist",
     "schema.graphql",
@@ -20,9 +20,7 @@
   "author": "SubQuery Team",
   "license": "MIT",
   "devDependencies": {
-    "@subql/cli": "latest",
-    "@subql/types-terra": "latest",
-    "@terra-money/terra.js": "^3.0.8",
+    "@cosmjs/stargate": "0.28.4",
     "typescript": "^4.4.4"
   },
   "dependencies": {
