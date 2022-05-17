@@ -204,6 +204,11 @@
   "resolved" "https://registry.npmjs.org/@types/node/-/node-17.0.23.tgz"
   "version" "17.0.23"
 
+"@types/object-hash@^1.3.0":
+  "integrity" "sha512-xFdpkAkikBgqBdG9vIlsqffDV8GpvnPEzs0IUtr1v3BEB97ijsFQ4RXVbUZwjFThhB4MDSTUfvmxUD5PGx0wXA=="
+  "resolved" "https://registry.npmjs.org/@types/object-hash/-/object-hash-1.3.4.tgz"
+  "version" "1.3.4"
+
 "atomic-sleep@^1.0.0":
   "integrity" "sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ=="
   "resolved" "https://registry.npmjs.org/atomic-sleep/-/atomic-sleep-1.0.0.tgz"
@@ -248,6 +253,11 @@
   dependencies:
     "long" "^4.0.0"
     "protobufjs" "~6.11.2"
+
+"dataloader@^1.4.0":
+  "integrity" "sha512-68s5jYdlvasItOJnCuI2Q9s4q98g0pCyL3HrcKJu8KNugUl8ahgmZYg38ysLTgQjjXX3H8CJLkAvWrclWfcalw=="
+  "resolved" "https://registry.npmjs.org/dataloader/-/dataloader-1.4.0.tgz"
+  "version" "1.4.0"
 
 "define-properties@^1.1.3":
   "integrity" "sha512-uckOqKcfaVvtBdsVkdPv3XjveQJsNQqmhXgRi8uhvWWuPYZCNlzT8qAyblUgNoXdHdjMTzAqeGjAoli8f+bzPA=="
@@ -376,6 +386,11 @@
   "resolved" "https://registry.npmjs.org/libsodium/-/libsodium-0.7.10.tgz"
   "version" "0.7.10"
 
+"lodash@^4.17.15":
+  "integrity" "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
+  "resolved" "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
+  "version" "4.17.21"
+
 "long@^4.0.0":
   "integrity" "sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA=="
   "resolved" "https://registry.npmjs.org/long/-/long-4.0.0.tgz"
@@ -390,6 +405,11 @@
   "integrity" "sha1-9sAMHAsIIkblxNmd+4x8CDsrWCo="
   "resolved" "https://registry.npmjs.org/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz"
   "version" "1.0.1"
+
+"object-hash@^1.3.1":
+  "integrity" "sha512-OSuu/pU4ENM9kmREg0BdNrUDIl1heYa4mBZacJc+vVWz4GtAwu7jO8s4AIt2aGRUTqxykpWzI3Oqnsm13tTMDA=="
+  "resolved" "https://registry.npmjs.org/object-hash/-/object-hash-1.3.1.tgz"
+  "version" "1.3.1"
 
 "object-keys@^1.1.1":
   "integrity" "sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA=="
@@ -437,12 +457,17 @@
     "sonic-boom" "^2.2.1"
     "thread-stream" "^0.15.0"
 
+"prettier@^2.5.1":
+  "integrity" "sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew=="
+  "resolved" "https://registry.npmjs.org/prettier/-/prettier-2.6.2.tgz"
+  "version" "2.6.2"
+
 "process-warning@^1.0.0":
   "integrity" "sha512-du4wfLyj4yCZq1VupnVSZmRsPJsNuxoDQFdCFHLaYiEbFBD7QE0a+I4D7hOxrVnh78QE/YipFAj9lXHiXocV+Q=="
   "resolved" "https://registry.npmjs.org/process-warning/-/process-warning-1.0.0.tgz"
   "version" "1.0.0"
 
-"protobufjs@^6.8.8":
+"protobufjs@^6.8.8", "protobufjs@~6.11.2":
   "integrity" "sha512-4BQJoPooKJl2G9j3XftkIXjoC9C0Av2NOrWmbLWT1vH32GcSUHjM0Arra6UfTsVyfMAuFzaLucXn1sadxJydAw=="
   "resolved" "https://registry.npmjs.org/protobufjs/-/protobufjs-6.11.2.tgz"
   "version" "6.11.2"
@@ -478,25 +503,6 @@
     "@protobufjs/utf8" "^1.1.0"
     "@types/long" "^4.0.1"
     "@types/node" "^13.7.0"
-    "long" "^4.0.0"
-
-"protobufjs@~6.11.2":
-  "integrity" "sha512-4BQJoPooKJl2G9j3XftkIXjoC9C0Av2NOrWmbLWT1vH32GcSUHjM0Arra6UfTsVyfMAuFzaLucXn1sadxJydAw=="
-  "resolved" "https://registry.npmjs.org/protobufjs/-/protobufjs-6.11.2.tgz"
-  "version" "6.11.2"
-  dependencies:
-    "@protobufjs/aspromise" "^1.1.2"
-    "@protobufjs/base64" "^1.1.2"
-    "@protobufjs/codegen" "^2.0.4"
-    "@protobufjs/eventemitter" "^1.1.0"
-    "@protobufjs/fetch" "^1.1.0"
-    "@protobufjs/float" "^1.0.2"
-    "@protobufjs/inquire" "^1.1.0"
-    "@protobufjs/path" "^1.1.2"
-    "@protobufjs/pool" "^1.1.0"
-    "@protobufjs/utf8" "^1.1.0"
-    "@types/long" "^4.0.1"
-    "@types/node" ">=13.7.0"
     "long" "^4.0.0"
 
 "quick-format-unescaped@^4.0.3":
@@ -568,6 +574,34 @@
   "version" "0.15.1"
   dependencies:
     "real-require" "^0.1.0"
+
+"ts-poet@^4.11.0":
+  "integrity" "sha512-OaXnCKsRs0yrc0O7LFhnq/US2DB4Wd313cS+qjG2XMksZ74pF/jvMHkJdURXJiAo4kSahL2N4e8JOdwUjOMNdw=="
+  "resolved" "https://registry.npmjs.org/ts-poet/-/ts-poet-4.11.0.tgz"
+  "version" "4.11.0"
+  dependencies:
+    "lodash" "^4.17.15"
+    "prettier" "^2.5.1"
+
+"ts-proto-descriptors@1.6.0":
+  "integrity" "sha512-Vrhue2Ti99us/o76mGy28nF3W/Uanl1/8detyJw2yyRwiBC5yxy+hEZqQ/ZX2PbZ1vyCpJ51A9L4PnCCnkBMTQ=="
+  "resolved" "https://registry.npmjs.org/ts-proto-descriptors/-/ts-proto-descriptors-1.6.0.tgz"
+  "version" "1.6.0"
+  dependencies:
+    "long" "^4.0.0"
+    "protobufjs" "^6.8.8"
+
+"ts-proto@^1.112.1":
+  "integrity" "sha512-pMqPsgehCR5lNHYrSCfaC7Vx5RXLxTk0MQFvC69+9E4x6yvAed3orCLAWZ1VvPug02bBK5J5vV8JJLS3+FnnUA=="
+  "resolved" "https://registry.npmjs.org/ts-proto/-/ts-proto-1.112.1.tgz"
+  "version" "1.112.1"
+  dependencies:
+    "@types/object-hash" "^1.3.0"
+    "dataloader" "^1.4.0"
+    "object-hash" "^1.3.1"
+    "protobufjs" "^6.8.8"
+    "ts-poet" "^4.11.0"
+    "ts-proto-descriptors" "1.6.0"
 
 "tslib@^2.3.1":
   "integrity" "sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw=="

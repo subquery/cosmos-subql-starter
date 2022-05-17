@@ -1,4 +1,4 @@
-import { Block, Message, Transaction, TransferEvent } from "../types";
+import { Block, ExecuteEvent, Message, Transaction } from "../types";
 import {
   CosmosEvent,
   CosmosBlock,
@@ -23,30 +23,23 @@ export async function handleMessage(
   const record = new Message(`${msg.tx.tx.hash}-${msg.idx}`);
   record.blockHeight = BigInt(msg.block.block.header.height);
   record.txHash = msg.tx.tx.hash;
-  record.fromAddress = msg.msg.fromAddress;
-  record.toAddress = msg.msg.toAddress;
-  record.amount = JSON.stringify(msg.msg.amount);
+  record.sender = msg.msg.sender;
+  record.contract = msg.msg.contract;
   await record.save();
 }
 
 export async function handleEvent(
   event: CosmosEvent
 ): Promise<void> {
-  const record = new TransferEvent(
+  const record = new ExecuteEvent(
     `${event.tx.tx.hash}-${event.msg.idx}-${event.idx}`
   );
   record.blockHeight = BigInt(event.block.block.header.height);
   record.txHash = event.tx.tx.hash;
   for (const attr of event.event.attributes) {
     switch (attr.key) {
-      case "sender":
-        record.sender = attr.value;
-        break;
-      case "recipient":
-        record.recipient = attr.value;
-        break;
-      case "amount":
-        record.amount = attr.value;
+      case "_contract_address":
+        record.contractAddress = attr.value;
         break;
       default:
     }

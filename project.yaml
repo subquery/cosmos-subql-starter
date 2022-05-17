@@ -16,12 +16,17 @@ repository: https://github.com/subquery/terra-subql-starter
 schema:
   file: ./schema.graphql
 network:
-  chainId: cosmoshub-4
-  endpoint: https://rpc.cosmos.network:443
+  chainId: juno-1
+  endpoint: https://rpc-juno.itastakers.com/
 
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 10346000
+    startBlock: 3000000
+    #chainTypes:
+    #  cosmos.slashing.v1beta1:
+    #    file: "./proto/cosmos/slashing/v1beta1/tx.proto"
+    #    messages:
+    #     - "MsgUnjail"
     mapping:
       file: "./dist/index.js"
       handlers:
@@ -32,10 +37,10 @@ dataSources:
         - handler: handleEvent
           kind: cosmos/EventHandler
           filter:
-            type: transfer
+            type: execute
             messageFilter:
-              type: "/cosmos.bank.v1beta1.MsgSend"
+              type: "/cosmwasm.wasm.v1.MsgExecuteContract"
         - handler: handleMessage
           kind: cosmos/MessageHandler
           filter:
-            type: "/cosmos.bank.v1beta1.MsgSend"
+            type: "/cosmwasm.wasm.v1.MsgExecuteContract"
