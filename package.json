@@ -1,7 +1,7 @@
 {
   "name": "cosmos-subquery-starter",
   "version": "0.0.1",
-  "description": "This project can be use as a starting point for developing your Cosmos based SubQuery project",
+  "description": "This project can be use as a starting point for developing your Cosmos (Juno) based SubQuery project",
   "main": "dist/index.js",
   "scripts": {
     "build": "subql build",
@@ -11,7 +11,7 @@
     "start:docker": "docker-compose pull && docker-compose up --remove-orphans"
   },
   "homepage": "https://github.com/subquery/cosmos-subql-starter",
-  "repository": "github:DeveloperInProgress/cosmos-subql-starter",
+  "repository": "github:subquery/cosmos-subql-starter",
   "files": [
     "dist",
     "schema.graphql",
