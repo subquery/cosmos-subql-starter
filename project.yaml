@@ -1,6 +1,6 @@
 
 specVersion: 1.0.0
-name: terra-subql-starter
+name: juno-subql-starter
 version: 0.0.1
 runner:
   node:
@@ -12,16 +12,16 @@ runner:
 description: >-
   This project can be use as a starting point for developing your Cosmos based
   SubQuery project
-repository: https://github.com/subquery/terra-subql-starter
+repository: https://github.com/subquery/juno-subql-starter
 schema:
   file: ./schema.graphql
 network:
   chainId: juno-1
-  endpoint: https://rpc-juno.itastakers.com/
+  endpoint: https://rpc.juno-1.api.onfinality.io
 
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 3000000
+    startBlock: 3062001
     #chainTypes:
     #  cosmos.slashing.v1beta1:
     #    file: "./proto/cosmos/slashing/v1beta1/tx.proto"
