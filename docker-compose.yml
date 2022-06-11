@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   postgres:
@@ -10,7 +10,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -18,7 +18,7 @@ services:
   subquery-node:
     image: onfinality/subql-node-cosmos:latest
     depends_on:
-      'postgres':
+      "postgres":
         condition: service_healthy
     restart: always
     environment:
@@ -33,7 +33,7 @@ services:
       - -f=/app
       - --db-schema=app
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://subquery-node:3000/ready']
+      test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
       interval: 3s
       timeout: 5s
       retries: 10
@@ -43,10 +43,10 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      'postgres':
+      "postgres":
         condition: service_healthy
-      'subquery-node':
-        condition: service_healthy
+      "subquery-node":
+        condition: service_started
     restart: always
     environment:
       DB_USER: postgres
