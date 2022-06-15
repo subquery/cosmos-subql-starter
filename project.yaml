@@ -4,7 +4,7 @@ version: 0.0.1
 runner:
   node:
     name: "@subql/node-cosmos"
-    version: "*"
+    version: ">0.0.1-14"
   query:
     name: "@subql/query"
     version: "*"
@@ -17,15 +17,15 @@ schema:
 network:
   chainId: juno-1
   endpoint: https://rpc.juno-1.api.onfinality.io
+  chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
+   cosmos.slashing.v1beta1:
+     file: "./proto/cosmos/slashing/v1beta1/tx.proto"
+     messages:
+      - "MsgUnjail"
 
 dataSources:
   - kind: cosmos/Runtime
     startBlock: 3062001
-    #chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
-    #  cosmos.slashing.v1beta1:
-    #    file: "./proto/cosmos/slashing/v1beta1/tx.proto"
-    #    messages:
-    #     - "MsgUnjail"
     mapping:
       file: "./dist/index.js"
       handlers:
