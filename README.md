@@ -2,7 +2,7 @@
 
 This is a starter project for Indexing Juno. It includes a simple blockhandler and an event handler. This project indexes all transfer events in juno-1.
 
-# Geting Started
+# Getting Started
 
 ### 1. Install dependencies
 
