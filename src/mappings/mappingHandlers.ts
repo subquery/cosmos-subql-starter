@@ -21,8 +21,8 @@ export async function handleMessage(msg: CosmosMessage): Promise<void> {
   const messageRecord = new Message(`${msg.tx.hash}-${msg.idx}`);
   messageRecord.blockHeight = BigInt(msg.block.block.header.height);
   messageRecord.txHash = msg.tx.hash;
-  messageRecord.sender = msg.msg.sender;
-  messageRecord.contract = msg.msg.contract;
+  messageRecord.sender = msg.msg.decodedMsg.sender;
+  messageRecord.contract = msg.msg.decodedMsg.contract;
   await messageRecord.save();
 }
 
