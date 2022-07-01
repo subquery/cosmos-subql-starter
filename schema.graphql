@@ -14,6 +14,12 @@ type Transaction @entity {
   id: ID!
   blockHeight: BigInt!
   timestamp: String!
+  status: String
+  gasUsed: BigInt
+  gasWanted: BigInt
+  messages: [Message]
+#  fee: BigInt
+#  memo: String
 }
 
 type Message @entity {
@@ -22,4 +28,36 @@ type Message @entity {
   txHash: String!
   sender: String!
   contract: String!
+}
+
+enum GovProposalVoteOption {
+  EMPTY,
+  YES,
+  ABSTAIN,
+  NO,
+  NO_WITH_VETO,
+}
+
+type GovProposalVote @entity {
+  id: ID!
+  proposalId: String!
+  voterAddress: String!
+  option: GovProposalVoteOption!
+#  TODO:
+#  weightedOptions: []
+}
+
+type DistDelegatorClaim @entity {
+  id: ID!
+  delegatorAddress: String!
+  validatorAddress: String!
+  #  validator: Validator!
+  # TODO: introduced in cosmos-sdk (baseline) v0.46
+  #  amount: BigInt!
+}
+
+type LegacyBridgeSwap @entity {
+  id: ID! # id field is always required and must look like this
+  destination: String!
+  amount: BigInt!
 }
