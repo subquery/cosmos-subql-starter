@@ -36,20 +36,19 @@ dataSources:
           kind: cosmos/BlockHandler
         - handler: handleTransaction
           kind: cosmos/TransactionHandler
-        - handler: handleEvent
-          kind: cosmos/EventHandler
+        - handler: handleGovProposalVote
+          kind: cosmos/MessageHandler
           filter:
-            type: execute
-            messageFilter:
-              type: "/cosmwasm.wasm.v1.MsgExecuteContract"
-              # contractCall field can be specified here too
-              #values: # A set of key/value pairs that are present in the message data
-              #contract: "juno1v99ehkuetkpf0yxdry8ce92yeqaeaa7lyxr2aagkesrw67wcsn8qxpxay0"
-        - handler: handleMessage
+            type: "/cosmos.gov.v1beta1.MsgVote"
+        - handler: handleDistDelegatorClaim
+          kind: cosmos/MessageHandler
+          filter:
+            type: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward"
+        - handler: handleLegacyBridgeSwap
           kind: cosmos/MessageHandler
           filter:
             type: "/cosmwasm.wasm.v1.MsgExecuteContract"
-            # Filter to only messages with the provide_liquidity function call
-            #contractCall: "provide_liquidity" # The name of the contract function that was called
-            #values: # A set of key/value pairs that are present in the message data
-            #contract: "juno1v99ehkuetkpf0yxdry8ce92yeqaeaa7lyxr2aagkesrw67wcsn8qxpxay0"
+            # Filter to only messages with the vote function call
+            contractCall: "swap" # The name of the contract function that was called
+            values: # This is the specific smart contract that we are subscribing to
+              contract: "fetch1qxxlalvsdjd07p07y3rc5fu6ll8k4tmetpha8n"
