@@ -69,7 +69,7 @@ interface LegacyBridgeSwapMsg {
 
 export async function handleGovProposalVote(message: CosmosMessage<GovProposalVoteMsg>): Promise<void> {
   const vote = new GovProposalVote(`${message.tx.hash}-${message.idx}`);
-  const {proposalId, voter, option} = message.msg.decodedMsg.msg.govProposalVote;
+  const {proposalId, voter, option} = message.msg.decodedMsg;
 
   vote.proposalId = proposalId;
   vote.voterAddress = voter;
