@@ -48,23 +48,19 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
 }
 
 interface GovProposalVoteMsg {
-  msg: {
     proposalId: string;
     voter: string;
     option: GovProposalVoteOption;
-  }
 }
 
 interface DistDelegatorClaimMsg {
-  msg: {
-    delegatorAddress: string;
-    validatorAddress: string;
-  }
+  delegatorAddress: string;
+  validatorAddress: string;
 }
 
 interface LegacyBridgeSwapMsg {
   msg: {
-    swap: {
+    legacyBridgeSwap: {
       destination: string,
       amount: bigint,
     }
@@ -73,7 +69,7 @@ interface LegacyBridgeSwapMsg {
 
 export async function handleGovProposalVote(message: CosmosMessage<GovProposalVoteMsg>): Promise<void> {
   const vote = new GovProposalVote(`${message.tx.hash}-${message.idx}`);
-  const {proposalId, voter, option} = message.msg.decodedMsg.msg;
+  const {proposalId, voter, option} = message.msg.decodedMsg.msg.govProposalVote;
 
   vote.proposalId = proposalId;
   vote.voterAddress = voter;
@@ -84,7 +80,7 @@ export async function handleGovProposalVote(message: CosmosMessage<GovProposalVo
 
 export async function handleDistDelegatorClaim(message: CosmosMessage<DistDelegatorClaimMsg>): Promise<void> {
   const claim = new DistDelegatorClaim(`${message.tx.hash}-${message.idx}`);
-  const {delegatorAddress, validatorAddress} = message.msg.decodedMsg.msg;
+  const {delegatorAddress, validatorAddress} = message.msg.decodedMsg;
 
   claim.delegatorAddress = delegatorAddress;
   claim.validatorAddress = validatorAddress;
@@ -97,9 +93,10 @@ export async function handleDistDelegatorClaim(message: CosmosMessage<DistDelega
 
 export async function handleLegacyBridgeSwap(message: CosmosMessage<LegacyBridgeSwapMsg>): Promise<void> {
   const swap = new LegacyBridgeSwap(`${message.tx.hash}-${message.idx}`);
+  const {destination, amount} = message.msg.decodedMsg.msg.legacyBridgeSwap;
 
-  swap.destination = message.msg.decodedMsg.msg.swap.destination;
-  swap.amount = BigInt(0); //message.msg.decodedMsg.msg.amount;
+  swap.destination = destination;
+  swap.amount = BigInt(amount);
 
   await swap.save();
 }

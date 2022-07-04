@@ -17,7 +17,6 @@ type Transaction @entity {
   status: String
   gasUsed: BigInt
   gasWanted: BigInt
-  messages: [Message]
 #  fee: BigInt
 #  memo: String
 }
