@@ -1,6 +1,15 @@
-# SubQuery Starter Project for Juno
+# SubQuery Starter Project for Cosmos Networks
 
-This is a starter project for Indexing Juno. It includes a simple blockhandler and an event handler. This project indexes all transfer events in juno-1.
+This is a starter project for Indexing Cosmos Networks. It includes a simple blockhandler and an event handler.
+
+**You can find starter projects for different Cosmos zones within this repository under each branch, this includes**:
+
+- Juno (main)
+- CosmosHub
+- Fetch.ai
+- Stargaze
+- Osmosis
+- Cronos
 
 # Getting Started
 
