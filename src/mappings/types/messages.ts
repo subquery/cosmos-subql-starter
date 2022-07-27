@@ -10,7 +10,7 @@ export interface ExecuteContractMsg {
 export interface GovProposalVoteMsg {
   proposalId: string;
   voter: string;
-  option: GovProposalVoteOption;
+  option: number;
 }
 
 export interface DistDelegatorClaimMsg {
