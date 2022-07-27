@@ -121,3 +121,23 @@ undelegate_tx = ledger_client.undelegate_tokens(validator_operator_address, 1000
 """
 Legacy Bridge Swap
 """
+
+contract = LedgerContract("../../eth-bridge/contracts/fetch/bridge.wasm", ledger_client)
+contract.deploy(
+    {"cap": "250000000000000000000000000",
+     "reverse_aggregated_allowance": "3000000000000000000000000",
+     "reverse_aggregated_allowance_approver_cap": "3000000000000000000000000",
+     "lower_swap_limit": "1",
+     "upper_swap_limit": "1000000000000000000000000",
+     "swap_fee": "0",
+     "paused_since_block": 18446744073709551615,
+     "denom": "atestfet",
+     "next_swap_id": 0
+     },
+    validator_wallet
+)
+contract.execute(
+    {"swap":{"destination":validator_address}},
+    validator_wallet,
+    funds="10000atestfet"
+)
