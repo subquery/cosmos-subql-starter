@@ -1,34 +1,3 @@
-type Block @entity {
-  id: ID! # The block hash
-  height: BigInt!
-}
-
-type ExecuteEvent @entity {
-  id: ID!
-  blockHeight: BigInt!
-  txHash: String!
-  contractAddress: String!
-}
-
-type Transaction @entity {
-  id: ID!
-  blockHeight: BigInt!
-  timestamp: String!
-  status: String
-  gasUsed: BigInt
-  gasWanted: BigInt
-#  fee: BigInt
-#  memo: String
-}
-
-type Message @entity {
-  id: ID!
-  blockHeight: BigInt!
-  txHash: String!
-  sender: String!
-  contract: String!
-}
-
 enum GovProposalVoteOption {
   EMPTY,
   YES,
@@ -37,26 +6,98 @@ enum GovProposalVoteOption {
   NO_WITH_VETO,
 }
 
+enum TxStatus {
+  Success
+  Error
+}
+
+type EventAttribute @jsonField {
+  key: String!
+  value: String!
+}
+
+type Block @entity {
+  id: ID! # The block header hash
+  chainId: String! @index
+  height: BigInt! @index
+  timestamp: String!
+  transactions: [Transaction] @derivedFrom(field: "block")
+  messages: [Message] @derivedFrom(field: "block")
+  events: [Event] @derivedFrom(field: "block")
+}
+
+type Transaction @entity {
+  id: ID!
+  block: Block!
+  gasUsed: BigInt!
+  gasWanted: BigInt!
+  fees: String!
+  memo: String
+  status: TxStatus!
+  log: String!
+  timeoutHeight: BigInt @index
+  messages: [Message] @derivedFrom(field: "transaction")
+}
+
+type Message @entity {
+  id: ID!
+  typeUrl: String! @index
+  json: String!
+  transaction: Transaction!
+  block: Block!
+}
+
+type Event @entity {
+  id: ID!
+  type: String! @index
+  attributes: [EventAttribute]!
+  log: String!
+  transaction: Transaction!
+  block: Block!
+}
+
+type ExecuteContractMessage @entity {
+  id: ID!
+  sender: String! @index
+  contract: String! @index
+  funds: String!
+  message: Message!
+  transaction: Transaction!
+  block: Block!
+}
+
 type GovProposalVote @entity {
   id: ID!
-  proposalId: String!
-  voterAddress: String!
+  proposalId: String! @index
+  voterAddress: String! @index
   option: GovProposalVoteOption!
-#  TODO:
-#  weightedOptions: []
+  message: Message!
+  transaction: Transaction!
+  block: Block!
+  #  TODO:
+  #  weightedOptions: []
 }
 
 type DistDelegatorClaim @entity {
   id: ID!
   delegatorAddress: String!
   validatorAddress: String!
+  message: Message!
+  transaction: Transaction!
+  block: Block!
+  # TODO:
   #  validator: Validator!
   # TODO: introduced in cosmos-sdk (baseline) v0.46
   #  amount: BigInt!
+  #  denom: String!
 }
 
 type LegacyBridgeSwap @entity {
   id: ID! # id field is always required and must look like this
   destination: String!
   amount: BigInt!
+  denom: String!
+  message: Message!
+  transaction: Transaction!
+  block: Block!
 }

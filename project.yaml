@@ -16,10 +16,9 @@ schema:
 
 network:
   chainId: fetchhub-4
-  # You must connect to an archive (non-pruned) node
-  endpoint: https://rpc-fetchhub.fetch.ai
+  endpoint: https://rpc-fetchhub.fetch.ai:443
   # Using a dictionary can massively improve indexing speed
-#  dictionary: https://api.subquery.network/sq/subquery/cosmos-juno-dictionary
+  dictionary: https://api.subquery.network/sq/subquery/cosmos-fetch-ai-dictionary
 
 dataSources:
   - kind: cosmos/Runtime
@@ -36,6 +35,10 @@ dataSources:
           kind: cosmos/BlockHandler
         - handler: handleTransaction
           kind: cosmos/TransactionHandler
+        - handler: handleMessage
+          kind: cosmos/MessageHandler
+        - handler: handleEvent
+          kind: cosmos/EventHandler
         - handler: handleGovProposalVote
           kind: cosmos/MessageHandler
           filter:
@@ -44,6 +47,10 @@ dataSources:
           kind: cosmos/MessageHandler
           filter:
             type: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward"
+        - handler: handleExecuteContractMessage
+          kind: cosmos/MessageHandler
+          filter:
+            type: "/cosmwasm.wasm.v1.MsgExecuteContract"
         - handler: handleLegacyBridgeSwap
           kind: cosmos/MessageHandler
           filter:
