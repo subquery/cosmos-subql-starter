@@ -8,8 +8,7 @@
 node_modules/
 dist/
 
-# lock files
-yarn.lock
+# lock files (not using NPM)
 package-lock.json
 
 # Compiled Java class files
