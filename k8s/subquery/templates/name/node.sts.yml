@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: subquery-node
+  labels:
+    {{- include "subquery.labels" . | nindent 4 }}
+    app.kubernetes.io/component: node
+
+spec:
+  selector:
+    matchLabels:
+      {{- include "subquery.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: node
+  serviceName: "subquery-node"
+  replicas: {{ .Values.subquery.node.replicas }}
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        {{- include "subquery.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: node
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: node
+          image: "{{ .Values.subquery.node.image }}:{{ .Values.subquery.node.tag }}"
+          args: ["-f=/app", "--db-schema=app", "--batch-size=1"]
+          envFrom:
+            - configMapRef:
+                name: subquery-node-config
+            - secretRef:
+                name: subquery-node-secrets
+          ports:
+            - containerPort: 3000
+              name: web

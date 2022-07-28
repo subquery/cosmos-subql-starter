@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: subquery-node-config
+  labels:
+    {{- include "subquery.labels" . | nindent 4 }}
+    app.kubernetes.io/component: node
+
+data:
+  DB_DATABASE: {{ .Values.db.name | quote }}
+  DB_USER: {{ .Values.db.user | quote }}
+  DB_HOST: "subquery-db"
+  DB_PORT: "5432"
+  START_BLOCK: {{ .Values.subquery.node.startBlock | quote }}

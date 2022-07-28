@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subquery-api
+  labels:
+    {{- include "subquery.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+spec:
+  replicas: {{ .Values.subquery.api.replicas }}
+  selector:
+    matchLabels:
+      {{- include "subquery.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: api
+  template:
+    metadata:
+      labels:
+        {{- include "subquery.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: api
+    spec:
+      containers:
+        - name: api
+          image: "{{ .Values.subquery.api.image }}:{{ .Values.subquery.api.tag }}"
+
+          args:
+            - "--name=app"
+            - "--playground"
+            - "--indexer=http://subquery-node:3000"
+
+          envFrom:
+            - configMapRef:
+                name: subquery-api-config
+            - secretRef:
+                name: subquery-api-secrets
+
+          ports:
+            - containerPort: 3000
+              name: api

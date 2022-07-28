@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: subquery-db
+  labels:
+    {{- include "subquery.labels" . | nindent 4 }}
+    app.kubernetes.io/component: db
+
+spec:
+  selector:
+    matchLabels:
+      {{- include "subquery.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: db
+  serviceName: "subquery-db"
+  replicas: 1
+  minReadySeconds: 10 # by default is 0
+  template:
+    metadata:
+      labels:
+        {{- include "subquery.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: db
+
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: db
+          image: "{{ .Values.db.image }}:{{ .Values.db.tag }}"
+          envFrom:
+            - configMapRef:
+                name: subquery-db-config
+            - secretRef:
+                name: subquery-db-secrets
+          ports:
+            - containerPort: 5432
+              name: psql
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+              subPath: db-data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.db.storageSize }}
