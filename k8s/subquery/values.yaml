@@ -4,13 +4,21 @@ subquery:
     tag: fe4d558
 
     startBlock: 6926337
-    
 
   api:
     image: onfinality/subql-query
     tag: v1.4.0
 
     replicas: 1
+
+    istio:
+      # Gateways
+      ingressGateway: istio-fetch-gaia-ig
+
+      # DNS Settings
+      dnsName: subquery-staging.sandbox-london-b.fetch-ai.com
+      dnsTarget: gaia.sandbox-london-b.fetch-ai.com
+      additionalDnsNames: []
 
 db:
   image: postgres

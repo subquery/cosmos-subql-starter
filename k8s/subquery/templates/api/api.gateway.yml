@@ -1,0 +1,39 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: subquery-api-gateway
+  labels:
+    {{- include "subquery.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+
+spec:
+  selector:
+    app: {{ .Values.subquery.api.istio.ingressGateway }}
+    istio: ingressgateway
+
+  servers:
+  - hosts:
+    - {{ .Values.subquery.api.istio.dnsName }}
+    {{- range .Values.subquery.api.istio.additionalDnsNames }}
+    - {{ . | quote }}
+    {{- end }}
+    port:
+      name: tcp-http
+      number: 80
+      protocol: HTTP
+    tls:
+      httpsRedirect: false
+  - hosts:
+    - {{ .Values.subquery.api.istio.dnsName }}
+    {{- range .Values.subquery.api.istio.additionalDnsNames }}
+    - {{ . | quote }}
+    {{- end }}
+    port:
+      name: tcp-https
+      number: 443
+      protocol: HTTPS
+    tls:
+      credentialName: "subq-{{ .Release.Namespace }}-{{ .Release.Name }}-cert"
+      mode: SIMPLE
+      privateKey: sds
+      serverCertificate: sds

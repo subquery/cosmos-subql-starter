@@ -9,8 +9,7 @@ metadata:
 spec:
   ports:
     - port: 3000
-      name: web
-  type: LoadBalancer
+      name: api
   selector:
     {{- include "subquery.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: api

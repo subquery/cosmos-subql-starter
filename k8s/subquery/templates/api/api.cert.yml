@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: "subq-{{ .Release.Namespace }}-{{ .Release.Name }}-cert"
+  namespace: istio-system
+spec:
+  commonName: {{ .Values.subquery.api.istio.dnsName }}
+  dnsNames:
+  - {{ .Values.subquery.api.istio.dnsName }}
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-dns
+  secretName: "subq-{{ .Release.Namespace }}-{{ .Release.Name }}-cert"

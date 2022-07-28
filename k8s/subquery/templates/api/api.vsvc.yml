@@ -1,0 +1,25 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: subquery-api-vsvc
+  labels:
+    {{- include "subquery.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+
+spec:
+  gateways:
+  - subquery-api-gateway
+
+  hosts:
+  - {{ .Values.subquery.api.istio.dnsName }}
+  {{- range .Values.subquery.api.istio.additionalDnsNames }}
+  - {{ . | quote }}
+  {{- end }}
+
+  http:
+  - route:
+    - destination:
+        host: subquery-api
+        port:
+          number: 3000
+      weight: 100
