@@ -101,3 +101,21 @@ type LegacyBridgeSwap @entity {
   transaction: Transaction!
   block: Block!
 }
+
+type Coin @jsonField {
+  denom: String!
+  amount: String!
+}
+
+type NativeTransferMsg @jsonField {
+  toAddress: String!  # indexable
+  fromAddress: String! #indexable
+  amount: [Coin]! # indexible
+}
+
+type NativeTransfer @entity {
+  id: ID!
+  message: NativeTransferMsg!
+  transaction: Transaction!
+  block: Block!
+}

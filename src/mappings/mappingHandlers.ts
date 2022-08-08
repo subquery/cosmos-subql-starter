@@ -9,10 +9,17 @@ import {
   LegacyBridgeSwap,
   Message,
   Transaction,
-  TxStatus
+  TxStatus,
+  NativeTransferMsg,
+  NativeTransfer
 } from "../types";
 import {CosmosBlock, CosmosEvent, CosmosMessage, CosmosTransaction,} from "@subql/types-cosmos";
-import {ExecuteContractMsg, DistDelegatorClaimMsg, GovProposalVoteMsg, LegacyBridgeSwapMsg} from "./types";
+import {
+    ExecuteContractMsg,
+    DistDelegatorClaimMsg,
+    GovProposalVoteMsg,
+    LegacyBridgeSwapMsg
+} from "./types";
 
 // messageId returns the id of the message passed or
 // that of the message which generated the event passed.
@@ -63,6 +70,20 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
   });
 
   await txEntity.save();
+}
+
+export async function handleNativeTransfer(msg: CosmosMessage<NativeTransferMsg>): Promise<void> {
+  logger.info(`[handleNativeTransfer] (tx ${msg.tx.hash}): indexing message ${msg.idx + 1} / ${msg.tx.decodedTx.body.messages.length}`)
+  logger.debug(`[handleNativeTransfer] (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`)
+
+  const transferEntity = NativeTransfer.create({
+    id: messageId(msg),
+    message: msg.msg.decodedMsg,
+    transactionId: msg.tx.hash,
+    blockId: msg.block.block.id
+  });
+
+  await transferEntity.save();
 }
 
 export async function handleMessage(msg: CosmosMessage): Promise<void> {
