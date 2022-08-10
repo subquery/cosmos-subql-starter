@@ -32,10 +32,12 @@ dataSources:
     mapping:
       file: "./dist/index.js"
       handlers:
-        - handler: handleBlock
-          kind: cosmos/BlockHandler
-        - handler: handleTransaction
-          kind: cosmos/TransactionHandler
+        # Using block handlers slows your project down as they can be executed with each and every block. Only use if you need to
+        # - handler: handleBlock
+        #   kind: cosmos/BlockHandler
+        # Using transaction handlers without filters slows your project down as they can be executed with each and every block
+        # - handler: handleTransaction
+        #   kind: cosmos/TransactionHandler
         - handler: handleEvent
           kind: cosmos/EventHandler
           filter:
