@@ -1,0 +1,20 @@
+name: Chart Push
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - k8s/**
+jobs:
+  chart-push:
+    runs-on: self-hosted
+    steps:
+      - uses: 'actions/checkout@v2'
+      - name: Unistalling of cm-push
+        run: helm plugin uninstall cm-push
+      - name: Installing cm-push
+        if: ${{ failure()||success() }}
+        run: helm plugin install https://github.com/chartmuseum/helm-push.git
+      - name: Pushing Chart
+        if: ${{ failure()||success() }}
+        run: helm cm-push ./k8s/subquery http://charts.management.fetch-ai.com/ -f

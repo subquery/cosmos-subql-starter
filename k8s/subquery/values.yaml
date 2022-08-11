@@ -1,9 +1,9 @@
 subquery:
   node:
     image: gcr.io/fetch-ai-sandbox/subquery-node
-    tag: fe4d558
+    tag: 239fe08
 
-    startBlock: 6926337
+    startBlock: "7099815"
 
   api:
     image: onfinality/subql-query
@@ -26,6 +26,7 @@ db:
 
   name: subquery
   user: subquery
-  password: "mVsM2RcYnzMTUjWKT@9qKMT7mJXpDofeX.bFNnneCe"
+  gcpProject: fetch-ai-sandbox
+  gcpSecret: sandbox_subquery_postgres
 
   storageSize: 1Gi

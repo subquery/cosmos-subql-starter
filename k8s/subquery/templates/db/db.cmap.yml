@@ -9,3 +9,4 @@ metadata:
 data:
   POSTGRES_USER: {{ .Values.db.user | quote }}
   POSTGRES_DB: {{ .Values.db.name | quote }}
+  POSTGRES_INITDB_ARGS: "-A scram-sha-256"
