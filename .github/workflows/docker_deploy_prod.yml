@@ -1,0 +1,57 @@
+name: Docker deploy prod
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  ledger-subquery:
+    name: build
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGE_PROJECT_ID: fetch-ai-images
+      IMAGE_NAME: subquery-node
+      DEPLOYMENT_REPO: fetchai/infra-production-deployment
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get image tag
+        id: vars
+        shell: bash
+        run: |
+          echo "::set-output name=tag_name::$(git rev-parse --short HEAD)"
+
+      # Authenticate to GCP
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.DEVOPS_IMAGES_SA_KEY }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0'
+
+      - run: 'gcloud info'
+
+      # Configure docker to use the gcloud command-line tool as a credential helper
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker -q
+
+      # Docker build ; docker push
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: |
+            gcr.io/${{ env.IMAGE_PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.tag_name }}
+
+      # Update manifests - trigger remote action
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: '${{ env.DEPLOYMENT_REPO }}'
+          event-type: render
+          client-payload: '{"image": "gcr.io/${{ env.IMAGE_PROJECT_ID }}/${{ env.IMAGE_NAME }}", "tag": "${{ steps.vars.outputs.tag_name }}", "ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
