@@ -6,6 +6,7 @@ import {
   CosmosTransaction,
 } from "@subql/types-cosmos";
 
+/*
 export async function handleBlock(block: CosmosBlock): Promise<void> {
   // If you wanted to index each block in Cosmos (Juno), you could do that here
 }
@@ -18,6 +19,7 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
   });
   await transactionRecord.save();
 }
+*/
 
 export async function handleMessage(msg: CosmosMessage): Promise<void> {
   const messageRecord = Message.create({

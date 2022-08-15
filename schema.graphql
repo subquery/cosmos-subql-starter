@@ -1,7 +1,7 @@
-type Block @entity {
-  id: ID! # The block hash
-  height: BigInt!
-}
+# type Block @entity {
+#   id: ID! # The block hash
+#   height: BigInt!
+# }
 
 type ExecuteEvent @entity {
   id: ID!
@@ -10,11 +10,11 @@ type ExecuteEvent @entity {
   contractAddress: String!
 }
 
-type Transaction @entity {
-  id: ID!
-  blockHeight: BigInt!
-  timestamp: String!
-}
+# type Transaction @entity {
+#   id: ID!
+#   blockHeight: BigInt!
+#   timestamp: String!
+# }
 
 type Message @entity {
   id: ID!
