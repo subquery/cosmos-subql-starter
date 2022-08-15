@@ -1,0 +1,36 @@
+specVersion: 1.0.0
+name: juno-subql-starter
+version: 0.0.1
+runner:
+  node:
+    name: '@subql/node-cosmos'
+    version: '>=0.1.0'
+  query:
+    name: '@subql/query'
+    version: '*'
+description: >-
+  This project can be use as a starting point for developing your Cosmos (Juno)
+  based SubQuery project
+repository: 'https://github.com/subquery/juno-subql-starter'
+schema:
+  file: ./schema.graphql
+network:
+  chainId: juno-1
+  endpoint: 'https://rpc.juno-1.api.onfinality.io'
+  dictionary: 'https://api.subquery.network/sq/subquery/cosmos-juno-dictionary'
+dataSources:
+  - kind: cosmos/Runtime
+    startBlock: 4136532
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - handler: handleEvent
+          kind: cosmos/EventHandler
+          filter:
+            type: execute
+            messageFilter:
+              type: /cosmwasm.wasm.v1.MsgExecuteContract
+        - handler: handleMessage
+          kind: cosmos/MessageHandler
+          filter:
+            type: /cosmwasm.wasm.v1.MsgExecuteContract
