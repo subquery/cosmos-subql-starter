@@ -4,9 +4,9 @@ metadata:
   name: "subq-{{ .Release.Namespace }}-{{ .Release.Name }}-cert"
   namespace: istio-system
 spec:
-  commonName: {{ .Values.subquery.api.istio.dnsName }}
+  commonName: {{ .Values.subquery.api.dns.name }}
   dnsNames:
-  - {{ .Values.subquery.api.istio.dnsName }}
+  - {{ .Values.subquery.api.dns.name }}
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt-dns

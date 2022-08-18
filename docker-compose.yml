@@ -30,7 +30,6 @@ services:
       DB_DATABASE: "subquery"
       DB_HOST: postgres
       DB_PORT: 5432
-      START_BLOCK: "7099815"
     volumes:
       - ./:/app
     command:

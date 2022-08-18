@@ -12,3 +12,5 @@ data:
   DB_HOST: "subquery-db"
   DB_PORT: "5432"
   START_BLOCK: {{ .Values.subquery.node.startBlock | quote }}
+  CHAIN_ID: {{ .Values.subquery.node.chainId }}
+  NETWORK_ENDPOINT: {{ .Values.subquery.node.networkEndpoint }}

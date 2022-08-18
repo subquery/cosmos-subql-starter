@@ -11,8 +11,8 @@ spec:
   - subquery-api-gateway
 
   hosts:
-  - {{ .Values.subquery.api.istio.dnsName }}
-  {{- range .Values.subquery.api.istio.additionalDnsNames }}
+  - {{ .Values.subquery.api.dns.name }}
+  {{- range .Values.subquery.api.dns.additionalDnsNames }}
   - {{ . | quote }}
   {{- end }}
 

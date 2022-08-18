@@ -8,13 +8,13 @@ metadata:
 
 spec:
   selector:
-    app: {{ .Values.subquery.api.istio.ingressGateway }}
+    app: {{ .Values.subquery.api.dns.ingressGateway }}
     istio: ingressgateway
 
   servers:
   - hosts:
-    - {{ .Values.subquery.api.istio.dnsName }}
-    {{- range .Values.subquery.api.istio.additionalDnsNames }}
+    - {{ .Values.subquery.api.dns.name }}
+    {{- range .Values.subquery.api.dns.additionalNames }}
     - {{ . | quote }}
     {{- end }}
     port:
@@ -24,8 +24,8 @@ spec:
     tls:
       httpsRedirect: false
   - hosts:
-    - {{ .Values.subquery.api.istio.dnsName }}
-    {{- range .Values.subquery.api.istio.additionalDnsNames }}
+    - {{ .Values.subquery.api.dns.name }}
+    {{- range .Values.subquery.api.dns.additionalNames }}
     - {{ . | quote }}
     {{- end }}
     port:

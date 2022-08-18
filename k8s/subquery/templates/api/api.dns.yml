@@ -7,8 +7,8 @@ metadata:
     app.kubernetes.io/component: api
 spec:
   endpoints:
-  - dnsName:  {{ .Values.subquery.api.istio.dnsName }}
+  - dnsName:  {{ .Values.subquery.api.dns.name }}
     recordTTL: 180
     recordType: CNAME
     targets:
-    - {{ .Values.subquery.api.istio.dnsTarget }}
+    - {{ .Values.subquery.api.dns.target }}

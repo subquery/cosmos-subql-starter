@@ -2,8 +2,9 @@ subquery:
   node:
     image: gcr.io/fetch-ai-sandbox/subquery-node
     tag: 239fe08
-
-    startBlock: "7099815"
+    startBlock: "827201"
+    networkEndpoint: https://rpc-dorado.fetch.ai:443
+    chainId: "dorado-1"
 
   api:
     image: onfinality/subql-query
@@ -11,13 +12,13 @@ subquery:
 
     replicas: 1
 
-    istio:
+    dns:
       # Gateways
-      ingressGateway: istio-fetch-gaia-ig
+      ingressGateway: "istio-fetch-gaia-ig"
 
       # DNS Settings
-      dnsName: subquery-staging.sandbox-london-b.fetch-ai.com
-      dnsTarget: gaia.sandbox-london-b.fetch-ai.com
+      name: staging.subquery.sandbox-london-b.fetch-ai.com
+      target: "gaia.sandbox-london-b.fetch-ai.com"
       additionalDnsNames: []
 
 db:
