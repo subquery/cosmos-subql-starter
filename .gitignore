@@ -56,3 +56,5 @@ Thumbs.db
 .data
 dist
 keys
+
+docker-compose.override.yml

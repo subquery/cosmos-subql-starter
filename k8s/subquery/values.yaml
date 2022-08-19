@@ -7,7 +7,7 @@ subquery:
     chainId: "dorado-1"
 
   api:
-    image: onfinality/subql-query
+    image: gcr.io/fetch-ai-sandbox/subquery-api
     tag: v1.4.0
 
     replicas: 1

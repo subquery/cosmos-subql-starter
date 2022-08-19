@@ -18,6 +18,7 @@ scripts/*.py
 .gitignore
 
 # Docker
+docker/
 Dockerfile
 .dockerignore
 docker-compose.yml

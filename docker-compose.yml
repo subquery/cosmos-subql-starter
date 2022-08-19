@@ -18,8 +18,9 @@ services:
       retries: 5
 
   subquery-node:
-#    image: onfinality/subql-node-cosmos:v0.2.0
-    build: .
+    build:
+      context: .
+      dockerfile: ./docker/node.dockerfile
     depends_on:
       "postgres":
         condition: service_healthy
@@ -43,7 +44,9 @@ services:
       retries: 10
 
   graphql-engine:
-    image: onfinality/subql-query:v1.4.0
+    build:
+      context: .
+      dockerfile: ./docker/api.dockerfile
     ports:
       - 3000:3000
     depends_on:
@@ -58,6 +61,11 @@ services:
       DB_DATABASE: "subquery"
       DB_HOST: postgres
       DB_PORT: 5432
+    volumes:
+      - ./subql/packages/query/dist:/app/dist
+      - ./subql/node_modules:/app/node_modules
+      - ./subql/packages/query/node_modules/.bin:/app/node_modules/.bin
+    entrypoint: ["/sbin/tini", "--", "yarn", "start:prod"]
     command:
       - --name=app
       - --playground

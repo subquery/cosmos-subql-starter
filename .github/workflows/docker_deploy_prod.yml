@@ -11,17 +11,21 @@ jobs:
 
     env:
       IMAGE_PROJECT_ID: fetch-ai-images
-      IMAGE_NAME: subquery-node
+      NODE_IMAGE_NAME: subquery-node
+      API_IMAGE_NAME: subquery-api
       DEPLOYMENT_REPO: fetchai/infra-production-deployment
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
       - name: Get image tag
         id: vars
         shell: bash
         run: |
-          echo "::set-output name=tag_name::$(git rev-parse --short HEAD)"
+          echo "::set-output name=node_tag_name::$(git rev-parse --short HEAD)"
+          echo "::set-output name=api_tag_name::$(cd ./subql && git rev-parse --short HEAD)"
 
       # Authenticate to GCP
       - id: 'auth'
@@ -40,12 +44,19 @@ jobs:
           gcloud auth configure-docker -q
 
       # Docker build ; docker push
-      - name: Build and push
+      - name: Build and push subquery node
         uses: docker/build-push-action@v3
         with:
           push: true
           tags: |
-            gcr.io/${{ env.IMAGE_PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.tag_name }}
+            gcr.io/${{ env.IMAGE_PROJECT_ID }}/${{ env.NODE_IMAGE_NAME }}:${{ steps.vars.outputs.node_tag_name }}
+
+      - name: Build and push graphql api
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: |
+            gcr.io/${{ env.IMAGE_PROJECT_ID }}/${{ env.API_IMAGE_NAME }}:${{ steps.vars.outputs.api_tag_name }}
 
       # Update manifests - trigger remote action
       - name: Repository Dispatch
