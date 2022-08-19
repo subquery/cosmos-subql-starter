@@ -47,6 +47,8 @@ jobs:
       - name: Build and push subquery node
         uses: docker/build-push-action@v3
         with:
+          context: .
+          file: ./docker/node.dockerfile
           push: true
           tags: |
             gcr.io/${{ env.IMAGE_PROJECT_ID }}/${{ env.NODE_IMAGE_NAME }}:${{ steps.vars.outputs.node_tag_name }}
@@ -54,6 +56,8 @@ jobs:
       - name: Build and push graphql api
         uses: docker/build-push-action@v3
         with:
+          context: .
+          file: ./docker/node.dockerfile
           push: true
           tags: |
             gcr.io/${{ env.IMAGE_PROJECT_ID }}/${{ env.API_IMAGE_NAME }}:${{ steps.vars.outputs.api_tag_name }}
