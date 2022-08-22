@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y tree
 WORKDIR /build
 
 # declare path args
-ARG subql_path=../subql
+ARG subql_path=./subql
 ARG query_pkg_path=${subql_path}/packages/query
 ARG subql_package_json_path=${subql_path}/package.json
 ARG subql_yarn_lock_path=${subql_path}/yarn.lock
