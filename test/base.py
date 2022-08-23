@@ -8,6 +8,16 @@ from gql import Client
 from gql.transport.aiohttp import AIOHTTPTransport
 import grpc, unittest, psycopg
 
+# TODO: support overriding somehow (e.g. CLI args)
+DB_HOST = "localhost"
+DB_PORT = "5432"
+DB_NAME = "subquery"
+DB_USER = "subquery"
+DB_PASS = "subquery"
+FETCHD_HOST = "localhost"
+FETCHD_GRPC_PORT = "9090"
+GRAPHQL_API_URL = "http://localhost:3000"
+
 
 class Base(unittest.TestCase):
     delegator_wallet = None
@@ -35,26 +45,26 @@ class Base(unittest.TestCase):
 
         cfg = NetworkConfig(
             chain_id="testing",
-            url="grpc+http://localhost:9090",
+            url=f"grpc+http://{FETCHD_HOST}:{FETCHD_GRPC_PORT}",
             fee_minimum_gas_price=1,
             fee_denomination="atestfet",
             staking_denomination="atestfet",
         )
 
-        gov_client = grpc.insecure_channel('localhost:9090')
+        gov_client = grpc.insecure_channel(f"{FETCHD_HOST}:{FETCHD_GRPC_PORT}")
 
         cls.ledger_client = LedgerClient(cfg)
         cls.gov_module = query_pb2_grpc.QueryStub(gov_client)
 
-        transport = AIOHTTPTransport(url="http://localhost:3000")
+        transport = AIOHTTPTransport(url=GRAPHQL_API_URL)
         cls.gql_client = Client(transport=transport, fetch_schema_from_transport=True)
 
         cls.db = psycopg.connect(
-            host="localhost",
-            port="5432",
-            dbname="postgres",
-            user="postgres",
-            password="postgres",
+            host=DB_HOST,
+            port=DB_PORT,
+            dbname=DB_NAME,
+            user=DB_USER,
+            password=DB_PASS,
             options=f'-c search_path=app'
         )
 
@@ -62,7 +72,8 @@ class Base(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.db.close()
+        if cls.db is not None:
+            cls.db.close()
 
 
 def get_wallet(mnemonic):
