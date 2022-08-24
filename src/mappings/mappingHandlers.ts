@@ -30,12 +30,12 @@ function messageId(msg: CosmosMessage | CosmosEvent): string {
 export async function handleBlock(block: CosmosBlock): Promise<void> {
   logger.info(`[handleBlock] (block.header.height): indexing block ${block.block.header.height}`)
 
-  const {id, header: {chainId, height, time: timestamp}} = block.block;
+  const {id, header: {chainId, height, time}} = block.block;
+  const timestamp = new Date(time);
   const blockEntity = Block.create({
     id,
     chainId,
     height: BigInt(height),
-    // TODO: convert to unix timestamp and store as Int.
     timestamp,
   });
 

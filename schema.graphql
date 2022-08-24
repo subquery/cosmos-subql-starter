@@ -20,7 +20,7 @@ type Block @entity {
   id: ID! # The block header hash
   chainId: String! @index
   height: BigInt! @index
-  timestamp: String!
+  timestamp: Date!
   transactions: [Transaction] @derivedFrom(field: "block")
   messages: [Message] @derivedFrom(field: "block")
   events: [Event] @derivedFrom(field: "block")
