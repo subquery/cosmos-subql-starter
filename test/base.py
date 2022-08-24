@@ -4,9 +4,9 @@ from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.gov.v1beta1 import query_pb2_grpc
 from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins
 from cosmpy.aerial.client import LedgerClient, NetworkConfig, utils
-from gql import Client
+from gql import Client, gql
 from gql.transport.aiohttp import AIOHTTPTransport
-import grpc, unittest, psycopg
+import grpc, unittest, psycopg, dateutil.parser as dp
 
 # TODO: support overriding somehow (e.g. CLI args)
 DB_HOST = "localhost"
@@ -74,6 +74,22 @@ class Base(unittest.TestCase):
     def tearDownClass(cls):
         if cls.db is not None:
             cls.db.close()
+
+    def get_latest_block_timestamp(self):
+        query_get_time = gql(  # get the timestamp from the latest block
+            """
+            query getDate {
+                blocks (orderBy:TIMESTAMP_DESC, first:1) {
+                    nodes {
+                        timestamp
+                    }
+                }
+            }
+            """
+        )
+        result = self.gql_client.execute(query_get_time)["blocks"]["nodes"][0]["timestamp"]
+        result = dp.parse(result)  # parse into datetime obj
+        return result
 
 
 def get_wallet(mnemonic):

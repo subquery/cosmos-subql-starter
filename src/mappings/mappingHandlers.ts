@@ -75,10 +75,15 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 export async function handleNativeTransfer(msg: CosmosMessage<NativeTransferMsg>): Promise<void> {
   logger.info(`[handleNativeTransfer] (tx ${msg.tx.hash}): indexing message ${msg.idx + 1} / ${msg.tx.decodedTx.body.messages.length}`)
   logger.debug(`[handleNativeTransfer] (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`)
-
+  const {toAddress, fromAddress, amount: amounts} = msg.msg.decodedMsg;
+  // workaround: assuming one denomination per transfer message
+  const denom = amounts[0].denom;
   const transferEntity = NativeTransfer.create({
     id: messageId(msg),
-    message: msg.msg.decodedMsg,
+    toAddress,
+    fromAddress,
+    amounts,
+    denom,
     transactionId: msg.tx.hash,
     blockId: msg.block.block.id
   });
@@ -120,7 +125,6 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
 export async function handleExecuteContractMessage(msg: CosmosMessage<ExecuteContractMsg>): Promise<void> {
   logger.info(`[handleExecuteContractMessage] (tx ${msg.tx.hash}): indexing ExecuteContractMessage ${messageId(msg)}`)
   logger.debug(`[handleExecuteContractMessage] (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`)
-
   const id = messageId(msg);
   const msgEntity = ExecuteContractMessage.create({
     id,

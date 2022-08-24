@@ -9,6 +9,7 @@ protobuf = "==3.20.*"
 bip-utils = "*"
 gql = {extras = ["all"], version = "*"}
 psycopg = "*"
+python-dateutil = "*"
 
 [dev-packages]
 
