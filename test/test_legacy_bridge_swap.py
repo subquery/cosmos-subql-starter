@@ -1,43 +1,14 @@
 from cosmpy.aerial.contract import LedgerContract
 from gql import gql
-import time, unittest, os, requests, base, decimal, datetime as dt, json
+from base_contract import BaseContract
+import time, unittest, decimal, datetime as dt, json
 
 
-class TestContractSwap(base.Base):
-    contract = None
+class TestContractSwap(BaseContract):
     amount = decimal.Decimal(10000)
     denom = "atestfet"
-    db_query = 'SELECT destination, amount, denom from legacy_bridge_swaps'
+    db_query = 'SELECT destination, amount, denom from legacy_bridge_swaps'\
 
-    def setUp(self):
-        url = "https://github.com/fetchai/fetch-ethereum-bridge-v1/releases/download/v0.2.0/bridge.wasm"
-        if not os.path.exists("../.contract"):
-            os.mkdir("../.contract")
-        try:
-            temp = open("../.contract/bridge.wasm", "rb")
-            temp.close()
-        except:
-            contract_request = requests.get(url)
-            file = open("../.contract/bridge.wasm", "wb").write(contract_request.content)
-
-        self.contract = LedgerContract("../.contract/bridge.wasm", self.ledger_client)
-
-        # TODO: avoid deploying with every test run
-        # Instead, query for active contract and skip if found.
-
-        self.contract.deploy(
-            {"cap": "250000000000000000000000000",
-             "reverse_aggregated_allowance": "3000000000000000000000000",
-             "reverse_aggregated_allowance_approver_cap": "3000000000000000000000000",
-             "lower_swap_limit": "1",
-             "upper_swap_limit": "1000000000000000000000000",
-             "swap_fee": "0",
-             "paused_since_block": 18446744073709551615,
-             "denom": "atestfet",
-             "next_swap_id": 0
-             },
-            self.validator_wallet
-        )
 
     def test_contract_swap(self):
         self.db_cursor.execute('TRUNCATE table legacy_bridge_swaps')
@@ -68,7 +39,7 @@ class TestContractSwap(base.Base):
         # query legacy bridge swaps, query related block and filter by timestamp, returning all within last five minutes
         query_get_by_range = gql(
             """
-            query blocker {
+            query getByRange {
                 legacyBridgeSwaps (
                 filter: {
                     block: {
@@ -88,7 +59,7 @@ class TestContractSwap(base.Base):
             """
         )
 
-        # query bridge swaps, filter by destination address - TODO: match correct 'destination' address
+        # query bridge swaps, filter by destination address
         query_get_by_address = gql(
             """
             query getByAddress {
@@ -115,7 +86,7 @@ class TestContractSwap(base.Base):
                 legacyBridgeSwaps (
                 filter: {
                     amount: {
-                        greaterThan: "1" 
+                        greaterThan: "1"
                     }
                 }) {
                     nodes {
@@ -124,7 +95,7 @@ class TestContractSwap(base.Base):
                         denom
                     }
                 }
-            }    
+            }
             """
         )
 

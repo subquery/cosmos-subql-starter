@@ -36,7 +36,7 @@ export async function handleBlock(block: CosmosBlock): Promise<void> {
     id,
     chainId,
     height: BigInt(height),
-    timestamp,
+    timestamp
   });
 
   await blockEntity.save()
@@ -132,14 +132,16 @@ export async function handleExecuteContractMessage(msg: CosmosMessage<ExecuteCon
   logger.info(`[handleExecuteContractMessage] (tx ${msg.tx.hash}): indexing ExecuteContractMessage ${messageId(msg)}`)
   logger.debug(`[handleExecuteContractMessage] (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`)
   const id = messageId(msg);
+  const {funds, contract, msg: _msg} = msg.msg.decodedMsg;
+  const method = Object.keys(_msg)[0];
   const msgEntity = ExecuteContractMessage.create({
     id,
-    sender: msg.msg.decodedMsg.sender,
-    contract: msg.msg.decodedMsg.contract,
-    funds: JSON.stringify(msg.msg.decodedMsg.funds),
+    method,
+    contract,
+    funds,
     messageId: id,
     transactionId: msg.tx.hash,
-    blockId: msg.block.block.id,
+    blockId: msg.block.block.id
   });
 
   // NB: no need to update msg ids in txs.

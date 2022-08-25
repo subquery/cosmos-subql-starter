@@ -1,9 +1,8 @@
-import {GovProposalVoteOption} from "../../types";
 import {Coin} from "./common";
 
 export interface ExecuteContractMsg {
-  sender: string;
   contract: string;
+  msg: object;
   funds?: Coin[];
 }
 
