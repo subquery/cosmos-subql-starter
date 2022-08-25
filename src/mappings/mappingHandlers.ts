@@ -110,10 +110,16 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
   logger.debug(`[handleEvent] (event.event): ${JSON.stringify(event.event, null, 2)}`)
   logger.debug(`[handleEvent] (event.log): ${JSON.stringify(event.log, null, 2)}`)
 
+  // NB: sanitize attribute values (may contain non-text characters)
+  const attributes = event.event.attributes.map((attribute) => {
+    const {key, value} = attribute;
+    return {key, value: JSON.stringify(value)};
+  });
+
   const eventEntity = Event.create({
     id: `${messageId(event)}-${event.idx}`,
     type: event.event.type,
-    attributes: event.event.attributes as EventAttribute[],
+    attributes,
     log: event.log.log,
     transactionId: event.tx.hash,
     blockId: event.block.block.id,
