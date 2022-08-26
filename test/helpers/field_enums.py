@@ -32,6 +32,7 @@ class TxFields(NamedFields):
     status = 6
     log = 7
     timeout_height = 8
+    signer_address = 9
 
     @classmethod
     def select_query(cls, table="transactions"):

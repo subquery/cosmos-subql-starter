@@ -1,17 +1,16 @@
 import {
   Block,
   DistDelegatorClaim,
-  ExecuteContractMessage,
-  EventAttribute,
   Event,
+  ExecuteContractMessage,
   GovProposalVote,
   GovProposalVoteOption,
   LegacyBridgeSwap,
   Message,
-  Transaction,
-  TxStatus,
+  NativeTransfer,
   NativeTransferMsg,
-  NativeTransfer
+  Transaction,
+  TxStatus
 } from "../types";
 import {CosmosBlock, CosmosEvent, CosmosMessage, CosmosTransaction,} from "@subql/types-cosmos";
 import {
@@ -20,6 +19,9 @@ import {
     GovProposalVoteMsg,
     LegacyBridgeSwapMsg
 } from "./types";
+import {SignerInfo} from "cosmjs-types/cosmos/tx/v1beta1/tx";
+import {toBech32} from "@cosmjs/encoding";
+import {createHash} from "crypto";
 
 // messageId returns the id of the message passed or
 // that of the message which generated the event passed.
@@ -57,6 +59,23 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
     }
   }
 
+  const pubKey: Uint8Array | undefined = tx.decodedTx.authInfo.signerInfos[0]?.publicKey?.value;
+  let signerAddress;
+  if (typeof (pubKey) !== "undefined") {
+    // TODO: check key type and handle respectively
+    // NB: ripemd160(sha256(pubKey)) only works for secp256k1 keys
+    const ripemd160 = createHash("ripemd160");
+    const sha256 = createHash("sha256");
+    // TODO: understand why!!!
+    // NB: pubKey has 2 "extra" bytes at the beginning as compared to the
+    // base64-decoded representation/ of the same key when imported to
+    // fetchd (`fetchd keys add --recover`) and shown (`fetchd keys show`).
+    sha256.update(pubKey.slice(2));
+    ripemd160.update(sha256.digest());
+    // TODO: move prefix to config value or constant
+    signerAddress = toBech32("fetch", ripemd160.digest());
+  }
+
   const txEntity = Transaction.create({
     id: tx.hash,
     blockId: tx.block.block.id,
@@ -67,6 +86,7 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
     fees: JSON.stringify(tx.decodedTx.authInfo.fee.amount),
     log: tx.tx.log,
     status,
+    signerAddress,
   });
 
   await txEntity.save();

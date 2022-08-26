@@ -41,12 +41,12 @@ class TestNativePrimitives(base.Base):
             if len(results) != 0:
                 raise Exception(f"truncation of table \"{table}\" failed, {len(results)} records remain")
 
-        tx = cls.ledger_client.send_tokens(cls.delegator_wallet.address(), cls.amount, cls.denom, cls.validator_wallet)
+        tx = cls.ledger_client.send_tokens(cls.delegator_address, cls.amount, cls.denom, cls.validator_wallet)
         tx.wait_to_complete()
         if not tx.response.is_successful():
             raise Exception(f"first set-up tx failed")
 
-        tx = cls.ledger_client.send_tokens(cls.delegator_wallet.address(), cls.amount, cls.denom, cls.validator_wallet)
+        tx = cls.ledger_client.send_tokens(cls.validator_address, int(cls.amount / 10), cls.denom, cls.delegator_wallet)
         tx.wait_to_complete()
         if not tx.response.is_successful():
             raise Exception(f"second set-up tx failed")
@@ -104,9 +104,11 @@ class TestNativePrimitives(base.Base):
             self.assertTrue(len(tx[TxFields.block_id.value]) == 64)
             self.assertGreater(tx[TxFields.gas_used.value], 0)
             self.assertGreater(tx[TxFields.gas_wanted.value], 0)
+            tx_signer_address = tx[TxFields.signer_address.value]
+            self.assertTrue(tx_signer_address == self.validator_address or
+                            tx_signer_address == self.delegator_address)
 
             fees = json.loads(tx[TxFields.fees.value])
-            # print(fees[0])
             self.assertEqual(len(fees), 1)
             self.assertEqual(fees[0]["denom"], self.denom)
             self.assertGreater(int(fees[0]["amount"]), 0)
@@ -125,6 +127,7 @@ class TestNativePrimitives(base.Base):
                         }
                         gasUsed
                         gasWanted
+                        signerAddress
                         # TODO:
                         # fees
                     }
@@ -142,6 +145,8 @@ class TestNativePrimitives(base.Base):
             self.assertRegex(tx["block"]["id"], block_id_regex)
             self.assertGreater(int(tx["gasUsed"]), 0)
             self.assertGreater(int(tx["gasWanted"]), 0)
+            self.assertTrue(tx["signerAddress"] == self.validator_address or
+                            tx["signerAddress"] == self.delegator_address)
             # TODO: fees
 
     def test_messages(self):
@@ -156,7 +161,7 @@ class TestNativePrimitives(base.Base):
             self.assertNotEqual(msg[MsgFields.json.value], "")
 
     def test_messages_query(self):
-        query = gql("""
+        query_all = gql("""
             query {
                 messages {
                     nodes {
@@ -174,7 +179,7 @@ class TestNativePrimitives(base.Base):
             }
         """)
 
-        result = self.gql_client.execute(query)
+        result = self.gql_client.execute(query_all)
         msgs = result["messages"]["nodes"]
         self.assertIsNotNone(msgs)
         self.assertEqual(len(msgs), self.expected_msgs_len)
@@ -186,6 +191,28 @@ class TestNativePrimitives(base.Base):
             self.assertEqual(msg["typeUrl"], self.expected_msg_type_url)
             # TODO: assert on parsed json (?)
             self.assertNotEqual(msg["json"], "")
+
+    def test_messages_by_tx_signer_query(self):
+        for address in [self.validator_address, self.delegator_address]:
+            query_by_tx_signer = gql("""
+                query {
+                    messages (filter:  {transaction: {signerAddress: {equalTo: """ + json.dumps(address) + """}}}) {
+                        nodes {
+                            transaction {
+                                signerAddress
+                            }
+                        }
+                    }
+                }
+            """)
+
+            result = self.gql_client.execute(query_by_tx_signer)
+            msgs = result["messages"]["nodes"]
+            self.assertIsNotNone(msgs)
+            self.assertEqual(len(msgs), self.expected_msgs_len / 2)
+
+            for msg in msgs:
+                self.assertEqual(msg["transaction"]["signerAddress"], address)
 
     def test_events(self):
         events = self.db_cursor.execute(EventFields.select_query()).fetchall()

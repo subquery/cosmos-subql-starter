@@ -36,6 +36,8 @@ type Transaction @entity {
   status: TxStatus!
   log: String!
   timeoutHeight: BigInt @index
+  # NB: only the first signer!
+  signerAddress: String @index
   messages: [Message] @derivedFrom(field: "transaction")
 }
 
