@@ -62,3 +62,68 @@ class EventFields(NamedFields):
     def select_query(cls, table="events"):
         return super().select_query(table)
 
+
+class NativeTransferFields(NamedFields):
+    id = 0
+    amounts = 1
+    denom = 2
+    to_address = 3
+    from_address = 4
+
+    @classmethod
+    def select_query(cls, table="native_transfers"):
+        return super().select_query(table)
+
+
+class LegacyBridgeSwapFields(NamedFields):
+    id = 0
+    message_id = 1
+    transaction_id = 2
+    block_id = 3
+    destination = 4
+    amount = 5
+    denom = 6
+
+    @classmethod
+    def select_query(cls, table="legacy_bridge_swaps"):
+        return super().select_query(table)
+
+
+class GovProposalVoteFields(NamedFields):
+    id = 0
+    message_id = 1
+    transaction_id = 2
+    block_id = 3
+    proposal_id = 4
+    voter_address = 5
+    option = 6
+
+    @classmethod
+    def select_query(cls, table="gov_proposal_votes"):
+        return super().select_query(table)
+
+
+class ExecuteContractMessageFields(NamedFields):
+    id = 0
+    message_id = 1
+    transaction_id = 2
+    contract = 3
+    method = 4
+    funds = 5
+
+    @classmethod
+    def select_query(cls, table="execute_contract_messages"):
+        return super().select_query(table)
+
+
+class DistDelegatorClaimFields(NamedFields):
+    id = 0
+    message_id = 1
+    transaction_id = 2
+    block_id = 3
+    delegator_address = 4
+    validator_address = 5
+
+    @classmethod
+    def select_query(cls, table="dist_delegator_claims"):
+        return super().select_query(table)

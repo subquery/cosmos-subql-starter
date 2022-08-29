@@ -1,31 +1,38 @@
+import base
+import datetime as dt
+import json
+import time
+import unittest
+
 from gql import gql
-import time, unittest, base, dateutil.parser as dp, datetime as dt, json
+
+from helpers.field_enums import NativeTransferFields
 
 
 class TestNativeTransfer(base.Base):
     amount = 5000000
     denom = "atestfet"
     msg_type = '/cosmos.bank.v1beta1.MsgSend'
-    db_query = 'SELECT amounts, denom, to_address, from_address from native_transfers'
 
-    def test_native_transfer(self):
-        self.db_cursor.execute('TRUNCATE table native_transfers')
-        self.db.commit()
-        self.assertFalse(self.db_cursor.execute(self.db_query).fetchall(), "\nError: table not empty after truncation")
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.clean_db({"native_transfers"})
 
-        tx = self.ledger_client.send_tokens(self.delegator_wallet.address(), self.amount, self.denom, self.validator_wallet)
+        tx = cls.ledger_client.send_tokens(cls.delegator_address, cls.amount, cls.denom, cls.validator_wallet)
         tx.wait_to_complete()
-        self.assertTrue(tx.response.is_successful(), "\nTXError: transfer tx unsuccessful")
+        cls.assertTrue(tx.response.is_successful(), "TXError: transfer unsuccessful")
 
         # primitive solution to wait for indexer to observe and handle new tx - TODO: add robust solution
         time.sleep(5)
 
-        native_transfer = self.db_cursor.execute(self.db_query).fetchone()
+    def test_native_transfer(self):
+        native_transfer = self.db_cursor.execute(NativeTransferFields.select_query()).fetchone()
         self.assertIsNotNone(native_transfer, "\nDBError: table is empty - maybe indexer did not find an entry?")
-        self.assertEqual(native_transfer[0][0]['amount'], str(self.amount), "\nDBError: fund amount does not match")
-        self.assertEqual(native_transfer[1], self.denom, "\nDBError: fund denomination does not match")
-        self.assertEqual(native_transfer[2], self.delegator_address, "\nDBError: swap sender address does not match")
-        self.assertEqual(native_transfer[3], self.validator_address, "\nDBError: sender address does not match")
+        self.assertEqual(native_transfer[NativeTransferFields.amounts.value][0]['amount'], str(self.amount), "\nDBError: fund amount does not match")
+        self.assertEqual(native_transfer[NativeTransferFields.denom.value], self.denom, "\nDBError: fund denomination does not match")
+        self.assertEqual(native_transfer[NativeTransferFields.to_address.value], self.delegator_address, "\nDBError: swap sender address does not match")
+        self.assertEqual(native_transfer[NativeTransferFields.from_address.value], self.validator_address, "\nDBError: sender address does not match")
 
     def test_retrieve_transfer(self):  # As of now, this test depends on the execution of the previous test in this class.
         result = self.get_latest_block_timestamp()
@@ -126,11 +133,11 @@ class TestNativeTransfer(base.Base):
             This provides {"toAddress":address, "fromAddress":address, "denom":denom, "amount":["amount":amount, "denom":denom]}
             which can be destructured for the values of interest.
             """
-            message = result["nativeTransfers"]["nodes"]
-            self.assertTrue(message, "\nGQLError: No results returned from query")
-            self.assertEqual(message[0]["denom"], self.denom, "\nGQLError: fund denomination does not match")
-            self.assertEqual(message[0]["toAddress"], self.delegator_address, "\nGQLError: destination address does not match")
-            self.assertEqual(message[0]["fromAddress"], self.validator_address, "\nGQLError: from address does not match")
+            native_transfers = result["nativeTransfers"]["nodes"]
+            self.assertNotEqual(native_transfers, [], "\nGQLError: No results returned from query")
+            self.assertEqual(native_transfers[0]["denom"], self.denom, "\nGQLError: fund denomination does not match")
+            self.assertEqual(native_transfers[0]["toAddress"], self.delegator_address, "\nGQLError: destination address does not match")
+            self.assertEqual(native_transfers[0]["fromAddress"], self.validator_address, "\nGQLError: from address does not match")
 
 
 if __name__ == '__main__':

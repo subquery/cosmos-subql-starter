@@ -1,39 +1,44 @@
-import base
+import datetime as dt
+import json
+import time
+import unittest
+
 from gql import gql
-import time, unittest, datetime as dt, json
+
+import base
+from helpers.field_enums import DistDelegatorClaimFields
 
 
 class TestDelegation(base.Base):
     amount = 100
-    db_query = 'SELECT delegator_address, validator_address from dist_delegator_claims'
 
-    def setUp(self):
-        delegate_tx = self.ledger_client.delegate_tokens(self.validator_operator_address, self.amount, self.validator_wallet)
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.clean_db({"dist_delegator_claims"})
+
+        delegate_tx = cls.ledger_client.delegate_tokens(cls.validator_operator_address, cls.amount, cls.validator_wallet)
         delegate_tx.wait_to_complete()
-        self.assertTrue(delegate_tx.response.is_successful(), "\nTXError: delegation tx unsuccessful")
+        cls.assertTrue(delegate_tx.response.is_successful(), "\nTXError: delegation tx unsuccessful")
 
-    def test_claim_rewards(self):
-        self.db_cursor.execute('TRUNCATE table dist_delegator_claims')
-        self.db.commit()
-        self.assertFalse(self.db_cursor.execute(self.db_query).fetchall(), "\nDBError: table not empty after truncation")
-
-        claim_tx = self.ledger_client.claim_rewards(self.validator_operator_address, self.validator_wallet)
+        claim_tx = cls.ledger_client.claim_rewards(cls.validator_operator_address, cls.validator_wallet)
         claim_tx.wait_to_complete()
-        self.assertTrue(claim_tx.response.is_successful(), "\nTXError: reward claim tx unsuccessful")
+        cls.assertTrue(claim_tx.response.is_successful(), "\nTXError: reward claim tx unsuccessful")
 
         # primitive solution to wait for indexer to observe and handle new tx - TODO: add robust solution
         time.sleep(5)
 
-        row = self.db_cursor.execute(self.db_query).fetchone()
+    def test_claim_rewards(self):
+        row = self.db_cursor.execute(DistDelegatorClaimFields.select_query()).fetchone()
         self.assertIsNotNone(row, "\nDBError: table is empty - maybe indexer did not find an entry?")
-        self.assertEqual(row[0], self.validator_address, "\nDBError: delegation address does not match")
-        self.assertEqual(row[1], self.validator_operator_address, "\nDBError: delegation address does not match")
+        self.assertEqual(row[DistDelegatorClaimFields.delegator_address.value], self.validator_address, "\nDBError: delegation address does not match")
+        self.assertEqual(row[DistDelegatorClaimFields.validator_address.value], self.validator_operator_address, "\nDBError: delegation address does not match")
 
     def test_retrieve_claim(self):  # As of now, this test depends on the execution of the previous test in this class.
-        result = self.get_latest_block_timestamp()
-        time_before = result - dt.timedelta(minutes=5)  # create a second timestamp for five minutes before
-        time_before = json.dumps(time_before.isoformat())  # convert both to JSON ISO format
-        time_latest = json.dumps(result.isoformat())
+        latest_block_timestamp = self.get_latest_block_timestamp()
+        # create a second timestamp for five minutes before
+        min_timestamp = (latest_block_timestamp - dt.timedelta(minutes=5)).isoformat()  # convert both to JSON ISO format
+        max_timestamp = latest_block_timestamp.isoformat()
 
         # query governance votes, query related block and filter by timestamp, returning all within last five minutes
         query_by_timestamp = gql(
@@ -43,8 +48,8 @@ class TestDelegation(base.Base):
                 filter: {
                     block: {
                     timestamp: {
-                        greaterThanOrEqualTo: """ + time_before + """,
-                                lessThanOrEqualTo: """ + time_latest + """
+                        greaterThanOrEqualTo: """ + json.dumps(min_timestamp) + """,
+                                lessThanOrEqualTo: """ + json.dumps(max_timestamp) + """
                             }
                         }
                     }) {
@@ -65,7 +70,7 @@ class TestDelegation(base.Base):
                 distDelegatorClaims (
                 filter: {
                     validatorAddress: { 
-                        equalTo:\""""+str(self.validator_operator_address)+"""\"
+                        equalTo:\"""" + str(self.validator_operator_address) + """\"
                     }
                 }) {
                     nodes {
@@ -85,7 +90,7 @@ class TestDelegation(base.Base):
                 distDelegatorClaims (
                 filter: {
                     delegatorAddress: { 
-                        equalTo:\""""+str(self.validator_address)+"""\"
+                        equalTo:\"""" + str(self.validator_address) + """\"
                     }
                 }) {
                     nodes {

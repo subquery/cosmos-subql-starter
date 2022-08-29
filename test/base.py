@@ -18,6 +18,13 @@ FETCHD_HOST = "localhost"
 FETCHD_GRPC_PORT = "9090"
 GRAPHQL_API_URL = "http://localhost:3000"
 
+CASCADE_TRUNCATE_TABLES = frozenset({"blocks", "transactions", "messages", "events"})
+
+
+class TruncationException(Exception):
+    def __init__(self, table, count):
+        super().__init__(f"truncation of table \"{table}\" failed, {count} records remain")
+
 
 class Base(unittest.TestCase):
     delegator_wallet = None
@@ -90,6 +97,17 @@ class Base(unittest.TestCase):
         result = self.gql_client.execute(query_get_time)["blocks"]["nodes"][0]["timestamp"]
         result = dp.parse(result)  # parse into datetime obj
         return result
+
+    @classmethod
+    def clean_db(cls, ensure_empty_tables={}):
+        table_names = list(CASCADE_TRUNCATE_TABLES.union(ensure_empty_tables))
+        cls.db_cursor.execute(f"TRUNCATE table {', '.join(table_names)} CASCADE")
+        cls.db.commit()
+
+        for table in table_names:
+            count = cls.db_cursor.execute(f"SELECT id from {table}").rowcount
+            if count != 0:
+                raise TruncationException(table, count)
 
 
 def get_wallet(mnemonic):

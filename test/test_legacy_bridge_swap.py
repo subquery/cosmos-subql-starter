@@ -1,36 +1,41 @@
-from cosmpy.aerial.contract import LedgerContract
+import datetime as dt
+import decimal
+import json
+import time
+import unittest
+
 from gql import gql
+
 from base_contract import BaseContract
-import time, unittest, decimal, datetime as dt, json
+from helpers.field_enums import LegacyBridgeSwapFields
 
 
 class TestContractSwap(BaseContract):
     amount = decimal.Decimal(10000)
     denom = "atestfet"
-    db_query = 'SELECT destination, amount, denom from legacy_bridge_swaps'\
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.clean_db({"legacy_bridge_swaps"})
 
-    def test_contract_swap(self):
-        self.db_cursor.execute('TRUNCATE table legacy_bridge_swaps')
-        self.db.commit()
-        self.assertFalse(self.db_cursor.execute(self.db_query).fetchall(), "\nDBError: table not empty after truncation")
-
-        self.contract.execute(
-            {"swap": {"destination": self.validator_address}},
-            self.validator_wallet,
-            funds=str(self.amount)+self.denom
+        cls.contract.execute(
+            {"swap": {"destination": cls.validator_address}},
+            cls.validator_wallet,
+            funds=str(cls.amount)+cls.denom
         )
 
         # primitive solution to wait for indexer to observe and handle new tx - TODO: add robust solution
         time.sleep(12)
 
-        row = self.db_cursor.execute(self.db_query).fetchone()
-        self.assertIsNotNone(row, "\nDBError: table is empty - maybe indexer did not find an entry?")
-        self.assertEqual(row[0], self.validator_address, "\nDBError: swap sender address does not match")
-        self.assertEqual(row[1], self.amount, "\nDBError: fund amount does not match")
-        self.assertEqual(row[2], self.denom, "\nDBError: fund denomination does not match")
+    def test_contract_swap(self):
+        swap = self.db_cursor.execute(LegacyBridgeSwapFields.select_query()).fetchone()
+        self.assertIsNotNone(swap, "\nDBError: table is empty - maybe indexer did not find an entry?")
+        self.assertEqual(swap[LegacyBridgeSwapFields.destination.value], self.validator_address, "\nDBError: swap sender address does not match")
+        self.assertEqual(swap[LegacyBridgeSwapFields.amount.value], self.amount, "\nDBError: fund amount does not match")
+        self.assertEqual(swap[LegacyBridgeSwapFields.denom.value], self.denom, "\nDBError: fund denomination does not match")
 
-    def test_retrieve_swap(self):  # As of now, this test depends on the execution of the previous test in this class.
+    def test_retrieve_swap(self):
         result = self.get_latest_block_timestamp()
         time_before = result - dt.timedelta(minutes=5)  # create a second timestamp for five minutes before
         time_before = json.dumps(time_before.isoformat())  # convert both to JSON ISO format
@@ -107,11 +112,11 @@ class TestContractSwap(BaseContract):
             This provides {"destination":destination address, "amount":amount, "denom":denomination}
             which can be destructured for the values of interest.
             """
-            message = result["legacyBridgeSwaps"]["nodes"]
-            self.assertTrue(message, "\nGQLError: No results returned from query")
-            self.assertEqual(message[0]["destination"], self.validator_address, "\nGQLError: swap destination address does not match")
-            self.assertEqual(int(message[0]["amount"]), int(self.amount), "\nGQLError: fund amount does not match")
-            self.assertEqual(message[0]["denom"], self.denom, "\nGQLError: fund denomination does not match")
+            swaps = result["legacyBridgeSwaps"]["nodes"]
+            self.assertNotEqual(swaps, [], "\nGQLError: No results returned from query")
+            self.assertEqual(swaps[0]["destination"], self.validator_address, "\nGQLError: swap destination address does not match")
+            self.assertEqual(int(swaps[0]["amount"]), int(self.amount), "\nGQLError: fund amount does not match")
+            self.assertEqual(swaps[0]["denom"], self.denom, "\nGQLError: fund denomination does not match")
 
 
 if __name__ == '__main__':

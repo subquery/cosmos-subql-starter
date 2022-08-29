@@ -1,9 +1,7 @@
 import json
-import re
 
 from gql import gql
 
-import base
 import time
 import unittest
 
@@ -32,24 +30,15 @@ class TestNativePrimitives(base.Base):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-
-        cls.db_cursor.execute(f"TRUNCATE table {', '.join(cls.tables)} CASCADE")
-        cls.db.commit()
-
-        for table in list(reversed(cls.tables)):
-            results = cls.db_cursor.execute(f"SELECT id FROM {table}").fetchall()
-            if len(results) != 0:
-                raise Exception(f"truncation of table \"{table}\" failed, {len(results)} records remain")
+        cls.clean_db()
 
         tx = cls.ledger_client.send_tokens(cls.delegator_address, cls.amount, cls.denom, cls.validator_wallet)
         tx.wait_to_complete()
-        if not tx.response.is_successful():
-            raise Exception(f"first set-up tx failed")
+        cls.assertTrue(tx.response.is_successful(), f"first set-up tx failed")
 
         tx = cls.ledger_client.send_tokens(cls.validator_address, int(cls.amount / 10), cls.denom, cls.delegator_wallet)
         tx.wait_to_complete()
-        if not tx.response.is_successful():
-            raise Exception(f"second set-up tx failed")
+        cls.assertTrue(tx.response.is_successful(), f"second set-up tx failed")
 
         # Wait for subql node to sync
         time.sleep(5)
