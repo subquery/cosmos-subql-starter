@@ -16,16 +16,16 @@ schema:
 network:
   chainId: dorado-1
   endpoint: https://rpc-dorado.fetch.ai:443
+  chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
+    cosmos.slashing.v1beta1:
+      file: "./proto/cosmos/slashing/v1beta1/tx.proto"
+      messages:
+        - "MsgUnjail"
   # Using a dictionary can massively improve indexing speed
   dictionary: https://api.subquery.network/sq/subquery/cosmos-fetch-ai-dictionary
 dataSources:
   - kind: cosmos/Runtime
     startBlock: 827201
-    chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
-      cosmos.slashing.v1beta1:
-        file: "./proto/cosmos/slashing/v1beta1/tx.proto"
-        messages:
-          - "MsgUnjail"
     mapping:
       file: "./dist/index.js"
       handlers:
