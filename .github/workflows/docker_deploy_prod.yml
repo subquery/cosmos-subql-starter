@@ -57,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ./docker/node.dockerfile
+          file: ./docker/api.dockerfile
           push: true
           tags: |
             gcr.io/${{ env.IMAGE_PROJECT_ID }}/${{ env.API_IMAGE_NAME }}:${{ steps.vars.outputs.api_tag_name }}
