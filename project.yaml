@@ -56,7 +56,7 @@ dataSources:
             # Filter to only messages with the vote function call
             contractCall: "swap" # The name of the contract function that was called
             values: # This is the specific smart contract that we are subscribing to
-              contract: "fetch1qxxlalvsdjd07p07y3rc5fu6ll8k4tmetpha8n"
+              contract: "fetch1suhgf5svhu4usrurvxzlgn54ksxmn8gljarjtxqnapv8kjnp4nrsa26575"
         - handler: handleNativeTransfer
           kind: cosmos/MessageHandler
           filter:
