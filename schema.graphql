@@ -99,6 +99,7 @@ type LegacyBridgeSwap @entity {
   destination: String!
   amount: BigInt!
   denom: String!
+  executeContractMessage: ExecuteContractMessage!
   message: Message!
   transaction: Transaction!
   block: Block!

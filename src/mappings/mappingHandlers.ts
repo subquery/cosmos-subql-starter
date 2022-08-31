@@ -226,6 +226,7 @@ export async function handleLegacyBridgeSwap(msg: CosmosMessage<LegacyBridgeSwap
     destination,
     amount: BigInt(amount),
     denom,
+    executeContractMessageId: id,
     messageId: id,
     transactionId: msg.tx.hash,
     blockId: msg.block.block.id,
