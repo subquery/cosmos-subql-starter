@@ -8,16 +8,16 @@ import {
   LegacyBridgeSwap,
   Message,
   NativeTransfer,
-  NativeTransferMsg,
   Transaction,
   TxStatus
 } from "../types";
 import {CosmosBlock, CosmosEvent, CosmosMessage, CosmosTransaction,} from "@subql/types-cosmos";
 import {
-    ExecuteContractMsg,
-    DistDelegatorClaimMsg,
-    GovProposalVoteMsg,
-    LegacyBridgeSwapMsg
+  ExecuteContractMsg,
+  DistDelegatorClaimMsg,
+  GovProposalVoteMsg,
+  LegacyBridgeSwapMsg,
+  NativeTransferMsg
 } from "./types";
 import {SignerInfo} from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import {toBech32} from "@cosmjs/encoding";
@@ -98,12 +98,14 @@ export async function handleNativeTransfer(msg: CosmosMessage<NativeTransferMsg>
   const {toAddress, fromAddress, amount: amounts} = msg.msg.decodedMsg;
   // workaround: assuming one denomination per transfer message
   const denom = amounts[0].denom;
+  const id = messageId(msg);
   const transferEntity = NativeTransfer.create({
-    id: messageId(msg),
+    id,
     toAddress,
     fromAddress,
     amounts,
     denom,
+    messageId: id,
     transactionId: msg.tx.hash,
     blockId: msg.block.block.id
   });

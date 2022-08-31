@@ -7,6 +7,8 @@ import unittest
 from gql import gql
 
 from helpers.field_enums import NativeTransferFields
+from helpers.graphql import test_filtered_query
+from helpers.regexes import msg_id_regex, block_id_regex, tx_id_regex
 
 
 class TestNativeTransfer(base.Base):
@@ -34,110 +36,84 @@ class TestNativeTransfer(base.Base):
         self.assertEqual(native_transfer[NativeTransferFields.to_address.value], self.delegator_address, "\nDBError: swap sender address does not match")
         self.assertEqual(native_transfer[NativeTransferFields.from_address.value], self.validator_address, "\nDBError: sender address does not match")
 
-    def test_retrieve_transfer(self):  # As of now, this test depends on the execution of the previous test in this class.
+    def test_retrieve_transfer(self):
         result = self.get_latest_block_timestamp()
-        time_before = result - dt.timedelta(minutes=5)  # create a second timestamp for five minutes before
-        time_before = json.dumps(time_before.isoformat())  # convert both to JSON ISO format
-        time_latest = json.dumps(result.isoformat())
+        # create a second timestamp for five minutes before
+        min_timestamp = (result - dt.timedelta(minutes=5)).isoformat()  # convert both to JSON ISO format
+        max_timestamp = result.isoformat()
+
+        native_transfer_nodes = """
+            {
+                id,
+                message { id }
+                transaction { id }
+                block { id }
+                amounts
+                denom
+                toAddress
+                fromAddress
+            }
+            """
+
+        def filtered_native_transaction_query(_filter):
+            return test_filtered_query("nativeTransfers", _filter, native_transfer_nodes)
 
         # query native transactions, query related block and filter by timestamp, returning all within last five minutes
-        query_get_by_range = gql(
-            """
-            query getByRange {
-                nativeTransfers (
-                filter: {
-                    block: {
-                    timestamp: {
-                        greaterThanOrEqualTo: """ + time_before + """,
-                        lessThanOrEqualTo: """ + time_latest + """
-                        }
-                    }
-                }) {
-                nodes {
-                    denom
-                    toAddress
-                    fromAddress
-                    }
+        filter_by_block_timestamp_range = filtered_native_transaction_query({
+            "block": {
+                "timestamp": {
+                    "greaterThanOrEqualTo": min_timestamp,
+                    "lessThanOrEqualTo": max_timestamp
                 }
             }
-            """
-        )
+        })
 
         # query native transactions, filter by recipient address
-        query_get_by_to_address = gql(
-            """
-            query getByToAddress {
-                nativeTransfers (
-                filter: {
-                    toAddress: {
-                        equalTo: """+json.dumps(self.delegator_address)+"""
-                        }
-                    }
-                ) {
-                nodes {
-                    denom
-                    toAddress
-                    fromAddress
-                    }
-                }
+        filter_by_to_address_equals = filtered_native_transaction_query({
+            "toAddress": {
+                "equalTo": self.delegator_address
             }
-            """
-        )
+        })
 
         # query native transactions, filter by sender address
-        query_get_by_from_address = gql(
-            """
-            query getByFromAddress {
-                nativeTransfers (
-                filter: {
-                    fromAddress: {
-                        equalTo: """+json.dumps(self.validator_address)+"""
-                        }
-                    }
-                ) {
-                nodes {
-                    denom
-                    toAddress
-                    fromAddress
-                    }
-                }
+        filter_by_from_address_equals = filtered_native_transaction_query({
+            "fromAddress": {
+                "equalTo": self.validator_address
             }
-            """
-        )
+        })
 
         # query native transactions, filter by denomination
-        query_get_by_denom = gql(
-            """
-            query getByDenom {
-                nativeTransfers (
-                filter: {
-                    denom: {
-                        equalTo:\""""+self.denom+"""\"
-                    }
-                }) {
-                    nodes {
-                        denom
-                        toAddress
-                        fromAddress
-                    }
-                }
+        filter_by_denom_equals = filtered_native_transaction_query({
+            "denom": {
+                "equalTo": self.denom
             }
-            """
-        )
+        })
 
-        queries = [query_get_by_range, query_get_by_to_address, query_get_by_from_address, query_get_by_denom]
-        for query in queries:
-            result = self.gql_client.execute(query)
-            """
-            ["nativeTransfers"]["nodes"][0] denotes the sequence of keys to access the message contents queried for above.
-            This provides {"toAddress":address, "fromAddress":address, "denom":denom, "amount":["amount":amount, "denom":denom]}
-            which can be destructured for the values of interest.
-            """
-            native_transfers = result["nativeTransfers"]["nodes"]
-            self.assertNotEqual(native_transfers, [], "\nGQLError: No results returned from query")
-            self.assertEqual(native_transfers[0]["denom"], self.denom, "\nGQLError: fund denomination does not match")
-            self.assertEqual(native_transfers[0]["toAddress"], self.delegator_address, "\nGQLError: destination address does not match")
-            self.assertEqual(native_transfers[0]["fromAddress"], self.validator_address, "\nGQLError: from address does not match")
+        for (name, query) in [
+            ("by block timestamp range", filter_by_block_timestamp_range),
+            ("by toAddress equals", filter_by_to_address_equals),
+            ("by fromAddress equals", filter_by_from_address_equals),
+            ("by denom equals", filter_by_denom_equals)
+        ]:
+            with self.subTest(name):
+                result = self.gql_client.execute(query)
+                """
+                ["nativeTransfers"]["nodes"][0] denotes the sequence of keys to access the message contents queried for above.
+                This provides {"toAddress":address, "fromAddress":address, "denom":denom, "amount":["amount":amount, "denom":denom]}
+                which can be destructured for the values of interest.
+                """
+                native_transfers = result["nativeTransfers"]["nodes"]
+                self.assertNotEqual(native_transfers, [], "\nGQLError: No results returned from query")
+                self.assertRegex(native_transfers[0]["id"], msg_id_regex)
+                self.assertRegex(native_transfers[0]["message"]["id"], msg_id_regex)
+                self.assertRegex(native_transfers[0]["transaction"]["id"], tx_id_regex)
+                self.assertRegex(native_transfers[0]["block"]["id"], block_id_regex)
+                # NB: `amount` is a list of `Coin`s (i.e. [{amount: "", denom: ""}, ...])
+                self.assertEqual(int(native_transfers[0]["amounts"][0]["amount"]), self.amount, "\nGQLError: fund amount does not match")
+                self.assertEqual(native_transfers[0]["amounts"][0]["denom"], self.denom, "\nGQLError: fund denom does not match")
+                self.assertEqual(native_transfers[0]["denom"], self.denom, "\nGQLError: fund denomination does not match")
+                self.assertEqual(native_transfers[0]["toAddress"], self.delegator_address, "\nGQLError: destination address does not match")
+                self.assertEqual(native_transfers[0]["fromAddress"], self.validator_address, "\nGQLError: from address does not match")
 
 
 if __name__ == '__main__':

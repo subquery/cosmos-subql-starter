@@ -1,5 +1,11 @@
 import {Coin} from "./common";
 
+export interface NativeTransferMsg {
+  toAddress: string;
+  fromAddress: string;
+  amount: Coin[];
+}
+
 export interface ExecuteContractMsg {
   contract: string;
   msg: object;
