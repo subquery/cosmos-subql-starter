@@ -8,10 +8,10 @@ SHELL [ "/bin/bash", "-c" ]
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ARG fetchd_version="0.10.0-rc1"
+ARG fetchd_version="0.10.6"
 ENV FETCHD_VER=${fetchd_version}
 
-ARG golang_version="1.16.6"
+ARG golang_version="1.18.5"
 ENV GOLANG_VER=${golang_version}
 
 ARG fetchd_password="12345678"
