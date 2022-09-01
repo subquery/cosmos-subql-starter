@@ -123,6 +123,8 @@ class DistDelegatorClaimFields(NamedFields):
     block_id = 3
     delegator_address = 4
     validator_address = 5
+    amount = 6
+    denom = 7
 
     @classmethod
     def select_query(cls, table="dist_delegator_claims"):

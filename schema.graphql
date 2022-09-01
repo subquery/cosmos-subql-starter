@@ -89,9 +89,9 @@ type DistDelegatorClaim @entity {
   block: Block!
   # TODO:
   #  validator: Validator!
-  # TODO: introduced in cosmos-sdk (baseline) v0.46
-  #  amount: BigInt!
-  #  denom: String!
+  # TODO: also available via msg in cosmos-sdk (baseline) v0.46
+    amount: BigInt!
+    denom: String!
 }
 
 type LegacyBridgeSwap @entity {

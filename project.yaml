@@ -61,3 +61,7 @@ dataSources:
           kind: cosmos/MessageHandler
           filter:
             type: "/cosmos.bank.v1beta1.MsgSend"
+        - handler: handleDelegatorWithdrawRewardEvent
+          kind: cosmos/EventHandler
+          filter:
+            type: "withdraw_rewards"
