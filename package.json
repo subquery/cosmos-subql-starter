@@ -1,7 +1,7 @@
 {
-  "name": "cosmos-subquery-starter",
-  "version": "0.0.1",
-  "description": "This project can be use as a starting point for developing your Cosmos (Juno) based SubQuery project",
+  "name": "ledger-subquery",
+  "version": "0.1.0",
+  "description": "This is the Fetch Ledger SubQuery project, an indexer for the Fetch network.",
   "main": "dist/index.js",
   "scripts": {
     "build": "subql build",
@@ -17,7 +17,7 @@
     "schema.graphql",
     "project.yaml"
   ],
-  "author": "SubQuery Team",
+  "author": "SubQuery & Fetch.ai Teams",
   "license": "MIT",
   "devDependencies": {
     "@cosmjs/stargate": "^0.28.9",
