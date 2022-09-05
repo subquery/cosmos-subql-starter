@@ -17,10 +17,5 @@ if [[ ! -z "${NETWORK_ENDPOINT}" ]]; then
     yq -i '.network.endpoint = strenv(NETWORK_ENDPOINT)' project.yaml
 fi
 
-if [[ ! -z "${LEGACY_BRIDGE_CONTRACT_ADDRESS}" ]]; then
-    echo "[Config Update] Legacy Bridge Contract Address: ${LEGACY_BRIDGE_CONTRACT_ADDRESS}"
-    yq -i '.dataSources[].mapping.handlers |= map(select(.handler == "handleLegacyBridgeSwap").filter.values.contract = env(LEGACY_BRIDGE_CONTRACT_ADDRESS))' project.yaml
-fi
-
 # run the main node
 exec /sbin/tini -- /usr/local/lib/node_modules/@subql/node-cosmos/bin/run
