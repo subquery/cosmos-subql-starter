@@ -1,6 +1,6 @@
 {
   "name": "ledger-subquery",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "This is the Fetch Ledger SubQuery project, an indexer for the Fetch network.",
   "main": "dist/index.js",
   "scripts": {
