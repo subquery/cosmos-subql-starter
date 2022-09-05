@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 as base
+FROM fetchai/fetchd:0.10.6
 
 USER root
 
@@ -26,27 +26,6 @@ ENV TOKEN=${token}
 #ARG validator_key_pwd="12345678"
 #ENV VALIDATOR_KEY_PWD=${validator_key_pwd}
 ENV FETCHMNEMONIC="nut grocery slice visit barrel peanut tumble patch slim logic install evidence fiction shield rich brown around arrest fresh position animal butter forget cost"
-
-####################
-### dependencies ###
-####################
-
-
-# utils
-RUN apt-get update && apt-get install -y wget make curl git jq python3 python3-pip
-ENV LC_ALL C.UTF-8
-ENV LANG C.UTF-8
-
-# golang
-RUN wget https://golang.org/dl/go${GOLANG_VER}.linux-amd64.tar.gz && \
-    tar -xzvf go${GOLANG_VER}.linux-amd64.tar.gz -C /usr/local && \
-    mkdir /root/go
-ENV PATH="${PATH}:/usr/local/go/bin:/root/go/bin"
-
-# fetchd (https://docs.fetch.ai/ledger_v2/building/)
-RUN git clone https://github.com/fetchai/fetchd.git && cd fetchd && \
-    git checkout v${FETCHD_VER} && \
-    make install && fetchd version
 
 ########################
 ### setup local node ###

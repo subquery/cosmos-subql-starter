@@ -3,7 +3,7 @@ dist/
 package-lock.json
 
 # Node Specific
-node_modules/
+*/node_modules/
 
 # Deployment
 k8s/
