@@ -5,11 +5,11 @@ import unittest
 
 from gql import gql
 
-from base_contract import BaseContract
+from base_contract import BridgeContract
 from helpers.field_enums import ExecuteContractMessageFields
 
 
-class TestContractExecution(BaseContract):
+class TestContractExecution(BridgeContract):
     amount = '10000'
     denom = "atestfet"
     method = 'swap'

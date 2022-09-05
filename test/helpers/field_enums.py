@@ -83,6 +83,7 @@ class LegacyBridgeSwapFields(NamedFields):
     destination = 4
     amount = 5
     denom = 6
+    contract = 7
 
     @classmethod
     def select_query(cls, table="legacy_bridge_swaps"):

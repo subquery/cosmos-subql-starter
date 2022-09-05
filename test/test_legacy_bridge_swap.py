@@ -1,19 +1,13 @@
 import datetime as dt
 import decimal
-import json
-import re
-import time
 import unittest
+import time
 
-from gql import gql
-
-from base_contract import BaseContract
+from base_contract import BridgeContract
 from helpers.field_enums import LegacyBridgeSwapFields
 from helpers.graphql import test_filtered_query
-from helpers.regexes import msg_id_regex, tx_id_regex, block_id_regex
 
-
-class TestContractSwap(BaseContract):
+class TestContractSwap(BridgeContract):
     amount = decimal.Decimal(10000)
     denom = "atestfet"
 
@@ -22,19 +16,19 @@ class TestContractSwap(BaseContract):
         super().setUpClass()
         cls.clean_db({"legacy_bridge_swaps"})
 
-        cls.contract.execute(
+        resp = cls.contract.execute(
             {"swap": {"destination": cls.validator_address}},
             cls.validator_wallet,
             funds=str(cls.amount)+cls.denom
         )
-
-        # primitive solution to wait for indexer to observe and handle new tx - TODO: add robust solution
-        time.sleep(12)
+        cls.ledger_client.wait_for_query_tx(resp.tx_hash)
+        time.sleep(5) # stil need to give some extra time for the indexer to pickup the tx
 
     def test_contract_swap(self):
         swap = self.db_cursor.execute(LegacyBridgeSwapFields.select_query()).fetchone()
         self.assertIsNotNone(swap, "\nDBError: table is empty - maybe indexer did not find an entry?")
         self.assertEqual(swap[LegacyBridgeSwapFields.destination.value], self.validator_address, "\nDBError: swap sender address does not match")
+        self.assertEqual(swap[LegacyBridgeSwapFields.contract.value], self.contract.address, "\nDBError: contract address does not match")
         self.assertEqual(swap[LegacyBridgeSwapFields.amount.value], self.amount, "\nDBError: fund amount does not match")
         self.assertEqual(swap[LegacyBridgeSwapFields.denom.value], self.denom, "\nDBError: fund denomination does not match")
 
@@ -48,6 +42,7 @@ class TestContractSwap(BaseContract):
             {
                 id
                 destination
+                contract
                 amount
                 denom
                 executeContractMessage { id }
@@ -76,6 +71,13 @@ class TestContractSwap(BaseContract):
                 "equalTo": str(self.validator_address)
             }
         })
+        
+        # query bridge swaps, filter by contract address
+        filter_by_contract_equals = filtered_legacy_bridge_swap_query({
+            "contract": {
+                "equalTo": str(self.contract.address)
+            }
+        })
 
         # query legacy bridge swaps, filter by amount
         filter_by_amount_above = filtered_legacy_bridge_swap_query({
@@ -87,7 +89,8 @@ class TestContractSwap(BaseContract):
         for (name, query) in [
             ("by block timestamp range", filter_by_block_timestamp_range),
             ("by amount above", filter_by_amount_above),
-            ("by destination equals", filter_by_destination_equals)
+            ("by destination equals", filter_by_destination_equals),
+            ("by contract equals", filter_by_contract_equals),
         ]:
             with self.subTest(name):
                 result = self.gql_client.execute(query)

@@ -53,10 +53,8 @@ dataSources:
           kind: cosmos/MessageHandler
           filter:
             type: "/cosmwasm.wasm.v1.MsgExecuteContract"
-            # Filter to only messages with the vote function call
+            # Filter to only messages with the swap function call
             contractCall: "swap" # The name of the contract function that was called
-            values: # This is the specific smart contract that we are subscribing to
-              contract: "fetch1suhgf5svhu4usrurvxzlgn54ksxmn8gljarjtxqnapv8kjnp4nrsa26575"
         - handler: handleNativeTransfer
           kind: cosmos/MessageHandler
           filter:

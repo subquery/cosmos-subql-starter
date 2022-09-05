@@ -34,7 +34,6 @@ services:
       START_BLOCK: "1"
       NETWORK_ENDPOINT: "http://fetch-node:26657"
       CHAIN_ID: "testing"
-      LEGACY_BRIDGE_CONTRACT_ADDRESS: "fetch14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9szlkpka"
     volumes:
       - ./:/app
     command:

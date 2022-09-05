@@ -97,6 +97,7 @@ type DistDelegatorClaim @entity {
 type LegacyBridgeSwap @entity {
   id: ID! # id field is always required and must look like this
   destination: String!
+  contract: String!
   amount: BigInt!
   denom: String!
   executeContractMessage: ExecuteContractMessage!

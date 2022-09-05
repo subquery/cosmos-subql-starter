@@ -215,17 +215,27 @@ export async function handleDistDelegatorClaim(msg: CosmosMessage<DistDelegatorC
 }
 
 export async function handleLegacyBridgeSwap(msg: CosmosMessage<LegacyBridgeSwapMsg>): Promise<void> {
-  logger.info(`[handleLegacyBridgeSwap] (tx ${msg.tx.hash}): indexing LegacyBridgeSwap ${messageId(msg)}`)
+  const id = messageId(msg);
+  logger.info(`[handleLegacyBridgeSwap] (tx ${msg.tx.hash}): indexing LegacyBridgeSwap ${id}`)
   logger.debug(`[handleLegacyBridgeSwap] (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`)
 
-  const id = messageId(msg);
   const {
     msg: {swap: {destination}},
-    funds: [{amount, denom}]
+    funds: [{amount, denom}],
+    contract,
   } = msg.msg.decodedMsg;
+  
+  // gracefully skip indexing "swap" messages that doesn't fullfill the bridge contract
+  // otherwise, the node will just crashloop trying to save the message to the db with required null fields.
+  if (!destination || !amount || !denom || !contract) {
+    logger.warn(`[handleLegacyBridgeSwap] (tx ${msg.tx.hash}): cannot index message (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`)
+    return 
+  }
+  
   const legacySwap = LegacyBridgeSwap.create({
     id,
     destination,
+    contract,
     amount: BigInt(amount),
     denom,
     executeContractMessageId: id,
