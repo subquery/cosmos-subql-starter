@@ -16,6 +16,7 @@ schema:
   file: ./schema.graphql
 network:
   chainId: stargaze-1
+  #  This endpoint might not be publicly available
   endpoint: 'http://nodes.stargaze-1.publicawesome.dev:26657/'
   dictionary: 'https://api.subquery.network/sq/subquery/cosmos-stargaze-dictionary'
   chainTypes:

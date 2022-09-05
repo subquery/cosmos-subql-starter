@@ -16,6 +16,7 @@ schema:
   file: ./schema.graphql
 network:
   chainId: fetchhub-4
+  #  This endpoint might not be publicly available
   endpoint: 'https://rpc-fetchhub.fetch.ai'
   dictionary: 'https://api.subquery.network/sq/subquery/cosmos-fetch-ai-dictionary'
   chainTypes:

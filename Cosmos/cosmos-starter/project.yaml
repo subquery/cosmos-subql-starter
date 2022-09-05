@@ -16,6 +16,7 @@ schema:
   file: ./schema.graphql
 network:
   chainId: cosmoshub-4
+  #  This endpoint might not be publicly available
   endpoint: 'https://rpc.cosmos.network'
   dictionary: 'https://api.subquery.network/sq/subquery/cosmos-hub-dictionary'
   chainTypes:

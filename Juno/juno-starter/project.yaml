@@ -16,6 +16,7 @@ schema:
   file: ./schema.graphql
 network:
   chainId: juno-1
+  #  This endpoint might not be publicly available
   endpoint: 'https://rpc.juno-1.api.onfinality.io'
   dictionary: 'https://api.subquery.network/sq/subquery/cosmos-juno-dictionary'
 dataSources:
