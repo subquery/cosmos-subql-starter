@@ -3,20 +3,24 @@ import decimal
 import unittest
 import time
 
-from base_contract import BridgeContract
+import base
+from contracts import BridgeContract, DefaultBridgeContractConfig
 from helpers.field_enums import LegacyBridgeSwapFields
 from helpers.graphql import test_filtered_query
 
-class TestContractSwap(BridgeContract):
+class TestContractSwap(base.Base):
     amount = decimal.Decimal(10000)
     denom = "atestfet"
 
+    _contract: BridgeContract
+    
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.clean_db({"legacy_bridge_swaps"})
 
-        resp = cls.contract.execute(
+        cls._contract = BridgeContract(cls.ledger_client, cls.validator_wallet, DefaultBridgeContractConfig)
+        resp = cls._contract.execute(
             {"swap": {"destination": cls.validator_address}},
             cls.validator_wallet,
             funds=str(cls.amount)+cls.denom
@@ -28,7 +32,7 @@ class TestContractSwap(BridgeContract):
         swap = self.db_cursor.execute(LegacyBridgeSwapFields.select_query()).fetchone()
         self.assertIsNotNone(swap, "\nDBError: table is empty - maybe indexer did not find an entry?")
         self.assertEqual(swap[LegacyBridgeSwapFields.destination.value], self.validator_address, "\nDBError: swap sender address does not match")
-        self.assertEqual(swap[LegacyBridgeSwapFields.contract.value], self.contract.address, "\nDBError: contract address does not match")
+        self.assertEqual(swap[LegacyBridgeSwapFields.contract.value], self._contract.address, "\nDBError: contract address does not match")
         self.assertEqual(swap[LegacyBridgeSwapFields.amount.value], self.amount, "\nDBError: fund amount does not match")
         self.assertEqual(swap[LegacyBridgeSwapFields.denom.value], self.denom, "\nDBError: fund denomination does not match")
 
@@ -75,7 +79,7 @@ class TestContractSwap(BridgeContract):
         # query bridge swaps, filter by contract address
         filter_by_contract_equals = filtered_legacy_bridge_swap_query({
             "contract": {
-                "equalTo": str(self.contract.address)
+                "equalTo": str(self._contract.address)
             }
         })
 

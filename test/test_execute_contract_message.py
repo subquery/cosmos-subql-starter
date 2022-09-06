@@ -5,33 +5,36 @@ import unittest
 
 from gql import gql
 
-from base_contract import BridgeContract
+import base
+from contracts import BridgeContract, DefaultBridgeContractConfig
 from helpers.field_enums import ExecuteContractMessageFields
 
 
-class TestContractExecution(BridgeContract):
+class TestContractExecution(base.Base):
     amount = '10000'
     denom = "atestfet"
     method = 'swap'
+
+    _contract: BridgeContract
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.clean_db({"execute_contract_messages"})
 
-        cls.contract.execute(
+        cls._contract = BridgeContract(cls.ledger_client, cls.validator_wallet, DefaultBridgeContractConfig)
+        resp = cls._contract.execute(
             {cls.method: {"destination": cls.validator_address}},
             cls.validator_wallet,
             funds=str(cls.amount) + cls.denom
         )
-
-        # primitive solution to wait for indexer to observe and handle new tx - TODO: substitute with more robust solution
-        time.sleep(12)
+        cls.ledger_client.wait_for_query_tx(resp.tx_hash)
+        time.sleep(5) # stil need to give some extra time for the indexer to pickup the tx
 
     def test_contract_execution(self):
         execMsgs = self.db_cursor.execute(ExecuteContractMessageFields.select_query()).fetchone()
         self.assertIsNotNone(execMsgs, "\nDBError: table is empty - maybe indexer did not find an entry?")
-        self.assertEqual(execMsgs[ExecuteContractMessageFields.contract.value], self.contract.address, "\nDBError: contract address does not match")
+        self.assertEqual(execMsgs[ExecuteContractMessageFields.contract.value], self._contract.address, "\nDBError: contract address does not match")
         self.assertEqual(execMsgs[ExecuteContractMessageFields.method.value], self.method, "\nDBError: contract method does not match")
         self.assertEqual(execMsgs[ExecuteContractMessageFields.funds.value][0]["amount"], self.amount, "\nDBError: fund amount does not match")
         self.assertEqual(execMsgs[ExecuteContractMessageFields.funds.value][0]["denom"], self.denom, "\nDBError: fund denomination does not match")
@@ -95,7 +98,7 @@ class TestContractExecution(BridgeContract):
             """
             execMsgs = results["executeContractMessages"]["nodes"]
             self.assertTrue(execMsgs, "\nGQLError: No results returned from query")
-            self.assertEqual(execMsgs[0]["contract"], self.contract.address, "\nGQLError: contract address does not match")
+            self.assertEqual(execMsgs[0]["contract"], self._contract.address, "\nGQLError: contract address does not match")
             self.assertEqual(execMsgs[0]["method"], self.method, "\nGQLError: contract method does not match")
             self.assertEqual(int(execMsgs[0]["funds"][0]["amount"]), int(self.amount), "\nGQLError: fund amount does not match")
             self.assertEqual(execMsgs[0]["funds"][0]["denom"], self.denom, "\nGQLError: fund denomination does not match")

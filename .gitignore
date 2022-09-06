@@ -58,3 +58,4 @@ dist
 keys
 
 docker-compose.override.yml
+.contract

@@ -10,6 +10,7 @@ bip-utils = "*"
 gql = {extras = ["all"], version = "*"}
 psycopg = "*"
 python-dateutil = "*"
+dataclasses-json = "*"
 
 [dev-packages]
 

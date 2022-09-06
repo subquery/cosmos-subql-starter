@@ -22,7 +22,7 @@ sed -i 's/cors_allowed_origins = \[\]/cors_allowed_origins = \["\*"\]/' ~/.fetch
 
 # update the block parameters to match mainnet
 cp ~/.fetchd/config/genesis.json ~/.fetchd/config.genesis.json.bak
-jq '.consensus_params.block.max_gas = "2000000" | .consensus_params.block.max_bytes = "200000" | .consensus_params.evidence.max_bytes = "200000"' ~/.fetchd/config.genesis.json.bak > ~/.fetchd/config/genesis.json
+jq '.consensus_params.block.max_gas = "3000000" | .consensus_params.block.max_bytes = "300000" | .consensus_params.evidence.max_bytes = "300000"' ~/.fetchd/config.genesis.json.bak > ~/.fetchd/config/genesis.json
 
 # Create a key to hold your validator account
 (echo "$FETCHMNEMONIC"; echo "$PASSWORD"; echo "$PASSWORD") | fetchd keys add validator --recover
