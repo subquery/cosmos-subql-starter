@@ -30,4 +30,4 @@ db:
   gcpProject: fetch-ai-sandbox
   gcpSecret: sandbox_subquery_postgres
 
-  storageSize: 7Gi
+  storageSize: 30Gi
