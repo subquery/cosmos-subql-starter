@@ -56,7 +56,7 @@ services:
       "postgres":
         condition: service_healthy
       "subquery-node":
-        condition: service_started
+        condition: service_healthy
     restart: always
     environment:
       DB_USER: "subquery"

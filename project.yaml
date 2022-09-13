@@ -63,3 +63,11 @@ dataSources:
           kind: cosmos/EventHandler
           filter:
             type: "withdraw_rewards"
+        - handler: handleNativeBalanceDecrement
+          kind: cosmos/EventHandler
+          filter:
+            type: "coin_spent"
+        - handler: handleNativeBalanceIncrement
+          kind: cosmos/EventHandler
+          filter:
+            type: "coin_received"
