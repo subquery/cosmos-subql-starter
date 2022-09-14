@@ -16,12 +16,17 @@ schema:
   file: ./schema.graphql
 network:
   chainId: juno-1
-  #  This endpoint might not be publicly available
-  endpoint: 'https://rpc.juno-1.api.onfinality.io'
-  dictionary: 'https://api.subquery.network/sq/subquery/cosmos-juno-dictionary'
+  # This endpoint must be a public non-pruned archive node
+  # Public nodes may be rate limited, which can affect indexing speed
+  # When developing your project we suggest getting a private API key
+  # You can get them from OnFinality for free https://app.onfinality.io
+  # https://documentation.onfinality.io/support/the-enhanced-api-service
+  endpoint: https://juno.api.onfinality.io/public
+  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+  dictionary: https://api.subquery.network/sq/subquery/cosmos-juno-dictionary
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 4136532
+    startBlock: 4415041 # first block on the fourth iteration of juno
     mapping:
       file: ./dist/index.js
       handlers:
