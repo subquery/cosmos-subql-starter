@@ -3,22 +3,25 @@ name: stargaze-subql-starter
 version: 0.0.1
 runner:
   node:
-    name: '@subql/node-cosmos'
-    version: '>=0.1.0'
+    name: "@subql/node-cosmos"
+    version: ">=0.1.0"
   query:
-    name: '@subql/query'
-    version: '*'
+    name: "@subql/query"
+    version: "*"
 description: >-
   This project can be use as a starting point for developing your Cosmos
   (Stargaze) based SubQuery project
-repository: 'https://github.com/subquery/cosmos-subql-starter'
+repository: "https://github.com/subquery/cosmos-subql-starter"
 schema:
   file: ./schema.graphql
 network:
   chainId: stargaze-1
-  #  This endpoint might not be publicly available
-  endpoint: 'http://nodes.stargaze-1.publicawesome.dev:26657/'
-  dictionary: 'https://api.subquery.network/sq/subquery/cosmos-stargaze-dictionary'
+  # This endpoint must be a public non-pruned archive node
+  # Public nodes may be rate limited, which can affect indexing speed
+  # When developing your project we suggest getting a private API key
+  endpoint: "http://nodes.stargaze-1.publicawesome.dev:26657/"
+  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+  dictionary: "https://api.subquery.network/sq/subquery/cosmos-stargaze-dictionary"
   chainTypes:
     cosmos.slashing.v1beta1:
       file: ./proto/cosmos/slashing/v1beta1/tx.proto

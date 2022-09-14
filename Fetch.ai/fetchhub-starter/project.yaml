@@ -3,22 +3,25 @@ name: fetchhub-subql-starter
 version: 0.0.1
 runner:
   node:
-    name: '@subql/node-cosmos'
-    version: '>=0.1.0'
+    name: "@subql/node-cosmos"
+    version: ">=0.1.0"
   query:
-    name: '@subql/query'
-    version: '*'
+    name: "@subql/query"
+    version: "*"
 description: >-
   This project can be use as a starting point for developing your Cosmos
   (Fetch.ai) based SubQuery project
-repository: 'https://github.com/subquery/juno-subql-starter'
+repository: "https://github.com/subquery/juno-subql-starter"
 schema:
   file: ./schema.graphql
 network:
   chainId: fetchhub-4
-  #  This endpoint might not be publicly available
-  endpoint: 'https://rpc-fetchhub.fetch.ai'
-  dictionary: 'https://api.subquery.network/sq/subquery/cosmos-fetch-ai-dictionary'
+  # This endpoint must be a public non-pruned archive node
+  # Public nodes may be rate limited, which can affect indexing speed
+  # When developing your project we suggest getting a private API key
+  endpoint: "https://rpc-fetchhub.fetch.ai"
+  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+  dictionary: "https://api.subquery.network/sq/subquery/cosmos-fetch-ai-dictionary"
   chainTypes:
     cosmos.slashing.v1beta1:
       file: ./proto/cosmos/slashing/v1beta1/tx.proto
