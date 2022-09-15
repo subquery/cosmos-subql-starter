@@ -75,6 +75,21 @@ class NativeTransferFields(NamedFields):
         return super().select_query(table)
 
 
+class CW20TransferFields(NamedFields):
+    id = 0
+    message_id = 1
+    transaction_id = 2
+    block_id = 3
+    amount = 4
+    to_address = 5
+    from_address = 6
+    contract = 7
+
+    @classmethod
+    def select_query(cls, table="c_w20_transfers"):
+        return super().select_query(table)
+
+
 class LegacyBridgeSwapFields(NamedFields):
     id = 0
     message_id = 1

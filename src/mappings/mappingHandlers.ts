@@ -10,8 +10,9 @@ import {
   LegacyBridgeSwap,
   Message,
   NativeTransfer,
+  CW20Transfer,
   Transaction,
-  TxStatus
+  TxStatus,
 } from "../types";
 import {CosmosBlock, CosmosEvent, CosmosMessage, CosmosTransaction,} from "@subql/types-cosmos";
 import {
@@ -19,7 +20,7 @@ import {
   DistDelegatorClaimMsg,
   GovProposalVoteMsg,
   LegacyBridgeSwapMsg,
-  NativeTransferMsg
+  NativeTransferMsg,
 } from "./types";
 import {toBech32} from "@cosmjs/encoding";
 import {createHash} from "crypto";
@@ -173,6 +174,40 @@ export async function handleExecuteContractMessage(msg: CosmosMessage<ExecuteCon
   await msgEntity.save();
 }
 
+
+export async function handleCW20Transfer(event: CosmosEvent): Promise<void> {
+  const id = messageId(event.msg);
+  logger.info(`[handleCW20Transfer] (tx ${event.tx.hash}): indexing CW20Transfer ${id}`);
+
+  const msg = event.msg.msg.decodedMsg;
+  const contract = msg.contract, fromAddress = msg.sender;
+  const toAddress = msg.msg?.transfer?.recipient;
+  const amount = msg.msg?.transfer?.amount;
+
+  if (typeof(amount)==="undefined" || typeof(toAddress)==="undefined" || typeof(fromAddress)==="undefined" || typeof(contract)==="undefined") {
+    logger.warn(`[handleCW20Transfer] (${event.tx.hash}): (!SKIPPED!) message is malformed (event.msg.msg.decodedMsg): ${JSON.stringify(event.msg.msg.decodedMsg, null, 2)}`)
+    return
+  }
+
+  if (!fromAddress || !amount || !toAddress || !contract) {
+    logger.warn(`[handleCW20Transfer] (tx ${event.tx.hash}): cannot index event (event.event): ${JSON.stringify(event.event, null, 2)}`)
+    return
+  }
+
+  const cw20transfer = CW20Transfer.create({
+    id,
+    toAddress,
+    fromAddress,
+    contract,
+    amount,
+    messageId: id,
+    transactionId: event.tx.hash,
+    blockId: event.block.block.id
+  });
+
+  await cw20transfer.save();
+}
+
 export async function handleGovProposalVote(msg: CosmosMessage<GovProposalVoteMsg>): Promise<void> {
   logger.info(`[handleGovProposalVote] (tx ${msg.tx.hash}): indexing GovProposalVote ${messageId(msg)}`)
   logger.debug(`[handleGovProposalVote] (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`)
@@ -226,14 +261,14 @@ export async function handleLegacyBridgeSwap(msg: CosmosMessage<LegacyBridgeSwap
     funds: [{amount, denom}],
     contract,
   } = msg.msg.decodedMsg;
-  
+
   // gracefully skip indexing "swap" messages that doesn't fullfill the bridge contract
   // otherwise, the node will just crashloop trying to save the message to the db with required null fields.
   if (!destination || !amount || !denom || !contract) {
     logger.warn(`[handleLegacyBridgeSwap] (tx ${msg.tx.hash}): cannot index message (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`)
-    return 
+    return
   }
-  
+
   const legacySwap = LegacyBridgeSwap.create({
     id,
     destination,

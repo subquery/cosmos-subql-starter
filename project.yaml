@@ -63,6 +63,13 @@ dataSources:
           kind: cosmos/EventHandler
           filter:
             type: "withdraw_rewards"
+        - handler: handleCW20Transfer
+          kind: cosmos/EventHandler
+          filter:
+            type: "execute"
+            messageFilter:
+              type: "/cosmwasm.wasm.v1.MsgExecuteContract"
+              contractCall: "transfer"
         - handler: handleNativeBalanceDecrement
           kind: cosmos/EventHandler
           filter:

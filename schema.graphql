@@ -122,6 +122,17 @@ type NativeTransfer @entity {
   block: Block!
 }
 
+type CW20Transfer @entity {
+  id: ID!
+  toAddress: String! @index
+  fromAddress: String! @index
+  contract: String! @index
+  amount: BigInt!
+  message: Message!
+  transaction: Transaction!
+  block: Block!
+}
+  
 type Account @entity {
   # id is the address
   id: ID!

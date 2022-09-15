@@ -31,4 +31,3 @@ export interface LegacyBridgeSwapMsg extends ExecuteContractMsg{
     },
   },
 }
-
