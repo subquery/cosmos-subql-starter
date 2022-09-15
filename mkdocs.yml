@@ -1,0 +1,24 @@
+site_name: Ledger SubQuery
+site_url: https://docs.fetch.ai/ledger-subquery
+site_description: Everything you need to know about the Fetch Ledger SubQuery indexer.
+repo_url: https://github.com/fetchai/ledger-subquery
+site_author: developer@fetch.ai
+
+theme:
+  name: material
+  logo: images/logo.png
+  favicon: assets/images/favicon.ico
+  feature:
+    tabs: true
+  custom_dir: custom_theme
+
+nav:
+  - Introduction: 'introduction.md'
+
+extra_css:
+  - css/style.css
+
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.highlight
