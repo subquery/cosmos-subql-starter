@@ -8,8 +8,8 @@ For a list of tracked entities, see the [schema.graphql file](https://github.com
 
 | Network | API / Playground URL |
 | --- | --- |
-| Fetchhub (mainnet) | https://subquery.fetch.ai |
-| Dorado (testnet) | https://subquery-dorado.fetch.ai |
+| Fetchhub (mainnet) | [https://subquery.fetch.ai](https://subquery.fetch.ai) |
+| Dorado (testnet) | [https://subquery-dorado.fetch.ai](https://subquery-dorado.fetch.ai) |
 
 
 ## Architecture
