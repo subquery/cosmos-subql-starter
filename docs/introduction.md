@@ -4,6 +4,14 @@ The ledger-subquery is a [SubQuery](https://www.subquery.network/)-based indexer
 This indexer provides a [Graphql](https://www.subquery.network/) API for querying tracked entities.
 For a list of tracked entities, see the [schema.graphql file](https://github.com/fetchai/ledger-subquery/blob/main/schema.graphql).
 
+## Endpoints
+
+| Network | API / Playground URL |
+| --- | --- |
+| Fetchhub (mainnet) | https://subquery.fetch.ai |
+| Dorado (testnet) | https://subquery-dorado.fetch.ai |
+
+
 ## Architecture
 
 ### Component Diagram
