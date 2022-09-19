@@ -1,0 +1,75 @@
+specVersion: 1.0.0
+name: cronos-evm-starter
+version: 0.0.1
+runner:
+  node:
+    name: "@subql/node-cosmos"
+    version: "*"
+  query:
+    name: "@subql/query"
+    version: "*"
+description: >-
+  A basic Ethermint EVM example project with an event and call handler. Read more about this at https://university.subquery.network/build/substrate-evm.html. This project can be use as a starting point for developing your SubQuery project
+repository: https://github.com/subquery/ethermint-evm-starter
+schema:
+  file: ./schema.graphql
+
+network:
+  chainId: cronosmainnet_25-1
+  # This endpoint must be a public non-pruned archive node
+  # Public nodes may be rate limited, which can affect indexing speed
+  # When developing your project we suggest getting a private API key
+  # You can get them from OnFinality for free https://app.onfinality.io
+  # https://documentation.onfinality.io/support/the-enhanced-api-service
+  endpoint: "https://rpc.cronos.org/"
+  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+  # dictionary: "https://api.subquery.network/sq/subquery/moonriver-dictionary"
+  chainTypes:
+    ethermint.evm.v1:
+      file: "./proto/ethermint/evm/v1/tx.proto"
+      messages:
+        - "MsgEthereumTx"
+        - "LegacyTx"
+        - "AccessListTx"
+        - "DynamicFeeTx"
+    ethermint.evm.v12:
+      file: "./proto/ethermint/evm/v1/evm.proto"
+      messages:
+        - "AccessTuple"
+    google.protobuf:
+      file: "./proto/google/protobuf/any.proto"
+      messages:
+        - "Any"
+
+dataSources:
+  - kind: cosmos/EthermintEvm
+    startBlock: 1474211
+    processor:
+      file: "./dist/ethermintEvm.js"
+      options:
+        abi: erc20
+        address: "0xD4949664cD82660AaE99bEdc034a0deA8A0bd517" # wevmos
+    assets:
+      erc20:
+        file: "./erc20.abi.json"
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        - handler: handleEthermintEvmEvent
+          kind: cosmos/EthermintEvmEvent
+          filter:
+            topics:
+              ## Example valid values:
+              # - '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
+              # - Transfer(address,address,u256)
+              # - Transfer(address from,address to,uint256 value)
+              - Transfer(address indexed src, address indexed dst, uint256 wad)
+              - null
+              - null
+              - null
+        - handler: handleEthermintEvmCall
+          kind: cosmos/EthermintEvmCall
+          filter:
+            method: approve(address guy, uint256 wad)
+            # The transaction sender
+            from: "0x86ed94fb8fffe265caf38cbefb0431d2fbf862c1"
