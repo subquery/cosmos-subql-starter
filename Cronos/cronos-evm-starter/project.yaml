@@ -45,7 +45,7 @@ dataSources:
   - kind: cosmos/EthermintEvm
     startBlock: 1474211
     processor:
-      file: "./dist/ethermintEvm.js"
+      file: "./node_modules/@subql/ethermint-evm-processor/dist/bundle.js"
       options:
         abi: erc20
         address: "0xD4949664cD82660AaE99bEdc034a0deA8A0bd517" # wevmos
