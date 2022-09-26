@@ -19,8 +19,7 @@ network:
   # This endpoint must be a public non-pruned archive node
   # Public nodes may be rate limited, which can affect indexing speed
   # When developing your project we suggest getting a private API key
-  # You can get them from OnFinality for free https://app.onfinality.io
-  # https://documentation.onfinality.io/support/the-enhanced-api-service
+  # Take a look here for some Cronos endpoints https://moonflow.solutions/rpc-servers
   endpoint: "https://rpc.cronos.org/"
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   # dictionary: "https://api.subquery.network/sq/subquery/moonriver-dictionary"
@@ -55,11 +54,16 @@ dataSources:
     mapping:
       file: "./dist/index.js"
       handlers:
+        # Using block handlers slows your project down as they can be executed with each and every block. Only use if you need to
+        # - handler: handleBlock
+        #   kind: cosmos/BlockHandler
         - handler: handleEthermintEvmEvent
           kind: cosmos/EthermintEvmEvent
           filter:
             topics:
-              ## Example valid values:
+              # The topics filter follows the Ethereum JSON-PRC log filters
+              # https://docs.ethers.io/v5/concepts/events
+              # Example valid values:
               # - '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
               # - Transfer(address,address,u256)
               # - Transfer(address from,address to,uint256 value)
@@ -70,6 +74,8 @@ dataSources:
         - handler: handleEthermintEvmCall
           kind: cosmos/EthermintEvmCall
           filter:
+            # Either Function Signature strings or the function `sighash` to filter the function called on the contract
+            # ](https://docs.ethers.io/v5/api/utils/abi/fragments/#FunctionFragment)
             method: approve(address guy, uint256 wad)
             # The transaction sender
             from: "0x86ed94fb8fffe265caf38cbefb0431d2fbf862c1"
