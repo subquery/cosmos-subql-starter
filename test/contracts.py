@@ -31,7 +31,7 @@ DefaultBridgeContractConfig = BridgeContractConfig(
     next_swap_id=0
 )
 
-class CW20Contract(LedgerContract):
+class Cw20Contract(LedgerContract):
 
     def __init__(self, client: LedgerClient, admin: Wallet):
         url = "https://github.com/CosmWasm/cw-plus/releases/download/v0.14.0/cw20_base.wasm"
@@ -54,7 +54,9 @@ class CW20Contract(LedgerContract):
             "initial_balances": [{
                 "amount": "3000000000000000000000000",
                 "address": str(admin.address())
-            }]},
+            }],
+            "mint": {"minter": str(admin.address())}
+        },
             admin,
             store_gas_limit=3000000
         )
