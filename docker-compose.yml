@@ -33,7 +33,7 @@ services:
       DB_PORT: 5432
       START_BLOCK: "1"
       NETWORK_ENDPOINT: "http://fetch-node:26657"
-      CHAIN_ID: "testing"
+      CHAIN_ID: "fetchchain"
     volumes:
       - ./:/app
     command:
@@ -75,14 +75,61 @@ services:
       - --indexer=http://subquery-node:3000
 
   fetch-node:
-    build:
-      context: .
-      dockerfile: ./docker/fetchd.dockerfile
+    image: fetchai/fetchd:0.10.6
+    entrypoint: ["sh", "-c", "/scripts/start_cosmos_node.sh"]
     environment:
-      FETCHMNEMONIC: "nut grocery slice visit barrel peanut tumble patch slim logic install evidence fiction shield rich brown around arrest fresh position animal butter forget cost"
+      BINARY: fetchd
+      DENOM: atestfet
+      MONIKER: fetchnode
+      CHAIN_ID: fetchchain
+      SET_CUSTOM_CONSENSUS_PARAMS: 1
+      VALIDATOR_MNEMONIC: "nut grocery slice visit barrel peanut tumble patch slim logic install evidence fiction shield rich brown around arrest fresh position animal butter forget cost"
+      EXTRA_GENESIS_ACCOUNTS: >
+        fetch1vmvxe6xgkqfe9fsp63p4f5pgp0jqe7h6505pnk:1000000000000000000000000atestfet
+        fetch1ka9j6a8u0lnt8rm86d9ntyurm39jylcu3dstng:1000000000000000000000000atestfet
+        fetch108g2rh9e8r65hq69dm9ca76ttmke3utdy983mf:1000000000000000000000000atestfet
+    volumes:
+      - ./scripts/start_cosmos_node.sh:/scripts/start_cosmos_node.sh:ro
     ports:
-      - "26657:26657"
-      - "1317:1317"
-      - "9090:9090"
-#    volumes:
-#      - fetch_node_data:/root/.fetchd/
+      - 1317:1317
+      - 26657:26657
+      - 9090:9090
+    expose:
+      - 26656
+  wasm-node:
+    image: cosmwasm/wasmd:v0.24.0
+    entrypoint: ["sh", "-c", "/scripts/start_cosmos_node.sh"]
+    environment:
+      BINARY: wasmd
+      DENOM: ustake
+      MONIKER: wasmnode
+      CHAIN_ID: wasmchain
+      EXTRA_GENESIS_ACCOUNTS: >
+        wasm132mmds9flytwh4grswde8zmcuwnd9yc4vdftf6:1000000000000000000000000ustake
+    volumes:
+      - ./scripts/start_cosmos_node.sh:/scripts/start_cosmos_node.sh:ro
+    expose:
+      - 1317
+      - 9090
+      - 26656
+      - 26657
+  hermes:
+    build: ./docker/hermes
+    entrypoint: ["sh", "-c", "/scripts/start_hermes.sh"]
+    depends_on:
+      "wasm-node":
+        condition: service_started
+      "fetch-node":
+        condition: service_started
+    restart: always
+    volumes:
+      - ./docker/hermes/config.toml:/root/.hermes/config.toml:ro
+      - ./scripts/start_hermes.sh:/scripts/start_hermes.sh:ro
+    environment:
+      # fetch108g2rh9e8r65hq69dm9ca76ttmke3utdy983mf
+      FETCH_RELAYER_MNEMONIC: "length panther shoe gun grief river state boy note lunar input chest iron mirror elephant flip ripple scout reflect orchard frame borrow radio total"
+      # wasm132mmds9flytwh4grswde8zmcuwnd9yc4vdftf6
+      WASM_RELAYER_MNEMONIC: "all expect burger grit believe forest match math holiday polar roof soccer thank focus note lion gesture dream bounce pony whip scale group refuse"
+    expose:
+      - 3000 # REST API https://hermes.informal.systems/rest-api.html#endpoints
+      - 3001 # prometheus telemetry

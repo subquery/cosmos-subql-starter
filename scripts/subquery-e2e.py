@@ -14,7 +14,7 @@ import grpc
 # ledger_client = LedgerClient(NetworkConfig.fetch_mainnet())
 
 cfg = NetworkConfig(
-    chain_id="testing",
+    chain_id="fetchchain",
     url="grpc+http://localhost:9090",
     fee_minimum_gas_price=1,
     fee_denomination="atestfet",

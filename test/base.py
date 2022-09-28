@@ -51,7 +51,7 @@ class Base(unittest.TestCase):
         cls.delegator_address = str(cls.delegator_wallet.address())
 
         cfg = NetworkConfig(
-            chain_id="testing",
+            chain_id="fetchchain",
             url=f"grpc+http://{FETCHD_HOST}:{FETCHD_GRPC_PORT}",
             fee_minimum_gas_price=1,
             fee_denomination="atestfet",

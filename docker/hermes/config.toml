@@ -1,0 +1,134 @@
+# The global section has parameters that apply globally to the relayer operation.
+[global]
+
+# Specify the verbosity for the relayer logging output. Default: 'info'
+# Valid options are 'error', 'warn', 'info', 'debug', 'trace'.
+log_level = 'info'
+
+
+# Specify the mode to be used by the relayer. [Required]
+[mode]
+
+# Specify the client mode.
+[mode.clients]
+
+# Whether or not to enable the client workers. [Required]
+enabled = true
+
+# Whether or not to enable periodic refresh of clients. [Default: true]
+# Note: Even if this is disabled, clients will be refreshed automatically if
+#      there is activity on a connection or channel they are involved with.
+refresh = true
+
+# Whether or not to enable misbehaviour detection for clients. [Default: false]
+misbehaviour = true
+
+# Specify the connections mode.
+[mode.connections]
+
+# Whether or not to enable the connection workers for handshake completion. [Required]
+enabled = false
+
+# Specify the channels mode.
+[mode.channels]
+
+# Whether or not to enable the channel workers for handshake completion. [Required]
+enabled = false
+
+# Specify the packets mode.
+[mode.packets]
+
+# Whether or not to enable the packet workers. [Required]
+enabled = true
+
+# Parametrize the periodic packet clearing feature.
+# Interval (in number of blocks) at which pending packets
+# should be eagerly cleared. A value of '0' will disable
+# periodic packet clearing. [Default: 100]
+clear_interval = 100
+
+# Whether or not to clear packets on start. [Default: false]
+clear_on_start = true
+
+# Toggle the transaction confirmation mechanism.
+# The tx confirmation mechanism periodically queries the `/tx_search` RPC
+# endpoint to check that previously-submitted transactions
+# (to any chain in this config file) have delivered successfully.
+# Experimental feature. Affects telemetry if set to false.
+# [Default: true]
+tx_confirmation = true
+
+# The REST section defines parameters for Hermes' built-in RESTful API.
+# https://hermes.informal.systems/rest.html
+[rest]
+
+# Whether or not to enable the REST service. Default: false
+enabled = true
+
+# Specify the IPv4/6 host over which the built-in HTTP server will serve the RESTful
+# API requests. Default: 127.0.0.1
+host = '0.0.0.0'
+
+# Specify the port over which the built-in HTTP server will serve the restful API
+# requests. Default: 3000
+port = 3000
+
+
+# The telemetry section defines parameters for Hermes' built-in telemetry capabilities.
+# https://hermes.informal.systems/telemetry.html
+[telemetry]
+
+# Whether or not to enable the telemetry service. Default: false
+enabled = true
+
+# Specify the IPv4/6 host over which the built-in HTTP server will serve the metrics
+# gathered by the telemetry service. Default: 127.0.0.1
+host = '0.0.0.0'
+
+# Specify the port over which the built-in HTTP server will serve the metrics gathered
+# by the telemetry service. Default: 3001
+port = 3001
+
+[[chains]]
+id = 'fetchchain'
+rpc_addr = 'http://fetch-node:26657'
+grpc_addr = 'http://fetch-node:9090'
+websocket_addr = 'ws://fetch-node:26657/websocket'
+rpc_timeout = '10s'
+account_prefix = 'fetch'
+key_name = 'fetchkey'
+store_prefix = 'ibc'
+default_gas = 100000
+max_gas = 400000
+gas_price = { price = 1000000000, denom = 'atestfet' }
+gas_adjustment = 1.0
+max_msg_num = 30
+max_tx_size = 2097152
+clock_drift = '5s'
+max_block_time = '10s'
+trusting_period = '14days'
+trust_threshold = { numerator = '1', denominator = '3' }
+address_type = { derivation = 'cosmos' }
+memo_prefix = ''
+
+[[chains]]
+id = 'wasmchain'
+rpc_addr = 'http://wasm-node:26657'
+grpc_addr = 'http://wasm-node:9090'
+websocket_addr = 'ws://wasm-node:26657/websocket'
+rpc_timeout = '10s'
+account_prefix = 'wasm'
+key_name = 'wasmkey'
+store_prefix = 'ibc'
+default_gas = 100000
+max_gas = 400000
+gas_price = { price = 0, denom = 'ustake' }
+gas_adjustment = 1.0
+max_msg_num = 30
+max_tx_size = 2097152
+clock_drift = '5s'
+max_block_time = '10s'
+trusting_period = '14days'
+trust_threshold = { numerator = '1', denominator = '3' }
+address_type = { derivation = 'cosmos' }
+memo_prefix = ''
