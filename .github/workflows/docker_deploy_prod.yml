@@ -71,12 +71,3 @@ jobs:
           push: true
           tags: |
             gcr.io/${{ env.IMAGE_PROJECT_ID }}/${{ env.GENESIS_IMAGE_NAME }}:${{ steps.vars.outputs.api_tag_name }}
-
-      # Update manifests - trigger remote action
-      - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
-          repository: '${{ env.DEPLOYMENT_REPO }}'
-          event-type: render
-          client-payload: '{"image": "gcr.io/${{ env.IMAGE_PROJECT_ID }}/${{ env.IMAGE_NAME }}", "tag": "${{ steps.vars.outputs.tag_name }}", "ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
