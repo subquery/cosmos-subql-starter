@@ -57,11 +57,11 @@ class TestNativeTransfer(EntityTest):
             }
             """
 
-        def filtered_native_transaction_query(_filter):
+        def filtered_native_transfer_query(_filter):
             return test_filtered_query("nativeTransfers", _filter, native_transfer_nodes)
 
         # query native transactions, query related block and filter by timestamp, returning all within last five minutes
-        filter_by_block_timestamp_range = filtered_native_transaction_query({
+        filter_by_block_timestamp_range = filtered_native_transfer_query({
             "block": {
                 "timestamp": {
                     "greaterThanOrEqualTo": min_timestamp,
@@ -71,21 +71,21 @@ class TestNativeTransfer(EntityTest):
         })
 
         # query native transactions, filter by recipient address
-        filter_by_to_address_equals = filtered_native_transaction_query({
+        filter_by_to_address_equals = filtered_native_transfer_query({
             "toAddress": {
                 "equalTo": self.delegator_address
             }
         })
 
         # query native transactions, filter by sender address
-        filter_by_from_address_equals = filtered_native_transaction_query({
+        filter_by_from_address_equals = filtered_native_transfer_query({
             "fromAddress": {
                 "equalTo": self.validator_address
             }
         })
 
         # query native transactions, filter by denomination
-        filter_by_denom_equals = filtered_native_transaction_query({
+        filter_by_denom_equals = filtered_native_transfer_query({
             "denom": {
                 "equalTo": self.denom
             }
