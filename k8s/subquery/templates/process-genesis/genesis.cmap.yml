@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: subquery-genesis-config
+  labels:
+    {{- include "subquery.labels" . | nindent 4 }}
+    app.kubernetes.io/component: genesis
+data:
+  DB_NAME: {{ .Values.db.name | quote }}
+  DB_USER: {{ .Values.db.user | quote }}
+  DB_SCHEMA: {{ .Values.db.schema | quote }}
+  DB_HOST: "subquery-db"
+  DB_PORT: "5432"

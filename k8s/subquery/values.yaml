@@ -21,12 +21,18 @@ subquery:
       target: "gaia.sandbox-london-b.fetch-ai.com"
       additionalDnsNames: []
 
+  genesis_processor:
+    image: gcr.io/fetch-ai-images/subquery-genesis-processor
+    tag: v2
+    genesisFile: https://storage.googleapis.com/fetch-ai-testnet-genesis/genesis-dorado-827201.json
+
 db:
   image: postgres
   tag: 14-alpine
 
   name: subquery
   user: subquery
+  schema: app
   gcpProject: fetch-ai-sandbox
   gcpSecret: sandbox_subquery_postgres
 

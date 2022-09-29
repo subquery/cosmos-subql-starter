@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: subquery-process-genesis
+  labels:
+    {{- include "subquery.labels" . | nindent 4 }}
+    app.kubernetes.io/component: genesis
+spec:
+  template:
+    metadata:
+      labels:
+        {{- include "subquery.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: genesis
+    spec:
+      terminationGracePeriodSeconds: 10
+      restartPolicy: OnFailure
+      containers:
+        - name: genesis
+          image: "{{ .Values.subquery.genesis_processor.image }}:{{ .Values.subquery.genesis_processor.tag }}"
+          command: ["pipenv", "run"]
+          args: 
+            - python
+            - /app/scripts/genesis.py
+            - {{ .Values.subquery.genesis_processor.genesisFile }}
+          envFrom:
+            - configMapRef:
+                name: subquery-genesis-config
+            - secretRef:
+                name: subquery-genesis-secrets
+      initContainers:
+        - command:
+          - sh
+          - -c
+          - >
+            set -x;
+            while [ $(curl -sw '%{http_code}' "http://subquery-node:3000/ready" -o /dev/null) -ne 200 ]; do
+              echo "Waiting for subquery-node"; sleep 5;
+            done
+          image: yauritux/busybox-curl
+          name: wait-subquerynode-0

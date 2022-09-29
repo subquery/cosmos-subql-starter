@@ -13,6 +13,7 @@ jobs:
       IMAGE_PROJECT_ID: fetch-ai-images
       NODE_IMAGE_NAME: subquery-node
       API_IMAGE_NAME: subquery-api
+      GENESIS_IMAGE_NAME: subquery-genesis-processor
       DEPLOYMENT_REPO: fetchai/infra-production-deployment
 
     steps:
@@ -61,6 +62,15 @@ jobs:
           push: true
           tags: |
             gcr.io/${{ env.IMAGE_PROJECT_ID }}/${{ env.API_IMAGE_NAME }}:${{ steps.vars.outputs.api_tag_name }}
+
+      - name: Build and push genesis job
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./docker/genesis.dockerfile
+          push: true
+          tags: |
+            gcr.io/${{ env.IMAGE_PROJECT_ID }}/${{ env.GENESIS_IMAGE_NAME }}:${{ steps.vars.outputs.api_tag_name }}
 
       # Update manifests - trigger remote action
       - name: Repository Dispatch
