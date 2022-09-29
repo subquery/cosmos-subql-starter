@@ -38,7 +38,7 @@ def process_genesis(db_conn_factory):
                           on_error=on_error,
                           on_completed=lambda: balances_done.release()).observe(genesis.source,
                                                                                 scheduler=scheduler,
-                                                                                delay=True)
+                                                                                delay=3)
 
     accounts_done.acquire()
     balances_done.acquire()
