@@ -70,4 +70,4 @@ jobs:
           file: ./docker/genesis.dockerfile
           push: true
           tags: |
-            gcr.io/${{ env.IMAGE_PROJECT_ID }}/${{ env.GENESIS_IMAGE_NAME }}:${{ steps.vars.outputs.api_tag_name }}
+            gcr.io/${{ env.IMAGE_PROJECT_ID }}/${{ env.GENESIS_IMAGE_NAME }}:${{ steps.vars.outputs.node_tag_name }}
