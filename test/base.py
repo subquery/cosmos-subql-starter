@@ -1,9 +1,7 @@
 from cosmpy.aerial.wallet import LocalWallet
-from cosmpy.crypto.keypairs import PrivateKey
 from cosmpy.crypto.address import Address
 from cosmpy.protos.cosmos.gov.v1beta1 import query_pb2_grpc
-from bip_utils import Bip39SeedGenerator, Bip44, Bip44Coins
-from cosmpy.aerial.client import LedgerClient, NetworkConfig, utils
+from cosmpy.aerial.client import LedgerClient, NetworkConfig
 from gql import Client, gql
 from gql.transport.aiohttp import AIOHTTPTransport
 import grpc, unittest, psycopg, dateutil.parser as dp
@@ -16,10 +14,15 @@ DB_USER = "subquery"
 DB_PASS = "subquery"
 FETCHD_HOST = "localhost"
 FETCHD_GRPC_PORT = "9090"
+WASMD_HOST = "localhost"
+WASMD_GRPC_PORT = "19090"
+
 GRAPHQL_API_URL = "http://localhost:3000"
 
 CASCADE_TRUNCATE_TABLES = frozenset({"blocks", "transactions", "messages", "events"})
 
+VALIDATOR_MNEMONIC = "nut grocery slice visit barrel peanut tumble patch slim logic install evidence fiction shield rich brown around arrest fresh position animal butter forget cost"
+DELEGATOR_MNEMONIC = "dismiss domain uniform image cute buzz ride anxiety nose canvas ripple stock buffalo bitter spirit maximum tone inner couch forum equal usage state scan"
 
 class TruncationException(Exception):
     def __init__(self, table, count):
@@ -41,13 +44,11 @@ class Base(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        validator_mnemonic = "nut grocery slice visit barrel peanut tumble patch slim logic install evidence fiction shield rich brown around arrest fresh position animal butter forget cost"
-        cls.validator_wallet = get_wallet(validator_mnemonic)
+        cls.validator_wallet = LocalWallet.from_mnemonic(VALIDATOR_MNEMONIC)
         cls.validator_address = str(cls.validator_wallet.address())
         cls.validator_operator_address = Address(bytes(cls.validator_wallet.address()), prefix="fetchvaloper")
 
-        delegator_mnemonic = "dismiss domain uniform image cute buzz ride anxiety nose canvas ripple stock buffalo bitter spirit maximum tone inner couch forum equal usage state scan"
-        cls.delegator_wallet = get_wallet(delegator_mnemonic)
+        cls.delegator_wallet = LocalWallet.from_mnemonic(DELEGATOR_MNEMONIC)
         cls.delegator_address = str(cls.delegator_wallet.address())
 
         cfg = NetworkConfig(
@@ -108,13 +109,6 @@ class Base(unittest.TestCase):
             count = cls.db_cursor.execute(f"SELECT id from {table}").rowcount
             if count != 0:
                 raise TruncationException(table, count)
-
-
-def get_wallet(mnemonic):
-    seed_bytes = Bip39SeedGenerator(mnemonic).Generate()
-    bip44_def_ctx = Bip44.FromSeed(seed_bytes, Bip44Coins.COSMOS).DeriveDefaultPath()
-    return LocalWallet(PrivateKey(bip44_def_ctx.PrivateKey().Raw().ToBytes()))
-
 
 if __name__ == '__main__':
     unittest.main()

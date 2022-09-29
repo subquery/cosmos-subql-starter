@@ -106,13 +106,15 @@ services:
       CHAIN_ID: wasmchain
       EXTRA_GENESIS_ACCOUNTS: >
         wasm132mmds9flytwh4grswde8zmcuwnd9yc4vdftf6:1000000000000000000000000ustake
+        wasm1wurz7uwmvchhc8x0yztc7220hxs9jxdj53m3s0:1000000000000000000000000ustake
     volumes:
       - ./scripts/start_cosmos_node.sh:/scripts/start_cosmos_node.sh:ro
+    ports:
+      - 11317:1317
+      - 36657:26657
+      - 19090:9090
     expose:
-      - 1317
-      - 9090
       - 26656
-      - 26657
   hermes:
     build: ./docker/hermes
     entrypoint: ["sh", "-c", "/scripts/start_hermes.sh"]

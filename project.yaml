@@ -79,6 +79,10 @@ dataSources:
           kind: cosmos/EventHandler
           filter:
             type: "coin_received"
+        - handler: handleIBCTransfer
+          kind: cosmos/EventHandler
+          filter:
+            type: "ibc_transfer"
         - handler: handleCw20BalanceTransfer
           kind: cosmos/EventHandler
           filter:

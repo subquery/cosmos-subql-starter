@@ -150,6 +150,20 @@ type NativeBalanceChange @entity {
   block: Block!
 }
 
+type IbcTransfer @entity {
+  id: ID!
+  toAddress: String! @index
+  fromAddress: String! @index
+  amount: Coin!
+  denom: String! @index
+  sourceChannel: String! @index
+  sourcePort: String! @index
+  event: Event!
+  message: Message!
+  transaction: Transaction!
+  block: Block!
+}
+
 type Cw20BalanceChange @entity {
   id: ID!
   balanceOffset: BigInt!
@@ -161,3 +175,4 @@ type Cw20BalanceChange @entity {
   transaction: Transaction!
   block: Block!
 }
+
