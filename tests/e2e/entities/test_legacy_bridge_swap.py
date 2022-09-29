@@ -1,14 +1,20 @@
 import datetime as dt
 import decimal
+import sys
 import unittest
 import time
+from pathlib import Path
 
-import base
-from contracts import BridgeContract, DefaultBridgeContractConfig
-from helpers.field_enums import LegacyBridgeSwapFields
-from helpers.graphql import test_filtered_query
+repo_root_path = Path(__file__).parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
-class TestContractSwap(base.Base):
+from tests.helpers.contracts import BridgeContract, DefaultBridgeContractConfig
+from tests.helpers.entity_test import EntityTest
+from tests.helpers.field_enums import LegacyBridgeSwapFields
+from tests.helpers.graphql import test_filtered_query
+
+
+class TestContractSwap(EntityTest):
     amount = decimal.Decimal(10000)
     denom = "atestfet"
 

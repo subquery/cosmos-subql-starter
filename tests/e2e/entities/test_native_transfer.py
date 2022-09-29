@@ -1,17 +1,19 @@
-import base
 import datetime as dt
-import json
+import sys
 import time
 import unittest
+from pathlib import Path
 
-from gql import gql
+repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
-from helpers.field_enums import NativeTransferFields
-from helpers.graphql import test_filtered_query
-from helpers.regexes import msg_id_regex, block_id_regex, tx_id_regex
+from tests.helpers.entity_test import EntityTest
+from tests.helpers.field_enums import NativeTransferFields
+from tests.helpers.graphql import test_filtered_query
+from tests.helpers.regexes import msg_id_regex, block_id_regex, tx_id_regex
 
 
-class TestNativeTransfer(base.Base):
+class TestNativeTransfer(EntityTest):
     amount = 5000000
     denom = "atestfet"
     msg_type = '/cosmos.bank.v1beta1.MsgSend'

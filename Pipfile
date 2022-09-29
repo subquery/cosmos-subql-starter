@@ -11,6 +11,7 @@ gql = {extras = ["all"], version = "*"}
 psycopg = "*"
 python-dateutil = "*"
 dataclasses-json = "*"
+reactivex = "*"
 
 [dev-packages]
 

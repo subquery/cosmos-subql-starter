@@ -1,3 +1,6 @@
+import sys
+from pathlib import Path
+
 from cosmpy.aerial.client import utils
 from cosmpy.aerial.tx import Transaction
 from cosmpy.protos.cosmos.base.v1beta1 import coin_pb2
@@ -5,15 +8,19 @@ from cosmpy.protos.cosmos.gov.v1beta1 import tx_pb2 as gov_tx, gov_pb2
 from google.protobuf import any_pb2
 from gql import gql
 
-import base
 import datetime as dt
 import json
 import time
 import unittest
-from helpers.field_enums import GovProposalVoteFields
 
+repo_root_path = Path(__file__).parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
-class TestGovernance(base.Base):
+from tests.helpers.contracts import Cw20Contract
+from tests.helpers.entity_test import EntityTest
+from tests.helpers.field_enums import GovProposalVoteFields
+
+class TestGovernance(EntityTest):
     vote_tx = None
     denom = "atestfet"
     amount = "10000000"

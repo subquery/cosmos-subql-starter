@@ -398,7 +398,7 @@ export async function handleNativeBalanceDecrement(event: CosmosEvent): Promise<
     const amount = BigInt(0) - BigInt(coin.amount); // save a negative amount for a "spend" event
     spendEvents.push({spender: spender, amount: amount, denom: coin.denom})
   };
-  
+
   for (const [i, spendEvent] of Object.entries(spendEvents)) {
     await saveNativeBalanceEvent(`${messageId(event)}-spend-${i}`, spendEvent.spender, spendEvent.amount, spendEvent.denom, event);
   }
@@ -428,22 +428,22 @@ export async function handleNativeBalanceIncrement(event: CosmosEvent): Promise<
     const amount = BigInt(coin.amount);
     receiveEvents.push({receiver: receiver, amount: amount, denom: coin.denom})
   };
-  
+
   for (const [i, receiveEvent] of Object.entries(receiveEvents)) {
     await saveNativeBalanceEvent(`${messageId(event)}-receive-${i}`, receiveEvent.receiver, receiveEvent.amount, receiveEvent.denom, event);
   }
 }
 
-async function checkBalancesAccount(address: string) {
+async function checkBalancesAccount(address: string, chainId: string) {
   let accountEntity = await Account.get(address);
   if (typeof(accountEntity) === "undefined") {
-    accountEntity = Account.create({id: address});
+    accountEntity = Account.create({id: address, chainId});
     await accountEntity.save();
   }
 }
 
 async function saveNativeBalanceEvent(id: string, address: string, amount: BigInt, denom: string, event: CosmosEvent) {
-  await checkBalancesAccount(address);
+  await checkBalancesAccount(address, event.block.block.header.chainId);
   const nativeBalanceChangeEntity = NativeBalanceChange.create({
     id,
     balanceOffset: amount.valueOf(),
@@ -493,7 +493,7 @@ export async function handleIBCTransfer(event: CosmosEvent): Promise<void> {
 }
 
 async function saveCw20BalanceEvent(id: string, address: string, amount: BigInt, contract: string, event: CosmosEvent) {
-  await checkBalancesAccount(address);
+  await checkBalancesAccount(address, event.block.block.header.chainId);
   const msgId = messageId(event.msg);
   const Cw20BalanceChangeEntity = Cw20BalanceChange.create({
     id,

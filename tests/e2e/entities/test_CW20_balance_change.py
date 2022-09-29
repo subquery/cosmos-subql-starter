@@ -1,10 +1,19 @@
-import unittest, base, time, datetime as dt
-from contracts import Cw20Contract
-from helpers.field_enums import Cw20BalanceChangeFields
-from helpers.graphql import test_filtered_query
+import datetime as dt
+import sys
+import time
+import unittest
+from pathlib import Path
+
+repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
+
+from tests.helpers.contracts import Cw20Contract
+from tests.helpers.entity_test import EntityTest
+from tests.helpers.field_enums import Cw20BalanceChangeFields
+from tests.helpers.graphql import test_filtered_query
 
 
-class TestCw20BalanceChange(base.Base):
+class TestCw20BalanceChange(EntityTest):
     amount = 5000
     _contract: Cw20Contract
     methods = None

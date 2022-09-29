@@ -33,5 +33,8 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: Run unit tests
+        run: pipenv run python -m unittest discover -s ./tests/unit
+
       - name: Run end-to-end tests
-        run: pipenv run python -m unittest discover -s ./test
+        run: pipenv run python -m unittest discover -s ./tests/e2e

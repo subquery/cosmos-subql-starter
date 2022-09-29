@@ -1,9 +1,11 @@
 from dataclasses import dataclass
-from dataclasses_json import dataclass_json
-import requests, os
-from cosmpy.aerial.contract import LedgerContract
+
+import os
+import requests
 from cosmpy.aerial.client import LedgerClient
+from cosmpy.aerial.contract import LedgerContract
 from cosmpy.aerial.wallet import Wallet
+from dataclasses_json import dataclass_json
 
 
 @dataclass_json

@@ -1,19 +1,32 @@
+import sys
 from enum import Enum
+from pathlib import Path
+from typing import List
+
+repo_root_path = Path(__file__).parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
+
+from src.genesis.observers.balances import NativeBalancesManager
+from src.genesis.observers.accounts import AccountsManager
 
 
 class NamedFields(Enum):
     @classmethod
-    def select_column_names(cls):
+    def select_column_names(cls) -> List[str]:
         return [f'"{field.name}"' for field in cls]
 
     @classmethod
-    def select_query(cls, table, prefix=False):
+    def select_query(cls, table: str, prefix=False) -> str:
         columns = cls.select_column_names()
         """ More complex queries might require disambiguation, eg. where two 'id' attributes are being referenced
             - 'relevant_table.id' this prefix would solve it"""
         if prefix:
             columns = [f"{table}.{column}" for column in columns]
         return f"SELECT {', '.join(columns)} FROM {table}"
+
+    @classmethod
+    def select_where(cls, where_clause: str, table: str) -> str:
+        return f"{cls.select_query(table)} WHERE {where_clause}"
 
 
 class BlockFields(NamedFields):
@@ -183,6 +196,30 @@ class NativeBalanceChangeFields(NamedFields):
     @classmethod
     def select_query(cls, table="native_balance_changes", prefix=False):
         return super().select_query(table, prefix)
+
+
+class Accounts(NamedFields):
+    id = 0
+    chain_id = 1
+
+    @classmethod
+    def select_query(cls, table=AccountsManager._table):
+        return super().select_query(table)
+
+
+class NativeBalances(NamedFields):
+    id = 0
+    account_id = 1
+    amount = 2
+    denom = 3
+
+    @classmethod
+    def select_query(cls, table=NativeBalancesManager._table):
+        return super().select_query(table)
+
+    @classmethod
+    def select_where(cls, where_clause: str, table: str = NativeBalancesManager._table):
+        return super().select_where(where_clause, table)
 
 class IBCTransferFields(NamedFields):
     id = 0

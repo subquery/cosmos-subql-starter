@@ -1,16 +1,21 @@
 import datetime as dt
 import json
+import sys
 import time
 import unittest
+from pathlib import Path
 
 from gql import gql
 
-import base
-from contracts import BridgeContract, DefaultBridgeContractConfig
-from helpers.field_enums import ExecuteContractMessageFields
+repo_root_path = Path(__file__).parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
+
+from tests.helpers.contracts import BridgeContract, Cw20Contract, DefaultBridgeContractConfig
+from tests.helpers.field_enums import ExecuteContractMessageFields
+from tests.helpers.entity_test import EntityTest
 
 
-class TestContractExecution(base.Base):
+class TestContractExecution(EntityTest):
     amount = '10000'
     denom = "atestfet"
     method = 'swap'

@@ -1,10 +1,18 @@
+import sys
 import time
 import unittest
-from gql import gql
-import base
-from helpers.field_enums import NativeBalanceChangeFields
+from pathlib import Path
 
-class TestNativeBalances(base.Base):
+from gql import gql
+
+repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
+
+from tests.helpers.entity_test import EntityTest
+from tests.helpers.field_enums import NativeBalanceChangeFields
+
+
+class TestNativeBalances(EntityTest):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

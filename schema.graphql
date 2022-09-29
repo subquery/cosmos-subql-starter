@@ -136,8 +136,17 @@ type Cw20Transfer @entity {
 type Account @entity {
   # id is the address
   id: ID!
+  chainId: String! @index
   nativeBalanceChanges: [NativeBalanceChange]! @derivedFrom(field: "account")
   cw20BalanceChanges: [Cw20BalanceChange]! @derivedFrom(field: "account")
+  genesisNativeBalances: [NativeBalance] @derivedFrom(field: "account")
+}
+
+type NativeBalance @entity {
+    id: ID!
+    amount: BigInt!
+    denom: String! @index
+    account: Account!
 }
 
 type NativeBalanceChange @entity {
