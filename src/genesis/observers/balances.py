@@ -43,7 +43,7 @@ class NativeBalancesManager(TableManager):
     _observer: NativeBalancesObserver
     _subscription: DisposableBase
     _db_conn: Connection
-    _table = "native_balances"
+    _table = "genesis_balances"
     _columns = (
         ("id", DBTypes.text),
         ("account_id", DBTypes.text),

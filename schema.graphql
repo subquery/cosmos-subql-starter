@@ -139,10 +139,10 @@ type Account @entity {
   chainId: String! @index
   nativeBalanceChanges: [NativeBalanceChange]! @derivedFrom(field: "account")
   cw20BalanceChanges: [Cw20BalanceChange]! @derivedFrom(field: "account")
-  genesisNativeBalances: [NativeBalance] @derivedFrom(field: "account")
+  genesisBalances: [GenesisBalance] @derivedFrom(field: "account")
 }
 
-type NativeBalance @entity {
+type GenesisBalance @entity {
     id: ID!
     amount: BigInt!
     denom: String! @index
