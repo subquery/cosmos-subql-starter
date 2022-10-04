@@ -21,11 +21,11 @@
   "license": "MIT",
   "devDependencies": {
     "@cosmjs/stargate": "^0.28.9",
-    "@subql/cli": "^1.1.0",
+    "@subql/cli": "latest",
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "@subql/types-cosmos": "^0.1.0",
+    "@subql/types-cosmos": "latest",
     "@types/node": "^17.0.21",
     "pino": "^7.8.0",
     "ts-proto": "^1.112.1",
