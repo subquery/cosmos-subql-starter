@@ -38,32 +38,42 @@ dataSources:
         - handler: handleEvent
           kind: cosmos/EventHandler
         - handler: handleGovProposalVote
-          kind: cosmos/MessageHandler
+          kind: cosmos/EventHandler
           filter:
-            type: "/cosmos.gov.v1beta1.MsgVote"
+            type: "proposal_vote"
+            messageFilter:
+              type: "/cosmos.gov.v1beta1.MsgVote"
         - handler: handleDistDelegatorClaim
-          kind: cosmos/MessageHandler
+          kind: cosmos/EventHandler
           filter:
-            type: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward"
-        - handler: handleExecuteContractMessage
-          kind: cosmos/MessageHandler
+            type: "withdraw_rewards"
+            messageFilter:
+              type: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward"
+        - handler: handleExecuteContractEvent
+          kind: cosmos/EventHandler
           filter:
-            type: "/cosmwasm.wasm.v1.MsgExecuteContract"
+            type: "execute"
+            messageFilter:
+              type: "/cosmwasm.wasm.v1.MsgExecuteContract"
         - handler: handleLegacyBridgeSwap
-          kind: cosmos/MessageHandler
+          kind: cosmos/EventHandler
           filter:
-            type: "/cosmwasm.wasm.v1.MsgExecuteContract"
-            # Filter to only messages with the swap function call
-            contractCall: "swap" # The name of the contract function that was called
+            type: "execute"
+            messageFilter:
+              type: "/cosmwasm.wasm.v1.MsgExecuteContract"
+              # Filter to only messages with the swap function call
+              contractCall: "swap"
         - handler: handleNativeTransfer
-          kind: cosmos/MessageHandler
+          kind: cosmos/EventHandler
           filter:
-            type: "/cosmos.bank.v1beta1.MsgSend"
+            type: "transfer"
+            messageFilter:
+              type: "/cosmos.bank.v1beta1.MsgSend"
         - handler: handleDelegatorWithdrawRewardEvent
           kind: cosmos/EventHandler
           filter:
             type: "withdraw_rewards"
-            # TODO: perhaps merge this handler config and that of Cw20BalanceTransfer
+        # TODO: perhaps merge this handler config and that of Cw20BalanceTransfer
         - handler: handleCw20Transfer
           kind: cosmos/EventHandler
           filter:
