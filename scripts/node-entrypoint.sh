@@ -18,4 +18,4 @@ if [[ ! -z "${NETWORK_ENDPOINT}" ]]; then
 fi
 
 # run the main node
-exec /sbin/tini -- /usr/local/lib/node_modules/@subql/node-cosmos/bin/run
+exec /sbin/tini -- /usr/local/lib/node_modules/@subql/node-cosmos/bin/run "$@"
