@@ -38,7 +38,7 @@ if db_host is None:
 db_port = env_db_port or args.db_port
 db_user = env_db_user or args.db_user
 db_pass = env_db_pass or args.db_pass
-db_schema = env_db_schema or args.db_schema
+db_schema = env_db_schema or args.db_schema or "app"
 db_name = env_db_name or args.db_name
 
 # TODO: progress indicators (?)
@@ -53,7 +53,7 @@ connection_args = {
     "dbname": db_name,
     "user": db_user,
     "password": db_pass,
-    "options": "-c search_path=app"
+    "options": f"-c search_path={db_schema}"
 }
 
 
