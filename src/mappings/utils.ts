@@ -2,7 +2,9 @@
  see: https://github.com/cosmos/cosmjs/blob/9970f77f18aa19843d31d3da8a9b99cd07186951/packages/proto-signing/src/coins.ts
  */
 
-import { Coin } from "@cosmjs/amino";
+import {Coin} from "@cosmjs/amino";
+import {CosmosEvent, CosmosMessage} from "@subql/types-cosmos";
+import {Account} from "../types";
 
 /**
  * Takes a coins list like "819966000ucosm,700000000ustake" and parses it.
@@ -24,4 +26,18 @@ export function parseCoins(input: string): Coin[] {
         denom: match[2],
       };
     });
+}
+
+// messageId returns the id of the message passed or
+// that of the message which generated the event passed.
+export function messageId(msg: CosmosMessage | CosmosEvent): string {
+  return `${msg.tx.hash}-${msg.idx}`;
+}
+
+export async function checkBalancesAccount(address: string, chainId: string) {
+  let accountEntity = await Account.get(address);
+  if (typeof (accountEntity) === "undefined") {
+    accountEntity = Account.create({id: address, chainId});
+    await accountEntity.save();
+  }
 }
