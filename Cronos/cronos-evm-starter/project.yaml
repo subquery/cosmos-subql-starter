@@ -9,11 +9,10 @@ runner:
     name: "@subql/query"
     version: "*"
 description: >-
-  A basic Ethermint EVM example project with an event and call handler. Read more about this at https://university.subquery.network/build/substrate-evm.html. This project can be use as a starting point for developing your SubQuery project
-repository: https://github.com/subquery/ethermint-evm-starter
+  This project can be use as a starting point for developing your Cosmos (Cronos) based SubQuery project
+repository: "https://github.com/subquery/cosmos-subql-starter"
 schema:
   file: ./schema.graphql
-
 network:
   chainId: cronosmainnet_25-1
   # This endpoint must be a public non-pruned archive node
@@ -22,7 +21,7 @@ network:
   # Take a look here for some Cronos endpoints https://moonflow.solutions/rpc-servers
   endpoint: "https://rpc.cronos.org/"
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-  # dictionary: "https://api.subquery.network/sq/subquery/moonriver-dictionary"
+  # dictionary: 
   chainTypes:
     ethermint.evm.v1:
       file: "./proto/ethermint/evm/v1/tx.proto"
@@ -47,7 +46,7 @@ dataSources:
       file: "./node_modules/@subql/ethermint-evm-processor/dist/bundle.js"
       options:
         abi: erc20
-        address: "0xD4949664cD82660AaE99bEdc034a0deA8A0bd517" # wevmos
+        address: "0xddf993bebbd397f2a42de7c39f09f9c8e34ef322" # #CRO address
     assets:
       erc20:
         file: "./erc20.abi.json"
