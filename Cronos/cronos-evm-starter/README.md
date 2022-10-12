@@ -5,7 +5,7 @@ A basic Cosmos Ethermint EVM (based on Cronos) example project with an event and
 The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
 A SubQuery package defines which data The SubQuery will index from the Substrate blockchain, and how it will store it.
 
-This Starter Package by deafult allows indexing transactions and approvals of Wrapped CRO Token. 
+This Starter Package by default allows **indexing transactions and approvals of Wrapped CRO Token**. 
 
 ## Preparation
 
@@ -119,3 +119,12 @@ With this project can try to query with the following code to get a taste of how
   } 
 }
 ```
+
+##  Useful Resources
+
+- [SubQuery Documentation](https://academy.subquery.network/)
+- [Tips and Tricks for Performance Improvements](https://academy.subquery.network/faqs/faqs.html#how-can-i-optimise-my-project-to-speed-it-up)
+- [Automated Historical State tracking](https://academy.subquery.network/th/run_publish/historical.html)
+- [Custom Substrate Chains](https://university.subquery.network/build/manifest.html#custom-substrate-chains)
+- [GraphQL Subscriptions](https://academy.subquery.network/run_publish/subscription.html)
+- [Discord with Technical Support Channel](https://discord.com/invite/subquery)
