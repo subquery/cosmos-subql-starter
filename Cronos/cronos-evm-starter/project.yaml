@@ -46,7 +46,7 @@ dataSources:
       file: "./node_modules/@subql/ethermint-evm-processor/dist/bundle.js"
       options:
         abi: erc20
-        address: "0xddf993bebbd397f2a42de7c39f09f9c8e34ef322" # #CRO address
+        address: "0x5c7f8a570d578ed84e63fdfa7b1ee72deae1ae23" #Wrapped CRO
     assets:
       erc20:
         file: "./erc20.abi.json"
@@ -75,6 +75,4 @@ dataSources:
           filter:
             # Either Function Signature strings or the function `sighash` to filter the function called on the contract
             # ](https://docs.ethers.io/v5/api/utils/abi/fragments/#FunctionFragment)
-            method: approve(address guy, uint256 wad)
-            # The transaction sender
-            from: "0x86ed94fb8fffe265caf38cbefb0431d2fbf862c1"
+            method: approve(address guy, uint256 wad)    
