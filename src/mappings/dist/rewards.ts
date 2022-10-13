@@ -5,16 +5,16 @@ import {DistDelegatorClaim} from "../../types";
 
 export async function handleDistDelegatorClaim(event: CosmosEvent): Promise<void> {
   const msg: CosmosMessage<DistDelegatorClaimMsg> = event.msg;
-  logger.info(`[handleDistDelegatorClaim] (tx ${msg.tx.hash}): indexing DistDelegatorClaim ${messageId(msg)}`)
-  logger.debug(`[handleDistDelegatorClaim] (event.msg.msg): ${JSON.stringify(msg.msg, null, 2)}`)
+  logger.info(`[handleDistDelegatorClaim] (tx ${msg.tx.hash}): indexing DistDelegatorClaim ${messageId(msg)}`);
+  logger.debug(`[handleDistDelegatorClaim] (event.msg.msg): ${JSON.stringify(msg.msg, null, 2)}`);
 
   const id = messageId(msg);
   const delegatorAddress = msg?.msg?.decodedMsg?.delegatorAddress;
   const validatorAddress = msg?.msg?.decodedMsg?.validatorAddress;
 
   if (!delegatorAddress || !validatorAddress) {
-    logger.warn(`[handleDistDelegatorClaim] (tx ${event.tx.hash}): cannot index event (event.event): ${JSON.stringify(event.event, null, 2)}`)
-    return
+    logger.warn(`[handleDistDelegatorClaim] (tx ${event.tx.hash}): cannot index event (event.event): ${JSON.stringify(event.event, null, 2)}`);
+    return;
   }
 
   const claim = DistDelegatorClaim.create({
@@ -36,17 +36,17 @@ export async function handleDistDelegatorClaim(event: CosmosEvent): Promise<void
 }
 
 export async function handleDelegatorWithdrawRewardEvent(event: CosmosEvent): Promise<void> {
-  logger.debug(`[handleDelegateWithdrawRewardEvent] (event.event): ${JSON.stringify(event.event, null, 2)}`)
-  logger.debug(`[handleDelegateWithdrawRewardEvent] (event.log): ${JSON.stringify(event.log, null, 2)}`)
+  logger.debug(`[handleDelegateWithdrawRewardEvent] (event.event): ${JSON.stringify(event.event, null, 2)}`);
+  logger.debug(`[handleDelegateWithdrawRewardEvent] (event.log): ${JSON.stringify(event.log, null, 2)}`);
 
-  const attrs: Record<string, any> = event.event.attributes.reduce((acc, attr) => {
+  const attrs: Record<string, unknown> = event.event.attributes.reduce((acc, attr) => {
     acc[attr.key] = attr.value;
     return acc;
   }, {});
 
   if (!attrs.amount || !attrs.validator) {
-    logger.warn(`[handleDelegatorWithdrawRewardEvent] (tx ${event.tx.hash}): cannot index event (event.event): ${JSON.stringify(event.event, null, 2)}`)
-    return
+    logger.warn(`[handleDelegatorWithdrawRewardEvent] (tx ${event.tx.hash}): cannot index event (event.event): ${JSON.stringify(event.event, null, 2)}`);
+    return;
   }
 
   const claims = await DistDelegatorClaim.getByTransactionId(event.tx.hash);

@@ -4,8 +4,8 @@ import {messageId} from "../utils";
 
 export async function handleIBCTransfer(event: CosmosEvent): Promise<void> {
   const msg = event.msg;
-  logger.info(`[handleIBCTransfer] (tx ${msg.tx.hash}): indexing message ${msg.idx + 1} / ${msg.tx.decodedTx.body.messages.length}`)
-  logger.debug(`[handleIBCTransfer] (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`)
+  logger.info(`[handleIBCTransfer] (tx ${msg.tx.hash}): indexing message ${msg.idx + 1} / ${msg.tx.decodedTx.body.messages.length}`);
+  logger.debug(`[handleIBCTransfer] (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`);
 
   const decodedMsg = msg.msg.decodedMsg;
   const sourcePort = decodedMsg.sourcePort;
@@ -16,8 +16,8 @@ export async function handleIBCTransfer(event: CosmosEvent): Promise<void> {
   const receiver = decodedMsg.receiver;
 
   if (!sourcePort || !sourceChannel || !tokenAmount || !tokenDenom || !sender || !receiver) {
-    logger.warn(`[handleIBCTransfer] (tx ${msg.tx.hash}): cannot index message (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`)
-    return
+    logger.warn(`[handleIBCTransfer] (tx ${msg.tx.hash}): cannot index message (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`);
+    return;
   }
 
   const id = messageId(msg);

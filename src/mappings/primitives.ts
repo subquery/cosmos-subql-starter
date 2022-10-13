@@ -5,7 +5,7 @@ import {createHash} from "crypto";
 import {toBech32} from "@cosmjs/encoding";
 
 export async function handleBlock(block: CosmosBlock): Promise<void> {
-  logger.info(`[handleBlock] (block.header.height): indexing block ${block.block.header.height}`)
+  logger.info(`[handleBlock] (block.header.height): indexing block ${block.block.header.height}`);
 
   const {id, header: {chainId, height, time}} = block.block;
   const timestamp = new Date(time);
@@ -16,18 +16,18 @@ export async function handleBlock(block: CosmosBlock): Promise<void> {
     timestamp
   });
 
-  await blockEntity.save()
+  await blockEntity.save();
 }
 
 export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
-  logger.info(`[handleTransaction] (block ${tx.block.block.header.height}): indexing transaction ${tx.idx + 1} / ${tx.block.txs.length}`)
-  logger.debug(`[handleTransaction] (tx.decodedTx): ${JSON.stringify(tx.decodedTx, null, 2)}`)
-  logger.debug(`[handleTransaction] (tx.tx.log): ${tx.tx.log}`)
+  logger.info(`[handleTransaction] (block ${tx.block.block.header.height}): indexing transaction ${tx.idx + 1} / ${tx.block.txs.length}`);
+  logger.debug(`[handleTransaction] (tx.decodedTx): ${JSON.stringify(tx.decodedTx, null, 2)}`);
+  logger.debug(`[handleTransaction] (tx.tx.log): ${tx.tx.log}`);
 
   let status = TxStatus.Error;
   if (tx.tx.log) {
     try {
-      JSON.parse(tx.tx.log)
+      JSON.parse(tx.tx.log);
       status = TxStatus.Success;
     } catch {
       // NB: assume tx failed
@@ -68,8 +68,8 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 }
 
 export async function handleMessage(msg: CosmosMessage): Promise<void> {
-  logger.info(`[handleMessage] (tx ${msg.tx.hash}): indexing message ${msg.idx + 1} / ${msg.tx.decodedTx.body.messages.length}`)
-  logger.debug(`[handleMessage] (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`)
+  logger.info(`[handleMessage] (tx ${msg.tx.hash}): indexing message ${msg.idx + 1} / ${msg.tx.decodedTx.body.messages.length}`);
+  logger.debug(`[handleMessage] (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`);
 
   const msgEntity = Message.create({
     id: messageId(msg),
@@ -83,9 +83,9 @@ export async function handleMessage(msg: CosmosMessage): Promise<void> {
 }
 
 export async function handleEvent(event: CosmosEvent): Promise<void> {
-  logger.info(`[handleEvent] (tx ${event.tx.hash}): indexing event ${event.idx + 1} / ${event.tx.tx.events.length}`)
-  logger.debug(`[handleEvent] (event.event): ${JSON.stringify(event.event, null, 2)}`)
-  logger.debug(`[handleEvent] (event.log): ${JSON.stringify(event.log, null, 2)}`)
+  logger.info(`[handleEvent] (tx ${event.tx.hash}): indexing event ${event.idx + 1} / ${event.tx.tx.events.length}`);
+  logger.debug(`[handleEvent] (event.event): ${JSON.stringify(event.event, null, 2)}`);
+  logger.debug(`[handleEvent] (event.log): ${JSON.stringify(event.log, null, 2)}`);
 
   // NB: sanitize attribute values (may contain non-text characters)
   const attributes = event.event.attributes.map((attribute) => {

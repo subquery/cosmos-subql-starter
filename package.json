@@ -4,6 +4,7 @@
   "description": "This is the Fetch Ledger SubQuery project, an indexer for the Fetch network.",
   "main": "dist/index.js",
   "scripts": {
+    "lint": "yarn eslint ./src",
     "build": "subql build",
     "prepack": "rm -rf dist && npm build",
     "test": "jest",
@@ -22,6 +23,9 @@
   "devDependencies": {
     "@cosmjs/stargate": "^0.28.9",
     "@subql/cli": "^1.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.40.0",
+    "@typescript-eslint/parser": "^5.40.0",
+    "eslint": "^8.25.0",
     "typescript": "^4.7.4"
   },
   "dependencies": {

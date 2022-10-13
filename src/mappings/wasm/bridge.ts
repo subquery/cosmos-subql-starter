@@ -4,10 +4,10 @@ import {messageId} from "../utils";
 import {LegacyBridgeSwap} from "../../types";
 
 export async function handleLegacyBridgeSwap(event: CosmosEvent): Promise<void> {
-  const msg: CosmosMessage<LegacyBridgeSwapMsg> = event.msg
+  const msg: CosmosMessage<LegacyBridgeSwapMsg> = event.msg;
   const id = messageId(msg);
-  logger.info(`[handleLegacyBridgeSwap] (tx ${msg.tx.hash}): indexing LegacyBridgeSwap ${id}`)
-  logger.debug(`[handleLegacyBridgeSwap] (event.msg.msg): ${JSON.stringify(msg.msg, null, 2)}`)
+  logger.info(`[handleLegacyBridgeSwap] (tx ${msg.tx.hash}): indexing LegacyBridgeSwap ${id}`);
+  logger.debug(`[handleLegacyBridgeSwap] (event.msg.msg): ${JSON.stringify(msg.msg, null, 2)}`);
 
   const contract = msg?.msg?.decodedMsg?.contract;
   const swapMsg = msg?.msg?.decodedMsg?.msg;
@@ -20,8 +20,8 @@ export async function handleLegacyBridgeSwap(event: CosmosEvent): Promise<void> 
   // gracefully skip indexing "swap" messages that doesn't fullfill the bridge contract
   // otherwise, the node will just crashloop trying to save the message to the db with required null fields.
   if (!destination || !amount || !denom || !contract) {
-    logger.warn(`[handleLegacyBridgeSwap] (tx ${msg.tx.hash}): cannot index message (event.msg.msg): ${JSON.stringify(msg.msg, null, 2)}`)
-    return
+    logger.warn(`[handleLegacyBridgeSwap] (tx ${msg.tx.hash}): cannot index message (event.msg.msg): ${JSON.stringify(msg.msg, null, 2)}`);
+    return;
   }
 
   const legacySwap = LegacyBridgeSwap.create({
