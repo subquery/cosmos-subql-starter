@@ -40,7 +40,8 @@ Postgraphile plugins also play a critical role; in particular, the [connection-f
 ### Pagination
 The graphql API implements [the connections specification](https://relay.dev/graphql/connections.htm) for pagination (see: [GraphQL pagination docs](https://graphql.org/learn/pagination/#end-of-list-counts-and-connections) for more).
 
-!!! tip It is recommended to prefer using pagination operators by default (e.g. `first: <limit>`) to avoid unnecessary delays in query responses. 
+!!! tip
+    It is recommended to prefer using pagination operators by default (e.g. `first: <limit>`) to avoid unnecessary delays in query responses. 
 
 ### Filtering
 
