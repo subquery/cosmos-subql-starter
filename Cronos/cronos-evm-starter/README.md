@@ -53,7 +53,7 @@ yarn codegen OR npm run-script codegen
 
 If you change any data in your `schema.graphql`, you should run this command again. You should also consider deleting your local database in the `.data/` directory.
 
-#### 3. Build the project 
+#### 2. Build the project 
 
 This builds your project into static files within the `/dist` for running.
 
