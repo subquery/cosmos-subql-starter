@@ -17,30 +17,19 @@ This Starter Package by default allows **indexing transactions and approvals of 
 
 - You will also need [Yarn](https://classic.yarnpkg.com/lang/en/docs/install ) or [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) and [Docker](https://docs.docker.com/engine/install/). 
 
-#### Install the SubQuery CLI
+#### Install the SubQuery CLI and Project Dependencies
 
-Install SubQuery CLI globally on your terminal by using NPM:
+Install SubQuery CLI globally on your terminal by using NPM (we don't recommend using Yarn to install global dependencies):
 
 ```
 npm install -g @subql/cli
 ```
 
-Run help to see available commands and usage provide by CLI
+Under the project directory, install the node dependencies by running the following command ([Learn more](https://academy.subquery.network/build/install.html#)):
 
 ```
-subql help
+yarn OR npm install
 ```
-
-## In case of Initializing the Starter Package (optional)
-
-Inside the directory in which you want to create the SubQuery project run the following command and follow all the steps chosing project name, GitHub repo addres, network familay, rpc endpoint and more. Everything can by changed afterwords as well. 
-
-```
-subql init project-name
-```
-
-Then you should see a folder with your project name has been created inside the directory, you can use this as the start point of your project. And the files should be identical as in the [Directory Structure](https://academy.subquery.network/build/introduction.html#directory-structure).
-
 
 ## Configure the Project Further
 
@@ -54,31 +43,25 @@ If you want to change your project you will need to work on the following files:
 
 ## Build the Project 
 
-#### 1. Install dependencies
+#### 1. Generate Associated Typescript
 
-Under the project directory, install the node dependencies by running the following command:
-
-```
-yarn install OR npm install
-```
-
-[Learn more](https://academy.subquery.network/build/install.html#)
-
-#### 2. Generate Associated Typescript
-
-Next, we will generate the associated typescript with the following command:
+We will generate the defined entity models with the following command:
 
 ```
 yarn codegen OR npm run-script codegen
 ```
+
+If you change any data in your `schema.graphql`, you should run this command again. You should also consider deleting your local database in the `.data/` directory.
+
 #### 3. Build the project 
 
-This bundles the app into static files for production.
-
+This builds your project into static files within the `/dist` for running.
 
 ```
 yarn build OR npm run-script codegen
 ```
+
+If you change any data in your `src/mappings/` directory you should run this command again.
 
 ## Indexing and Query
 
@@ -87,16 +70,19 @@ yarn build OR npm run-script codegen
 Under the project directory run following command:
 
 ```
-docker-compose pull && docker-compose up
+yarn start:docker
 ```
+
+This will download packages from Docker, create a new Postgres database, and start an indexing an query service. When you first run this, it may take some time to start, please be patient.
 
 #### 2. Query this Project
 
 Open your browser and head to `http://localhost:3000`.
 
-Finally, you should see a GraphQL playground is showing in the explorer and the schemas that ready to query.
+Finally, you should see a GraphQL playground is showing in the explorer and the schemas that ready to query. On the right hand side is a documentation button that shows you what models you have to construct queries.
 
 With this project can try to query with the following code to get a taste of how it works.
+
 ```graphql
 {
   query {
