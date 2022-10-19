@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "lint": "yarn eslint ./src",
+    "lint:fix": "yarn eslint --fix ./src",
     "build": "subql build",
     "prepack": "rm -rf dist && npm build",
     "test": "jest",
