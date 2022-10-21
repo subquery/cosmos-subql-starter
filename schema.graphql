@@ -149,6 +149,22 @@ type GenesisBalance @entity {
     account: Account!
 }
 
+type AuthzExec @entity {
+  id: ID!
+  grantee: String! @index
+  subMessages: [AuthzExecMessage]! @derivedFrom(field: "authzExec")
+  message: Message!
+  transaction: Transaction!
+  block: Block!
+}
+
+# NB: AuthzExec --|{ Message join table
+type AuthzExecMessage @entity {
+  id: ID!
+  authzExec: AuthzExec!
+  message: Message!
+}
+
 type NativeBalanceChange @entity {
   id: ID!
   balanceOffset: BigInt!

@@ -1,6 +1,7 @@
 import {CosmosEvent} from "@subql/types-cosmos";
 import {NativeBalanceChange} from "../../types";
-import {checkBalancesAccount, messageId, parseCoins} from "../utils";
+import {checkBalancesAccount, messageId} from "../utils";
+import {parseCoins} from "../../cosmjs/utils";
 
 export async function saveNativeBalanceEvent(id: string, address: string, amount: bigint, denom: string, event: CosmosEvent) {
   await checkBalancesAccount(address, event.block.block.header.chainId);
@@ -40,7 +41,7 @@ export async function handleNativeBalanceDecrement(event: CosmosEvent): Promise<
     const amount = BigInt(0) - BigInt(coin.amount); // save a negative amount for a "spend" event
     spendEvents.push({spender: spender, amount: amount, denom: coin.denom});
   }
-  
+
 
   for (const [i, spendEvent] of Object.entries(spendEvents)) {
     await saveNativeBalanceEvent(`${messageId(event)}-spend-${i}`, spendEvent.spender, spendEvent.amount, spendEvent.denom, event);
@@ -71,7 +72,7 @@ export async function handleNativeBalanceIncrement(event: CosmosEvent): Promise<
     const amount = BigInt(coin.amount);
     receiveEvents.push({receiver: receiver, amount: amount, denom: coin.denom});
   }
-  
+
 
   for (const [i, receiveEvent] of Object.entries(receiveEvents)) {
     await saveNativeBalanceEvent(`${messageId(event)}-receive-${i}`, receiveEvent.receiver, receiveEvent.amount, receiveEvent.denom, event);

@@ -31,3 +31,13 @@ export interface LegacyBridgeSwapMsg extends ExecuteContractMsg{
     },
   },
 }
+
+export interface EncodedMsg {
+  typeUrl: string;
+  value: Uint8Array;
+}
+
+export interface AuthzExecMsg {
+  grantee: string;
+  msgs: EncodedMsg[];
+}

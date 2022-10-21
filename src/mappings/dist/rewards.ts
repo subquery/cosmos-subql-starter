@@ -1,7 +1,8 @@
 import {CosmosEvent, CosmosMessage} from "@subql/types-cosmos";
 import {DistDelegatorClaimMsg} from "../types";
-import {messageId, parseCoins} from "../utils";
+import {messageId} from "../utils";
 import {DistDelegatorClaim} from "../../types";
+import {parseCoins} from "../../cosmjs/utils";
 
 export async function handleDistDelegatorClaim(event: CosmosEvent): Promise<void> {
   const msg: CosmosMessage<DistDelegatorClaimMsg> = event.msg;

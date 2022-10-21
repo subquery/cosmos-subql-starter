@@ -52,6 +52,10 @@ class EntityTest(TestWithDBConn, TestWithGQLClient):
         cls.ledger_client = LedgerClient(cfg)
         cls.gov_module = query_pb2_grpc.QueryStub(gov_client)
 
+    @classmethod
+    def get_delegator_account(cls):
+        return cls.ledger_client.query_account(cls.delegator_address)
+
 
 if __name__ == '__main__':
     unittest.main()

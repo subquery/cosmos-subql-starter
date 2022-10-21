@@ -221,6 +221,7 @@ class NativeBalances(NamedFields):
     def select_where(cls, where_clause: str, table: str = NativeBalancesManager._table):
         return super().select_where(where_clause, table)
 
+
 class IBCTransferFields(NamedFields):
     id = 0
     to_address = 1
@@ -236,4 +237,26 @@ class IBCTransferFields(NamedFields):
 
     @classmethod
     def select_query(cls, table="ibc_transfers", prefix=False):
+        return super().select_query(table, prefix)
+
+
+class AuthzExecFields(NamedFields):
+    id = 0
+    grantee = 1
+    message_id = 2
+    transaction_id = 3
+    block_id = 4
+
+    @classmethod
+    def select_query(cls, table="authz_execs", prefix=False):
+        return super().select_query(table, prefix)
+
+
+class AuthzExecMessageFields(NamedFields):
+    id = 0
+    authz_exec_id = 1
+    message_id = 2
+
+    @classmethod
+    def select_query(cls, table="authz_exec_messages", prefix=False):
         return super().select_query(table, prefix)
