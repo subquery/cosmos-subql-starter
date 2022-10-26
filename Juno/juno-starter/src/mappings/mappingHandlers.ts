@@ -8,11 +8,11 @@ import {
 
 /*
 export async function handleBlock(block: CosmosBlock): Promise<void> {
-  // If you want to index each block in Cosmos(Juno), you could do that here
+  // If you want to index each block in Cosmos (Juno), you could do that here
 }
 
 export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
-  // If you want to index each transaction in Cosmos(Juno), you could do that here
+  // If you want to index each transaction in Cosmos (Juno), you could do that here
   const transactionRecord = Transaction.create({
     id: tx.hash,
     blockHeight: BigInt(tx.block.block.header.height),
