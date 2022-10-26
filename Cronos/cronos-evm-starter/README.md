@@ -1,9 +1,10 @@
-# SubQuery - Starter Package
+# SubQuery - Starter Package for Cosmos/Cronos
 
-A basic Cosmos Ethermint EVM (based on Cronos) example project with an event and call handler. Read more about this at https://academy.subquery.network/build/cosmos-evm.html. This project can be use as a starting point for developing your SubQuery project. 
+A basic Cosmos Ethermint EVM (based on Cronos) example project with an event and call handler. Read more about this at https://academy.subquery.network/build/cosmos-evm.html.
 
-The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
-A SubQuery package defines which data The SubQuery will index from the Substrate blockchain, and how it will store it.
+The Starter Package is an example that you can use as a starting point for developing your SubQuery project. 
+
+A SubQuery package defines which data SubQuery will index from the Substrate blockchain, and how it will store it.
 
 This Starter Package by default allows **indexing transactions and approvals of Wrapped CRO Token**. 
 
