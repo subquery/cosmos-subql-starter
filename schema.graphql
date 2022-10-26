@@ -31,7 +31,7 @@ type Transaction @entity {
   block: Block!
   gasUsed: BigInt!
   gasWanted: BigInt!
-  fees: String!
+  fees: [Coin]!
   memo: String
   status: TxStatus!
   log: String!

@@ -3,13 +3,13 @@ import time
 import unittest
 from pathlib import Path
 
+from tests.helpers.entity_test import EntityTest
+from tests.helpers.field_enums import NativeBalanceChangeFields
+
 from gql import gql
 
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
-
-from tests.helpers.entity_test import EntityTest
-from tests.helpers.field_enums import NativeBalanceChangeFields
 
 
 class TestNativeBalances(EntityTest):
@@ -21,7 +21,7 @@ class TestNativeBalances(EntityTest):
         tx = cls.ledger_client.send_tokens(cls.delegator_wallet.address(), 10*10**18, "atestfet", cls.validator_wallet)
         tx.wait_to_complete()
         cls.assertTrue(tx.response.is_successful(), "first set-up tx failed")
-        
+
         tx = cls.ledger_client.send_tokens(cls.validator_wallet.address(), 3*10**18, "atestfet", cls.delegator_wallet)
         tx.wait_to_complete()
         cls.assertTrue(tx.response.is_successful(), "second set-up tx failed")
@@ -41,16 +41,17 @@ class TestNativeBalances(EntityTest):
         for event in events:
             self.assertTrue(
                 (event[NativeBalanceChangeFields.account_id.value] == self.validator_wallet.address() or
-                event[NativeBalanceChangeFields.account_id.value] == self.delegator_wallet.address())
+                 event[NativeBalanceChangeFields.account_id.value] == self.delegator_wallet.address())
             )
             self.assertNotEqual(int(event[NativeBalanceChangeFields.balance_offset.value]), 0)
             self.assertEqual(event[NativeBalanceChangeFields.denom.value], "atestfet")
-            
+
             total[event[NativeBalanceChangeFields.account_id.value]] += event[NativeBalanceChangeFields.balance_offset.value]
 
-        self.assertEqual(total[self.validator_wallet.address()], -7*10**18)
-        self.assertEqual(total[self.delegator_wallet.address()], 7*10**18)
-    
+        # TODO: Represent variable fees in more robust way
+        self.assertLessEqual(total[self.validator_wallet.address()], -7*10**18)
+        self.assertLessEqual(total[self.delegator_wallet.address()], 7*10**18)
+
     def test_account_balance_tracking_query(self):
         query = gql("""
             query {
@@ -64,7 +65,7 @@ class TestNativeBalances(EntityTest):
                 }
             }
         """)
-       
+
         result = self.gql_client.execute(query)
         validator_balance = 0
         delegator_balance = 0
@@ -76,9 +77,10 @@ class TestNativeBalances(EntityTest):
                 delegator_balance += int(balance["sum"]["balanceOffset"])
             else:
                 self.fail("couldn't find validator or delegator address in keys")
-        
-        self.assertEqual(-7*10**18, validator_balance)
-        self.assertEqual(7*10**18, delegator_balance)
+
+        self.assertLessEqual(validator_balance, -7*10**18)
+        self.assertLessEqual(delegator_balance, 7*10**18)
+
 
 if __name__ == '__main__':
     unittest.main()

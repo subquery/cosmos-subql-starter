@@ -1,5 +1,5 @@
 import {CosmosEvent} from "@subql/types-cosmos";
-import {NativeBalanceChange} from "../../types";
+import {NativeBalanceChange, Transaction} from "../../types";
 import {checkBalancesAccount, messageId} from "../utils";
 import {parseCoins} from "../../cosmjs/utils";
 
@@ -15,6 +15,13 @@ export async function saveNativeBalanceEvent(id: string, address: string, amount
     transactionId: event.tx.hash,
   });
   await nativeBalanceChangeEntity.save();
+}
+
+async function saveNativeFeesEvent(event: CosmosEvent) {
+  const transaction = await Transaction.get(event.tx.hash);
+  const fees = transaction.fees[0], signer = transaction.signerAddress;
+  const amount = fees.amount, denom = fees.denom;
+  await saveNativeBalanceEvent(`${event.tx.hash}-fee`, signer, BigInt(0) - BigInt(amount), denom, event);
 }
 
 export async function handleNativeBalanceDecrement(event: CosmosEvent): Promise<void> {
@@ -46,6 +53,7 @@ export async function handleNativeBalanceDecrement(event: CosmosEvent): Promise<
   for (const [i, spendEvent] of Object.entries(spendEvents)) {
     await saveNativeBalanceEvent(`${messageId(event)}-spend-${i}`, spendEvent.spender, spendEvent.amount, spendEvent.denom, event);
   }
+  await saveNativeFeesEvent(event);
 }
 
 export async function handleNativeBalanceIncrement(event: CosmosEvent): Promise<void> {
@@ -77,4 +85,5 @@ export async function handleNativeBalanceIncrement(event: CosmosEvent): Promise<
   for (const [i, receiveEvent] of Object.entries(receiveEvents)) {
     await saveNativeBalanceEvent(`${messageId(event)}-receive-${i}`, receiveEvent.receiver, receiveEvent.amount, receiveEvent.denom, event);
   }
+  await saveNativeFeesEvent(event);
 }

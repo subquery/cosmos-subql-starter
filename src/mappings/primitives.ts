@@ -58,7 +58,7 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
     gasWanted: BigInt(Math.trunc(tx.tx.gasWanted)),
     memo: tx.decodedTx.body.memo,
     timeoutHeight: BigInt(tx.decodedTx.body.timeoutHeight.toString()),
-    fees: JSON.stringify(tx.decodedTx.authInfo.fee.amount),
+    fees: tx.decodedTx.authInfo.fee.amount,
     log: tx.tx.log,
     status,
     signerAddress,

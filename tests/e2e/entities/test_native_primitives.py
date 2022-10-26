@@ -101,7 +101,7 @@ class TestNativePrimitives(EntityTest):
             self.assertTrue(tx_signer_address == self.validator_address or
                             tx_signer_address == self.delegator_address)
 
-            fees = json.loads(tx[TxFields.fees.value])
+            fees = tx[TxFields.fees.value]
             self.assertEqual(len(fees), 1)
             self.assertEqual(fees[0]["denom"], self.denom)
             self.assertGreater(int(fees[0]["amount"]), 0)
