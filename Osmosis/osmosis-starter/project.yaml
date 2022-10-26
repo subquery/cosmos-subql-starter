@@ -1,0 +1,68 @@
+specVersion: 1.0.0
+name: osmosis-subql-starter
+version: 0.0.1
+runner:
+  node:
+    name: "@subql/node-cosmos"
+    version: "*"
+  query:
+    name: "@subql/query"
+    version: "*"
+description: >-
+  This project can be use as a starting point for developing your Cosmos
+  (Osmosis) based SubQuery project
+repository: "https://github.com/subquery/cosmos-subql-starter"
+schema:
+  file: ./schema.graphql
+network:
+  chainId: osmosis-1
+  # This endpoint must be a public non-pruned archive node
+  # Public nodes may be rate limited, which can affect indexing speed
+  # When developing your project we suggest getting a private API key
+  endpoint: "https://rpc.osmosis.zone"
+  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+  dictionary: "https://api.subquery.network/sq/subquery/cosmos-osmosis-dictionary"
+  chainTypes:
+    cosmos.slashing.v1beta1:
+      file: "./proto/cosmos/slashing/v1beta1/tx.proto"
+      messages:
+        - "MsgUnjail"
+    cosmos.gov.v1beta1:
+      file: "./proto/cosmos/gov/v1beta1/tx.proto"
+      messages:
+        - "MsgVoteWeighted"
+    cosmos.gov.v1beta1.gov: # Key is not used, it matches the one above and is inferred from the file
+      file: "./proto/cosmos/gov/v1beta1/gov.proto"
+      messages:
+        - "WeightedVoteOption"
+    cosmos.base.v1beta1: # needed by MsgCreateVestingAccount
+      file: "./proto/cosmos/cosmos.base.v1beta1.coin.proto"
+      messages:
+        - "Coin"
+    osmosis.gamm.v1beta1:
+      file: "./proto/cosmos/osmosis/gamm/v1beta1/tx.proto"
+      messages:
+        - MsgJoinPool
+        - MsgSwapExactAmountIn
+dataSources:
+  - kind: cosmos/Runtime
+    startBlock: 1
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        # Using block handlers slows your project down as they can be executed with each and every block. Only use if you need to
+        # - handler: handleBlock
+        #   kind: cosmos/BlockHandler
+        # Using transaction handlers without filters slows your project down as they can be executed with each and every transaction
+        # - handler: handleTransaction
+        #   kind: cosmos/TransactionHandler
+        - handler: handleEvent
+          kind: cosmos/EventHandler
+          filter:
+            type: execute
+            messageFilter:
+              type: /cosmwasm.wasm.v1.MsgExecuteContract
+        - handler: handleMessage
+          kind: cosmos/MessageHandler
+          filter:
+            type: /cosmwasm.wasm.v1.MsgExecuteContract
