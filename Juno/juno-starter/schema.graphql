@@ -7,18 +7,18 @@
 #   height: BigInt!
 # }
 
+# type Transaction @entity {
+#   id: ID!
+#   blockHeight: BigInt!
+#   timestamp: String!
+# }
+
 type ExecuteEvent @entity {
   id: ID!
   blockHeight: BigInt!
   txHash: String!
   contractAddress: String!
 }
-
-# type Transaction @entity {
-#   id: ID!
-#   blockHeight: BigInt!
-#   timestamp: String!
-# }
 
 type Message @entity {
   id: ID!

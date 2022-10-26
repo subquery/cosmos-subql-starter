@@ -44,6 +44,8 @@ dataSources:
         # Using block handlers slows your project down as they can be executed with each and every block. Only use if you need to
         # - handler: handleBlock
         #   kind: cosmos/BlockHandler
+        # Using transaction handlers without filters slows your project down as they can be executed with each and every block
+        # - handler: handleTransaction
         - handler: handleEvent
           kind: cosmos/EventHandler
           filter:
