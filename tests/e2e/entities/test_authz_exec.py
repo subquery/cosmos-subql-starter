@@ -107,9 +107,9 @@ class TestAuthzExec(EntityTest):
     def test_exec_delegate(self):
         # query DB for messages, authz_execs, & authz_exec_messages
         messages = self.db_cursor.execute(
-            MsgFields.select_query()).fetchall()
+            MsgFields.select_where(f"{MsgFields.type_url.name} = '/cosmos.staking.v1beta1.MsgDelegate'")).fetchall()
         self.assertNotEqual(messages, [])
-        self.assertEqual(len(messages), self.expected_msgs_len)
+        self.assertEqual(len(messages), 1)
 
         authz_execs = self.db_cursor.execute(
             AuthzExecFields.select_query()).fetchall()

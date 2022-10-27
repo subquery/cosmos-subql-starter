@@ -201,3 +201,58 @@ type Cw20BalanceChange @entity {
   block: Block!
 }
 
+enum Interface {
+  Uncertain,
+  CW20,
+  LegacyBridgeSwap,
+}
+
+enum AccessType {
+#	// AccessTypeUnspecified placeholder for empty value
+	Unspecified,
+#	// AccessTypeNobody forbidden
+	AccessTypeNobody,
+#	// AccessTypeOnlyAddress restricted to a single address
+#	// Deprecated: use AccessTypeAnyOfAddresses instead
+	AccessTypeOnlyAddress,
+#	// AccessTypeEverybody unrestricted
+	AccessTypeEverybody,
+#	// AccessTypeAnyOfAddresses allow any of the addresses
+	AccessTypeAnyOfAddresses,
+}
+
+type CW20Contract @entity {
+  id: ID!
+  contract: Contract!
+}
+
+type StoreContractMessage @entity {
+  id: ID!
+  sender: String!
+  permission: AccessType
+  contracts: [Contract] @derivedFrom(field: "storeMessage")
+  codeId: Int! @index
+  message: Message!
+  transaction: Transaction!
+  block: Block!
+}
+
+type InstantiateContractMessage @entity {
+  id: ID!
+  sender: String! @index
+  admin: String!
+  codeId: Int!
+  label: String!
+  payload: String!
+  funds: [Coin]
+  message: Message!
+  transaction: Transaction!
+  block: Block!
+}
+
+type Contract @entity {
+  id: ID!
+  interfaces: [Interface]
+  storeMessage: StoreContractMessage!
+  instantiateMessage: InstantiateContractMessage!
+}

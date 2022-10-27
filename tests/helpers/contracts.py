@@ -21,6 +21,7 @@ class BridgeContractConfig:
     denom: str
     next_swap_id: int
 
+
 DefaultBridgeContractConfig = BridgeContractConfig(
     cap="250000000000000000000000000",
     reverse_aggregated_allowance="3000000000000000000000000",
@@ -33,10 +34,43 @@ DefaultBridgeContractConfig = BridgeContractConfig(
     next_swap_id=0
 )
 
-class Cw20Contract(LedgerContract):
+
+class DeployTestContract(LedgerContract):
 
     def __init__(self, client: LedgerClient, admin: Wallet):
+        """ Using a slightly older version of CW20 contract as a test contract - as this will still be classified as the
+            CW20 interface, but is different enough to allow a unique store_code message during testing."""
         url = "https://github.com/CosmWasm/cw-plus/releases/download/v0.14.0/cw20_base.wasm"
+        if not os.path.exists(".contract"):
+            os.mkdir(".contract")
+        try:
+            temp = open(".contract/test_contract.wasm", "rb")
+            temp.close()
+        except:
+            contract_request = requests.get(url)
+            with open(".contract/test_contract.wasm", "wb") as file:
+                file.write(contract_request.content)
+
+        super().__init__(".contract/test_contract.wasm", client)
+
+        self.deploy({
+            "name": "test coin",
+            "symbol": "TEST",
+            "decimals": 6,
+            "initial_balances": [{
+                "amount": "3000000000000000000000000",
+                "address": str(admin.address())
+            }],
+            "mint": {"minter": str(admin.address())}
+        },
+            admin,
+            store_gas_limit=3000000
+        )
+
+
+class Cw20Contract(LedgerContract):
+    def __init__(self, client: LedgerClient, admin: Wallet):
+        url = "https://github.com/CosmWasm/cw-plus/releases/download/v0.16.0/cw20_base.wasm"
         if not os.path.exists(".contract"):
             os.mkdir(".contract")
         try:
@@ -65,7 +99,6 @@ class Cw20Contract(LedgerContract):
 
 
 class BridgeContract(LedgerContract):
-
     def __init__(self, client: LedgerClient, admin: Wallet, cfg: BridgeContractConfig):
         url = "https://github.com/fetchai/fetch-ethereum-bridge-v1/releases/download/v0.2.0/bridge.wasm"
         if not os.path.exists(".contract"):

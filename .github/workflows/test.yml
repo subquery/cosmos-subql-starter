@@ -22,24 +22,33 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install linter dependencies
+      - name: Install NodeJS dependencies
         run: yarn install
 
       - name: Lint TypeScript
         run: yarn lint
+
+      - name: Codegen TypeScript
+        run: yarn codegen
+
+      - name: Build TypeScript
+        run: yarn build
+
+      - name: Run TypeScript unit tests
+        run: yarn test
 
       - name: Start-up local test environment
         uses: isbang/compose-action@v1.2.0
         with:
           compose-file: "./ci-compose.yml"
 
-      # NB: doing this here gives the test env time to come up
-      - name: Install test dependencies
+      # NB: doing this after start-up gives the test env time to come up
+      - name: Install Python dependencies
         uses: palewire/install-python-pipenv-pipfile@v2
         with:
           python-version: 3.9
 
-      - name: Run unit tests
+      - name: Run Python unit tests
         run: pipenv run python -m unittest discover -s ./tests/unit
 
       - name: Run end-to-end tests
