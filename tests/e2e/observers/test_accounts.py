@@ -21,7 +21,6 @@ from src.genesis.observers import Account, AccountsObserver, AccountsManager, ac
 
 class TestAccountsObserver(TestWithDBConn):
     def test_subscribe_to(self) -> None:
-
         test_genesis = Genesis(**test_genesis_data)
         test_chain_id = test_genesis_data["chain_id"]
         actual_entries: List[Account] = []
@@ -43,7 +42,8 @@ class TestAccountsObserver(TestWithDBConn):
         test_accounts_observer.subscribe_to(test_genesis.source,
                                             post_operators=[map_(test_accounts_observer.map_account)])
 
-        lock.acquire()
+        # Lock returns false if times-out
+        assert (lock.acquire(True, 5))
 
 
 # TODO: test with existing account(s)
