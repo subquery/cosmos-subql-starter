@@ -2,7 +2,9 @@ version: "3"
 
 services:
   postgres:
-    image: postgres:14-alpine
+    build:
+      context: ./docker/
+      dockerfile: ./plv8.dockerfile
     ports:
       - 5432:5432
     environment:
