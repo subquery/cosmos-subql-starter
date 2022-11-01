@@ -44,6 +44,12 @@ export async function handleNativeBalanceDecrement(event: CosmosEvent): Promise<
     const spender = e.value;
     const amountStr = event.event.attributes[parseInt(i) + 1].value;
 
+    // NB: some events contain empty string amounts
+    if (amountStr === "") {
+      logger.warn(`empty string amount; block: ${event.block.block.header.height}; event idx: ${event.idx}; message typeUrl: ${event.msg.msg.typeUrl}`);
+      return;
+    }
+
     const coin = parseCoins(amountStr)[0];
     const amount = BigInt(0) - BigInt(coin.amount); // save a negative amount for a "spend" event
     spendEvents.push({spender: spender, amount: amount, denom: coin.denom});
@@ -75,6 +81,12 @@ export async function handleNativeBalanceIncrement(event: CosmosEvent): Promise<
     }
     const receiver = e.value;
     const amountStr = event.event.attributes[parseInt(i) + 1].value;
+
+    // NB: some events contain empty string amounts
+    if (amountStr === "") {
+      logger.warn(`empty string amount; block: ${event.block.block.header.height}; event idx: ${event.idx}; message typeUrl: ${event.msg.msg.typeUrl}`);
+      return;
+    }
 
     const coin = parseCoins(amountStr)[0];
     const amount = BigInt(coin.amount);
