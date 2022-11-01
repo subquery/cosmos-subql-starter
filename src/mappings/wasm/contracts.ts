@@ -106,7 +106,9 @@ async function saveContractEvent(instantiateMsg: InstantiateContractMessage, con
   const storeCodeMsg = (await StoreContractMessage.getByCodeId(instantiateMsg.codeId))[0];
 
   if (!storeCodeMsg || !contract_address || !instantiateMsg) {
-    logger.warn(`[saveContractEvent] (tx ${event.tx.hash}): failed to save contract (storeCodeMsg, instantiateMsg): ${storeCodeMsg}, ${instantiateMsg}`);
+    logger.warn(`[saveContractEvent] (tx ${event.tx.hash}): failed to save contract
+(storeCodeMsg): ${JSON.stringify(storeCodeMsg, null, 2)},
+(instantiateMsg): ${JSON.stringify(instantiateMsg, null, 2)})`);
     return;
   }
 
