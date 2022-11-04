@@ -10,7 +10,12 @@
     "prepack": "rm -rf dist && npm build",
     "test": "jest",
     "codegen": "subql codegen",
-    "start:docker": "docker-compose pull && docker-compose up --remove-orphans"
+    "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
+    "db:dump": "pg_dump --schema app --file migrations/initial_schema.sql",
+    "db:dump:schema": "yarn db:dump -- --schema-only postgres://subquery:subquery@localhost/subquery",
+    "db:dump:all": "yarn db:dump -- postgres://subquery:subquery@localhost/subquery",
+    "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
+    "plv8ify": "plv8ify --input-file ./migrations/current.ts --output-folder ./migrations/ --scope-prefix '' generate && mv ./migrations/plv8ify_* ./migrations/current.sql"
   },
   "homepage": "https://github.com/subquery/cosmos-subql-starter",
   "repository": "github:subquery/cosmos-subql-starter",
@@ -31,6 +36,7 @@
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.40.0",
     "babel-jest": "^29.2.1",
+    "buffer": "^6.0.3",
     "eslint": "^8.25.0",
     "jest": "^29.2.1",
     "ts-jest": "^29.0.3",
