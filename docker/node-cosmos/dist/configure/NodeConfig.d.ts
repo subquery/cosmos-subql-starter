@@ -1,0 +1,50 @@
+import { LevelWithSilent } from 'pino';
+export interface IConfig {
+    readonly configDir?: string;
+    readonly subquery: string;
+    readonly subqueryName?: string;
+    readonly dbSchema?: string;
+    readonly localMode: boolean;
+    readonly batchSize: number;
+    readonly timeout: number;
+    readonly debug: boolean;
+    readonly preferRange: boolean;
+    readonly networkEndpoint?: string;
+    readonly networkDictionary?: string;
+    readonly networkEndpointParams?: Record<string, string>;
+    readonly outputFmt?: 'json';
+    readonly logLevel?: LevelWithSilent;
+    readonly queryLimit: number;
+    readonly indexCountLimit: number;
+    readonly timestampField: boolean;
+    readonly proofOfIndex: boolean;
+    readonly mmrPath?: string;
+    readonly ipfs?: string;
+}
+export declare type MinConfig = Partial<Omit<IConfig, 'subquery'>> & Pick<IConfig, 'subquery'>;
+export declare class NodeConfig implements IConfig {
+    private readonly _config;
+    static fromFile(filePath: string, configFromArgs?: Partial<IConfig>): NodeConfig;
+    constructor(config: MinConfig);
+    get subquery(): string;
+    get subqueryName(): string;
+    get configDir(): string;
+    get localMode(): boolean;
+    get batchSize(): number;
+    get networkEndpoint(): string | undefined;
+    get networkDictionary(): string | undefined;
+    get networkEndpointParams(): Record<string, string> | undefined;
+    get timeout(): number;
+    get debug(): boolean;
+    get preferRange(): boolean;
+    get outputFmt(): 'json' | undefined;
+    get logLevel(): LevelWithSilent;
+    get queryLimit(): number;
+    get indexCountLimit(): number;
+    get timestampField(): boolean;
+    get proofOfIndex(): boolean;
+    get mmrPath(): string;
+    get ipfs(): string;
+    get dbSchema(): string;
+    merge(config: Partial<IConfig>): this;
+}

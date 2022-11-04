@@ -1,0 +1,260 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: "subquery"
+      POSTGRES_PASSWORD: "subquery"
+      POSTGRES_DB: "subquery"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U subquery"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  subquery-node:
+    build:
+      context: .
+      dockerfile: ./docker/node.dockerfile
+    depends_on:
+      "postgres":
+        condition: service_healthy
+      "fetch-node":
+        condition: service_started
+    restart: always
+    environment:
+      DB_USER: "subquery"
+      DB_PASS: "subquery"
+      DB_DATABASE: "subquery"
+      DB_HOST: postgres
+      DB_PORT: 5432
+      START_BLOCK: "1"
+      NETWORK_ENDPOINT: "http://fetch-node:26657"
+      CHAIN_ID: "fetchchain"
+    volumes:
+      - ./:/app
+      - ./docker/node-cosmos:/usr/local/lib/node_modules/@subql/node-cosmos
+    command:
+      - -f=/app
+      - --db-schema=app
+      - --batch-size=10
+      - --profiler
+      - --force-clean
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+
+  graphql-engine:
+    build:
+      context: .
+      dockerfile: ./docker/api.dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      "postgres":
+        condition: service_healthy
+      "subquery-node":
+        condition: service_healthy
+    restart: always
+    environment:
+      DB_USER: "subquery"
+      DB_PASS: "subquery"
+      DB_DATABASE: "subquery"
+      DB_HOST: postgres
+      DB_PORT: 5432
+    volumes:
+      - ./subql/packages/query/dist:/app/dist
+      - ./subql/node_modules:/app/node_modules
+      - ./subql/packages/query/node_modules/.bin:/app/node_modules/.bin
+    entrypoint: ["/sbin/tini", "--", "yarn", "start:prod"]
+    command:
+      - --name=app
+      - --playground
+      - --indexer=http://subquery-node:3000
+
+  fetch-node:
+    image: fetchai/fetchd:0.10.6
+    entrypoint: ["sh", "-c", "/scripts/start_cosmos_node.sh"]
+    environment:
+      BINARY: fetchd
+      DENOM: atestfet
+      MONIKER: fetchnode
+      CHAIN_ID: fetchchain
+      SET_CUSTOM_CONSENSUS_PARAMS: 1
+      VALIDATOR_MNEMONIC: "nut grocery slice visit barrel peanut tumble patch slim logic install evidence fiction shield rich brown around arrest fresh position animal butter forget cost"
+      EXTRA_GENESIS_ACCOUNTS: >
+        fetch1vmvxe6xgkqfe9fsp63p4f5pgp0jqe7h6505pnk:1000000000000000000000000atestfet
+        fetch1ka9j6a8u0lnt8rm86d9ntyurm39jylcu3dstng:1000000000000000000000000atestfet
+        fetch108g2rh9e8r65hq69dm9ca76ttmke3utdy983mf:1000000000000000000000000atestfet
+    volumes:
+      - ./scripts/start_cosmos_node.sh:/scripts/start_cosmos_node.sh:ro
+    ports:
+      - 1317:1317
+      - 26657:26657
+      - 9090:9090
+    expose:
+      - 26656
+  wasm-node:
+    image: cosmwasm/wasmd:v0.24.0
+    entrypoint: ["sh", "-c", "/scripts/start_cosmos_node.sh"]
+    environment:
+      BINARY: wasmd
+      DENOM: ustake
+      MONIKER: wasmnode
+      CHAIN_ID: wasmchain
+      EXTRA_GENESIS_ACCOUNTS: >
+        wasm132mmds9flytwh4grswde8zmcuwnd9yc4vdftf6:1000000000000000000000000ustake
+        wasm1wurz7uwmvchhc8x0yztc7220hxs9jxdj53m3s0:1000000000000000000000000ustake
+    volumes:
+      - ./scripts/start_cosmos_node.sh:/scripts/start_cosmos_node.sh:ro
+    ports:
+      - 11317:1317
+      - 36657:26657
+      - 19090:9090
+    expose:
+      - 26656
+  hermes:
+    build: ./docker/hermes
+    entrypoint: ["sh", "-c", "/scripts/start_hermes.sh"]
+    depends_on:
+      "wasm-node":
+        condition: service_started
+      "fetch-node":
+        condition: service_started
+    restart: always
+    volumes:
+      - ./docker/hermes/config.toml:/root/.hermes/config.toml:ro
+      - ./scripts/start_hermes.sh:/scripts/start_hermes.sh:ro
+    environment:
+      # fetch108g2rh9e8r65hq69dm9ca76ttmke3utdy983mf
+      FETCH_RELAYER_MNEMONIC: "length panther shoe gun grief river state boy note lunar input chest iron mirror elephant flip ripple scout reflect orchard frame borrow radio total"
+      # wasm132mmds9flytwh4grswde8zmcuwnd9yc4vdftf6
+      WASM_RELAYER_MNEMONIC: "all expect burger grit believe forest match math holiday polar roof soccer thank focus note lion gesture dream bounce pony whip scale group refuse"
+    expose:
+      - 3000 # REST API https://hermes.informal.systems/rest-api.html#endpoints
+      - 3001 # prometheus telemetry
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:22.4.5-alpine
+    # ports:
+    # - "9000:9000"
+    # - "8123:8123"
+    tty: true
+    volumes:
+      - ./docker/signoz/clickhouse-config.xml:/etc/clickhouse-server/config.xml
+      - ./docker/signoz/clickhouse-users.xml:/etc/clickhouse-server/users.xml
+      #- ./docker/signoz/clickhouse-storage.xml:/etc/clickhouse-server/config.d/storage.xml
+      - ./docker/signoz/data/clickhouse/:/var/lib/clickhouse/
+    restart: on-failure
+    logging:
+      options:
+        max-size: 50m
+        max-file: "3"
+    healthcheck:
+      # "clickhouse", "client", "-u ${CLICKHOUSE_USER}", "--password ${CLICKHOUSE_PASSWORD}", "-q 'SELECT 1'"
+      test: ["CMD", "wget", "--spider", "-q", "localhost:8123/ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  alertmanager:
+    image: signoz/alertmanager:0.23.0-0.2
+    volumes:
+      - ./docker/signoz/data/alertmanager:/data
+    depends_on:
+      query-service:
+        condition: service_healthy
+    restart: on-failure
+    command:
+      - --queryService.url=http://query-service:8085
+      - --storage.path=/data
+
+  # Notes for Maintainers/Contributors who will change Line Numbers of Frontend & Query-Section. Please Update Line Numbers in `./scripts/commentLinesForSetup.sh` & `./CONTRIBUTING.md`
+
+  query-service:
+    image: signoz/query-service:0.11.2
+    container_name: query-service
+    command: ["-config=/root/config/prometheus.yml"]
+    # ports:
+    #   - "6060:6060"     # pprof port
+    #   - "8080:8080"     # query-service port
+    volumes:
+      - ./docker/signoz/prometheus.yml:/root/config/prometheus.yml
+#      - ../dashboards:/root/config/dashboards
+      - ./data/signoz/:/var/lib/signoz/
+    environment:
+      - ClickHouseUrl=tcp://clickhouse:9000/?database=signoz_traces
+      - ALERTMANAGER_API_PREFIX=http://alertmanager:9093/api/
+      - SIGNOZ_LOCAL_DB_PATH=/var/lib/signoz/signoz.db
+      - DASHBOARDS_PATH=/root/config/dashboards
+      - STORAGE=clickhouse
+      - GODEBUG=netdns=go
+      - TELEMETRY_ENABLED=true
+      - DEPLOYMENT_TYPE=docker-standalone-amd
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "localhost:8080/api/v1/version"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      clickhouse:
+        condition: service_healthy
+
+  frontend:
+    image: signoz/frontend:0.11.2
+    container_name: frontend
+    restart: on-failure
+    depends_on:
+      - alertmanager
+      - query-service
+    ports:
+      - "3301:3301"
+    volumes:
+      - ./docker/signoz/common/nginx-config.conf:/etc/nginx/conf.d/default.conf
+
+  otel-collector:
+    image: signoz/signoz-otel-collector:0.55.3
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    user: root # required for reading docker container logs
+    volumes:
+      - ./docker/signoz/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=host.name=signoz-host,os.type=linux
+    ports:
+      # - "1777:1777"     # pprof extension
+      - "4317:4317"     # OTLP gRPC receiver
+      - "4318:4318"     # OTLP HTTP receiver
+      # - "8888:8888"     # OtelCollector internal metrics
+      # - "8889:8889"     # signoz spanmetrics exposed by the agent
+      # - "9411:9411"     # Zipkin port
+      # - "13133:13133"   # health check extension
+      # - "14250:14250"   # Jaeger gRPC
+      # - "14268:14268"   # Jaeger thrift HTTP
+      # - "55678:55678"   # OpenCensus receiver
+      # - "55679:55679"   # zPages extension
+    restart: on-failure
+    depends_on:
+      clickhouse:
+        condition: service_healthy
+
+  otel-collector-metrics:
+    image: signoz/signoz-otel-collector:0.55.3
+    command: ["--config=/etc/otel-collector-metrics-config.yaml"]
+    volumes:
+      - ./docker/signoz/otel-collector-metrics-config.yaml:/etc/otel-collector-metrics-config.yaml
+    # ports:
+    #   - "1777:1777"     # pprof extension
+    #   - "8888:8888"     # OtelCollector internal metrics
+    #   - "13133:13133"   # Health check extension
+    #   - "55679:55679"   # zPages extension
+    restart: on-failure
+    depends_on:
+      clickhouse:
+        condition: service_healthy

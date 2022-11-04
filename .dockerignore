@@ -12,8 +12,11 @@ k8s/
 .git/
 .gitignore
 
+# SigNoz / ClickHouse data
+docker/signoz/data
+data
+
 # Docker
-docker/
 Dockerfile
 .dockerignore
 docker-compose.yml

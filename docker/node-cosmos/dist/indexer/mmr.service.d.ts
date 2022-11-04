@@ -1,0 +1,32 @@
+import { OnApplicationShutdown } from '@nestjs/common';
+import { MMR } from '@subql/x-merkle-mountain-range';
+import { Sequelize } from 'sequelize';
+import { NodeConfig } from '../configure/NodeConfig';
+import { SubqueryProject } from '../configure/SubqueryProject';
+import { ProofOfIndex } from './entities/Poi.entity';
+import { MmrPayload, MmrProof } from './events';
+export declare class MmrService implements OnApplicationShutdown {
+    protected nodeConfig: NodeConfig;
+    protected project: SubqueryProject;
+    protected sequelize: Sequelize;
+    private isShutdown;
+    private metadataRepo;
+    private fileBasedMmr;
+    private poiRepo;
+    private nextMmrBlockHeight;
+    private blockOffset;
+    constructor(nodeConfig: NodeConfig, project: SubqueryProject, sequelize: Sequelize);
+    onApplicationShutdown(): void;
+    syncFileBaseFromPoi(schema: string, blockOffset: number): Promise<void>;
+    appendMmrNode(poiBlock: ProofOfIndex): Promise<void>;
+    validatePoiMmr(poiWithMmr: ProofOfIndex, mmrValue: Uint8Array): void;
+    updatePoiMmrRoot(id: number, mmrValue: Uint8Array): Promise<void>;
+    getPoiBlocksByRange(startHeight: number): Promise<ProofOfIndex[]>;
+    getLatestPoiWithMmr(): Promise<ProofOfIndex>;
+    getFirstPoiWithoutMmr(): Promise<ProofOfIndex>;
+    ensureFileBasedMmr(projectMmrPath: string): Promise<MMR>;
+    getMmr(blockHeight: number): Promise<MmrPayload>;
+    getLatestMmr(): Promise<MmrPayload>;
+    getLatestMmrProof(): Promise<MmrProof>;
+    getMmrProof(blockHeight: number): Promise<MmrProof>;
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/entities/index.ts"],"names":[],"mappings":";AAAA,gEAAgE;AAChE,sCAAsC;;;;;;;;;;;;;;;;AAEtC,oDAAkC","sourcesContent":["// Copyright 2020-2022 OnFinality Limited authors & contributors\n// SPDX-License-Identifier: Apache-2.0\n\nexport * from './Subquery.entity';\n"]}

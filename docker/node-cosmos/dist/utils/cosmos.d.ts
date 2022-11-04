@@ -1,0 +1,14 @@
+import { Block } from '@cosmjs/stargate';
+import { BlockResultsResponse, TxData } from '@cosmjs/tendermint-rpc';
+import { SubqlCosmosEventFilter, SubqlCosmosMessageFilter, CosmosBlock, CosmosEvent, CosmosTransaction, CosmosMessage } from '@subql/types-cosmos';
+import { CosmosClient } from '../indexer/api.service';
+import { BlockContent } from '../indexer/types';
+export declare function filterMessageData(data: CosmosMessage, filter?: SubqlCosmosMessageFilter): boolean;
+export declare function filterMessages(messages: CosmosMessage[], filterOrFilters?: SubqlCosmosMessageFilter | SubqlCosmosMessageFilter[] | undefined): CosmosMessage[];
+export declare function filterEvent(event: CosmosEvent, filter?: SubqlCosmosEventFilter): boolean;
+export declare function filterEvents(events: CosmosEvent[], filterOrFilters?: SubqlCosmosEventFilter | SubqlCosmosEventFilter[] | undefined): CosmosEvent[];
+export declare function fetchCosmosBlocksArray(api: CosmosClient, blockArray: number[]): Promise<[Block, BlockResultsResponse][]>;
+export declare function wrapBlock(block: Block, txs: TxData[]): CosmosBlock;
+export declare function wrapTx(block: CosmosBlock, txResults: TxData[]): CosmosTransaction[];
+export declare function wrapEvent(block: CosmosBlock, txs: CosmosTransaction[], api: CosmosClient): CosmosEvent[];
+export declare function fetchBlocksBatches(api: CosmosClient, blockArray: number[]): Promise<BlockContent[]>;
