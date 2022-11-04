@@ -22,9 +22,9 @@ export async function handleEthermintEvmEvent(
 ): Promise<void> {
   const transaction = new Transaction(event.transactionHash);
 
-  transaction.value = event.args[2].toBigInt();
-  transaction.from = event.args[0];
-  transaction.to = event.args[1];
+  transaction.value = event.args.value.toBigInt();
+  transaction.from = event.args.from;
+  transaction.to = event.args.to;
   transaction.contractAddress = event.address;
 
   await transaction.save();
@@ -35,8 +35,8 @@ export async function handleEthermintEvmCall(
 ): Promise<void> {
   const approval = new Approval(event.hash);
   approval.owner = event.from;
-  approval.value = event.args[1].toBigInt();
-  approval.spender = event.args[0];
+  approval.value = event.args._value.toBigInt();
+  approval.spender = event.args._spender;
   approval.contractAddress = event.to;
 
   await approval.save();
