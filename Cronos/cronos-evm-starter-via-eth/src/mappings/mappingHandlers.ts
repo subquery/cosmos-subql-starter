@@ -7,13 +7,13 @@ import { Approval, Transaction } from "../types";
 
 // Setup types from ABI
 type TransferEventArgs = [string, string, BigNumber] & {
-  src: string;
-  dst: string;
-  wad: BigNumber;
+  from: string;
+  to: string;
+  value: BigNumber;
 };
 type ApproveCallArgs = [string, BigNumber] & {
-  guy: string;
-  wad: BigNumber;
+  _spender: string;
+  _value: BigNumber;
 };
 
 export async function handleLog(
@@ -22,9 +22,9 @@ export async function handleLog(
   logger.info("transaction");
   const transaction = Transaction.create({
     id: event.transactionHash,
-    value: event.args.wad.toBigInt(),
-    from: event.args.src,
-    to: event.args.dst,
+    value: event.args.value.toBigInt(),
+    from: event.args.from,
+    to: event.args.to,
     contractAddress: event.address,
   });
 
@@ -38,8 +38,8 @@ export async function handleTransaction(
   const approval = Approval.create({
     id: event.hash,
     owner: event.from,
-    value: event.args.wad.toBigInt(),
-    spender: event.args.guy,
+    value: event.args._value.toBigInt(),
+    spender: event.args._spender,
     contractAddress: event.to,
   });
 

@@ -20,10 +20,9 @@ network:
   # When developing your project we suggest getting a private API key
   # Take a look here for some Cronos endpoints https://moonflow.solutions/rpc-servers
   endpoint: "https://evm.cronos.org/"
-
 dataSources:
   - kind: ethereum/Runtime
-    startBlock: 5443061 #3652309
+    startBlock: 5443986  #3652309
     options:
       abi: erc20
       address: "0x5c7f8a570d578ed84e63fdfa7b1ee72deae1ae23" # Wrapped CRO
@@ -40,7 +39,7 @@ dataSources:
             ## https://docs.ethers.io/v5/api/utils/abi/fragments/#FunctionFragment
             # function: '0x095ea7b3'
             # function: '0x7ff36ab500000000000000000000000000000000000000000000000000000000'
-            function: approve(address guy, uint256 wad)
+            function: approve(address spender, uint256 value)
         - handler: handleLog
           kind: ethereum/LogHandler
           filter:
@@ -50,6 +49,5 @@ dataSources:
               # Example valid values:
               # - '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
               # - Transfer(address,address,u256)
-              # - Transfer(address from,address to,uint256 value)
-              - Transfer(address src, address dst, uint256 wad)
+              - Transfer(address from, address to, uint256 value)
               # address: "0x60781C2586D68229fde47564546784ab3fACA982"
