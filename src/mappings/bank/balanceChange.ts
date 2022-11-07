@@ -19,9 +19,12 @@ export async function saveNativeBalanceEvent(id: string, address: string, amount
 
 async function saveNativeFeesEvent(event: CosmosEvent) {
   const transaction = await Transaction.get(event.tx.hash);
-  const fees = transaction.fees[0], signer = transaction.signerAddress;
-  const amount = fees.amount, denom = fees.denom;
-  await saveNativeBalanceEvent(`${event.tx.hash}-fee`, signer, BigInt(0) - BigInt(amount), denom, event);
+  const {fees, signerAddress} = transaction;
+  const fee = fees.length > 0 ? fees[0] : null;
+  const feeAmountStr = fee ? fee.amount : 0;
+  const feeAmount = BigInt(0) - BigInt(feeAmountStr);
+  const feeDenom = fee ? fee.denom : "";
+  await saveNativeBalanceEvent(`${event.tx.hash}-fee`, signerAddress, feeAmount, feeDenom, event);
 }
 
 export async function handleNativeBalanceDecrement(event: CosmosEvent): Promise<void> {
@@ -90,9 +93,8 @@ export async function handleNativeBalanceIncrement(event: CosmosEvent): Promise<
 
     const coin = parseCoins(amountStr)[0];
     const amount = BigInt(coin.amount);
-    receiveEvents.push({receiver: receiver, amount: amount, denom: coin.denom});
+    receiveEvents.push({receiver, amount, denom: coin.denom});
   }
-
 
   for (const [i, receiveEvent] of Object.entries(receiveEvents)) {
     await saveNativeBalanceEvent(`${messageId(event)}-receive-${i}`, receiveEvent.receiver, receiveEvent.amount, receiveEvent.denom, event);
