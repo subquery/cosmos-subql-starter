@@ -6,9 +6,6 @@ from typing import List
 repo_root_path = Path(__file__).parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
-from src.genesis.observers.balances import NativeBalancesManager
-from src.genesis.observers.accounts import AccountsManager
-
 
 class NamedFields(Enum):
     @classmethod
@@ -284,7 +281,7 @@ class NativeBalances(NamedFields):
     @classmethod
     @property
     def table(self):
-        return NativeBalancesManager._table
+        return "genesis_balances"
 
 
 class IBCTransferFields(NamedFields):
@@ -323,7 +320,6 @@ class AuthzExecMessageFields(NamedFields):
     id = 0
     authz_exec_id = 1
     message_id = 2
-
 
     @classmethod
     @property

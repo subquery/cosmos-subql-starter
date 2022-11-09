@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 from tests.helpers.entity_test import EntityTest
-from tests.helpers.field_enums import NativeBalanceChangeFields
+from src.genesis.helpers.field_enums import NativeBalanceChangeFields
 
 from gql import gql
 

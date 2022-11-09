@@ -21,8 +21,8 @@ repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
 from tests.helpers.entity_test import EntityTest
-from tests.helpers.field_enums import MsgFields, AuthzExecFields, AuthzExecMessageFields
-from tests.helpers.regexes import block_id_regex, tx_id_regex, msg_id_regex, event_id_regex
+from src.genesis.helpers.field_enums import MsgFields, AuthzExecFields, AuthzExecMessageFields
+from tests.helpers.regexes import msg_id_regex
 
 
 class TestAuthzExec(EntityTest):

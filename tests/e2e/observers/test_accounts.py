@@ -11,12 +11,12 @@ repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
 from tests.helpers.clients import TestWithDBConn, TestWithGQLClient
-from tests.helpers.field_enums import Accounts
+from src.genesis.helpers.field_enums import Accounts
 from tests.helpers.genesis_data import test_bank_state_balances, test_genesis_data
 
 from src.genesis.state.bank import Balance
 from src.genesis.genesis import Genesis
-from src.genesis.observers import Account, AccountsObserver, AccountsManager, accounts_keys_path
+from src.genesis.observers import Account, AccountsObserver, AccountsManager
 
 
 class TestAccountsObserver(TestWithDBConn):

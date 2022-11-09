@@ -8,6 +8,7 @@ from reactivex.operators import filter as filter_, map as map_, delay as delay_,
 from reactivex.scheduler.scheduler import Scheduler
 
 from src.genesis.db import DBTypes, TableManager
+from src.genesis.helpers.field_enums import NativeBalances
 from src.genesis.state import Balance
 
 native_balances_keys_path = ".app_state.bank.balances"
@@ -43,7 +44,7 @@ class NativeBalancesManager(TableManager):
     _observer: NativeBalancesObserver
     _subscription: DisposableBase
     _db_conn: Connection
-    _table = "genesis_balances"
+    _table = NativeBalances.table
     _columns = (
         ("id", DBTypes.text),
         ("account_id", DBTypes.text),

@@ -10,7 +10,7 @@ sys.path.insert(0, str(repo_root_path))
 
 from tests.helpers.contracts import BridgeContract, DefaultBridgeContractConfig
 from tests.helpers.entity_test import EntityTest
-from tests.helpers.field_enums import LegacyBridgeSwapFields
+from src.genesis.helpers.field_enums import LegacyBridgeSwapFields
 from tests.helpers.graphql import test_filtered_query
 
 

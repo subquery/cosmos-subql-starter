@@ -16,9 +16,8 @@ import unittest
 repo_root_path = Path(__file__).parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
-from tests.helpers.contracts import Cw20Contract
 from tests.helpers.entity_test import EntityTest
-from tests.helpers.field_enums import GovProposalVoteFields
+from src.genesis.helpers.field_enums import GovProposalVoteFields
 
 class TestGovernance(EntityTest):
     vote_tx = None

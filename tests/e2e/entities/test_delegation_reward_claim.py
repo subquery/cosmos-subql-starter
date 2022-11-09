@@ -8,7 +8,7 @@ from pathlib import Path
 repo_root_path = Path(__file__).parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
-from tests.helpers.field_enums import DistDelegatorClaimFields
+from src.genesis.helpers.field_enums import DistDelegatorClaimFields
 from tests.helpers.graphql import test_filtered_query
 from tests.helpers.regexes import msg_id_regex, block_id_regex, tx_id_regex
 from tests.helpers.entity_test import EntityTest
