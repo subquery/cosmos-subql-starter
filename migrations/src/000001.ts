@@ -11,6 +11,7 @@
 
 import Buffer from "buffer";
 import allModuleTypes from "../src/cosmjs/proto";
+import {getSelectResults} from "./src/utils";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _ = Buffer;
@@ -18,22 +19,6 @@ const _ = Buffer;
 export interface EncodedMessage {
   typeUrl: string;
   value: Uint8Array;
-}
-
-type FieldValues = Record<string, Record<string, any>>;
-interface Row {
-  row: FieldValues
-}
-
-class SelectResult {
-  private i = -1;
-  constructor(private readonly rows: Row[]) {}
-
-  *[Symbol.iterator]() {
-    this.i++;
-    // Row looks like {"row": {"f1": <field 1 value>, ...}}
-    yield Object.entries(this.rows[this.i].row).map(e => e[1]);
-  }
 }
 
 interface AuthzMessage {
@@ -57,12 +42,13 @@ export function migrationAddAuthzSupport() {
   const authzExecSelect = "SELECT (m.id, m.type_url, json, m.transaction_id, m.block_id, t.id) FROM app.messages m JOIN app.transactions t ON m.transaction_id = t.id WHERE m.type_url = '/cosmos.authz.v1beta1.MsgExec'";
 
   // @ts-ignore
-  const messagesSelectResults = new SelectResult(plv8.execute(authzExecSelect));
+  const messagesSelectResults = getSelectResults(plv8.execute(authzExecSelect));
+  if (messagesSelectResults === null) {
+    return;
+  }
 
   // @ts-ignore
   for (const [id, type_url, json, transaction_id, block_id] of messagesSelectResults) {
-    // @ts-ignore
-    plv8.elog(WARNING, "json", json);
     const {grantee, msgs}: AuthzMessage = JSON.parse(json);
 
     // @ts-ignore

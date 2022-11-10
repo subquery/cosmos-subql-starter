@@ -1,8 +1,157 @@
 --! Previous: -
---! Hash: sha1:00723c78660aa829e0b63747e2c8921b57f68118
+--! Hash: sha1:07039c1f7e5327105f926f5d9288c9e3f97b876f
 
 CREATE SCHEMA IF NOT EXISTS app;
 SET SCHEMA 'app';
+
+ALTER TABLE IF EXISTS ONLY app.authz_execs DROP CONSTRAINT IF EXISTS authz_execs_transaction_id_fkey;
+ALTER TABLE IF EXISTS ONLY app.authz_execs DROP CONSTRAINT IF EXISTS authz_execs_message_id_fkey;
+ALTER TABLE IF EXISTS ONLY app.authz_execs DROP CONSTRAINT IF EXISTS authz_execs_block_id_fkey;
+ALTER TABLE IF EXISTS ONLY app.authz_exec_messages DROP CONSTRAINT IF EXISTS authz_exec_messages_message_id_fkey;
+ALTER TABLE IF EXISTS ONLY app.authz_exec_messages DROP CONSTRAINT IF EXISTS authz_exec_messages_authz_exec_id_fkey;
+DROP INDEX IF EXISTS app.authz_execs_transaction_id;
+DROP INDEX IF EXISTS app.authz_execs_message_id;
+DROP INDEX IF EXISTS app.authz_execs_grantee;
+DROP INDEX IF EXISTS app.authz_execs_block_id;
+DROP INDEX IF EXISTS app.authz_exec_messages_message_id;
+DROP INDEX IF EXISTS app.authz_exec_messages_authz_exec_id;
+ALTER TABLE IF EXISTS ONLY app.authz_execs DROP CONSTRAINT IF EXISTS authz_execs_pkey;
+ALTER TABLE IF EXISTS ONLY app.authz_exec_messages DROP CONSTRAINT IF EXISTS authz_exec_messages_pkey;
+DROP TABLE IF EXISTS app.authz_execs;
+DROP TABLE IF EXISTS app.authz_exec_messages;
+
+--
+-- Name: authz_exec_messages; Type: TABLE; Schema: app; Owner: subquery
+--
+
+CREATE TABLE app.authz_exec_messages (
+    id text NOT NULL,
+    authz_exec_id text NOT NULL,
+    message_id text NOT NULL
+);
+
+
+ALTER TABLE app.authz_exec_messages OWNER TO subquery;
+
+--
+-- Name: authz_execs; Type: TABLE; Schema: app; Owner: subquery
+--
+
+CREATE TABLE app.authz_execs (
+    id text NOT NULL,
+    grantee text NOT NULL,
+    message_id text NOT NULL,
+    transaction_id text NOT NULL,
+    block_id text NOT NULL
+);
+
+
+ALTER TABLE app.authz_execs OWNER TO subquery;
+
+--
+-- Name: authz_exec_messages authz_exec_messages_pkey; Type: CONSTRAINT; Schema: app; Owner: subquery
+--
+
+ALTER TABLE ONLY app.authz_exec_messages
+    ADD CONSTRAINT authz_exec_messages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: authz_execs authz_execs_pkey; Type: CONSTRAINT; Schema: app; Owner: subquery
+--
+
+ALTER TABLE ONLY app.authz_execs
+    ADD CONSTRAINT authz_execs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: authz_exec_messages_authz_exec_id; Type: INDEX; Schema: app; Owner: subquery
+--
+
+CREATE INDEX authz_exec_messages_authz_exec_id ON app.authz_exec_messages USING hash (authz_exec_id);
+
+
+--
+-- Name: authz_exec_messages_message_id; Type: INDEX; Schema: app; Owner: subquery
+--
+
+CREATE INDEX authz_exec_messages_message_id ON app.authz_exec_messages USING hash (message_id);
+
+
+--
+-- Name: authz_execs_block_id; Type: INDEX; Schema: app; Owner: subquery
+--
+
+CREATE INDEX authz_execs_block_id ON app.authz_execs USING hash (block_id);
+
+
+--
+-- Name: authz_execs_grantee; Type: INDEX; Schema: app; Owner: subquery
+--
+
+CREATE INDEX authz_execs_grantee ON app.authz_execs USING btree (grantee);
+
+
+--
+-- Name: authz_execs_message_id; Type: INDEX; Schema: app; Owner: subquery
+--
+
+CREATE INDEX authz_execs_message_id ON app.authz_execs USING hash (message_id);
+
+
+--
+-- Name: authz_execs_transaction_id; Type: INDEX; Schema: app; Owner: subquery
+--
+
+CREATE INDEX authz_execs_transaction_id ON app.authz_execs USING hash (transaction_id);
+
+
+--
+-- Name: authz_exec_messages authz_exec_messages_authz_exec_id_fkey; Type: FK CONSTRAINT; Schema: app; Owner: subquery
+--
+
+ALTER TABLE ONLY app.authz_exec_messages
+    ADD CONSTRAINT authz_exec_messages_authz_exec_id_fkey FOREIGN KEY (authz_exec_id) REFERENCES app.authz_execs(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: CONSTRAINT authz_exec_messages_authz_exec_id_fkey ON authz_exec_messages; Type: COMMENT; Schema: app; Owner: subquery
+--
+
+COMMENT ON CONSTRAINT authz_exec_messages_authz_exec_id_fkey ON app.authz_exec_messages IS '@foreignFieldName subMessages';
+
+
+--
+-- Name: authz_exec_messages authz_exec_messages_message_id_fkey; Type: FK CONSTRAINT; Schema: app; Owner: subquery
+--
+
+ALTER TABLE ONLY app.authz_exec_messages
+    ADD CONSTRAINT authz_exec_messages_message_id_fkey FOREIGN KEY (message_id) REFERENCES app.messages(id) ON UPDATE CASCADE;
+
+
+--
+-- Name: authz_execs authz_execs_block_id_fkey; Type: FK CONSTRAINT; Schema: app; Owner: subquery
+--
+
+ALTER TABLE ONLY app.authz_execs
+    ADD CONSTRAINT authz_execs_block_id_fkey FOREIGN KEY (block_id) REFERENCES app.blocks(id) ON UPDATE CASCADE;
+
+
+--
+-- Name: authz_execs authz_execs_message_id_fkey; Type: FK CONSTRAINT; Schema: app; Owner: subquery
+--
+
+ALTER TABLE ONLY app.authz_execs
+    ADD CONSTRAINT authz_execs_message_id_fkey FOREIGN KEY (message_id) REFERENCES app.messages(id) ON UPDATE CASCADE;
+
+
+--
+-- Name: authz_execs authz_execs_transaction_id_fkey; Type: FK CONSTRAINT; Schema: app; Owner: subquery
+--
+
+ALTER TABLE ONLY app.authz_execs
+    ADD CONSTRAINT authz_execs_transaction_id_fkey FOREIGN KEY (transaction_id) REFERENCES app.transactions(id) ON UPDATE CASCADE;
+
 CREATE EXTENSION plv8;
 DROP FUNCTION IF EXISTS plv8ify_migrationAddAuthzSupport();
 CREATE OR REPLACE FUNCTION plv8ify_migrationAddAuthzSupport() RETURNS JSONB AS $plv8ify$
@@ -17388,17 +17537,15 @@ var plv8ify = (() => {
   var allModuleTypes = _types.reduce((acc, next) => acc.concat(next), []);
   var proto_default = allModuleTypes;
 
+  // migrations/src/utils.ts
+  function getSelectResults(rows) {
+    if (rows.length < 1) {
+      return null;
+    }
+    return rows.map((row) => Object.entries(row).map((e) => e[1]));
+  }
+
   // migrations/current.ts
-  var SelectResult = class {
-    constructor(rows) {
-      this.rows = rows;
-      this.i = -1;
-    }
-    *[Symbol.iterator]() {
-      this.i++;
-      yield Object.entries(this.rows[this.i].row).map((e) => e[1]);
-    }
-  };
   function decode(msg) {
     for (const [typeUrl, msgType] of proto_default) {
       if (typeUrl === msg.typeUrl) {
@@ -17411,9 +17558,11 @@ var plv8ify = (() => {
   function migrationAddAuthzSupport() {
     plv8.execute("SET SCHEMA 'app'");
     const authzExecSelect = "SELECT (m.id, m.type_url, json, m.transaction_id, m.block_id, t.id) FROM app.messages m JOIN app.transactions t ON m.transaction_id = t.id WHERE m.type_url = '/cosmos.authz.v1beta1.MsgExec'";
-    const messagesSelectResults = new SelectResult(plv8.execute(authzExecSelect));
+    const messagesSelectResults = getSelectResults(plv8.execute(authzExecSelect));
+    if (messagesSelectResults === null) {
+      return;
+    }
     for (const [id, type_url, json, transaction_id, block_id] of messagesSelectResults) {
-      plv8.elog(WARNING, "json", json);
       const { grantee, msgs } = JSON.parse(json);
       plv8.execute(
         "INSERT INTO app.authz_execs (id, grantee, message_id, transaction_id, block_id) VALUES ($1, $2, $3, $4, $5)",
