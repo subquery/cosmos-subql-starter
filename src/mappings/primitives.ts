@@ -70,11 +70,12 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 export async function handleMessage(msg: CosmosMessage): Promise<void> {
   logger.info(`[handleMessage] (tx ${msg.tx.hash}): indexing message ${msg.idx + 1} / ${msg.tx.decodedTx.body.messages.length}`);
   logger.debug(`[handleMessage] (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`);
-
+  delete msg.msg?.decodedMsg?.wasmByteCode;
+  const json = JSON.stringify(msg.msg.decodedMsg);
   const msgEntity = Message.create({
     id: messageId(msg),
     typeUrl: msg.msg.typeUrl,
-    json: JSON.stringify(msg.msg.decodedMsg),
+    json,
     transactionId: msg.tx.hash,
     blockId: msg.block.block.id,
   });
