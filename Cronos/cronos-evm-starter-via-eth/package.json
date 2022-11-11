@@ -1,7 +1,7 @@
 {
-  "name": "ethereum-subql-starter",
+  "name": "cronos-evm-starter-via-eth",
   "version": "0.0.1",
-  "description": "This project can be use as a starting point for developing your new Cronos SubQuery project via the ethereum API",
+  "description": "This project can be use as a starting point for developing your Cosmos (Cronos) based SubQuery project via the Etheruem API",
   "main": "dist/index.js",
   "scripts": {
     "build": "subql build",
@@ -11,8 +11,8 @@
     "prepack": "rm -rf dist && npm run build",
     "test": "jest"
   },
-  "homepage": "https://github.com/subquery/ethereum-subql-starter",
-  "repository": "github:subquery/ethereum-subql-starter",
+  "homepage": "https://github.com/subquery/cosmos-subql-starter",
+  "repository": "github:subquery/cosmos-subql-starter",
   "files": [
     "dist",
     "schema.graphql",

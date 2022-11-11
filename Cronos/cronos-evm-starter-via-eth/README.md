@@ -1,103 +1,117 @@
-# SubQuery - Starter Package
+# SubQuery - Starter Package for Cosmos/Cronos
+
+A basic Cronos EVM example project that uses the Ethereum API with an event and call handler. Read more about this at https://academy.subquery.network/build/cosmos-evm.html.
 
 The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
-A SubQuery package defines which data The SubQuery will index from the Substrate blockchain, and how it will store it.
+
+A SubQuery package defines which data SubQuery will index from the Substrate blockchain, and how it will store it.
+
+This Starter Package by default allows **indexing transactions and approvals of Wrapped CRO Token**.
 
 ## Preparation
 
-#### Environment
+#### Environment and dependencies
 
-- [Typescript](https://www.typescriptlang.org/) are required to compile project and define types.
+- [Typescript](https://www.typescriptlang.org/) is required to compile project and define types.
 
 - Both SubQuery CLI and generated Project have dependencies and require [Node](https://nodejs.org/en/).
 
-#### Install the SubQuery CLI
+- You will also need [Yarn](https://classic.yarnpkg.com/lang/en/docs/install) or [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) and [Docker](https://docs.docker.com/engine/install/).
 
-Install SubQuery CLI globally on your terminal by using NPM:
+#### Install the SubQuery CLI and Project Dependencies
+
+Install SubQuery CLI globally on your terminal by using NPM (we don't recommend using Yarn to install global dependencies):
 
 ```
 npm install -g @subql/cli
 ```
 
-Run help to see available commands and usage provide by CLI
+Under the project directory, install the node dependencies by running the following command ([Learn more](https://academy.subquery.network/build/install.html#)):
 
 ```
-subql help
+yarn OR npm install
 ```
 
-## Initialize the starter package
+## Configure the Project Further
 
-Inside the directory in which you want to create the SubQuery project, simply replace `project-name` with your project name and run the command:
+If you want to change your project you will need to work on the following files:
 
-```
-subql init --starter project-name
-```
+- The Manifest in `project.yaml` to **configure your project**
+- The GraphQL Schema in `schema.graphql` to **define shape of the data**
+- The Mapping functions in `src/mappings/` directory to **transform data coming from blockchain**
 
-Then you should see a folder with your project name has been created inside the directory, you can use this as the start point of your project. And the files should be identical as in the [Directory Structure](https://doc.subquery.network/directory_structure.html).
+[Learn more](https://academy.subquery.network/build/introduction.html)
 
-Last, under the project directory, run following command to install all the dependency.
+## Build the Project
 
-```
-yarn install
-```
+#### 1. Generate Associated Typescript
 
-## Configure your project
-
-In the starter package, we have provided a simple example of project configuration. You will be mainly working on the following files:
-
-- The Manifest in `project.yaml`
-- The GraphQL Schema in `schema.graphql`
-- The Mapping functions in `src/mappings/` directory
-
-For more information on how to write the SubQuery,
-check out our doc section on [Define the SubQuery](https://doc.subquery.network/define_a_subquery.html)
-
-#### Code generation
-
-In order to index your SubQuery project, it is mandatory to build your project first.
-Run this command under the project directory.
+We will generate the defined entity models with the following command:
 
 ```
-yarn codegen
+yarn codegen OR npm run-script codegen
 ```
 
-## Build the project
+If you change any data in your `schema.graphql`, you should run this command again. You should also consider deleting your local database in the `.data/` directory.
 
-In order to deploy your SubQuery project to our hosted service, it is mandatory to pack your configuration before upload.
-Run pack command from root directory of your project will automatically generate a `your-project-name.tgz` file.
+#### 2. Build the project
+
+This builds your project into static files within the `/dist` for running.
 
 ```
-yarn build
+yarn build OR npm run-script codegen
 ```
+
+If you change any data in your `src/mappings/` directory you should run this command again.
 
 ## Indexing and Query
 
-#### Run required systems in docker
+#### 1. Run Docker
 
 Under the project directory run following command:
 
 ```
-docker-compose pull && docker-compose up
+yarn start:docker
 ```
 
-#### Query the project
+This will download packages from Docker, create a new Postgres database, and start an indexing an query service. When you first run this, it may take some time to start, please be patient.
+
+#### 2. Query this Project
 
 Open your browser and head to `http://localhost:3000`.
 
-Finally, you should see a GraphQL playground is showing in the explorer and the schemas that ready to query.
+Finally, you should see a GraphQL playground is showing in the explorer and the schemas that ready to query. On the right hand side is a documentation button that shows you what models you have to construct queries.
 
-For the `subql-starter` project, you can try to query with the following code to get a taste of how it works.
+With this project can try to query with the following code to get a taste of how it works.
 
 ```graphql
 {
   query {
-    starterEntities(first: 10) {
+    approvals(first: 5) {
       nodes {
-        field1
-        field2
-        field3
+        id
+        value
+        owner
+        spender
+      }
+    }
+    transactions(first: 5) {
+      nodes {
+        id
+        value
+        to: id
+        from: id
       }
     }
   }
 }
 ```
+
+## Useful Resources
+
+- [SubQuery Documentation](https://academy.subquery.network/)
+- [Tips and Tricks for Performance Improvements](https://academy.subquery.network/faqs/faqs.html#how-can-i-optimise-my-project-to-speed-it-up)
+- [Automated Historical State tracking](https://academy.subquery.network/th/run_publish/historical.html)
+- [Custom Substrate Chains](https://university.subquery.network/build/manifest.html#custom-substrate-chains)
+- [GraphQL Subscriptions](https://academy.subquery.network/run_publish/subscription.html)
+- [Discord with Technical Support Channel](https://discord.com/invite/subquery)

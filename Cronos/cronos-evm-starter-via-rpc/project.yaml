@@ -8,8 +8,7 @@ runner:
   query:
     name: "@subql/query"
     version: "*"
-description: >-
-  This project can be use as a starting point for developing your Cosmos (Cronos) based SubQuery project
+description: "This project can be use as a starting point for developing your Cosmos (Cronos) based SubQuery project via the Ethermint RPC API"
 repository: "https://github.com/subquery/cosmos-subql-starter/tree/main/Cronos/cronos-evm-starter-via-rpc"
 schema:
   file: ./schema.graphql

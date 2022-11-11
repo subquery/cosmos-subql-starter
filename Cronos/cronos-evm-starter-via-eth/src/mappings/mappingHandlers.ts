@@ -1,8 +1,5 @@
-// Copyright 2020-2022 OnFinality Limited authors & contributors
-// SPDX-License-Identifier: Apache-2.0
 import { EthereumTransaction, EthereumLog } from "@subql/types-ethereum";
 import { BigNumber } from "@ethersproject/bignumber";
-
 import { Approval, Transaction } from "../types";
 
 // Setup types from ABI
@@ -17,30 +14,30 @@ type ApproveCallArgs = [string, BigNumber] & {
 };
 
 export async function handleLog(
-  event: EthereumLog<TransferEventArgs>
+  transferLog: EthereumLog<TransferEventArgs>
 ): Promise<void> {
-  logger.info("transaction");
+  // logger.info("transaction: " + transferLog.transactionHash);
   const transaction = Transaction.create({
-    id: event.transactionHash,
-    value: event.args.value.toBigInt(),
-    from: event.args.from,
-    to: event.args.to,
-    contractAddress: event.address,
+    id: transferLog.transactionHash,
+    value: transferLog.args.value.toBigInt(),
+    from: transferLog.args.from,
+    to: transferLog.args.to,
+    contractAddress: transferLog.address,
   });
 
   await transaction.save();
 }
 
 export async function handleTransaction(
-  event: EthereumTransaction<ApproveCallArgs>
+  approveCallTransaction: EthereumTransaction<ApproveCallArgs>
 ): Promise<void> {
-  logger.info("approval");
+  // logger.info("approval: " + approveCallTransaction.hash);
   const approval = Approval.create({
-    id: event.hash,
-    owner: event.from,
-    value: event.args._value.toBigInt(),
-    spender: event.args._spender,
-    contractAddress: event.to,
+    id: approveCallTransaction.hash,
+    owner: approveCallTransaction.from,
+    value: approveCallTransaction.args._value.toBigInt(),
+    spender: approveCallTransaction.args._spender,
+    contractAddress: approveCallTransaction.to,
   });
 
   await approval.save();
