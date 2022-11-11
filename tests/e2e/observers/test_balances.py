@@ -1,9 +1,12 @@
 import sys
 from threading import Lock
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 from typing import List
+import copy
 
+import pytest
 from reactivex.scheduler import ThreadPoolScheduler
 
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
@@ -43,9 +46,12 @@ class TestNativeBalanceObserver(TestWithDBConn):
 class TestBalanceManager(TestWithDBConn):
     @classmethod
     def setUpClass(cls):
+        TestWithDBConn().setUpClass()
         super().setUpClass()
-        cls.truncate_tables("native_balances", cascade=True)
-        cls.truncate_tables("accounts", cascade=True)
+
+    @classmethod
+    def reinit_db(cls):
+        cls.clean_db(["native_balances", "accounts"])
 
         with cls.db_conn.cursor() as db:
             # TODO: reference test data rather than more magic string literals
@@ -54,6 +60,9 @@ class TestBalanceManager(TestWithDBConn):
             cls.db_conn.commit()
 
     def test_observe(self):
+        # Clean DB to prevent interaction with other tests
+        self.reinit_db()
+
         expected_balances: List[Balance] = Balance.from_dict_list(test_bank_state_balances)
         scheduler = ThreadPoolScheduler(2)
         lock = Lock()
@@ -113,6 +122,55 @@ class TestBalanceManager(TestWithDBConn):
                 self.assertEqual(expected_coin, actual_coin)
 
         # TODO: check for extra stuff in actual_balances (?)
+
+    @patch("logging.Logger.warning")
+    def test_observe_with_duplicate_values(self, logger_warning_mock):
+        # Clean DB to prevent interaction with other tests
+        self.reinit_db()
+
+        duplicate_message = "Duplicate balance occurred"
+
+        # Insert first set of balances to DB
+        test_manager = NativeBalancesManager(self.db_conn)
+        test_manager.observe(Genesis(**test_genesis_data).source)
+
+        # Try to insert same set again
+        second_test_manager = NativeBalancesManager(self.db_conn)
+        second_test_manager.observe(Genesis(**test_genesis_data).source)
+
+        n_min_calls = 4
+        assert logger_warning_mock.call_count == n_min_calls
+        for mock_call in logger_warning_mock.mock_calls:
+            assert duplicate_message in mock_call.args[0]
+
+    def test_observe_with_duplicate_values_with_errors(self):
+        # Clean DB to prevent interaction with other tests
+        self.reinit_db()
+
+        current_bank_state_balances = [
+            {
+                "address": "addr123",
+                "coins": [
+                    {"amount": 123, "denom": "a-token"},
+                    {"amount": 457, "denom": "b-token"},
+                ]
+            },
+        ]
+
+        # Create variation of test data without overwriting the original dict
+        current_test_genesis_data = copy.deepcopy(test_genesis_data)
+        current_test_genesis_data["app_state"]["bank"]["balances"] = current_bank_state_balances
+
+        # Insert first set of balances to DB
+        test_manager = NativeBalancesManager(self.db_conn)
+        test_manager.observe(Genesis(**test_genesis_data).source)
+
+        # Insert duplicate entry with different balance
+        test_manager = NativeBalancesManager(self.db_conn)
+
+        with pytest.raises(RuntimeError) as e:
+            test_manager.observe(Genesis(**current_test_genesis_data).source)
+        assert 'Balance for addr123-b-token in DB (456) is different from genesis (457)' in str(e)
 
 
 if __name__ == "__main__":

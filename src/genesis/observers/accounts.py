@@ -10,8 +10,14 @@ from reactivex.scheduler.scheduler import Scheduler
 from src.genesis.db import DBTypes, TableManager
 from src.genesis.state import Balance
 from .chain_id import ChainIdObserver
+from psycopg.errors import UniqueViolation
+
+from src.genesis.helpers.field_enums import Accounts
+from src.utils.loggers import get_logger
 
 accounts_keys_path = ".app_state.bank.balances"
+
+_logger = get_logger(__name__)
 
 
 @dataclass
@@ -59,7 +65,7 @@ class AccountsManager(TableManager):
     _observer: AccountsObserver
     _subscription: DisposableBase
     _db_conn: Connection
-    _table = "accounts"
+    _table = Accounts.table
     _columns = (
         ("id", DBTypes.text),
         ("chain_id", DBTypes.text),
@@ -80,13 +86,45 @@ class AccountsManager(TableManager):
                                           on_completed=on_completed,
                                           on_error=on_error)
 
+    @classmethod
+    def _get_name_and_index(cls, e: UniqueViolation, accounts: List[Account]) -> Tuple[str, int]:
+        # Extract account name from error string
+        duplicate_account_id = cls._extract_id_from_unique_violation_exception(e)
+
+        # Find duplicate account index
+        duplicate_account_index = None
+        for i in range(len(accounts)):
+            if accounts[i].id == duplicate_account_id:
+                duplicate_account_index = i
+
+        return duplicate_account_id, duplicate_account_index
+
     def copy_accounts(self, accounts: List[Account]) -> None:
         with self._db_conn.cursor() as db:
-            # TODO: check if account exists (?)
-            with db.copy(f'COPY {self._table} ({",".join(self.column_names)}) FROM STDIN') as copy:
-                for account in accounts:
-                    values = (f"{getattr(account, c)}" for c in self.column_names)
-                    copy.write_row(values)
+            duplicate_occured = True
+
+            while duplicate_occured:
+                try:
+                    duplicate_occured = False
+                    with db.copy(f'COPY {self._table} ({",".join(self.column_names)}) FROM STDIN') as copy:
+                        for account in accounts:
+                            values = (f"{getattr(account, c)}" for c in self.column_names)
+                            copy.write_row(values)
+                except UniqueViolation as e:
+                    duplicate_occured = True
+
+                    duplicate_account_id, duplicate_account_index = self._get_name_and_index(e, accounts)
+
+                    if duplicate_account_index is None:
+                        raise RuntimeError(
+                            f"Error during duplicate handling, account id {duplicate_account_id} not found")
+
+                    # Remove duplicate account from queue
+                    accounts.pop(duplicate_account_index)
+
+                    _logger.warning(f"Duplicate account occurred during COPY: {duplicate_account_id}")
+                    self._db_conn.commit()
+
         self._db_conn.commit()
 
     def observe(self, observable: Observable, scheduler: Optional[Scheduler] = None, buffer_size: int = 500) -> None:

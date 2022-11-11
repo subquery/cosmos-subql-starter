@@ -12,8 +12,10 @@ psycopg = "*"
 python-dateutil = "*"
 dataclasses-json = "*"
 reactivex = "*"
+click = "*"
 
 [dev-packages]
+pytest = "*"
 
 [requires]
 python_version = "3.9"

@@ -1,6 +1,7 @@
 from typing import Tuple, Generator, Any
 
 from psycopg import Connection
+from psycopg.errors import UniqueViolation
 
 from src.genesis.db.types import DBTypes
 
@@ -59,3 +60,8 @@ class TableManager:
             """)
             self._db_conn.commit()
             # TODO error checking / handling (?)
+
+    @classmethod
+    def _extract_id_from_unique_violation_exception(cls, e: UniqueViolation) -> str:
+        # Extract which ID was violated from UniqueViolation exception
+        return str(e).split("(")[2].split(")")[0]

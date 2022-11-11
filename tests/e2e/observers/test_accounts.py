@@ -3,6 +3,7 @@ import sys
 from threading import Lock
 from typing import List, Tuple
 import unittest
+from unittest.mock import patch
 
 from gql import gql
 from reactivex.operators import map as map_
@@ -46,7 +47,6 @@ class TestAccountsObserver(TestWithDBConn):
         assert (lock.acquire(True, 5))
 
 
-# TODO: test with existing account(s)
 class TestAccountsManager(TestWithDBConn, TestWithGQLClient):
     test_manager: AccountsManager
     completed = False
@@ -64,8 +64,26 @@ class TestAccountsManager(TestWithDBConn, TestWithGQLClient):
         def on_completed():
             cls.completed = True
 
+        cls.completed = False
         cls.test_manager = AccountsManager(cls.db_conn, on_completed=on_completed)
         cls.test_manager.observe(Genesis(**test_genesis_data).source)
+
+    @patch("logging.Logger.warning")
+    def test_duplicate(self, logger_warning_mock):
+        duplicate_message = "Duplicate account occurred"
+
+        self.completed = False
+
+        def on_completed():
+            self.completed = True
+
+        account_manager = AccountsManager(self.db_conn, on_completed=on_completed)
+        account_manager.observe(Genesis(**test_genesis_data).source)
+        assert self.completed
+
+        assert logger_warning_mock.call_count == 2
+        assert duplicate_message in logger_warning_mock.mock_calls[0].args[0]
+        assert duplicate_message in logger_warning_mock.mock_calls[1].args[0]
 
     def test_sql_retrieval(self):
         self.assertTrue(self.completed)
