@@ -1,7 +1,7 @@
 {
-  "name": "cronos-evm-starter",
+  "name": "cronos-evm-starter-via-rpc",
   "version": "1.0.0",
-  "description": "A basic Ethermint EVM example project with an event and call handler. Read more about this at https://academy.subquery.network/build/cosmos-evm.html. This project can be use as a starting point for developing your SubQuery project",
+  "description": "This project can be use as a starting point for developing your Cosmos (Cronos) based SubQuery project via the Ethermint RPC API",
   "main": "dist/index.js",
   "scripts": {
     "build": "subql build",

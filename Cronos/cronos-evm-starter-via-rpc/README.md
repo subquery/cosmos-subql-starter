@@ -1,12 +1,12 @@
-# SubQuery - Starter Package for Cosmos/CosmosHub
+# SubQuery - Starter Package for Cosmos/Cronos
 
-A basic Cosmos (based on CosmosHub) example project with an event and message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
+A basic Cosmos Ethermint EVM (based on Cronos) example project with an event and call handler. Read more about this at https://academy.subquery.network/build/cosmos-evm.html.
 
 The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
 
 A SubQuery package defines which data SubQuery will index from the blockchain, and how it will store it.
 
-This Starter Package by default allows **indexing transfer events and messages from CosmosHub**.
+This Starter Package by default allows **indexing transactions and approvals of Wrapped CRO Token**.
 
 ## Preparation
 
@@ -87,24 +87,20 @@ With this project can try to query with the following code to get a taste of how
 ```graphql
 {
   query {
-    transferEvents(first: 5) {
+    approvals(first: 5) {
       nodes {
         id
-        blockHeight
-        txHash
-        recipient
-        sender
-        amount
+        value
+        owner
+        spender
       }
     }
-    messages(first: 5) {
+    transactions(first: 5) {
       nodes {
         id
-        blockHeight
-        txHash
-        from
-        to
-        amount
+        value
+        to: id
+        from: id
       }
     }
   }

@@ -1,22 +1,22 @@
 # SubQuery - Starter Package for Cosmos/Cronos
 
-A basic Cosmos Ethermint EVM (based on Cronos) example project with an event and call handler. Read more about this at https://academy.subquery.network/build/cosmos-evm.html.
+A basic Cronos EVM example project that uses the Ethereum API with an event and call handler. Read more about this at https://academy.subquery.network/build/cosmos-evm.html.
 
-The Starter Package is an example that you can use as a starting point for developing your SubQuery project. 
+The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
 
-A SubQuery package defines which data SubQuery will index from the Substrate blockchain, and how it will store it.
+A SubQuery package defines which data SubQuery will index from the blockchain, and how it will store it.
 
-This Starter Package by default allows **indexing transactions and approvals of Wrapped CRO Token**. 
+This Starter Package by default allows **indexing transactions and approvals of Wrapped CRO Token**.
 
 ## Preparation
 
-#### Environment and dependencies 
+#### Environment and dependencies
 
 - [Typescript](https://www.typescriptlang.org/) is required to compile project and define types.
 
 - Both SubQuery CLI and generated Project have dependencies and require [Node](https://nodejs.org/en/).
 
-- You will also need [Yarn](https://classic.yarnpkg.com/lang/en/docs/install ) or [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) and [Docker](https://docs.docker.com/engine/install/). 
+- You will also need [Yarn](https://classic.yarnpkg.com/lang/en/docs/install) or [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) and [Docker](https://docs.docker.com/engine/install/).
 
 #### Install the SubQuery CLI and Project Dependencies
 
@@ -42,7 +42,7 @@ If you want to change your project you will need to work on the following files:
 
 [Learn more](https://academy.subquery.network/build/introduction.html)
 
-## Build the Project 
+## Build the Project
 
 #### 1. Generate Associated Typescript
 
@@ -54,7 +54,7 @@ yarn codegen OR npm run-script codegen
 
 If you change any data in your `schema.graphql`, you should run this command again. You should also consider deleting your local database in the `.data/` directory.
 
-#### 2. Build the project 
+#### 2. Build the project
 
 This builds your project into static files within the `/dist` for running.
 
@@ -87,31 +87,30 @@ With this project can try to query with the following code to get a taste of how
 ```graphql
 {
   query {
-    approvals (first: 5) {
-        nodes {
-            id
-            value
-            owner
-            spender
-        }
+    approvals(first: 5) {
+      nodes {
+        id
+        value
+        owner
+        spender
+      }
     }
-    transactions (first: 5) {
-        nodes {
-            id
-            value
-            to: id
-            from: id
-        }
+    transactions(first: 5) {
+      nodes {
+        id
+        value
+        to: id
+        from: id
+      }
     }
-  } 
+  }
 }
 ```
 
-##  Useful Resources
+## Useful Resources
 
 - [SubQuery Documentation](https://academy.subquery.network/)
 - [Tips and Tricks for Performance Improvements](https://academy.subquery.network/faqs/faqs.html#how-can-i-optimise-my-project-to-speed-it-up)
 - [Automated Historical State tracking](https://academy.subquery.network/th/run_publish/historical.html)
-- [Custom Substrate Chains](https://university.subquery.network/build/manifest.html#custom-substrate-chains)
 - [GraphQL Subscriptions](https://academy.subquery.network/run_publish/subscription.html)
 - [Discord with Technical Support Channel](https://discord.com/invite/subquery)

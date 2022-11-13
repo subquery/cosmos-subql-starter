@@ -1,5 +1,5 @@
 specVersion: 1.0.0
-name: cronos-evm-starter
+name: cronos-evm-starter-via-rpc
 version: 0.0.1
 runner:
   node:
@@ -8,9 +8,8 @@ runner:
   query:
     name: "@subql/query"
     version: "*"
-description: >-
-  This project can be use as a starting point for developing your Cosmos (Cronos) based SubQuery project
-repository: "https://github.com/subquery/cosmos-subql-starter/tree/main/Cronos/cronos-evm-starter"
+description: "This project can be use as a starting point for developing your Cosmos (Cronos) based SubQuery project via the Ethermint RPC API"
+repository: "https://github.com/subquery/cosmos-subql-starter/tree/main/Cronos/cronos-evm-starter-via-rpc"
 schema:
   file: ./schema.graphql
 network:
@@ -46,7 +45,7 @@ dataSources:
       file: "./node_modules/@subql/ethermint-evm-processor/dist/bundle.js"
       options:
         abi: erc20
-        address: "0x5c7f8a570d578ed84e63fdfa7b1ee72deae1ae23" #Wrapped CRO
+        address: "0x5c7f8a570d578ed84e63fdfa7b1ee72deae1ae23" # Wrapped CRO
     assets:
       erc20:
         file: "./erc20.abi.json"
@@ -66,7 +65,7 @@ dataSources:
               # - '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
               # - Transfer(address,address,u256)
               # - Transfer(address from,address to,uint256 value)
-              - Transfer(address indexed src, address indexed dst, uint256 wad)
+              - Transfer(address indexed from, address indexed to, uint256 amount)
               - null
               - null
               - null
@@ -75,4 +74,4 @@ dataSources:
           filter:
             # Either Function Signature strings or the function `sighash` to filter the function called on the contract
             # ](https://docs.ethers.io/v5/api/utils/abi/fragments/#FunctionFragment)
-            method: approve(address guy, uint256 wad)    
+            method: approve(address spender, uint256 rawAmount)
