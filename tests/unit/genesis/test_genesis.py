@@ -6,13 +6,13 @@ from threading import Thread
 from time import sleep
 from typing import List, Tuple
 
-from helpers.genesis_data import test_genesis_data
-from helpers.http_server import serve_test_data
-from helpers.utils import check_attrs, check_genesis_entries
 from reactivex import operators
 
 from src.genesis.genesis import Genesis, GenesisSingleton
 from src.genesis.state.bank import Balance
+from tests.helpers.genesis_data import test_genesis_data
+from tests.helpers.http_server import serve_test_data
+from tests.helpers.utils import check_attrs, check_genesis_entries
 
 repo_root_path = Path(__file__).parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))

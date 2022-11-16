@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
 
 from reactivex import Observable, Observer
 from reactivex.abc import DisposableBase
@@ -12,7 +12,7 @@ chain_id_keys_path = ".chain_id"
 
 class ChainIdObserver(Observer):
     @staticmethod
-    def filter_chain_id(next_: Tuple[str, any]) -> bool:
+    def filter_chain_id(next_: Tuple[str, Any]) -> bool:
         return next_[0].startswith(chain_id_keys_path)
 
     def __init__(self, on_next=None, on_completed=None, on_error=None) -> None:
