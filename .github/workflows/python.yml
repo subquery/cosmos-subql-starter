@@ -1,4 +1,4 @@
-name: Checks and Tests
+name: Python Checks and Tests
 'on':
   push:
     branches:
@@ -15,7 +15,12 @@ jobs:
         python-version:
           - '3.9'
         tox-job:
-          - lint-checks
+          - black-check
+          - isort-check
+          - flake8
+          - vulture
+          - mypy
+          - pylint
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v3
