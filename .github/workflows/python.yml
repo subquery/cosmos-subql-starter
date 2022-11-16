@@ -5,30 +5,21 @@ name: Python Checks and Tests
       - main
   pull_request: null
 jobs:
-  code_quality_check:
+  style_checks:
     name: Check Python Code Quality
-    runs-on: '${{ matrix.os }}'
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-        python-version:
-          - '3.9'
-        tox-job:
-          - black-check
-          - isort-check
-          - flake8
-          - vulture
-          - mypy
-          - pylint
-    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '${{ matrix.python-version }}'
-      - name: Install dependencies
-        run: pip install tox==3.25.1
-      - name: 'Run check ${{ matrix.tox-job }}'
-        run: |
-          tox -e ${{ matrix.tox-job }}
+       - uses: actions/checkout@v2
+       - uses: actions/setup-python@v4
+         with:
+           python-version: 3.9
+       - name: Install dependencies
+         run: python3 -m pip install black isort flake8 mypy pylint
+       - name: Install pre dependencies
+         run: python3 -m pip install -r requirements.txt
+       - name: Run style checks
+         run: make lint-checks
