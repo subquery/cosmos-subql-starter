@@ -3,10 +3,10 @@ import unittest
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+from src.genesis.state import OwnAttrsMixin
+
 repo_root_path = Path(__file__).parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
-
-from src.genesis.state import OwnAttrsMixin
 
 
 def check_genesis_entries(

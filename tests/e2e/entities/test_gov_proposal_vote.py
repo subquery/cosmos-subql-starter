@@ -13,11 +13,11 @@ from cosmpy.protos.cosmos.gov.v1beta1 import tx_pb2 as gov_tx
 from google.protobuf import any_pb2
 from gql import gql
 
-repo_root_path = Path(__file__).parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
-
 from src.genesis.helpers.field_enums import GovProposalVoteFields
 from tests.helpers.entity_test import EntityTest
+
+repo_root_path = Path(__file__).parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
 
 class TestGovernance(EntityTest):

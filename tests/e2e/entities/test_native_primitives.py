@@ -6,9 +6,6 @@ from pathlib import Path
 
 from gql import gql
 
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
-
 from src.genesis.helpers.field_enums import (
     BlockFields,
     EventFields,
@@ -22,6 +19,9 @@ from tests.helpers.regexes import (
     msg_id_regex,
     tx_id_regex,
 )
+
+repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
 
 class TestNativePrimitives(EntityTest):
@@ -50,13 +50,13 @@ class TestNativePrimitives(EntityTest):
             cls.delegator_address, cls.amount, cls.denom, cls.validator_wallet
         )
         tx.wait_to_complete()
-        cls.assertTrue(tx.response.is_successful(), f"first set-up tx failed")
+        cls.assertTrue(tx.response.is_successful(), "first set-up tx failed")
 
         tx = cls.ledger_client.send_tokens(
             cls.validator_address, int(cls.amount / 10), cls.denom, cls.delegator_wallet
         )
         tx.wait_to_complete()
-        cls.assertTrue(tx.response.is_successful(), f"second set-up tx failed")
+        cls.assertTrue(tx.response.is_successful(), "second set-up tx failed")
 
         # Wait for subql node to sync
         time.sleep(5)
@@ -66,7 +66,7 @@ class TestNativePrimitives(EntityTest):
         self.assertNotEqual(
             blocks,
             [],
-            f"\nDBError: block table is empty - maybe indexer did not find an entry?",
+            "\nDBError: block table is empty - maybe indexer did not find an entry?",
         )
 
         self.assertGreaterEqual(len(blocks), self.expected_blocks_len)

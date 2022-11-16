@@ -5,10 +5,11 @@ import threading
 from reactivex.scheduler import ThreadPoolScheduler
 
 from src.genesis.genesis import GenesisSingleton
+from src.genesis.observers import AccountsManager, NativeBalancesManager
 
-from .accounts import *
-from .balances import *
-from .chain_id import *
+from .accounts import *  # noqa: F401
+from .balances import *  # noqa: F401
+from .chain_id import *  # noqa: F401
 
 
 def process_genesis(db_conn_factory):

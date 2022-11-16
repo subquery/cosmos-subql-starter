@@ -4,9 +4,6 @@ import time
 import unittest
 from pathlib import Path
 
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
-
 from src.genesis.helpers.field_enums import (
     ContractFields,
     InstantiateMessageFields,
@@ -15,6 +12,9 @@ from src.genesis.helpers.field_enums import (
 from tests.helpers.contracts import DeployTestContract
 from tests.helpers.entity_test import EntityTest
 from tests.helpers.graphql import test_filtered_query
+
+repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
 
 class TestContractDeploy(EntityTest):

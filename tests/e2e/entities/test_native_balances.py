@@ -78,7 +78,7 @@ class TestNativeBalances(EntityTest):
             query {
                 nativeBalanceChanges{
                     groupedAggregates(groupBy: [ACCOUNT_ID, DENOM]){
-                        sum{ 
+                        sum{
                             balanceOffset
                         }
                         keys

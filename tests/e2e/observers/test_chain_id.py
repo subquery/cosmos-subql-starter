@@ -1,17 +1,16 @@
 import sys
-import time
 import unittest
 from pathlib import Path
 from threading import Lock
 
 from reactivex.scheduler import ThreadPoolScheduler
 
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
-
 from src.genesis.genesis import Genesis
 from src.genesis.observers import ChainIdObserver
 from tests.helpers.genesis_data import test_genesis_data
+
+repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
 
 class TestChainIdObserver(unittest.TestCase):

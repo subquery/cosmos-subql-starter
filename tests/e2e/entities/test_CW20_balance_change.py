@@ -4,13 +4,13 @@ import time
 import unittest
 from pathlib import Path
 
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
-
 from src.genesis.helpers.field_enums import Cw20BalanceChangeFields
 from tests.helpers.contracts import Cw20Contract
 from tests.helpers.entity_test import EntityTest
 from tests.helpers.graphql import test_filtered_query
+
+repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
 
 class TestCw20BalanceChange(EntityTest):
@@ -71,7 +71,7 @@ class TestCw20BalanceChange(EntityTest):
                 Cw20BalanceChangeFields.by_execute_contract_method(str(method))
             ).fetchall()
             entry = self.methods[method]
-            """Due to differences in structure of each tabled test case, self.assertIn checks if the entry is in 
+            """Due to differences in structure of each tabled test case, self.assertIn checks if the entry is in
                the short list of possible values given in the methods dict"""
             for query in transfer:
                 self.assertIsNotNone(

@@ -4,7 +4,7 @@ from reactivex import Observable, Observer
 from reactivex.abc import DisposableBase
 from reactivex.operators import filter as filter_
 from reactivex.operators import map as map_
-from reactivex.operators import observe_on, replay, subscribe_on
+from reactivex.operators import observe_on
 from reactivex.scheduler.scheduler import Scheduler
 
 chain_id_keys_path = ".chain_id"

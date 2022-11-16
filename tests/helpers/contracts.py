@@ -45,7 +45,7 @@ class DeployTestContract(LedgerContract):
         try:
             temp = open(".contract/test_contract.wasm", "rb")
             temp.close()
-        except:
+        except:  # noqa: E722
             contract_request = requests.get(url)
             with open(".contract/test_contract.wasm", "wb") as file:
                 file.write(contract_request.content)
@@ -78,7 +78,7 @@ class Cw20Contract(LedgerContract):
         try:
             temp = open(".contract/cw20.wasm", "rb")
             temp.close()
-        except:
+        except:  # noqa: E722
             contract_request = requests.get(url)
             with open(".contract/cw20.wasm", "wb") as file:
                 file.write(contract_request.content)
@@ -111,7 +111,7 @@ class BridgeContract(LedgerContract):
         try:
             temp = open(".contract/bridge.wasm", "rb")
             temp.close()
-        except:
+        except:  # noqa: E722
             contract_request = requests.get(url)
             with open(".contract/bridge.wasm", "wb") as file:
                 file.write(contract_request.content)

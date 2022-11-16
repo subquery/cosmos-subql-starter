@@ -7,12 +7,12 @@ from pathlib import Path
 
 from gql import gql
 
-repo_root_path = Path(__file__).parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
-
 from src.genesis.helpers.field_enums import ExecuteContractMessageFields
 from tests.helpers.contracts import BridgeContract, DefaultBridgeContractConfig
 from tests.helpers.entity_test import EntityTest
+
+repo_root_path = Path(__file__).parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
 
 class TestContractExecution(EntityTest):

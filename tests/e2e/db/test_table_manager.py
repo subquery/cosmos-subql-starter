@@ -2,12 +2,12 @@ import sys
 import unittest
 from pathlib import Path
 
-src_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.append(str(src_path))
-
 from src.genesis.db.table_manager import TableManager, table_exists
 from src.genesis.db.types import DBTypes
 from tests.helpers.clients import TestWithDBConn
+
+src_path = Path(__file__).parent.parent.parent.parent.absolute()
+sys.path.append(str(src_path))
 
 
 class TestTableManager(TestWithDBConn):
