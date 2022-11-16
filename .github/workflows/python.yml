@@ -18,8 +18,6 @@ jobs:
          with:
            python-version: 3.9
        - name: Install dependencies
-         run: python3 -m pip install black isort flake8 mypy pylint
-       - name: Install pre dependencies
-         run: python3 -m pip install -r requirements.txt
+         run: pipenv install --dev
        - name: Run style checks
-         run: make lint-checks
+         run: pipenv run make lint-checks
