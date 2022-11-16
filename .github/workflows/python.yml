@@ -1,0 +1,29 @@
+name: Checks and Tests
+'on':
+  push:
+    branches:
+      - main
+  pull_request: null
+jobs:
+  code_quality_check:
+    name: Check Python Code Quality
+    runs-on: '${{ matrix.os }}'
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+        python-version:
+          - '3.9'
+        tox-job:
+          - lint-checks
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '${{ matrix.python-version }}'
+      - name: Install dependencies
+        run: pip install tox==3.25.1
+      - name: 'Run check ${{ matrix.tox-job }}'
+        run: |
+          tox -e ${{ matrix.tox-job }}

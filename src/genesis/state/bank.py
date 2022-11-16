@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
-from typing import List, Dict
+from typing import Dict, List
 
-from .utils import Coin, ListConstructorMixin, list_field_with_default, OwnAttrsMixin
+from .utils import Coin, ListConstructorMixin, OwnAttrsMixin, list_field_with_default
 
 
 @dataclass(frozen=True)

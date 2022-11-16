@@ -1,6 +1,6 @@
+import os
 from dataclasses import dataclass
 
-import os
 import requests
 from cosmpy.aerial.client import LedgerClient
 from cosmpy.aerial.contract import LedgerContract
@@ -31,15 +31,14 @@ DefaultBridgeContractConfig = BridgeContractConfig(
     swap_fee="0",
     paused_since_block=18446744073709551615,
     denom="atestfet",
-    next_swap_id=0
+    next_swap_id=0,
 )
 
 
 class DeployTestContract(LedgerContract):
-
     def __init__(self, client: LedgerClient, admin: Wallet):
-        """ Using a slightly older version of CW20 contract as a test contract - as this will still be classified as the
-            CW20 interface, but is different enough to allow a unique store_code message during testing."""
+        """Using a slightly older version of CW20 contract as a test contract - as this will still be classified as the
+        CW20 interface, but is different enough to allow a unique store_code message during testing."""
         url = "https://github.com/CosmWasm/cw-plus/releases/download/v0.14.0/cw20_base.wasm"
         if not os.path.exists(".contract"):
             os.mkdir(".contract")
@@ -53,18 +52,21 @@ class DeployTestContract(LedgerContract):
 
         super().__init__(".contract/test_contract.wasm", client)
 
-        self.deploy({
-            "name": "test coin",
-            "symbol": "TEST",
-            "decimals": 6,
-            "initial_balances": [{
-                "amount": "3000000000000000000000000",
-                "address": str(admin.address())
-            }],
-            "mint": {"minter": str(admin.address())}
-        },
+        self.deploy(
+            {
+                "name": "test coin",
+                "symbol": "TEST",
+                "decimals": 6,
+                "initial_balances": [
+                    {
+                        "amount": "3000000000000000000000000",
+                        "address": str(admin.address()),
+                    }
+                ],
+                "mint": {"minter": str(admin.address())},
+            },
             admin,
-            store_gas_limit=3000000
+            store_gas_limit=3000000,
         )
 
 
@@ -83,18 +85,21 @@ class Cw20Contract(LedgerContract):
 
         super().__init__(".contract/cw20.wasm", client)
 
-        self.deploy({
-            "name": "test coin",
-            "symbol": "TEST",
-            "decimals": 6,
-            "initial_balances": [{
-                "amount": "3000000000000000000000000",
-                "address": str(admin.address())
-            }],
-            "mint": {"minter": str(admin.address())}
-        },
+        self.deploy(
+            {
+                "name": "test coin",
+                "symbol": "TEST",
+                "decimals": 6,
+                "initial_balances": [
+                    {
+                        "amount": "3000000000000000000000000",
+                        "address": str(admin.address()),
+                    }
+                ],
+                "mint": {"minter": str(admin.address())},
+            },
             admin,
-            store_gas_limit=3000000
+            store_gas_limit=3000000,
         )
 
 
@@ -118,8 +123,4 @@ class BridgeContract(LedgerContract):
         # deploy will store the contract only if no existing contracts was found during init.
         # and it will instantiate the contract only if contract.address is None
         # see: https://github.com/fetchai/cosmpy/blob/master/cosmpy/aerial/contract/__init__.py#L168-L179
-        self.deploy(
-            cfg.to_dict(),
-            admin,
-            store_gas_limit=3000000
-        )
+        self.deploy(cfg.to_dict(), admin, store_gas_limit=3000000)

@@ -1,8 +1,8 @@
-from pathlib import Path
 import sys
+import unittest
+from pathlib import Path
 from threading import Lock
 from typing import List, Tuple
-import unittest
 from unittest.mock import patch
 
 from gql import gql
@@ -11,13 +11,12 @@ from reactivex.operators import map as map_
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
-from tests.helpers.clients import TestWithDBConn, TestWithGQLClient
-from src.genesis.helpers.field_enums import Accounts
-from tests.helpers.genesis_data import test_bank_state_balances, test_genesis_data
-
-from src.genesis.state.bank import Balance
 from src.genesis.genesis import Genesis
-from src.genesis.observers import Account, AccountsObserver, AccountsManager
+from src.genesis.helpers.field_enums import Accounts
+from src.genesis.observers import Account, AccountsManager, AccountsObserver
+from src.genesis.state.bank import Balance
+from tests.helpers.clients import TestWithDBConn, TestWithGQLClient
+from tests.helpers.genesis_data import test_bank_state_balances, test_genesis_data
 
 
 class TestAccountsObserver(TestWithDBConn):
@@ -28,8 +27,10 @@ class TestAccountsObserver(TestWithDBConn):
         lock = Lock()
         lock.acquire()
 
-        expected_entries = [Account(id=Balance(**b).address, chain_id=test_chain_id) for
-                            b in test_genesis_data["app_state"]["bank"]["balances"]]
+        expected_entries = [
+            Account(id=Balance(**b).address, chain_id=test_chain_id)
+            for b in test_genesis_data["app_state"]["bank"]["balances"]
+        ]
 
         def on_next(next_: Tuple[str, any]):
             actual_entries.append(next_)
@@ -39,20 +40,24 @@ class TestAccountsObserver(TestWithDBConn):
             self.assertListEqual(expected_entries, actual_entries)
             lock.release()
 
-        test_accounts_observer = AccountsObserver(on_next=on_next, on_completed=on_completed)
-        test_accounts_observer.subscribe_to(test_genesis.source,
-                                            post_operators=[map_(test_accounts_observer.map_account)])
+        test_accounts_observer = AccountsObserver(
+            on_next=on_next, on_completed=on_completed
+        )
+        test_accounts_observer.subscribe_to(
+            test_genesis.source,
+            post_operators=[map_(test_accounts_observer.map_account)],
+        )
 
         # Lock returns false if times-out
-        assert (lock.acquire(True, 5))
+        assert lock.acquire(True, 5)
 
 
 class TestAccountsManager(TestWithDBConn, TestWithGQLClient):
     test_manager: AccountsManager
     completed = False
     expected_accounts: List[Account] = [
-        Account(id=b["address"], chain_id=test_genesis_data.get("chain_id")) for
-        b in test_bank_state_balances
+        Account(id=b["address"], chain_id=test_genesis_data.get("chain_id"))
+        for b in test_bank_state_balances
     ]
 
     @classmethod
@@ -93,15 +98,19 @@ class TestAccountsManager(TestWithDBConn, TestWithGQLClient):
         with self.db_conn.cursor() as db:
             for row in db.execute(Accounts.select_query()).fetchall():
                 actual_accounts.append(
-                    Account(id=row[Accounts.id.value],
-                            chain_id=row[Accounts.chain_id.value]))
+                    Account(
+                        id=row[Accounts.id.value], chain_id=row[Accounts.chain_id.value]
+                    )
+                )
 
         self.assertListEqual(self.expected_accounts, actual_accounts)
 
     def test_gql_retrieval(self):
         actual_accounts: List[Account] = []
 
-        results = self.gql_client.execute(gql("""
+        results = self.gql_client.execute(
+            gql(
+                """
             query {
                 accounts {
                     nodes {
@@ -110,14 +119,13 @@ class TestAccountsManager(TestWithDBConn, TestWithGQLClient):
                     }
                 }
             }
-        """))
+        """
+            )
+        )
 
         for node in results["accounts"]["nodes"]:
             actual_accounts.append(
-                Account(
-                    id=node.get("id"),
-                    chain_id=node.get("chainId")
-                )
+                Account(id=node.get("id"), chain_id=node.get("chainId"))
             )
 
         self.assertListEqual(self.expected_accounts, actual_accounts)

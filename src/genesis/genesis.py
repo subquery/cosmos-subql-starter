@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
 from reactivex import Observer, create
 from reactivex.scheduler.scheduler import Scheduler
@@ -87,7 +87,9 @@ class GenesisSingleton:
     def __new__(cls, json_url=None):
         if not hasattr(cls, "_genesis"):
             if json_url is None:
-                raise Exception("attempted to memoize GenesisSingleton._genesis but json_url was None")
+                raise Exception(
+                    "attempted to memoize GenesisSingleton._genesis but json_url was None"
+                )
 
             data = download_json(json_url)
             cls._genesis = Genesis(**data)

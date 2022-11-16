@@ -1,10 +1,10 @@
-import sys
-from threading import Lock
-import unittest
-from unittest.mock import patch
-from pathlib import Path
-from typing import List
 import copy
+import sys
+import unittest
+from pathlib import Path
+from threading import Lock
+from typing import List
+from unittest.mock import patch
 
 import pytest
 from reactivex.scheduler import ThreadPoolScheduler
@@ -12,13 +12,16 @@ from reactivex.scheduler import ThreadPoolScheduler
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
-from tests.helpers.clients import TestWithDBConn
-from tests.helpers.genesis_data import test_genesis_data, test_bank_state_balances
-from src.genesis.helpers.field_enums import NativeBalances
-
-from src.genesis.state import Balance, Coin
 from src.genesis.genesis import Genesis
-from src.genesis.observers import NativeBalancesObserver, NativeBalancesManager, native_balances_keys_path
+from src.genesis.helpers.field_enums import NativeBalances
+from src.genesis.observers import (
+    NativeBalancesManager,
+    NativeBalancesObserver,
+    native_balances_keys_path,
+)
+from src.genesis.state import Balance, Coin
+from tests.helpers.clients import TestWithDBConn
+from tests.helpers.genesis_data import test_bank_state_balances, test_genesis_data
 
 
 class TestNativeBalanceObserver(TestWithDBConn):
@@ -26,8 +29,10 @@ class TestNativeBalanceObserver(TestWithDBConn):
         completed = False
         test_genesis = Genesis(**test_genesis_data)
         actual_entries: List[Balance] = []
-        expected_entries = [(native_balances_keys_path, Balance(**b)) for
-                            b in test_genesis_data["app_state"]["bank"]["balances"]]
+        expected_entries = [
+            (native_balances_keys_path, Balance(**b))
+            for b in test_genesis_data["app_state"]["bank"]["balances"]
+        ]
 
         def on_next(balance: Balance):
             actual_entries.append(balance)
@@ -36,7 +41,9 @@ class TestNativeBalanceObserver(TestWithDBConn):
             nonlocal completed
             completed = True
 
-        test_balance_observer = NativeBalancesObserver(on_next=on_next, on_completed=on_completed)
+        test_balance_observer = NativeBalancesObserver(
+            on_next=on_next, on_completed=on_completed
+        )
         test_balance_observer.subscribe_to(test_genesis.source)
 
         self.assertTrue(completed)
@@ -63,7 +70,9 @@ class TestBalanceManager(TestWithDBConn):
         # Clean DB to prevent interaction with other tests
         self.reinit_db()
 
-        expected_balances: List[Balance] = Balance.from_dict_list(test_bank_state_balances)
+        expected_balances: List[Balance] = Balance.from_dict_list(
+            test_bank_state_balances
+        )
         scheduler = ThreadPoolScheduler(2)
         lock = Lock()
         lock.acquire()
@@ -77,7 +86,7 @@ class TestBalanceManager(TestWithDBConn):
         test_manager.observe(Genesis(**test_genesis_data).source, scheduler=scheduler)
 
         # Lock returns false if times-out
-        assert (lock.acquire(True, 5))
+        assert lock.acquire(True, 5)
 
     def collect_actual_balances(self):
         actual_balances = []
@@ -86,11 +95,17 @@ class TestBalanceManager(TestWithDBConn):
             for address in [b["address"] for b in test_bank_state_balances]:
                 balance = Balance(**{"address": address})
 
-                for row in db.execute(NativeBalances.select_where(f"account_id = '{address}'")).fetchall():
-                    balance.coins.append(Coin(**{
-                        "amount": int(row[NativeBalances.amount.value]),
-                        "denom": row[NativeBalances.denom.value],
-                    }))
+                for row in db.execute(
+                    NativeBalances.select_where(f"account_id = '{address}'")
+                ).fetchall():
+                    balance.coins.append(
+                        Coin(
+                            **{
+                                "amount": int(row[NativeBalances.amount.value]),
+                                "denom": row[NativeBalances.denom.value],
+                            }
+                        )
+                    )
 
                 actual_balances.append(balance)
 
@@ -153,13 +168,15 @@ class TestBalanceManager(TestWithDBConn):
                 "coins": [
                     {"amount": 123, "denom": "a-token"},
                     {"amount": 457, "denom": "b-token"},
-                ]
+                ],
             },
         ]
 
         # Create variation of test data without overwriting the original dict
         current_test_genesis_data = copy.deepcopy(test_genesis_data)
-        current_test_genesis_data["app_state"]["bank"]["balances"] = current_bank_state_balances
+        current_test_genesis_data["app_state"]["bank"][
+            "balances"
+        ] = current_bank_state_balances
 
         # Insert first set of balances to DB
         test_manager = NativeBalancesManager(self.db_conn)
@@ -170,7 +187,10 @@ class TestBalanceManager(TestWithDBConn):
 
         with pytest.raises(RuntimeError) as e:
             test_manager.observe(Genesis(**current_test_genesis_data).source)
-        assert 'Balance for addr123-b-token in DB (456) is different from genesis (457)' in str(e)
+        assert (
+            "Balance for addr123-b-token in DB (456) is different from genesis (457)"
+            in str(e)
+        )
 
 
 if __name__ == "__main__":

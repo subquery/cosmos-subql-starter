@@ -5,10 +5,9 @@ from pathlib import Path
 src_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.append(str(src_path))
 
-from tests.helpers.clients import TestWithDBConn
-
 from src.genesis.db.table_manager import TableManager, table_exists
 from src.genesis.db.types import DBTypes
+from tests.helpers.clients import TestWithDBConn
 
 
 class TestTableManager(TestWithDBConn):
@@ -22,16 +21,18 @@ class TestTableManager(TestWithDBConn):
         cls.table_manager._table = cls.test_table
         cls.table_manager._columns = (
             ("text_column", DBTypes.text),
-            ("numeric_column", DBTypes.numeric)
+            ("numeric_column", DBTypes.numeric),
         )
         cls.table_manager._indexes = ("numeric_column",)
 
     @classmethod
     def setUp(cls) -> None:
         with cls.db_conn.cursor() as db:
-            db.execute(f"""
+            db.execute(
+                f"""
                 DROP TABLE IF EXISTS {cls.test_table};
-            """)
+            """
+            )
 
     def test__ensure_table(self) -> None:
         exists = table_exists(self.db_conn, self.test_table)

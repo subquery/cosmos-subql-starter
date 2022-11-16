@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Dict, Union
+from typing import Dict, List, Union
 
 
 def list_field_with_default(default: any):
