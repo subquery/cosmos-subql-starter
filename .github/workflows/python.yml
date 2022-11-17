@@ -1,4 +1,4 @@
-name: Python Checks and Tests
+name: Python Linting Checks
 'on':
   push:
     branches:
