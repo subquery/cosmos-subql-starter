@@ -14,8 +14,8 @@ repository: https://github.com/fetchai/ledger-subquery
 schema:
   file: ./schema.graphql
 network:
-  chainId: fetchchain
-  endpoint: http://fetch-node:26657
+  chainId: dorado-1
+  endpoint: https://rpc-dorado.fetch.ai:443
   chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
     cosmos.slashing.v1beta1:
       file: "./proto/cosmos/slashing/v1beta1/tx.proto"
@@ -25,7 +25,7 @@ network:
   dictionary: https://api.subquery.network/sq/subquery/cosmos-fetch-ai-dictionary
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 1
+    startBlock: 827201
     mapping:
       file: "./dist/index.js"
       handlers:
