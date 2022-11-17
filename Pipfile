@@ -18,6 +18,9 @@ click = "*"
 pytest = "*"
 black = "*"
 isort = "*"
+flake8 = "*"
+mypy = "*"
+pylint = "*"
 
 [requires]
 python_version = "3.9"
