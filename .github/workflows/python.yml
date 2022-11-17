@@ -21,13 +21,13 @@ jobs:
          run: sudo apt update
        - name: Install OS dependencies
          run: sudo apt install -y python3-dev nodejs
-       - name: Install NodeJS dependencies
-         run: yarn install
 
        - name: Install pipenv
          run: pip3 install pipenv
        - name: Install dependencies
          run: pipenv install --dev
 
+       - name: Install NodeJS dependencies
+         run: pipenv run yarn install
        - name: Run style checks
-         run: pipenv run yarn pylint-checks
+           run: pipenv run yarn pylint-checks
