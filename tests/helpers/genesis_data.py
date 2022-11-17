@@ -6,14 +6,14 @@ test_bank_state_balances = [
         "coins": [
             {"amount": 123, "denom": "a-token"},
             {"amount": 456, "denom": "b-token"},
-        ]
+        ],
     },
     {
         "address": "addr456",
         "coins": [
             {"amount": 111, "denom": "a-token"},
             {"amount": 222, "denom": "b-token"},
-        ]
+        ],
     },
 ]
 

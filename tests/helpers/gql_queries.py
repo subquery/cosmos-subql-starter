@@ -11,4 +11,3 @@ latest_block_timestamp = gql(  # get the timestamp from the latest block
     }
     """
 )
-

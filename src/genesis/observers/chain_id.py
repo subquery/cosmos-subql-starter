@@ -1,8 +1,10 @@
-from typing import Tuple, Optional
+from typing import Optional, Tuple
 
-from reactivex import Observer, Observable
+from reactivex import Observable, Observer
 from reactivex.abc import DisposableBase
-from reactivex.operators import filter as filter_, map as map_, replay, observe_on, subscribe_on
+from reactivex.operators import filter as filter_
+from reactivex.operators import map as map_
+from reactivex.operators import observe_on, replay, subscribe_on
 from reactivex.scheduler.scheduler import Scheduler
 
 chain_id_keys_path = ".chain_id"
@@ -16,7 +18,9 @@ class ChainIdObserver(Observer):
     def __init__(self, on_next=None, on_completed=None, on_error=None) -> None:
         super().__init__(on_next=on_next, on_completed=on_completed, on_error=on_error)
 
-    def subscribe_to(self, observable: Observable, scheduler: Optional[Scheduler] = None) -> DisposableBase:
+    def subscribe_to(
+        self, observable: Observable, scheduler: Optional[Scheduler] = None
+    ) -> DisposableBase:
         operators = [
             filter_(self.filter_chain_id),
             map_(lambda next_: next_[1]),
@@ -24,6 +28,6 @@ class ChainIdObserver(Observer):
         if scheduler is not None:
             operators.insert(0, observe_on(scheduler=scheduler))
 
-        return observable.pipe(*operators).subscribe(on_next=self.on_next,
-                                                     on_completed=self.on_completed,
-                                                     on_error=self.on_error)
+        return observable.pipe(*operators).subscribe(
+            on_next=self.on_next, on_completed=self.on_completed, on_error=self.on_error
+        )

@@ -1,7 +1,7 @@
 import sys
 import unittest
 from pathlib import Path
-from typing import List, Tuple, Dict
+from typing import Dict, List, Tuple
 
 repo_root_path = Path(__file__).parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
@@ -9,7 +9,11 @@ sys.path.insert(0, str(repo_root_path))
 from src.genesis.state import OwnAttrsMixin
 
 
-def check_genesis_entries(test_case: unittest.TestCase, expected: List[Tuple[str, any]], actual: List[Tuple[str, any]]):
+def check_genesis_entries(
+    test_case: unittest.TestCase,
+    expected: List[Tuple[str, any]],
+    actual: List[Tuple[str, any]],
+):
     for i, entry in enumerate(expected):
         expected_key_paths, expected_value = entry
         actual_key_paths, actual_value = actual[i]

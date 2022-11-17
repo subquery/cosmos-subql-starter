@@ -7,9 +7,9 @@ from pathlib import Path
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
+from src.genesis.helpers.field_enums import Cw20TransferFields
 from tests.helpers.contracts import Cw20Contract
 from tests.helpers.entity_test import EntityTest
-from src.genesis.helpers.field_enums import Cw20TransferFields
 from tests.helpers.graphql import test_filtered_query
 
 
@@ -24,23 +24,49 @@ class TestCw20Transfer(EntityTest):
 
         cls._contract = Cw20Contract(cls.ledger_client, cls.validator_wallet)
         resp = cls._contract.execute(
-            {"transfer": {"recipient": cls.delegator_address, "amount": str(cls.amount)}},
-            cls.validator_wallet)
+            {
+                "transfer": {
+                    "recipient": cls.delegator_address,
+                    "amount": str(cls.amount),
+                }
+            },
+            cls.validator_wallet,
+        )
         cls.ledger_client.wait_for_query_tx(resp.tx_hash)
         time.sleep(5)
 
     def test_execute_transfer(self):
         transfer = self.db_cursor.execute(Cw20TransferFields.select_query()).fetchone()
-        self.assertIsNotNone(transfer, "\nDBError: table is empty - maybe indexer did not find an entry?")
-        self.assertEqual(transfer[Cw20TransferFields.to_address.value], self.delegator_address, "\nDBError: transfer recipient address does not match")
-        self.assertEqual(transfer[Cw20TransferFields.contract.value], self._contract.address, "\nDBError: contract address does not match")
-        self.assertEqual(transfer[Cw20TransferFields.amount.value], self.amount, "\nDBError: fund amount does not match")
-        self.assertEqual(transfer[Cw20TransferFields.from_address.value], self.validator_address, "\nDBError: transfer sender address does not match")
+        self.assertIsNotNone(
+            transfer, "\nDBError: table is empty - maybe indexer did not find an entry?"
+        )
+        self.assertEqual(
+            transfer[Cw20TransferFields.to_address.value],
+            self.delegator_address,
+            "\nDBError: transfer recipient address does not match",
+        )
+        self.assertEqual(
+            transfer[Cw20TransferFields.contract.value],
+            self._contract.address,
+            "\nDBError: contract address does not match",
+        )
+        self.assertEqual(
+            transfer[Cw20TransferFields.amount.value],
+            self.amount,
+            "\nDBError: fund amount does not match",
+        )
+        self.assertEqual(
+            transfer[Cw20TransferFields.from_address.value],
+            self.validator_address,
+            "\nDBError: transfer sender address does not match",
+        )
 
     def test_retrieve_transfer(self):
         latest_block_timestamp = self.get_latest_block_timestamp()
         # create a second timestamp for five minutes before
-        min_timestamp = (latest_block_timestamp - dt.timedelta(minutes=5)).isoformat()  # convert both to JSON ISO format
+        min_timestamp = (
+            latest_block_timestamp - dt.timedelta(minutes=5)
+        ).isoformat()  # convert both to JSON ISO format
         max_timestamp = latest_block_timestamp.isoformat()
 
         cw20_transfer_nodes = """
@@ -60,42 +86,36 @@ class TestCw20Transfer(EntityTest):
             return test_filtered_query("cw20Transfers", _filter, cw20_transfer_nodes)
 
         # query Cw20 transfers, query related block and filter by timestamp, returning all within last five minutes
-        filter_by_block_timestamp_range = filtered_cw20_transfer_query({
-            "block": {
-                "timestamp": {
-                    "greaterThanOrEqualTo": min_timestamp,
-                    "lessThanOrEqualTo": max_timestamp
+        filter_by_block_timestamp_range = filtered_cw20_transfer_query(
+            {
+                "block": {
+                    "timestamp": {
+                        "greaterThanOrEqualTo": min_timestamp,
+                        "lessThanOrEqualTo": max_timestamp,
+                    }
                 }
             }
-        })
+        )
 
         # query Cw20 transfers, filter by destination address
-        filter_by_to_address_equals = filtered_cw20_transfer_query({
-            "toAddress": {
-                "equalTo": str(self.delegator_address)
-            }
-        })
+        filter_by_to_address_equals = filtered_cw20_transfer_query(
+            {"toAddress": {"equalTo": str(self.delegator_address)}}
+        )
 
         # query Cw20 transfers, filter by destination address
-        filter_by_from_address_equals = filtered_cw20_transfer_query({
-            "fromAddress": {
-                "equalTo": str(self.validator_address)
-            }
-        })
+        filter_by_from_address_equals = filtered_cw20_transfer_query(
+            {"fromAddress": {"equalTo": str(self.validator_address)}}
+        )
 
         # query Cw20 transfers, filter by contract address
-        filter_by_contract_equals = filtered_cw20_transfer_query({
-            "contract": {
-                "equalTo": str(self._contract.address)
-            }
-        })
+        filter_by_contract_equals = filtered_cw20_transfer_query(
+            {"contract": {"equalTo": str(self._contract.address)}}
+        )
 
         # query Cw20 transfers, filter by amount
-        filter_by_amount_above = filtered_cw20_transfer_query({
-            "amount": {
-                "greaterThan": "1"
-            }
-        })
+        filter_by_amount_above = filtered_cw20_transfer_query(
+            {"amount": {"greaterThan": "1"}}
+        )
 
         for (name, query) in [
             ("by block timestamp range", filter_by_block_timestamp_range),
@@ -112,12 +132,30 @@ class TestCw20Transfer(EntityTest):
                 which can be destructured for the values of interest.
                 """
                 transfer = result["cw20Transfers"]["nodes"]
-                self.assertNotEqual(transfer, [], "\nGQLError: No results returned from query")
-                self.assertEqual(transfer[0]["toAddress"], self.delegator_address, "\nGQLError: transfer recipient address does not match")
-                self.assertEqual(transfer[0]["fromAddress"], self.validator_address, "\nGQLError: transfer sender address does not match")
-                self.assertEqual(int(transfer[0]["amount"]), int(self.amount), "\nGQLError: fund amount does not match")
-                self.assertEqual(transfer[0]["contract"], self._contract.address, "\nGQLError: contract address does not match")
+                self.assertNotEqual(
+                    transfer, [], "\nGQLError: No results returned from query"
+                )
+                self.assertEqual(
+                    transfer[0]["toAddress"],
+                    self.delegator_address,
+                    "\nGQLError: transfer recipient address does not match",
+                )
+                self.assertEqual(
+                    transfer[0]["fromAddress"],
+                    self.validator_address,
+                    "\nGQLError: transfer sender address does not match",
+                )
+                self.assertEqual(
+                    int(transfer[0]["amount"]),
+                    int(self.amount),
+                    "\nGQLError: fund amount does not match",
+                )
+                self.assertEqual(
+                    transfer[0]["contract"],
+                    self._contract.address,
+                    "\nGQLError: contract address does not match",
+                )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

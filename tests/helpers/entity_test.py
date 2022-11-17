@@ -11,7 +11,8 @@ from cosmpy.protos.cosmos.gov.v1beta1 import query_pb2_grpc
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
-from tests.helpers.clients import TestWithDBConn, TestWithGQLClient, FETCHD_HOST, FETCHD_GRPC_PORT
+from tests.helpers.clients import (FETCHD_GRPC_PORT, FETCHD_HOST,
+                                   TestWithDBConn, TestWithGQLClient)
 
 VALIDATOR_MNEMONIC = "nut grocery slice visit barrel peanut tumble patch slim logic install evidence fiction shield rich brown around arrest fresh position animal butter forget cost"
 DELEGATOR_MNEMONIC = "dismiss domain uniform image cute buzz ride anxiety nose canvas ripple stock buffalo bitter spirit maximum tone inner couch forum equal usage state scan"
@@ -34,7 +35,9 @@ class EntityTest(TestWithDBConn, TestWithGQLClient):
 
         cls.validator_wallet = LocalWallet.from_mnemonic(VALIDATOR_MNEMONIC)
         cls.validator_address = str(cls.validator_wallet.address())
-        cls.validator_operator_address = Address(bytes(cls.validator_wallet.address()), prefix="fetchvaloper")
+        cls.validator_operator_address = Address(
+            bytes(cls.validator_wallet.address()), prefix="fetchvaloper"
+        )
 
         cls.delegator_wallet = LocalWallet.from_mnemonic(DELEGATOR_MNEMONIC)
         cls.delegator_address = str(cls.delegator_wallet.address())
@@ -57,5 +60,5 @@ class EntityTest(TestWithDBConn, TestWithGQLClient):
         return cls.ledger_client.query_account(cls.delegator_address)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

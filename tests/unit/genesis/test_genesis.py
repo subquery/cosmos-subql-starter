@@ -13,7 +13,7 @@ sys.path.insert(0, str(repo_root_path))
 
 from helpers.genesis_data import test_genesis_data
 from helpers.http_server import serve_test_data
-from helpers.utils import check_genesis_entries, check_attrs
+from helpers.utils import check_attrs, check_genesis_entries
 
 from src.genesis.genesis import Genesis, GenesisSingleton
 from src.genesis.state.bank import Balance
@@ -31,8 +31,10 @@ class TestGenesis(unittest.TestCase):
         test_key_paths = ".app_state.bank.balances"
         actual_genesis = Genesis(**test_genesis_data)
         actual_entries: List[Tuple[str, any]] = []
-        expected_entries = [(test_key_paths, Balance(**b)) for
-                            b in test_genesis_data["app_state"]["bank"]["balances"]]
+        expected_entries = [
+            (test_key_paths, Balance(**b))
+            for b in test_genesis_data["app_state"]["bank"]["balances"]
+        ]
 
         def balances_filter(value: Tuple[str, any]) -> bool:
             key, _ = value
@@ -45,9 +47,9 @@ class TestGenesis(unittest.TestCase):
             nonlocal completed
             completed = True
 
-        actual_genesis.source.pipe(
-            operators.filter(balances_filter)
-        ).subscribe(on_next=on_next, on_completed=on_completed)
+        actual_genesis.source.pipe(operators.filter(balances_filter)).subscribe(
+            on_next=on_next, on_completed=on_completed
+        )
 
         self.assertTrue(completed)
         check_genesis_entries(self, expected_entries, actual_entries)

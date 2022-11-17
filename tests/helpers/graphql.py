@@ -14,10 +14,18 @@ def to_gql(obj):
 def test_filtered_query(root_entity, _filter, nodes_string):
     filter_string = to_gql(_filter)
 
-    return gql("""
+    return gql(
+        """
     query {
-        """ + root_entity + """ (filter: """ + filter_string + """) {
-            nodes """ + nodes_string + """
+        """
+        + root_entity
+        + """ (filter: """
+        + filter_string
+        + """) {
+            nodes """
+        + nodes_string
+        + """
         }
     }
-    """)
+    """
+    )
