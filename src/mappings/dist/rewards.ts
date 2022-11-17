@@ -1,10 +1,22 @@
 import {CosmosEvent, CosmosMessage} from "@subql/types-cosmos";
 import {DistDelegatorClaimMsg} from "../types";
-import {messageId} from "../utils";
+import {attemptHandling, messageId, unprocessedEventHandler} from "../utils";
 import {DistDelegatorClaim} from "../../types";
 import {parseCoins} from "../../cosmjs/utils";
 
 export async function handleDistDelegatorClaim(event: CosmosEvent): Promise<void> {
+  await attemptHandling(event,
+    _handleDistDelegatorClaim,
+    unprocessedEventHandler);
+}
+
+export async function handleDelegatorWithdrawRewardEvent(event: CosmosEvent): Promise<void> {
+  await attemptHandling(event,
+    _handleDelegatorWithdrawRewardEvent,
+    unprocessedEventHandler);
+}
+
+async function _handleDistDelegatorClaim(event: CosmosEvent): Promise<void> {
   const msg: CosmosMessage<DistDelegatorClaimMsg> = event.msg;
   logger.info(`[handleDistDelegatorClaim] (tx ${msg.tx.hash}): indexing DistDelegatorClaim ${messageId(msg)}`);
   logger.debug(`[handleDistDelegatorClaim] (event.msg.msg): ${JSON.stringify(msg.msg, null, 2)}`);
@@ -36,7 +48,7 @@ export async function handleDistDelegatorClaim(event: CosmosEvent): Promise<void
   await claim.save();
 }
 
-export async function handleDelegatorWithdrawRewardEvent(event: CosmosEvent): Promise<void> {
+async function _handleDelegatorWithdrawRewardEvent(event: CosmosEvent): Promise<void> {
   logger.debug(`[handleDelegateWithdrawRewardEvent] (event.event): ${JSON.stringify(event.event, null, 2)}`);
   logger.debug(`[handleDelegateWithdrawRewardEvent] (event.log): ${JSON.stringify(event.log, null, 2)}`);
 

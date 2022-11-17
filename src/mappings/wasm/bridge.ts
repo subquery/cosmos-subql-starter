@@ -1,9 +1,13 @@
 import {CosmosEvent, CosmosMessage} from "@subql/types-cosmos";
 import {LegacyBridgeSwapMsg} from "../types";
-import {messageId} from "../utils";
+import {attemptHandling, messageId, primitivesFromEvent, trackUnprocessed} from "../utils";
 import {LegacyBridgeSwap} from "../../types";
 
 export async function handleLegacyBridgeSwap(event: CosmosEvent): Promise<void> {
+  await attemptHandling(event, _handleLegacyBridgeSwap, _handleLegacyBridgeSwapError);
+}
+
+async function _handleLegacyBridgeSwap(event: CosmosEvent): Promise<void> {
   const msg: CosmosMessage<LegacyBridgeSwapMsg> = event.msg;
   const id = messageId(msg);
   logger.info(`[handleLegacyBridgeSwap] (tx ${msg.tx.hash}): indexing LegacyBridgeSwap ${id}`);
@@ -37,4 +41,8 @@ export async function handleLegacyBridgeSwap(event: CosmosEvent): Promise<void> 
   });
 
   await legacySwap.save();
+}
+
+async function _handleLegacyBridgeSwapError(err: Error, event: CosmosEvent): Promise<void> {
+  await trackUnprocessed(err, primitivesFromEvent(event));
 }

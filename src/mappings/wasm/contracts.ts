@@ -1,6 +1,11 @@
 import {CosmosEvent, CosmosMessage} from "@subql/types-cosmos";
 import {ExecuteContractMsg} from "../types";
-import {getJaccardResult, messageId} from "../utils";
+import {
+  attemptHandling,
+  getJaccardResult,
+  messageId,
+  unprocessedEventHandler
+} from "../utils";
 import {
   Contract,
   ExecuteContractMessage,
@@ -9,6 +14,24 @@ import {
 } from "../../types/";
 
 export async function handleExecuteContractEvent(event: CosmosEvent): Promise<void> {
+  await attemptHandling(event,
+    _handleExecuteContractEvent,
+    unprocessedEventHandler);
+}
+
+export async function handleContractStoreEvent(event: CosmosEvent): Promise<void> {
+  await attemptHandling(event,
+    _handleContractStoreEvent,
+    unprocessedEventHandler);
+}
+
+export async function handleContractInstantiateEvent(event: CosmosEvent): Promise<void> {
+  await attemptHandling(event,
+    _handleContractInstantiateEvent,
+    unprocessedEventHandler);
+}
+
+async function _handleExecuteContractEvent(event: CosmosEvent): Promise<void> {
   const msg: CosmosMessage<ExecuteContractMsg> = event.msg;
   logger.info(`[handleExecuteContractMessage] (tx ${msg.tx.hash}): indexing ExecuteContractMessage ${messageId(msg)}`);
   logger.debug(`[handleExecuteContractMessage] (event.msg.msg): ${JSON.stringify(msg.msg, null, 2)}`);
@@ -37,7 +60,7 @@ export async function handleExecuteContractEvent(event: CosmosEvent): Promise<vo
   await msgEntity.save();
 }
 
-export async function handleContractStoreEvent(event: CosmosEvent): Promise<void> {
+async function _handleContractStoreEvent(event: CosmosEvent): Promise<void> {
   logger.info(`[handleContractStoreEvent] (tx ${event.msg.tx.hash}): indexing event ${messageId(event.msg)}`);
   logger.debug(`[handleContractStoreEvent] (event.event): ${JSON.stringify(event.event, null, 2)}`);
   logger.debug(`[handleContractStoreEvent] (event.log): ${JSON.stringify(event.log, null, 2)}`);
@@ -67,7 +90,7 @@ export async function handleContractStoreEvent(event: CosmosEvent): Promise<void
   await storeMsg.save();
 }
 
-export async function handleContractInstantiateEvent(event: CosmosEvent): Promise<void> {
+async function _handleContractInstantiateEvent(event: CosmosEvent): Promise<void> {
   logger.info(`[handleContractInstantiateEvent] (tx ${event.msg.tx.hash}): indexing event ${messageId(event.msg)}`);
   logger.debug(`[handleContractInstantiateEvent] (event.event): ${JSON.stringify(event.event, null, 2)}`);
   logger.debug(`[handleContractInstantiateEvent] (event.log): ${JSON.stringify(event.log, null, 2)}`);

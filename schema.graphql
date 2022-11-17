@@ -256,3 +256,12 @@ type Contract @entity {
   storeMessage: StoreContractMessage!
   instantiateMessage: InstantiateContractMessage!
 }
+
+type UnprocessedEntity @entity {
+  id: ID!
+  error: String!
+  event: Event
+  message: Message
+  transaction: Transaction
+  block: Block
+}

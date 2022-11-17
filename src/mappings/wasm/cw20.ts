@@ -1,6 +1,11 @@
 import {CosmosEvent} from "@subql/types-cosmos";
 import {Cw20BalanceChange, Cw20Transfer} from "../../types";
-import {checkBalancesAccount, messageId} from "../utils";
+import {
+  attemptHandling,
+  checkBalancesAccount,
+  unprocessedEventHandler,
+  messageId,
+} from "../utils";
 
 export async function saveCw20BalanceEvent(id: string, address: string, amount: bigint, contract: string, event: CosmosEvent) {
   await checkBalancesAccount(address, event.block.block.header.chainId);
@@ -19,7 +24,23 @@ export async function saveCw20BalanceEvent(id: string, address: string, amount: 
   await Cw20BalanceChangeEntity.save();
 }
 
-export async function handleCw20Transfer(event: CosmosEvent): Promise<void> { // TODO: consolidate Cw20 functions and helpers
+export async function handleCw20Transfer(event: CosmosEvent): Promise<void> {
+  await attemptHandling(event, _handleCw20Transfer, unprocessedEventHandler);
+}
+
+export async function handleCw20BalanceMint(event: CosmosEvent): Promise<void> {
+  await attemptHandling(event,
+    _handleCw20BalanceMint,
+    unprocessedEventHandler);
+}
+
+export async function handleCw20BalanceTransfer(event: CosmosEvent): Promise<void> {
+  await attemptHandling(event,
+    _handleCw20BalanceTransfer,
+    unprocessedEventHandler);
+}
+
+async function _handleCw20Transfer(event: CosmosEvent): Promise<void> { // TODO: consolidate Cw20 functions and helpers
   const id = messageId(event.msg);
   logger.info(`[handleCw20Transfer] (tx ${event.tx.hash}): indexing Cw20Transfer ${id}`);
   logger.debug(`[handleCw20Transfer] (event.msg.msg): ${JSON.stringify(event.msg.msg, null, 2)}`);
@@ -66,7 +87,7 @@ export async function handleCw20BalanceBurn(event: CosmosEvent): Promise<void> {
   await saveCw20BalanceEvent(`${id}-burn`, fromAddress, BigInt(0) - BigInt(amount), contract, event);
 }
 
-export async function handleCw20BalanceMint(event: CosmosEvent): Promise<void> {
+async function _handleCw20BalanceMint(event: CosmosEvent): Promise<void> {
   const id = messageId(event.msg);
   logger.info(`[handleCw20BalanceMint] (tx ${event.tx.hash}): indexing Cw20BalanceMint ${id}`);
   logger.debug(`[handleCw20BalanceMint] (event.msg.msg): ${JSON.stringify(event.msg.msg, null, 2)}`);
@@ -84,7 +105,7 @@ export async function handleCw20BalanceMint(event: CosmosEvent): Promise<void> {
   await saveCw20BalanceEvent(`${id}-mint`, toAddress, BigInt(amount), contract, event);
 }
 
-export async function handleCw20BalanceTransfer(event: CosmosEvent): Promise<void> {
+async function _handleCw20BalanceTransfer(event: CosmosEvent): Promise<void> {
   const id = messageId(event.msg);
   logger.info(`[handleCw20BalanceTransfer] (tx ${event.tx.hash}): indexing Cw20BalanceTransfer ${id}`);
   logger.debug(`[handleCw20BalanceTransfer] (event.msg.msg): ${JSON.stringify(event.msg.msg, null, 2)}`);

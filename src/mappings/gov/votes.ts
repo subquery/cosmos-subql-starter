@@ -1,9 +1,13 @@
 import {CosmosEvent, CosmosMessage} from "@subql/types-cosmos";
 import {GovProposalVoteMsg} from "../types";
-import {messageId} from "../utils";
+import {attemptHandling, messageId, unprocessedEventHandler} from "../utils";
 import {GovProposalVote, GovProposalVoteOption} from "../../types";
 
 export async function handleGovProposalVote(event: CosmosEvent): Promise<void> {
+  await attemptHandling(event, _handleGovProposalVote, unprocessedEventHandler);
+}
+
+async function _handleGovProposalVote(event: CosmosEvent): Promise<void> {
   const msg: CosmosMessage<GovProposalVoteMsg> = event.msg;
   logger.info(`[handleGovProposalVote] (tx ${msg.tx.hash}): indexing GovProposalVote ${messageId(msg)}`);
   logger.debug(`[handleGovProposalVote] (event.msg.msg): ${JSON.stringify(msg.msg, null, 2)}`);

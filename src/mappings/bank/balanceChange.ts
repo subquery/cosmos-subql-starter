@@ -1,6 +1,11 @@
 import {CosmosEvent} from "@subql/types-cosmos";
 import {NativeBalanceChange, Transaction} from "../../types";
-import {checkBalancesAccount, messageId} from "../utils";
+import {
+  attemptHandling,
+  checkBalancesAccount,
+  messageId,
+  unprocessedEventHandler
+} from "../utils";
 import {parseCoins} from "../../cosmjs/utils";
 
 export async function saveNativeBalanceEvent(id: string, address: string, amount: bigint, denom: string, event: CosmosEvent) {
@@ -28,6 +33,14 @@ async function saveNativeFeesEvent(event: CosmosEvent) {
 }
 
 export async function handleNativeBalanceDecrement(event: CosmosEvent): Promise<void> {
+  await attemptHandling(event, _handleNativeBalanceDecrement, unprocessedEventHandler);
+}
+
+export async function handleNativeBalanceIncrement(event: CosmosEvent): Promise<void> {
+  await attemptHandling(event, _handleNativeBalanceDecrement, unprocessedEventHandler);
+}
+
+async function _handleNativeBalanceDecrement(event: CosmosEvent): Promise<void> {
   logger.info(`[handleNativeBalanceDecrement] (tx ${event.tx.hash}): indexing event ${event.idx + 1} / ${event.tx.tx.events.length}`);
   logger.debug(`[handleNativeBalanceDecrement] (event.event): ${JSON.stringify(event.event, null, 2)}`);
   logger.debug(`[handleNativeBalanceDecrement] (event.log): ${JSON.stringify(event.log, null, 2)}`);
@@ -65,7 +78,7 @@ export async function handleNativeBalanceDecrement(event: CosmosEvent): Promise<
   await saveNativeFeesEvent(event);
 }
 
-export async function handleNativeBalanceIncrement(event: CosmosEvent): Promise<void> {
+async function _handleNativeBalanceIncrement(event: CosmosEvent): Promise<void> {
   logger.info(`[handleNativeBalanceIncrement] (tx ${event.tx.hash}): indexing event ${event.idx + 1} / ${event.tx.tx.events.length}`);
   logger.debug(`[handleNativeBalanceIncrement] (event.event): ${JSON.stringify(event.event, null, 2)}`);
   logger.debug(`[handleNativeBalanceIncrement] (event.log): ${JSON.stringify(event.log, null, 2)}`);
