@@ -30,4 +30,4 @@ jobs:
        - name: Install NodeJS dependencies
          run: pipenv run yarn install
        - name: Run style checks
-           run: pipenv run yarn pylint-checks
+         run: pipenv run yarn pylint-checks
