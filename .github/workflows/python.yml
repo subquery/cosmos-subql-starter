@@ -22,4 +22,4 @@ jobs:
        - name: Install dependencies
          run: pipenv install --dev
        - name: Run style checks
-         run: pipenv run make lint-checks
+         run: pipenv run yarn pylint-checks
