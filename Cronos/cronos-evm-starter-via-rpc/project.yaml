@@ -40,7 +40,7 @@ network:
 
 dataSources:
   - kind: cosmos/EthermintEvm
-    startBlock: 1474211
+    startBlock: 446 # Block that this contract was created
     processor:
       file: "./node_modules/@subql/ethermint-evm-processor/dist/bundle.js"
       options:
@@ -55,6 +55,12 @@ dataSources:
         # Using block handlers slows your project down as they can be executed with each and every block. Only use if you need to
         # - handler: handleBlock
         #   kind: cosmos/BlockHandler
+        - handler: handleEthermintEvmCall
+          kind: cosmos/EthermintEvmCall
+          filter:
+            # Either Function Signature strings or the function `sighash` to filter the function called on the contract
+            # ](https://docs.ethers.io/v5/api/utils/abi/fragments/#FunctionFragment)
+            method: approve(address spender, uint256 value)
         - handler: handleEthermintEvmEvent
           kind: cosmos/EthermintEvmEvent
           filter:
@@ -64,14 +70,7 @@ dataSources:
               # Example valid values:
               # - '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
               # - Transfer(address,address,u256)
-              # - Transfer(address from,address to,uint256 value)
-              - Transfer(address indexed from, address indexed to, uint256 amount)
+              - Transfer(address from, address to, uint256 value)
               - null
               - null
               - null
-        - handler: handleEthermintEvmCall
-          kind: cosmos/EthermintEvmCall
-          filter:
-            # Either Function Signature strings or the function `sighash` to filter the function called on the contract
-            # ](https://docs.ethers.io/v5/api/utils/abi/fragments/#FunctionFragment)
-            method: approve(address spender, uint256 rawAmount)

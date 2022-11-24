@@ -24,7 +24,7 @@ network:
   dictionary: "https://api.subquery.network/sq/subquery/cosmos-cronos-dictionary"
 dataSources:
   - kind: ethereum/Runtime
-    startBlock: 446
+    startBlock: 446 # Block that this contract was created
     options:
       abi: erc20
       address: "0x5c7f8a570d578ed84e63fdfa7b1ee72deae1ae23" # Wrapped CRO https://cronos.org/explorer/address/0x5C7F8A570d578ED84E63fdFA7b1eE72dEae1AE23
@@ -34,6 +34,9 @@ dataSources:
     mapping:
       file: "./dist/index.js"
       handlers:
+        # Using block handlers slows your project down as they can be executed with each and every block. Only use if you need to
+        # - handler: handleBlock
+        #   kind: ethereum/BlockHandler
         - handler: handleTransaction
           kind: ethereum/TransactionHandler
           filter:

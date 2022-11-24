@@ -20,24 +20,28 @@ type ApproveCallArgs = [string, BigNumber] & {
 export async function handleEthermintEvmEvent(
   event: EthermintEvmEvent<TransferEventArgs>
 ): Promise<void> {
-  const transaction = new Transaction(event.transactionHash);
-
-  transaction.value = event.args.value.toBigInt();
-  transaction.from = event.args.from;
-  transaction.to = event.args.to;
-  transaction.contractAddress = event.address;
+  logger.info(JSON.stringify(event.args.value));
+  const transaction = Transaction.create({
+    id: event.transactionHash,
+    value: event.args.value.toBigInt(),
+    from: event.args.from,
+    to: event.args.to,
+    contractAddress: event.address,
+  });
 
   await transaction.save();
 }
 
 export async function handleEthermintEvmCall(
-  event: EthermintEvmCall<ApproveCallArgs>
+  call: EthermintEvmCall<ApproveCallArgs>
 ): Promise<void> {
-  const approval = new Approval(event.hash);
-  approval.owner = event.from;
-  approval.value = event.args._value.toBigInt();
-  approval.spender = event.args._spender;
-  approval.contractAddress = event.to;
+  const approval = Approval.create({
+    id: call.hash,
+    owner: call.from,
+    value: call.args._value.toBigInt(),
+    spender: call.args._spender,
+    contractAddress: call.to,
+  });
 
   await approval.save();
 }
