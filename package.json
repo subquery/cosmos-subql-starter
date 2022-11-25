@@ -14,9 +14,10 @@
     "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
     "start:tracing": "docker-compose -f docker-compose.tracing.yml pull && docker-compose -f docker-compose.tracing.yml up --remove-orphans",
     "stop:tracing": "docker-compose -f docker-compose.tracing.yml down",
-    "db:dump": "pg_dump --schema app -c --if-exists --file migrations/initial_schema.sql",
-    "db:dump:schema": "yarn db:dump -- --schema-only postgres://subquery:subquery@localhost/subquery",
-    "db:dump:all": "yarn db:dump -- postgres://subquery:subquery@localhost/subquery",
+    "db:dump": "pg_dump --schema app -c --if-exists --file migrations/current_schema.sql postgres://subquery:subquery@localhost/subquery",
+    "db:dump:schema": "yarn db:dump --schema-only",
+    "db:dump:all": "yarn db:dump",
+    "db:dump:migrations": "pg_dump --schema graphile_migrate -Cc --file migrations/migration_snapshot.sql postgres://subquery:subquery@localhost/subquery",
     "plv8ify": "plv8ify --input-file ./migrations/current.ts --output-folder ./migrations/ --scope-prefix '' generate && mv ./migrations/plv8ify_* ./migrations/current.sql"
   },
   "homepage": "https://github.com/subquery/cosmos-subql-starter",
