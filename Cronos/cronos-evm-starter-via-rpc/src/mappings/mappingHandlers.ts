@@ -20,7 +20,6 @@ type ApproveCallArgs = [string, BigNumber] & {
 export async function handleEthermintEvmEvent(
   event: EthermintEvmEvent<TransferEventArgs>
 ): Promise<void> {
-  logger.info(JSON.stringify(event.args));
   const transaction = Transaction.create({
     id: event.transactionHash,
     value: (event.args[2]).toBigInt(),
