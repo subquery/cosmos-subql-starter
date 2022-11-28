@@ -60,7 +60,7 @@ dataSources:
           filter:
             # Either Function Signature strings or the function `sighash` to filter the function called on the contract
             # ](https://docs.ethers.io/v5/api/utils/abi/fragments/#FunctionFragment)
-            method: approve(address spender, uint256 value)
+            method: approve(address guy, uint256 wad)
         - handler: handleEthermintEvmEvent
           kind: cosmos/EthermintEvmEvent
           filter:
@@ -70,7 +70,4 @@ dataSources:
               # Example valid values:
               # - '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
               # - Transfer(address,address,u256)
-              - Transfer(address from, address to, uint256 value)
-              - null
-              - null
-              - null
+              - Transfer(address src, address dst, uint256 wad)

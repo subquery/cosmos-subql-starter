@@ -44,7 +44,7 @@ dataSources:
             ## https://docs.ethers.io/v5/api/utils/abi/fragments/#FunctionFragment
             # function: '0x095ea7b3'
             # function: '0x7ff36ab500000000000000000000000000000000000000000000000000000000'
-            function: approve(address spender, uint256 value)
+            function: approve(address guy, uint256 wad)
         - handler: handleLog
           kind: ethereum/LogHandler
           filter:
@@ -54,5 +54,5 @@ dataSources:
               # Example valid values:
               # - '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
               # - Transfer(address,address,u256)
-              - Transfer(address from, address to, uint256 value)
+              - Transfer(address src, address dst, uint256 wad)
               # address: "0x60781C2586D68229fde47564546784ab3fACA982"

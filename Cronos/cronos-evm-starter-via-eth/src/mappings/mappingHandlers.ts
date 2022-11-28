@@ -4,24 +4,24 @@ import { Approval, Transaction } from "../types";
 
 // Setup types from ABI
 type TransferEventArgs = [string, string, BigNumber] & {
-  from: string;
-  to: string;
-  value: BigNumber;
+  src: string;
+  dst: string;
+  wad: BigNumber;
 };
 type ApproveCallArgs = [string, BigNumber] & {
-  _spender: string;
-  _value: BigNumber;
+  guy: string;
+  wad: BigNumber;
 };
 
 export async function handleLog(
   transferLog: EthereumLog<TransferEventArgs>
 ): Promise<void> {
-  // logger.info("transaction: " + transferLog.transactionHash);
+  logger.info("transaction: " + transferLog.transactionHash);
   const transaction = Transaction.create({
     id: transferLog.transactionHash,
-    value: transferLog.args.value.toBigInt(),
-    from: transferLog.args.from,
-    to: transferLog.args.to,
+    value: transferLog.args.wad.toBigInt(),
+    from: transferLog.args.src,
+    to: transferLog.args.dst,
     contractAddress: transferLog.address,
   });
 
@@ -31,12 +31,12 @@ export async function handleLog(
 export async function handleTransaction(
   approveCallTransaction: EthereumTransaction<ApproveCallArgs>
 ): Promise<void> {
-  // logger.info("approval: " + approveCallTransaction.hash);
+  logger.info("approval: " + approveCallTransaction.hash);
   const approval = Approval.create({
     id: approveCallTransaction.hash,
     owner: approveCallTransaction.from,
-    value: approveCallTransaction.args._value.toBigInt(),
-    spender: approveCallTransaction.args._spender,
+    value: approveCallTransaction.args.wad.toBigInt(),
+    spender: approveCallTransaction.args.guy,
     contractAddress: approveCallTransaction.to,
   });
 

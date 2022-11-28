@@ -7,24 +7,25 @@ import { BigNumber } from "ethers";
 
 // Setup types from ABI
 type TransferEventArgs = [string, string, BigNumber] & {
-  from: string;
-  to: string;
-  value: BigNumber;
+  src: string;
+  dst: string;
+  wad: BigNumber;
 };
 
 type ApproveCallArgs = [string, BigNumber] & {
-  _spender: string;
-  _value: BigNumber;
+  guy: string;
+  wad: BigNumber;
 };
 
 export async function handleEthermintEvmEvent(
   event: EthermintEvmEvent<TransferEventArgs>
 ): Promise<void> {
+  logger.info("transaction: " + event.transactionHash);
   const transaction = Transaction.create({
     id: event.transactionHash,
-    value: (event.args[2]).toBigInt(),
-    from: event.args[0],
-    to: event.args[1],
+    value: event.args.wad.toBigInt(),
+    from: event.args.src,
+    to: event.args.dst,
     contractAddress: event.address,
   });
 
@@ -34,11 +35,12 @@ export async function handleEthermintEvmEvent(
 export async function handleEthermintEvmCall(
   call: EthermintEvmCall<ApproveCallArgs>
 ): Promise<void> {
+  logger.info("approval: " + call.hash);
   const approval = Approval.create({
     id: call.hash,
     owner: call.from,
-    value: call.args[1].toBigInt(),
-    spender: call.args[0],
+    value: call.args.wad.toBigInt(),
+    spender: call.args.guy,
     contractAddress: call.to,
   });
 
