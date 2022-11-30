@@ -1,8 +1,12 @@
 import {CosmosEvent} from "@subql/types-cosmos";
 import {IbcTransfer} from "../../types";
-import {messageId} from "../utils";
+import {attemptHandling, messageId, unprocessedEventHandler} from "../utils";
 
 export async function handleIBCTransfer(event: CosmosEvent): Promise<void> {
+  await attemptHandling(event, _handleIBCTransfer, unprocessedEventHandler);
+}
+
+async function _handleIBCTransfer(event: CosmosEvent): Promise<void> {
   const msg = event.msg;
   logger.info(`[handleIBCTransfer] (tx ${msg.tx.hash}): indexing message ${msg.idx + 1} / ${msg.tx.decodedTx.body.messages.length}`);
   logger.debug(`[handleIBCTransfer] (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`);

@@ -1,4 +1,4 @@
-import {messageId} from "../utils";
+import {attemptHandling, messageId, unprocessedEventHandler} from "../utils";
 import {AuthzExecMsg} from "../types";
 import {CosmosMessage} from "@subql/types-cosmos";
 
@@ -6,6 +6,10 @@ import {AuthzExec, AuthzExecMessage, Message} from "../../types";
 import allModuleTypes from "../../cosmjs/proto";
 
 export async function handleAuthzExec(msg: CosmosMessage<AuthzExecMsg>): Promise<void> {
+  await attemptHandling(msg, _handleAuthzExec, unprocessedEventHandler);
+}
+
+async function _handleAuthzExec(msg: CosmosMessage<AuthzExecMsg>): Promise<void> {
   logger.info(`[handleAuthzExec] (tx ${msg.tx.hash}): indexing message ${msg.idx + 1} / ${msg.tx.decodedTx.body.messages.length}`);
   logger.debug(`[handleAuthzExec] (msg.msg): ${JSON.stringify(msg.msg, null, 2)}`);
 
