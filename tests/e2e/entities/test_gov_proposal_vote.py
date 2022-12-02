@@ -1,29 +1,30 @@
+import datetime as dt
+import json
 import sys
+import time
+import unittest
 from pathlib import Path
 
 from cosmpy.aerial.client import utils
 from cosmpy.aerial.tx import Transaction
 from cosmpy.protos.cosmos.base.v1beta1 import coin_pb2
-from cosmpy.protos.cosmos.gov.v1beta1 import tx_pb2 as gov_tx, gov_pb2
+from cosmpy.protos.cosmos.gov.v1beta1 import gov_pb2
+from cosmpy.protos.cosmos.gov.v1beta1 import tx_pb2 as gov_tx
 from google.protobuf import any_pb2
 from gql import gql
-
-import datetime as dt
-import json
-import time
-import unittest
 
 repo_root_path = Path(__file__).parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
-from tests.helpers.entity_test import EntityTest
 from src.genesis.helpers.field_enums import GovProposalVoteFields
+from tests.helpers.entity_test import EntityTest
+
 
 class TestGovernance(EntityTest):
     vote_tx = None
     denom = "atestfet"
     amount = "10000000"
-    option = 'YES'
+    option = "YES"
 
     @classmethod
     def setUpClass(cls):
@@ -31,37 +32,43 @@ class TestGovernance(EntityTest):
         cls.clean_db({"gov_proposal_votes"})
 
         proposal_content = any_pb2.Any()
-        proposal_content.Pack(gov_pb2.TextProposal(
-            title="Test Proposal",
-            description="This is a test proposal"
-        ), "")
+        proposal_content.Pack(
+            gov_pb2.TextProposal(
+                title="Test Proposal", description="This is a test proposal"
+            ),
+            "",
+        )
 
         msg = gov_tx.MsgSubmitProposal(
             content=proposal_content,
-            initial_deposit=[coin_pb2.Coin(
-                denom=cls.denom,
-                amount=cls.amount
-            )],
-            proposer=cls.validator_address
+            initial_deposit=[coin_pb2.Coin(denom=cls.denom, amount=cls.amount)],
+            proposer=cls.validator_address,
         )
 
         tx = Transaction()
         tx.add_message(msg)
 
-        tx = utils.prepare_and_broadcast_basic_transaction(cls.ledger_client, tx, cls.validator_wallet)
+        tx = utils.prepare_and_broadcast_basic_transaction(
+            cls.ledger_client, tx, cls.validator_wallet
+        )
         tx.wait_to_complete()
-        cls.assertTrue(tx.response.is_successful(), "\nTXError: governance proposal tx unsuccessful")
+        cls.assertTrue(
+            tx.response.is_successful(),
+            "\nTXError: governance proposal tx unsuccessful",
+        )
 
         cls.msg = gov_tx.MsgVote(
             proposal_id=1,
             voter=cls.validator_address,
-            option=gov_pb2.VoteOption.VOTE_OPTION_YES
+            option=gov_pb2.VoteOption.VOTE_OPTION_YES,
         )
         cls.vote_tx = Transaction()
         cls.vote_tx.add_message(cls.msg)
 
     def test_proposal_vote(self):
-        tx = utils.prepare_and_broadcast_basic_transaction(self.ledger_client, self.vote_tx, self.validator_wallet)
+        tx = utils.prepare_and_broadcast_basic_transaction(
+            self.ledger_client, self.vote_tx, self.validator_wallet
+        )
         tx.wait_to_complete()
         self.assertTrue(tx.response.is_successful(), "\nTXError: vote tx unsuccessful")
 
@@ -69,14 +76,28 @@ class TestGovernance(EntityTest):
         time.sleep(5)
 
         vote = self.db_cursor.execute(GovProposalVoteFields.select_query()).fetchone()
-        self.assertIsNotNone(vote, "\nDBError: table is empty - maybe indexer did not find an entry?")
-        self.assertEqual(vote[GovProposalVoteFields.voter_address.value], self.validator_address, "\nDBError: voter address does not match")
-        self.assertEqual(vote[GovProposalVoteFields.option.value], self.option, "\nDBError: voter option does not match")
+        self.assertIsNotNone(
+            vote, "\nDBError: table is empty - maybe indexer did not find an entry?"
+        )
+        self.assertEqual(
+            vote[GovProposalVoteFields.voter_address.value],
+            self.validator_address,
+            "\nDBError: voter address does not match",
+        )
+        self.assertEqual(
+            vote[GovProposalVoteFields.option.value],
+            self.option,
+            "\nDBError: voter option does not match",
+        )
 
-    def test_retrieve_vote(self):  # As of now, this test depends on the execution of the previous test in this class.
+    def test_retrieve_vote(
+        self,
+    ):  # As of now, this test depends on the execution of the previous test in this class.
         latest_block_timestamp = self.get_latest_block_timestamp()
         # create a second timestamp for five minutes before
-        min_timestamp = (latest_block_timestamp - dt.timedelta(minutes=5)).isoformat()  # convert both to JSON ISO format
+        min_timestamp = (
+            latest_block_timestamp - dt.timedelta(minutes=5)
+        ).isoformat()  # convert both to JSON ISO format
         max_timestamp = latest_block_timestamp.isoformat()
 
         # query governance votes, query related block and filter by timestamp, returning all within last five minutes
@@ -87,8 +108,12 @@ class TestGovernance(EntityTest):
                 filter: {
                     block: {
                     timestamp: {
-                        greaterThanOrEqualTo: """ + json.dumps(min_timestamp) + """,
-                                lessThanOrEqualTo: """ + json.dumps(max_timestamp) + """
+                        greaterThanOrEqualTo: """
+            + json.dumps(min_timestamp)
+            + """,
+                                lessThanOrEqualTo: """
+            + json.dumps(max_timestamp)
+            + """
                             }
                         }
                     }) {
@@ -109,7 +134,9 @@ class TestGovernance(EntityTest):
                 govProposalVotes (
                 filter: {
                     voterAddress: {
-                        equalTo: \"""" + str(self.validator_address) + """\"
+                        equalTo: \""""
+            + str(self.validator_address)
+            + """\"
                     }
                 }) {
                     nodes {
@@ -129,7 +156,9 @@ class TestGovernance(EntityTest):
                 govProposalVotes (
                 filter: {
                     option: {
-                        equalTo: """ + self.option + """
+                        equalTo: """
+            + self.option
+            + """
                     }
                 }) {
                     nodes {
@@ -151,10 +180,17 @@ class TestGovernance(EntityTest):
             """
             votes = result["govProposalVotes"]["nodes"]
             self.assertTrue(votes[0], "\nGQLError: No results returned from query")
-            self.assertEqual(votes[0]["voterAddress"], self.validator_address,
-                             "\nGQLError: voter address does not match")
-            self.assertEqual(votes[0]["option"], self.option, "\nGQLError: voter option does not match")
+            self.assertEqual(
+                votes[0]["voterAddress"],
+                self.validator_address,
+                "\nGQLError: voter address does not match",
+            )
+            self.assertEqual(
+                votes[0]["option"],
+                self.option,
+                "\nGQLError: voter option does not match",
+            )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

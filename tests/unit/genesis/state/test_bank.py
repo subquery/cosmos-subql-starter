@@ -5,9 +5,8 @@ from pathlib import Path
 repo_root_path = Path(__file__).parent.parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
-from tests.helpers.genesis_data import test_bank_state
-
 from src.genesis.state.bank import BankState
+from tests.helpers.genesis_data import test_bank_state
 
 
 class TestBank(unittest.TestCase):
@@ -28,5 +27,5 @@ class TestBank(unittest.TestCase):
             self.assertEqual(expected_coin["denom"], coin.denom)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

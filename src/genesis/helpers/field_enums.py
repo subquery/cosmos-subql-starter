@@ -31,7 +31,9 @@ class NamedFields(Enum):
         return f"SELECT {', '.join(columns)} FROM {tables_str}"
 
     @classmethod
-    def select_where(cls, where_clause: str, tables: List[str] = None, prefix=False) -> str:
+    def select_where(
+        cls, where_clause: str, tables: List[str] = None, prefix=False
+    ) -> str:
         return f"{cls.select_query(tables=tables, prefix=True)} WHERE {where_clause}"
 
 

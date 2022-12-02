@@ -1,17 +1,17 @@
 import sys
+import time
 import unittest
 from pathlib import Path
+from threading import Lock
 
 from reactivex.scheduler import ThreadPoolScheduler
-from threading import Lock
-import time
 
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
-from tests.helpers.genesis_data import test_genesis_data
 from src.genesis.genesis import Genesis
 from src.genesis.observers import ChainIdObserver
+from tests.helpers.genesis_data import test_genesis_data
 
 
 class TestChainIdObserver(unittest.TestCase):
@@ -38,8 +38,8 @@ class TestChainIdObserver(unittest.TestCase):
 
         test_observer = ChainIdObserver(on_next=on_next, on_completed=on_completed)
         test_observer.subscribe_to(test_genesis.source, scheduler=test_scheduler)
-        assert (on_next_lock.acquire(True, 1))
-        assert (on_completed_lock.acquire(True, 1))
+        assert on_next_lock.acquire(True, 1)
+        assert on_completed_lock.acquire(True, 1)
 
 
 if __name__ == "__main__":
