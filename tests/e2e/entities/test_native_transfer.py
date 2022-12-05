@@ -22,13 +22,14 @@ class TestNativeTransfer(EntityTest):
     def setUpClass(cls):
         super().setUpClass()
         cls.clean_db({"native_transfers"})
-
-        tx = cls.ledger_client.send_tokens(
-            cls.delegator_address, cls.amount, cls.denom, cls.validator_wallet
-        )
-        tx.wait_to_complete()
-        cls.assertTrue(tx.response.is_successful(), "TXError: transfer unsuccessful")
-
+        for i in range(3):  # enough entities are created to verify sorting
+            tx = cls.ledger_client.send_tokens(
+                cls.delegator_address, cls.amount, cls.denom, cls.validator_wallet
+            )
+            tx.wait_to_complete()
+            cls.assertTrue(
+                tx.response.is_successful(), "TXError: transfer unsuccessful"
+            )
         # primitive solution to wait for indexer to observe and handle new tx - TODO: add robust solution
         time.sleep(5)
 
@@ -74,7 +75,10 @@ class TestNativeTransfer(EntityTest):
                 id,
                 message { id }
                 transaction { id }
-                block { id }
+                block {
+                    id
+                    height 
+                }
                 amounts
                 denom
                 toAddress
@@ -82,10 +86,22 @@ class TestNativeTransfer(EntityTest):
             }
             """
 
-        def filtered_native_transfer_query(_filter):
+        default_filter = {  # filter parameter of helper function must not be null, so instead use rhetorical filter
+            "block": {"height": {"greaterThanOrEqualTo": "0"}}
+        }
+
+        def filtered_native_transfer_query(_filter, order=""):
             return test_filtered_query(
-                "nativeTransfers", _filter, native_transfer_nodes
+                "nativeTransfers", _filter, native_transfer_nodes, _order=order
             )
+
+        order_by_block_height_asc = filtered_native_transfer_query(
+            default_filter, "NATIVE_TRANSFERS_BY_BLOCK_HEIGHT_ASC"
+        )
+
+        order_by_block_height_desc = filtered_native_transfer_query(
+            default_filter, "NATIVE_TRANSFERS_BY_BLOCK_HEIGHT_DESC"
+        )
 
         # query native transactions, query related block and filter by timestamp, returning all within last five minutes
         filter_by_block_timestamp_range = filtered_native_transfer_query(
@@ -161,6 +177,28 @@ class TestNativeTransfer(EntityTest):
                     self.validator_address,
                     "\nGQLError: from address does not match",
                 )
+
+        for (name, query, orderAssert) in (
+            (
+                "order by block height ascending",
+                order_by_block_height_asc,
+                self.assertGreaterEqual,
+            ),
+            (
+                "order by block height descending",
+                order_by_block_height_desc,
+                self.assertLessEqual,
+            ),
+        ):
+            result = self.gql_client.execute(query)
+            native_transfers = result["nativeTransfers"]["nodes"]
+            last = native_transfers[0]["block"]["height"]
+            for entry in native_transfers:
+                cur = entry["block"]["height"]
+                orderAssert(
+                    cur, last, msg="OrderAssertError: order of objects is incorrect"
+                )
+                last = cur
 
 
 if __name__ == "__main__":

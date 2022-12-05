@@ -11,8 +11,12 @@ from cosmpy.protos.cosmos.gov.v1beta1 import query_pb2_grpc
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
-from tests.helpers.clients import (FETCHD_GRPC_PORT, FETCHD_HOST,
-                                   TestWithDBConn, TestWithGQLClient)
+from tests.helpers.clients import (
+    FETCHD_GRPC_PORT,
+    FETCHD_HOST,
+    TestWithDBConn,
+    TestWithGQLClient,
+)
 
 VALIDATOR_MNEMONIC = "nut grocery slice visit barrel peanut tumble patch slim logic install evidence fiction shield rich brown around arrest fresh position animal butter forget cost"
 DELEGATOR_MNEMONIC = "dismiss domain uniform image cute buzz ride anxiety nose canvas ripple stock buffalo bitter spirit maximum tone inner couch forum equal usage state scan"

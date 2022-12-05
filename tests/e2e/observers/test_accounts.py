@@ -16,8 +16,7 @@ from src.genesis.helpers.field_enums import Accounts
 from src.genesis.observers import Account, AccountsManager, AccountsObserver
 from src.genesis.state.bank import Balance
 from tests.helpers.clients import TestWithDBConn, TestWithGQLClient
-from tests.helpers.genesis_data import (test_bank_state_balances,
-                                        test_genesis_data)
+from tests.helpers.genesis_data import test_bank_state_balances, test_genesis_data
 
 
 class TestAccountsObserver(TestWithDBConn):

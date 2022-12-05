@@ -6,17 +6,24 @@ from pathlib import Path
 
 from gql import gql
 
+from tests.helpers.graphql import test_filtered_query
+
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
-from src.genesis.helpers.field_enums import (BlockFields, EventFields,
-                                             MsgFields, TxFields)
+from src.genesis.helpers.field_enums import (
+    BlockFields,
+    EventFields,
+    MsgFields,
+    TxFields,
+)
 from tests.helpers.entity_test import EntityTest
-from src.genesis.helpers.field_enums import BlockFields, TxFields, MsgFields, EventFields
-from tests.helpers.regexes import (block_id_regex, event_id_regex,
-                                   msg_id_regex, tx_id_regex, 
-                                   event_attr_id_regex)
-from tests.helpers.graphql import test_filtered_query
+from tests.helpers.regexes import (
+    block_id_regex,
+    event_id_regex,
+    msg_id_regex,
+    tx_id_regex,
+)
 
 
 class TestNativePrimitives(EntityTest):
@@ -164,7 +171,6 @@ class TestNativePrimitives(EntityTest):
             # TODO: fees
 
     def test_messages(self):
-
         msgs = self.db_cursor.execute(MsgFields.select_query()).fetchall()
         self.assertEqual(len(msgs), self.expected_msgs_len)
         for msg in msgs:
@@ -244,77 +250,149 @@ class TestNativePrimitives(EntityTest):
             self.assertNotEqual(event[EventFields.type.value], "")
             # TODO: more assertions (?)
 
-    def test_events_query(self):
-        event_nodes = """
-        {
-            id
-            attributes {
-                nodes {
-                    id
-                    key
-                    value
-                    eventId
-                }
-            }
-            transactionId
-            blockId
-        }
-        """
-
-        all_events_query = gql(
+    def test_primitives_query(self):
+        query = gql(
             """
-            query {
-                events {
-                    nodes """ + event_nodes + """
+                query {
+                    events {
+                        nodes {
+                            id
+                            block {
+                                id
+                            }
+                            transaction {
+                                id
+                            }
+                            attributes {
+                                nodes {
+                                    key
+                                    value
+                                }
+                            }
+                        }
+                    }
                 }
-            }
-        """
+            """
         )
 
-        filter_by_action_query = test_filtered_query("events", {
-            "attributes": {
-                "action": {
-                    "equalTo": "transfer"
+        event_nodes = """
+            {
+                id
+                block {
+                    height
                 }
             }
-        }, event_nodes)
-
-        filter_by_module_query = test_filtered_query("events", {
-            "attributes": {
-                "module": {
-                    "equalTo": "bank"
+            """
+        transaction_nodes = """
+            {
+                id
+                block {
+                    height
                 }
             }
-        }, event_nodes)
+            """
+        messages_nodes = """
+            {
+                block {
+                    height
+                }
+            }
+            """
 
-        for (name, query) in (
-                ("transfer events", filter_by_action_query),
-                ("bank module events", filter_by_module_query),
-                ("all events", all_events_query),
-        ):
-            with self.subTest(name):
-                result = self.gql_client.execute(all_events_query)
-                events = result["events"]["nodes"]
-                self.assertIsNotNone(events)
-                self.assertEqual(len(events), self.expected_events_len)
+        default_filter = {  # filter parameter of helper function must not be null, so instead use rhetorical filter
+            "block": {"height": {"greaterThanOrEqualTo": "0"}}
+        }
 
-                for event in events:
-                    self.assertRegex(event["id"], event_id_regex)
-                    self.assertRegex(event["blockId"], block_id_regex)
-                    self.assertRegex(event["transactionId"], tx_id_regex)
+        def filtered_event_query(_filter, order=""):
+            return test_filtered_query(
+                "events", _filter, event_nodes, _order=order
+            )
 
-                    attributes = event["attributes"]["nodes"]
-                    self.assertGreater(len(attributes), 0)
-                    for attr in attributes:
-                        self.assertRegex(attr["id"], event_attr_id_regex)
-                        self.assertRegex(attr["eventId"], event_id_regex)
-                        for field in ["key", "value"]:
-                            self.assertTrue(field in list(attr))
-                            self.assertNotEqual(attr[field], "")
+        def filtered_transaction_query(_filter, order=""):
+            return test_filtered_query(
+                "transactions", _filter, transaction_nodes, _order=order
+            )
 
-                        # These three event types have an "amount" key/value
-                        if attr["key"] in ["coin_spent", "coin_received", "transfer"]:
-                            self.assertEqual(attr["value"], f"{self.amount}{self.denom}")
+        def filtered_messages_query(_filter, order=""):
+            return test_filtered_query(
+                "messages", _filter, messages_nodes, _order=order
+            )
+
+        order_events_by_block_height_asc = filtered_event_query(
+            default_filter, "EVENTS_BY_BLOCK_HEIGHT_ASC"
+        )
+
+        order_events_by_block_height_desc = filtered_event_query(
+            default_filter, "EVENTS_BY_BLOCK_HEIGHT_DESC"
+        )
+
+        order_transactions_by_block_height_asc = filtered_transaction_query(
+            default_filter, "TRANSACTIONS_BY_BLOCK_HEIGHT_ASC"
+        )
+
+        order_transactions_by_block_height_desc = filtered_transaction_query(
+            default_filter, "TRANSACTIONS_BY_BLOCK_HEIGHT_DESC"
+        )
+
+        order_messages_by_block_height_asc = filtered_messages_query(
+            default_filter, "MESSAGES_BY_BLOCK_HEIGHT_ASC"
+        )
+
+        order_messages_by_block_height_desc = filtered_messages_query(
+            default_filter, "MESSAGES_BY_BLOCK_HEIGHT_DESC"
+        )
+
+        with self.subTest("primitive id by regex"):
+            result = self.gql_client.execute(query)
+            events = result["events"]["nodes"]
+            self.assertIsNotNone(events)
+            self.assertEqual(len(events), self.expected_events_len)
+
+            for event in events:
+                self.assertRegex(event["id"], event_id_regex)
+                self.assertRegex(event["block"]["id"], block_id_regex)
+                self.assertRegex(event["transaction"]["id"], tx_id_regex)
+
+                attributes = event["attributes"]["nodes"]
+                self.assertGreater(len(attributes), 0)
+                for attr in attributes:
+                    for field in ["key", "value"]:
+                        self.assertTrue(field in list(attr))
+                        self.assertNotEqual(attr[field], "")
+
+                    # These three event types have an "amount" key/value
+                    if attr["key"] in ["coin_spent", "coin_received", "transfer"]:
+                        self.assertEqual(attr["value"], f"{self.amount}{self.denom}")
+
+        value_table = {
+            "transactions": {
+                order_transactions_by_block_height_asc: self.assertGreaterEqual,
+                order_transactions_by_block_height_desc: self.assertLessEqual,
+            },
+            "messages": {
+                order_messages_by_block_height_asc: self.assertGreaterEqual,
+                order_messages_by_block_height_desc: self.assertLessEqual,
+            },
+            "events": {
+                order_events_by_block_height_asc: self.assertGreaterEqual,
+                order_events_by_block_height_desc: self.assertLessEqual,
+            },
+        }
+
+        for key in ["transactions", "messages", "events"]:
+            for query in list(value_table[key].keys()):
+                with self.subTest(f"ordering {key} by block height"):
+                    result = self.gql_client.execute(query)
+                    entities = result[key]["nodes"]
+                    last = entities[0]["block"]["height"]
+                    for entry in entities:
+                        cur = entry["block"]["height"]
+                        value_table[key][query](
+                            cur,
+                            last,
+                            msg="OrderAssertError: order of objects is incorrect",
+                        )
+                        last = cur
 
 
 if __name__ == "__main__":

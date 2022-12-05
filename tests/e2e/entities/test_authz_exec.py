@@ -12,7 +12,9 @@ from cosmpy.aerial.wallet import LocalWallet
 from cosmpy.protos.cosmos.authz.v1beta1.authz_pb2 import Grant
 from cosmpy.protos.cosmos.authz.v1beta1.tx_pb2 import MsgExec, MsgGrant
 from cosmpy.protos.cosmos.staking.v1beta1.authz_pb2 import (
-    AUTHORIZATION_TYPE_DELEGATE, StakeAuthorization)
+    AUTHORIZATION_TYPE_DELEGATE,
+    StakeAuthorization,
+)
 from google.protobuf.any_pb2 import Any
 from google.protobuf.timestamp_pb2 import Timestamp
 from gql import gql
@@ -20,8 +22,11 @@ from gql import gql
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
 
-from src.genesis.helpers.field_enums import (AuthzExecFields,
-                                             AuthzExecMessageFields, MsgFields)
+from src.genesis.helpers.field_enums import (
+    AuthzExecFields,
+    AuthzExecMessageFields,
+    MsgFields,
+)
 from tests.helpers.entity_test import EntityTest
 from tests.helpers.regexes import msg_id_regex
 
