@@ -12,8 +12,11 @@ sys.path.insert(0, str(repo_root_path))
 from src.genesis.helpers.field_enums import (BlockFields, EventFields,
                                              MsgFields, TxFields)
 from tests.helpers.entity_test import EntityTest
+from src.genesis.helpers.field_enums import BlockFields, TxFields, MsgFields, EventFields
 from tests.helpers.regexes import (block_id_regex, event_id_regex,
-                                   msg_id_regex, tx_id_regex)
+                                   msg_id_regex, tx_id_regex, 
+                                   event_attr_id_regex)
+from tests.helpers.graphql import test_filtered_query
 
 
 class TestNativePrimitives(EntityTest):
@@ -242,45 +245,76 @@ class TestNativePrimitives(EntityTest):
             # TODO: more assertions (?)
 
     def test_events_query(self):
-        query = gql(
+        event_nodes = """
+        {
+            id
+            attributes {
+                nodes {
+                    id
+                    key
+                    value
+                    eventId
+                }
+            }
+            transactionId
+            blockId
+        }
+        """
+
+        all_events_query = gql(
             """
             query {
                 events {
-                    nodes {
-                        id
-                        block {
-                            id
-                        }
-                        transaction {
-                            id
-                        }
-                        attributes
-                    }
+                    nodes """ + event_nodes + """
                 }
             }
         """
         )
 
-        result = self.gql_client.execute(query)
-        events = result["events"]["nodes"]
-        self.assertIsNotNone(events)
-        self.assertEqual(len(events), self.expected_events_len)
+        filter_by_action_query = test_filtered_query("events", {
+            "attributes": {
+                "action": {
+                    "equalTo": "transfer"
+                }
+            }
+        }, event_nodes)
 
-        for event in events:
-            self.assertRegex(event["id"], event_id_regex)
-            self.assertRegex(event["block"]["id"], block_id_regex)
-            self.assertRegex(event["transaction"]["id"], tx_id_regex)
+        filter_by_module_query = test_filtered_query("events", {
+            "attributes": {
+                "module": {
+                    "equalTo": "bank"
+                }
+            }
+        }, event_nodes)
 
-            attributes = event["attributes"]
-            self.assertGreater(len(attributes), 0)
-            for attr in attributes:
-                for field in ["key", "value"]:
-                    self.assertTrue(field in list(attr))
-                    self.assertNotEqual(attr[field], "")
+        for (name, query) in (
+                ("transfer events", filter_by_action_query),
+                ("bank module events", filter_by_module_query),
+                ("all events", all_events_query),
+        ):
+            with self.subTest(name):
+                result = self.gql_client.execute(all_events_query)
+                events = result["events"]["nodes"]
+                self.assertIsNotNone(events)
+                self.assertEqual(len(events), self.expected_events_len)
 
-                # These three event types have an "amount" key/value
-                if attr["key"] in ["coin_spent", "coin_received", "transfer"]:
-                    self.assertEqual(attr["value"], f"{self.amount}{self.denom}")
+                for event in events:
+                    self.assertRegex(event["id"], event_id_regex)
+                    self.assertRegex(event["blockId"], block_id_regex)
+                    self.assertRegex(event["transactionId"], tx_id_regex)
+
+                    attributes = event["attributes"]["nodes"]
+                    self.assertGreater(len(attributes), 0)
+                    for attr in attributes:
+                        self.assertRegex(attr["id"], event_attr_id_regex)
+                        self.assertRegex(attr["eventId"], event_id_regex)
+                        for field in ["key", "value"]:
+                            self.assertTrue(field in list(attr))
+                            self.assertNotEqual(attr[field], "")
+
+                        # These three event types have an "amount" key/value
+                        if attr["key"] in ["coin_spent", "coin_received", "transfer"]:
+                            self.assertEqual(attr["value"], f"{self.amount}{self.denom}")
 
 
 if __name__ == "__main__":

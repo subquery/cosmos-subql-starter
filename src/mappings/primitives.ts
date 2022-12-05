@@ -1,5 +1,5 @@
 import {CosmosBlock, CosmosEvent, CosmosMessage, CosmosTransaction} from "@subql/types-cosmos";
-import {Block, Event, Message, Transaction, TxStatus} from "../types";
+import {Block, Event, EventAttribute, Message, Transaction, TxStatus} from "../types";
 import {
   attemptHandling,
   messageId,
@@ -112,21 +112,35 @@ async function _handleEvent(event: CosmosEvent): Promise<void> {
   logger.debug(`[handleEvent] (event.log): ${JSON.stringify(event.log, null, 2)}`);
 
   // NB: sanitize attribute values (may contain non-text characters)
+  const sanitize = (value: unknown) => {
+    const json = JSON.stringify(value);
+    return json.substring(1, json.length - 1);
+  };
   const attributes = event.event.attributes.map((attribute) => {
     const {key, value} = attribute;
-    return {key, value: JSON.stringify(value)};
+    return {key, value: sanitize(value)};
   });
 
+  const id = `${messageId(event)}-${event.idx}`;
   const eventEntity = Event.create({
-    id: `${messageId(event)}-${event.idx}`,
+    id,
     type: event.event.type,
-    attributes,
     log: event.log.log,
     transactionId: event.tx.hash,
     blockId: event.block.block.id,
   });
-
   await eventEntity.save();
+
+  for (const [i, attribute] of Object.entries(attributes)) {
+    const attrId = `${id}-${i}`;
+    const {key, value} = attribute;
+    await EventAttribute.create({
+      id: attrId,
+      key,
+      value,
+      eventId: eventEntity.id,
+    }).save();
+  }
 }
 
 async function _handleBlockError(err: Error, _: CosmosBlock): Promise<void> {

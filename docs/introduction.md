@@ -104,7 +104,12 @@ query transferEventsDuring {
     type: {equalTo: "transfer"},
   }) {
     nodes {
-      attributes
+      attributes {
+        nodes {
+          key
+          value
+        }
+      }
     }
   }
 }
@@ -142,8 +147,9 @@ _(see: [schema.graphql](https://github.com/ledger-subquery/blob/main/schema.grap
 - messages
 - events
 
-### Relationship diagram
+### Entity relationship diagrams
 
 ![entity relationship diagram legend](./assets/entities_legend.svg)
 
-![entity relationship diagram](./assets/entities.svg)
+![entity database relationship diagram](./assets/entities_db.svg)
+![entity api relationship diagram](./assets/entities_api.svg)
