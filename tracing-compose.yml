@@ -67,10 +67,13 @@ services:
       DB_DATABASE: "subquery"
       DB_HOST: postgres
       DB_PORT: 5432
+      OPEN_TELEMETRY_SERVICE_NAME: "ledger-subquery-graphql-api"
+      OPEN_TELEMETRY_COLLECTOR_URL: "http://otel-collector:4317"
     volumes:
       - ./subql/packages/query/dist:/app/dist
       - ./subql/node_modules:/app/node_modules
       - ./subql/packages/query/node_modules/.bin:/app/node_modules/.bin
+      - ./subql/packages/common:/app/node_modules/@subql/common
     entrypoint: ["/sbin/tini", "--", "yarn", "start:prod"]
     command:
       - --name=app

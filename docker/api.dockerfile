@@ -30,7 +30,7 @@ COPY --from=builder /build/packages/query/bin /app/bin
 COPY --from=builder /build/packages/query/package.json /app/
 COPY --from=builder /build/node_modules /app/node_modules
 
-COPY --from=builder /build/packages/common/dist /app/node_modules/@subql/common
-COPY --from=builder /build/packages/utils/dist /app/node_modules/@subql/utils
+COPY --from=builder /build/packages/common /app/node_modules/@subql/common
+COPY --from=builder /build/packages/utils /app/node_modules/@subql/utils
 
 ENTRYPOINT ["/sbin/tini", "--", "yarn", "start:prod"]
