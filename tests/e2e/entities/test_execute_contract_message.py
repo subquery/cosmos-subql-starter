@@ -5,11 +5,10 @@ import time
 import unittest
 from pathlib import Path
 
-from gql import gql
-
 from src.genesis.helpers.field_enums import ExecuteContractMessageFields
 from tests.helpers.contracts import BridgeContract, DefaultBridgeContractConfig
 from tests.helpers.entity_test import EntityTest
+from tests.helpers.graphql import test_filtered_query
 
 repo_root_path = Path(__file__).parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
@@ -30,12 +29,13 @@ class TestContractExecution(EntityTest):
         cls._contract = BridgeContract(
             cls.ledger_client, cls.validator_wallet, DefaultBridgeContractConfig
         )
-        resp = cls._contract.execute(
-            {cls.method: {"destination": cls.validator_address}},
-            cls.validator_wallet,
-            funds=str(cls.amount) + cls.denom,
-        )
-        cls.ledger_client.wait_for_query_tx(resp.tx_hash)
+        for i in range(3):  # enough entities are created to verify sorting
+            resp = cls._contract.execute(
+                {cls.method: {"destination": cls.validator_address}},
+                cls.validator_wallet,
+                funds=str(cls.amount) + cls.denom,
+            )
+            cls.ledger_client.wait_for_query_tx(resp.tx_hash)
         time.sleep(
             5
         )  # stil need to give some extra time for the indexer to pickup the tx
@@ -78,53 +78,54 @@ class TestContractExecution(EntityTest):
         ).isoformat()  # convert both to JSON ISO format
         max_timestamp = json.dumps(latest_block_timestamp.isoformat())
 
-        # query execute contract messages, query related block and filter by timestamp, returning all within last five minutes
-        query_get_by_range = gql(
+        contract_execution_messages_swap_nodes = """
+            {
+                id,
+                message { id }
+                transaction { id }
+                block {
+                    id
+                    height
+                }
+                contract
+                method
+                funds
+            }
             """
-            query getByRange {
-                executeContractMessages (
-                filter: {
-                    block: {
-                    timestamp: {
-                        greaterThanOrEqualTo: """
-            + json.dumps(min_timestamp)
-            + """,
-                                lessThanOrEqualTo: """
-            + json.dumps(max_timestamp)
-            + """
-                            }
-                        }
-                    }) {
-                    nodes {
-                        contract
-                        method
-                        funds
+
+        def filtered_execute_contract_messages_query(_filter, order=""):
+            return test_filtered_query(
+                "executeContractMessages",
+                _filter,
+                contract_execution_messages_swap_nodes,
+                _order=order,
+            )
+
+        order_by_block_height_asc = filtered_execute_contract_messages_query(
+            {"block": {"height": {"greaterThanOrEqualTo": "0"}}},
+            "EXECUTE_CONTRACT_MESSAGES_BY_BLOCK_HEIGHT_ASC",
+        )
+
+        order_by_block_height_desc = filtered_execute_contract_messages_query(
+            {"block": {"height": {"greaterThanOrEqualTo": "0"}}},
+            "EXECUTE_CONTRACT_MESSAGES_BY_BLOCK_HEIGHT_DESC",
+        )
+
+        # query execute contract messages, query related block and filter by timestamp, returning all within last five minutes
+        query_get_by_range = filtered_execute_contract_messages_query(
+            {
+                "block": {
+                    "timestamp": {
+                        "greaterThanOrEqualTo": min_timestamp,
+                        "lessThanOrEqualTo": max_timestamp,
                     }
                 }
             }
-            """
         )
 
         # query execute contract messages, filter by contract method
-        query_get_by_method = gql(
-            """
-            query getByMethod {
-                executeContractMessages (
-                filter: {
-                    method: {
-                        equalTo:\""""
-            + str(self.method)
-            + """\"
-                    }
-                }) {
-                    nodes {
-                        contract
-                        method
-                        funds
-                    }
-                }
-            }
-            """
+        query_get_by_method = filtered_execute_contract_messages_query(
+            {"method": {"equalTo": self.method}}
         )
 
         queries = [query_get_by_range, query_get_by_method]
@@ -157,6 +158,29 @@ class TestContractExecution(EntityTest):
                 self.denom,
                 "\nGQLError: fund denomination does not match",
             )
+
+        for (name, query, orderAssert) in (
+            (
+                "order by block height ascending",
+                order_by_block_height_asc,
+                self.assertGreaterEqual,
+            ),
+            (
+                "order by block height descending",
+                order_by_block_height_desc,
+                self.assertLessEqual,
+            ),
+        ):
+            with self.subTest(name):
+                result = self.gql_client.execute(query)
+                execute_contract_messages = result["executeContractMessages"]["nodes"]
+                last = execute_contract_messages[0]["block"]["height"]
+                for entry in execute_contract_messages:
+                    cur = entry["block"]["height"]
+                    orderAssert(
+                        cur, last, msg="OrderAssertError: order of objects is incorrect"
+                    )
+                    last = cur
 
 
 if __name__ == "__main__":

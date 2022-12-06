@@ -24,11 +24,7 @@ entity Transaction {
   events
   messages
   block
-
 }
-
-Transaction }|--|| Block
-Transaction::block ..|| Block
 
 entity Message {
   +id
@@ -39,32 +35,32 @@ entity Message {
   block
 }
 
-Transaction ||--|{ Message
-Transaction::messages ...|{ Message
-
-Message::block ..|| Block
-Message::transaction ..|| Transaction
-
 entity Event {
   +id
   +type
-  attributes
   log
   ..relations..
+  attributes
   transaction
   block
 
 }
 
-object EventAttribute {
-  key
-  value
+entity EventAttribute {
+  +id
+  +key
+  +value
+  ..relations..
+  event
 }
 
-Transaction::events .|{ Event
-Event::attributes -|{ EventAttribute
 
-Event }|--|| Transaction
-Event::transaction ..|| Transaction
-Event::block ..|| Block
+Block ||--o{ Transaction
+Block ||--o{ Message
+Block ||--o{ Event
+
+Transaction ||--|{ Event
+Transaction ||--|{ Message
+
+EventAttribute }|--|| Event
 @enduml

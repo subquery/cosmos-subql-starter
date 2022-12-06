@@ -59,6 +59,21 @@ _Note: end-to-end tests will truncate tables in the DB and interact with the con
 pipenv run python -m unittest discover -s ./test
 ```
 
+## Tracing
+
+The SubQuery node and GraphQL API services have been instrumented using [open telemetry](https://opentelemetry.io/).
+This enables end-to-end tracing support for both services, which covers querying Fetchd RPC to inserting into the DB and then reading from the DB to respond to an end-user GQL query.
+
+To run the tracing stack locally, start the docker composition using the [tracing-compose.yml](./tracing-compose.yml) file:
+```bash
+docker compose -f ./tracing-compose.yml up -d
+```
+
+The tracing composition is notably more substantial than the conventional stack and will take a bit longer to start-up.
+Once running, you can point your browser to [localhost:3301](http://localhost:3301) to access the [SigNoz](https://signoz.io/) dashboard.
+
+_(see: [SigNoz documentation](https://signoz.io/docs/) for more)_
+
 ## DB Migrations
 
 This repository uses [graphile-migrate](https://github.com/graphile/migrate) CLI to manage database migrations.

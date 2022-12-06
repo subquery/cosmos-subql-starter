@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ledger-subquery-health
+  labels:
+    app: ledger-subquery-health
+    appkey: ledger-subquery-health
+spec:
+  schedule: "*/5 * * * *"
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec: 
+      template:         
+        metadata:
+          name: ledger-subquery-health
+          labels:          
+            app: ledger-subquery-health
+            appkey: ledger-subquery-health
+          annotations:
+            sidecar.istio.io/inject: "false"
+        spec:
+          containers:
+          - name: ledger-subquery-health
+            image: ellerbrock/alpine-bash-curl-ssl
+            command: ['sh', '-c', '/usr/local/bin/healthcheck.sh' ]
+            env:
+            - name: HOST
+              value: {{ .Values.subquery.api.health.subquery_host }}
+            - name: STATUSCAKE_ENDPOINT
+              value: {{ .Values.subquery.api.health.statuscake_endpoint }}
+            volumeMounts:
+            - mountPath: /usr/local/bin/
+              name: healthcheck-script
+          volumes:
+          - name: healthcheck-script
+            configMap:
+              name: subquery-health-configfiles
+              defaultMode: 511
+          restartPolicy: Never

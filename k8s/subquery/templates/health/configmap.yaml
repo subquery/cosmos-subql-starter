@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: subquery-health-configfiles
+data:
+  healthcheck.sh: |
+{{ $.Files.Get "conf/healthcheck.sh" | indent 4 }}

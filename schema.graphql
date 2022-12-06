@@ -11,9 +11,11 @@ enum TxStatus {
   Error
 }
 
-type EventAttribute @jsonField {
+type EventAttribute @entity {
+  id: ID!
   key: String!
   value: String!
+  event: Event!
 }
 
 type Block @entity {
@@ -52,7 +54,7 @@ type Message @entity {
 type Event @entity {
   id: ID!
   type: String! @index
-  attributes: [EventAttribute]!
+  attributes: [EventAttribute]! @derivedFrom(field: "event")
   log: String!
   transaction: Transaction!
   block: Block!

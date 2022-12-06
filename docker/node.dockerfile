@@ -12,6 +12,10 @@ RUN yarn install --frozen-lockfile
 COPY . /app
 RUN yarn codegen && yarn build
 
+# build subql common package
+WORKDIR /app/subql
+RUN yarn install && yarn build
+
 FROM onfinality/subql-node-cosmos:v0.2.0
 
 # NB: add SigNoz / OpenTelemetry dependencies
@@ -34,6 +38,7 @@ RUN yarn install --frozen-lockfile --prod
 
 # NB: replace built node-cosmos run module
 COPY ./docker/node-cosmos /usr/local/lib/node_modules/@subql/node-cosmos
+COPY --from=builder /app/subql/packages/common /usr/local/lib/node_modules/@subql/node-cosmos/node_modules/@subql/common
 
 COPY --from=builder /app/dist /app/dist
 ADD ./proto /app/proto

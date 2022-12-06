@@ -21,23 +21,24 @@ class TestDelegation(EntityTest):
     def setUpClass(cls):
         super().setUpClass()
         cls.clean_db({"dist_delegator_claims"})
+        for claim in range(3):  # enough entities are created to verify sorting
+            delegate_tx = cls.ledger_client.delegate_tokens(
+                cls.validator_operator_address, cls.amount, cls.validator_wallet
+            )
+            delegate_tx.wait_to_complete()
+            cls.assertTrue(
+                delegate_tx.response.is_successful(),
+                "\nTXError: delegation tx unsuccessful",
+            )
 
-        delegate_tx = cls.ledger_client.delegate_tokens(
-            cls.validator_operator_address, cls.amount, cls.validator_wallet
-        )
-        delegate_tx.wait_to_complete()
-        cls.assertTrue(
-            delegate_tx.response.is_successful(),
-            "\nTXError: delegation tx unsuccessful",
-        )
-
-        claim_tx = cls.ledger_client.claim_rewards(
-            cls.validator_operator_address, cls.validator_wallet
-        )
-        claim_tx.wait_to_complete()
-        cls.assertTrue(
-            claim_tx.response.is_successful(), "\nTXError: reward claim tx unsuccessful"
-        )
+            claim_tx = cls.ledger_client.claim_rewards(
+                cls.validator_operator_address, cls.validator_wallet
+            )
+            claim_tx.wait_to_complete()
+            cls.assertTrue(
+                claim_tx.response.is_successful(),
+                "\nTXError: reward claim tx unsuccessful",
+            )
 
         # primitive solution to wait for indexer to observe and handle new tx - TODO: add robust solution
         time.sleep(5)
@@ -68,12 +69,20 @@ class TestDelegation(EntityTest):
         ).isoformat()  # convert both to JSON ISO format
         max_timestamp = latest_block_timestamp.isoformat()
 
+        def filtered_dist_delegate_claim_query(_filter, order=""):
+            return test_filtered_query(
+                "distDelegatorClaims", _filter, dist_delegate_claim_nodes, _order=order
+            )
+
         dist_delegate_claim_nodes = """
             {
                 id
                 message { id }
                 transaction { id }
-                block { id }
+                block {
+                    id
+                    height
+                 }
                 validatorAddress
                 delegatorAddress
                 amount
@@ -81,10 +90,15 @@ class TestDelegation(EntityTest):
             }
             """
 
-        def filtered_dist_delegate_claim_query(_filter):
-            return test_filtered_query(
-                "distDelegatorClaims", _filter, dist_delegate_claim_nodes
-            )
+        default_filter = {"block": {"height": {"greaterThanOrEqualTo": "0"}}}
+
+        order_by_block_height_asc = filtered_dist_delegate_claim_query(
+            default_filter, "DIST_DELEGATOR_CLAIMS_BY_BLOCK_HEIGHT_ASC"
+        )
+
+        order_by_block_height_desc = filtered_dist_delegate_claim_query(
+            default_filter, "DIST_DELEGATOR_CLAIMS_BY_BLOCK_HEIGHT_DESC"
+        )
 
         # query governance votes, query related block and filter by timestamp, returning all within last five minutes
         filter_by_block_timestamp_range = filtered_dist_delegate_claim_query(
@@ -140,6 +154,29 @@ class TestDelegation(EntityTest):
                 self.assertRegex(
                     claims[0]["denom"], re.compile("^[\w/]{2,127}$")  # noqa: W605
                 )
+
+        for (name, query, orderAssert) in (
+            (
+                "order by block height ascending",
+                order_by_block_height_asc,
+                self.assertGreaterEqual,
+            ),
+            (
+                "order by block height descending",
+                order_by_block_height_desc,
+                self.assertLessEqual,
+            ),
+        ):
+            with self.subTest(name):
+                result = self.gql_client.execute(query)
+                dist_delegator_claims = result["distDelegatorClaims"]["nodes"]
+                last = dist_delegator_claims[0]["block"]["height"]
+                for entry in dist_delegator_claims:
+                    cur = entry["block"]["height"]
+                    orderAssert(
+                        cur, last, msg="OrderAssertError: order of objects is incorrect"
+                    )
+                    last = cur
 
 
 if __name__ == "__main__":

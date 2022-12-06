@@ -85,7 +85,6 @@ class EventFields(NamedFields):
     transaction_id = 1
     block_id = 2
     type = 3
-    attributes = 4
 
     @classmethod
     @property
@@ -223,9 +222,10 @@ class ExecuteContractMessageFields(NamedFields):
     id = 0
     message_id = 1
     transaction_id = 2
-    contract = 3
-    method = 4
-    funds = 5
+    block_id = 3
+    contract = 4
+    method = 5
+    funds = 6
 
     @classmethod
     @property

@@ -11,9 +11,15 @@ const yargs_1 = require("./yargs");
 const DEFAULT_PORT = 3000;
 const logger = (0, logger_1.getLogger)('subql-node');
 const { argv } = (0, yargs_1.getYargsOption)();
+const telemetry = common_1.telemetry;
 
 async function bootstrap() {
     var _a;
+    if (!!telemetry) {
+        await telemetry.start();
+        logger.info('Tracing started...');
+    }
+
     const debug = argv.debug;
     const validate = (x) => {
         const p = parseInt(x);
@@ -34,12 +40,6 @@ async function bootstrap() {
         await app.init();
         const indexerManager = app.get(indexer_manager_1.IndexerManager);
         await indexerManager.start();
-
-        if (argv.tracing) {
-            const tracer = require('./utils/tracer')(argv['otel-collector']);
-            await tracer.start();
-            logger.info('Tracing started...');
-        }
 
         await app.listen(port);
         logger.info(`Node started on port: ${port}`);

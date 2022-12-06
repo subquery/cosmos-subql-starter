@@ -23,6 +23,8 @@ class TestCw20BalanceChange(EntityTest):
         super().setUpClass()
         cls.clean_db({"cw20_transfers"})
         cls._contract = Cw20Contract(cls.ledger_client, cls.validator_wallet)
+        code_id = cls._contract._store()
+        cls._contract._instantiate(code_id)
         cls.methods = {
             "burn": {
                 "balance_offset": [-cls.amount],
@@ -40,9 +42,13 @@ class TestCw20BalanceChange(EntityTest):
                 "contract": cls._contract.address,
             },
         }
-
         resp = cls._contract.execute(
-            {"mint": {"recipient": cls.validator_address, "amount": str(cls.amount)}},
+            {
+                "mint": {
+                    "recipient": cls.validator_address,
+                    "amount": str(cls.amount),
+                }
+            },
             cls.validator_wallet,
         )
         cls.ledger_client.wait_for_query_tx(resp.tx_hash)
@@ -62,7 +68,6 @@ class TestCw20BalanceChange(EntityTest):
             {"burn": {"amount": str(cls.amount)}}, cls.validator_wallet
         )
         cls.ledger_client.wait_for_query_tx(resp.tx_hash)
-
         time.sleep(5)
 
     def test_execute_balance_change(self):
@@ -111,14 +116,29 @@ class TestCw20BalanceChange(EntityTest):
                 account { id }
                 message { id }
                 transaction { id }
-                block { id }
+                block {
+                    id
+                    height
+                }
             }
             """
 
-        def filtered_cw20_balance_change_query(_filter):
+        default_filter = {  # filter parameter of helper function must not be null, so instead use rhetorical filter
+            "block": {"height": {"greaterThanOrEqualTo": "0"}}
+        }
+
+        def filtered_cw20_balance_change_query(_filter, order=""):
             return test_filtered_query(
-                "cw20BalanceChanges", _filter, cw20_balance_change_nodes
+                "cw20BalanceChanges", _filter, cw20_balance_change_nodes, _order=order
             )
+
+        order_by_block_height_asc = filtered_cw20_balance_change_query(
+            default_filter, "CW20_BALANCE_CHANGES_BY_BLOCK_HEIGHT_ASC"
+        )
+
+        order_by_block_height_desc = filtered_cw20_balance_change_query(
+            default_filter, "CW20_BALANCE_CHANGES_BY_BLOCK_HEIGHT_DESC"
+        )
 
         # query Cw20 transfers, query related block and filter by timestamp, returning all within last five minutes
         for method in list(self.methods.keys()):
@@ -210,6 +230,29 @@ class TestCw20BalanceChange(EntityTest):
                             entry["contract"],
                             "\nGQLError: contract address does not match",
                         )
+
+        for (name, query, orderAssert) in (
+            (
+                "order by block height ascending",
+                order_by_block_height_asc,
+                self.assertGreaterEqual,
+            ),
+            (
+                "order by block height descending",
+                order_by_block_height_desc,
+                self.assertLessEqual,
+            ),
+        ):
+            with self.subTest(name):
+                result = self.gql_client.execute(query)
+                cw20_balance_changes = result["cw20BalanceChanges"]["nodes"]
+                last = cw20_balance_changes[0]["block"]["height"]
+                for entry in cw20_balance_changes:
+                    cur = entry["block"]["height"]
+                    orderAssert(
+                        cur, last, msg="OrderAssertError: order of objects is incorrect"
+                    )
+                    last = cur
 
 
 if __name__ == "__main__":
