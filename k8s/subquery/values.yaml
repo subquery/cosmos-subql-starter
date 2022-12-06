@@ -22,6 +22,10 @@ subquery:
       target: "gaia.sandbox-london-b.fetch-ai.com"
       additionalDnsNames: []
 
+    health:
+      statuscake_endpoint: placeholder # NOTE: replace this with statuscake PUSH endpoint
+      subquery_host: https://subquery.fetch.ai/
+
   genesis_processor:
     image: gcr.io/fetch-ai-images/subquery-genesis-processor
     tag: v2
