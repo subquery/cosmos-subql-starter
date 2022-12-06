@@ -34,9 +34,12 @@ services:
       START_BLOCK: "1"
       NETWORK_ENDPOINT: "http://fetch-node:26657"
       CHAIN_ID: "fetchchain"
+      OPEN_TELEMETRY_SERVICE_NAME: "ledger-subquery-subquery-node"
+      OPEN_TELEMETRY_COLLECTOR_URL: "http://otel-collector:4317"
     volumes:
       - ./:/app
       - ./docker/node-cosmos:/usr/local/lib/node_modules/@subql/node-cosmos
+      - ./subql/packages/common:/usr/local/lib/node_modules/@subql/node-cosmos/node_modules/@subql/common
     command:
       - -f=/app
       - --db-schema=app
