@@ -1,5 +1,7 @@
 import copy
+import sys
 import unittest
+from pathlib import Path
 from threading import Lock
 from typing import List
 from unittest.mock import patch
@@ -17,6 +19,9 @@ from src.genesis.observers import (
 from src.genesis.state import Balance, Coin
 from tests.helpers.clients import TestWithDBConn
 from tests.helpers.genesis_data import test_bank_state_balances, test_genesis_data
+
+repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
 
 class TestNativeBalanceObserver(TestWithDBConn):
