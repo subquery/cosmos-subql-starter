@@ -24,22 +24,22 @@ class TestCw20BalanceChange(EntityTest):
         cls.clean_db({"cw20_transfers"})
         cls._contract = Cw20Contract(cls.ledger_client, cls.validator_wallet)
         code_id = cls._contract._store()
-        cls._contract._instantiate(code_id)
+        address = cls._contract._instantiate(code_id)
         cls.methods = {
             "burn": {
                 "balance_offset": [-cls.amount],
                 "account_id": [cls.validator_address],
-                "contract": cls._contract.address,
+                "contract": address,
             },
             "mint": {
                 "balance_offset": [cls.amount],
                 "account_id": [cls.validator_address],
-                "contract": cls._contract.address,
+                "contract": address,
             },
             "transfer": {
                 "balance_offset": [cls.amount, -cls.amount],
                 "account_id": [cls.validator_address, cls.delegator_address],
-                "contract": cls._contract.address,
+                "contract": address,
             },
         }
         resp = cls._contract.execute(
@@ -59,7 +59,7 @@ class TestCw20BalanceChange(EntityTest):
                     "recipient": cls.delegator_address,
                     "amount": str(cls.amount),
                 }
-        },
+            },
             cls.validator_wallet,
         )
         cls.ledger_client.wait_for_query_tx(resp.tx_hash)
@@ -89,7 +89,7 @@ class TestCw20BalanceChange(EntityTest):
                     "\nDBError: balance offset does not match",
                 )
                 self.assertEqual(
-                    query[Cw20BalanceChangeFields.contract.value],
+                    query[Cw20BalanceChangeFields.contract_id.value],
                     entry["contract"],
                     "\nDBError: contract address does not match",
                 )
@@ -103,7 +103,7 @@ class TestCw20BalanceChange(EntityTest):
         latest_block_timestamp = self.get_latest_block_timestamp()
         # create a second timestamp for five minutes before
         min_timestamp = (
-            latest_block_timestamp - dt.timedelta(minutes=5)
+                latest_block_timestamp - dt.timedelta(minutes=5)
         ).isoformat()  # convert both to JSON ISO format
         max_timestamp = latest_block_timestamp.isoformat()
 
@@ -111,7 +111,9 @@ class TestCw20BalanceChange(EntityTest):
             {
                 id
                 balanceOffset
-                contract
+                contract {
+                    id
+                }
                 accountId
                 account { id }
                 message { id }
@@ -159,7 +161,7 @@ class TestCw20BalanceChange(EntityTest):
             # query Cw20 balance changes, filter by contract address
             filter_by_contract_address = filtered_cw20_balance_change_query(
                 {
-                    "contract": {"equalTo": str(self._contract.address)},
+                    "contract": {"id": {"equalTo": str(self._contract.address)}},
                     "block": {
                         "executeContractMessages": {
                             "some": {"method": {"equalTo": method}}
@@ -207,11 +209,8 @@ class TestCw20BalanceChange(EntityTest):
                     """
                     transfer = result["cw20BalanceChanges"]["nodes"]
                     entry = self.methods[method]
-                    for (
-                        result
-                    ) in (
-                        transfer
-                    ):  # assuming that some queries return a list of values, iterate - such as with the method "transfer"
+                    # assuming that some queries return a list of values, iterate - such as with the method "transfer"
+                    for result in transfer:
                         self.assertNotEqual(
                             result, [], "\nGQLError: No results returned from query"
                         )
@@ -226,22 +225,22 @@ class TestCw20BalanceChange(EntityTest):
                             "\nGQLError: fund amount does not match",
                         )
                         self.assertEqual(
-                            result["contract"],
+                            result["contract"]["id"],
                             entry["contract"],
                             "\nGQLError: contract address does not match",
                         )
 
         for (name, query, orderAssert) in (
-            (
-                "order by block height ascending",
-                order_by_block_height_asc,
-                self.assertGreaterEqual,
-            ),
-            (
-                "order by block height descending",
-                order_by_block_height_desc,
-                self.assertLessEqual,
-            ),
+                (
+                        "order by block height ascending",
+                        order_by_block_height_asc,
+                        self.assertGreaterEqual,
+                ),
+                (
+                        "order by block height descending",
+                        order_by_block_height_desc,
+                        self.assertLessEqual,
+                ),
         ):
             with self.subTest(name):
                 result = self.gql_client.execute(query)
