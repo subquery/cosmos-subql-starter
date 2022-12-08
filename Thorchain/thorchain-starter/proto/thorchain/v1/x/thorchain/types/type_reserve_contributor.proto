@@ -1,0 +1,11 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+
+message ReserveContributor {
+  string address = 1 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
+  string amount = 2 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+}

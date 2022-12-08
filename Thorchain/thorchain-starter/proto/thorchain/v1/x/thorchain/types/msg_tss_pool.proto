@@ -1,0 +1,22 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+option (gogoproto.goproto_getters_all) = false;
+
+import "thorchain/v1/x/thorchain/types/type_blame.proto";
+import "thorchain/v1/x/thorchain/types/type_keygen.proto";
+import "gogoproto/gogo.proto";
+
+
+message MsgTssPool {
+  string id = 1 [(gogoproto.customname) = "ID"];
+  string pool_pub_key = 2 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.PubKey"];
+  KeygenType keygen_type = 3 [(gogoproto.casttype) = "KeygenType"];
+  repeated string pub_keys = 4;
+  int64 height = 5;
+  Blame blame = 6 [(gogoproto.nullable) = false];
+  repeated string chains = 7;
+  bytes signer = 8  [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+  int64 keygen_time = 9;
+}

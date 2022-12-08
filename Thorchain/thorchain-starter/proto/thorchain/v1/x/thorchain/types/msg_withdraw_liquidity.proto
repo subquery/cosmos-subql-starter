@@ -1,0 +1,16 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "thorchain/v1/common/common.proto";
+import "gogoproto/gogo.proto";
+
+message MsgWithdrawLiquidity {
+  common.Tx tx = 1 [(gogoproto.nullable) = false];
+  string withdraw_address = 2 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
+  string basis_points = 3 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  common.Asset asset = 4 [(gogoproto.nullable) = false];
+  common.Asset withdrawal_asset = 5 [(gogoproto.nullable) = false];
+  bytes signer = 6  [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+}

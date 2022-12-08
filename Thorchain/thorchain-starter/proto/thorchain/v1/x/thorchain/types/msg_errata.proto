@@ -1,0 +1,12 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+
+message MsgErrataTx {
+  string tx_id = 1 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.TxID", (gogoproto.customname) = "TxID"];
+  string chain = 2 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Chain"];
+  bytes signer = 3 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+}
