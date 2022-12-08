@@ -21,14 +21,22 @@ network:
   endpoint: "https://rpc.ninerealms.com/"
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   # dictionary: "https://api.subquery.network/sq/subquery/cosmos-hub-dictionary"
+  chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
+    thorchain.message.observed.out: # Key is not used, it matches the one above and is inferred from the file
+      file: ./proto/thorchain/v1/x/thorchain/types/msg_observed_txout.proto
+      messages:
+        - MsgObservedTxOut
+    thorchain.types.observed.out: # Key is not used, it matches the one above and is inferred from the file
+      file: ./proto/thorchain/v1/x/thorchain/types/type_observed_tx.proto
+      messages:
+        - ObservedTx
+    common.Common: # Key is not used, it matches the one above and is inferred from the file
+      file: ./proto/thorchain/v1/common/common.proto
+      messages:
+        - common
 dataSources:
   - kind: cosmos/Runtime
     startBlock: 8561331
-    chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
-      MsgObservedTxOut:
-        file: ./proto/thorchain/v1/x/thorchain/types/msg_observed_txout.proto
-        messages:
-          - MsgObservedTxOut
     mapping:
       file: ./dist/index.js
       handlers:
