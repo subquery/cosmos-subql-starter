@@ -37,7 +37,7 @@ export async function handleNativeBalanceDecrement(event: CosmosEvent): Promise<
 }
 
 export async function handleNativeBalanceIncrement(event: CosmosEvent): Promise<void> {
-  await attemptHandling(event, _handleNativeBalanceDecrement, unprocessedEventHandler);
+  await attemptHandling(event, _handleNativeBalanceIncrement, unprocessedEventHandler);
 }
 
 async function _handleNativeBalanceDecrement(event: CosmosEvent): Promise<void> {
