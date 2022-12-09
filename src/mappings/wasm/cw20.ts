@@ -7,13 +7,13 @@ import {
   messageId,
 } from "../utils";
 
-export async function saveCw20BalanceEvent(id: string, address: string, amount: bigint, contract: string, event: CosmosEvent) {
+export async function saveCw20BalanceEvent(id: string, address: string, amount: bigint, contractId: string, event: CosmosEvent) {
   await checkBalancesAccount(address, event.block.block.header.chainId);
   const msgId = messageId(event.msg);
   const Cw20BalanceChangeEntity = Cw20BalanceChange.create({
     id,
     balanceOffset: amount.valueOf(),
-    contract,
+    contractId,
     accountId: address,
     eventId: `${messageId(event)}-${event.idx}`,
     executeContractMessageId: msgId,

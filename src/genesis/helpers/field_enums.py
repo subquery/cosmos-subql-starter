@@ -169,7 +169,7 @@ class Cw20TransferFields(NamedFields):
 class Cw20BalanceChangeFields(NamedFields):
     id = 0
     balance_offset = 1
-    contract = 2
+    contract_id = 2
     account_id = 3
     event_id = 4
     transaction_id = 5
