@@ -201,7 +201,7 @@ type IbcTransfer @entity {
 type Cw20BalanceChange @entity {
   id: ID!
   balanceOffset: BigInt!
-  contract: Contract! @index
+  contract: Contract!
   account: Account!
   executeContractMessage: ExecuteContractMessage!
   event: Event!
