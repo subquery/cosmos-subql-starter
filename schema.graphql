@@ -106,7 +106,7 @@ type Contract @entity {
 type LegacyBridgeSwap @entity {
   id: ID! # id field is always required and must look like this
   destination: String!
-  contract: String!
+  contract: Contract!
   amount: BigInt!
   denom: String!
   executeContractMessage: ExecuteContractMessage!
@@ -201,7 +201,7 @@ type IbcTransfer @entity {
 type Cw20BalanceChange @entity {
   id: ID!
   balanceOffset: BigInt!
-  contract: Contract! @index
+  contract: Contract!
   account: Account!
   executeContractMessage: ExecuteContractMessage!
   event: Event!

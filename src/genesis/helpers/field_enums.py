@@ -195,7 +195,7 @@ class LegacyBridgeSwapFields(NamedFields):
     destination = 4
     amount = 5
     denom = 6
-    contract = 7
+    contract_id = 7
 
     @classmethod
     @property
