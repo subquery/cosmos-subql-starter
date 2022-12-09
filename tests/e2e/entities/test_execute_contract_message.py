@@ -30,6 +30,9 @@ class TestContractExecution(EntityTest):
         cls._contract = BridgeContract(
             cls.ledger_client, cls.validator_wallet, DefaultBridgeContractConfig
         )
+        code_id = cls._contract._store()
+        cls._contract._instantiate(code_id)
+
         for i in range(3):  # enough entities are created to verify sorting
             resp = cls._contract.execute(
                 {cls.method: {"destination": cls.validator_address}},
@@ -37,9 +40,8 @@ class TestContractExecution(EntityTest):
                 funds=str(cls.amount) + cls.denom,
             )
             cls.ledger_client.wait_for_query_tx(resp.tx_hash)
-        time.sleep(
-            5
-        )  # stil need to give some extra time for the indexer to pickup the tx
+        # stil need to give some extra time for the indexer to pickup the tx
+        time.sleep(5)
 
     def test_contract_execution(self):
         execMsgs = self.db_cursor.execute(

@@ -13,7 +13,7 @@ async function _handleLegacyBridgeSwap(event: CosmosEvent): Promise<void> {
   logger.info(`[handleLegacyBridgeSwap] (tx ${msg.tx.hash}): indexing LegacyBridgeSwap ${id}`);
   logger.debug(`[handleLegacyBridgeSwap] (event.msg.msg): ${JSON.stringify(msg.msg, null, 2)}`);
 
-  const contract = msg?.msg?.decodedMsg?.contract;
+  const contractId = msg?.msg?.decodedMsg?.contract;
   const swapMsg = msg?.msg?.decodedMsg?.msg;
   const destination = swapMsg?.swap?.destination;
 
@@ -23,7 +23,7 @@ async function _handleLegacyBridgeSwap(event: CosmosEvent): Promise<void> {
 
   // gracefully skip indexing "swap" messages that doesn't fullfill the bridge contract
   // otherwise, the node will just crashloop trying to save the message to the db with required null fields.
-  if (!destination || !amount || !denom || !contract) {
+  if (!destination || !amount || !denom || !contractId) {
     logger.warn(`[handleLegacyBridgeSwap] (tx ${msg.tx.hash}): cannot index message (event.msg.msg): ${JSON.stringify(msg.msg, null, 2)}`);
     return;
   }
@@ -31,7 +31,7 @@ async function _handleLegacyBridgeSwap(event: CosmosEvent): Promise<void> {
   const legacySwap = LegacyBridgeSwap.create({
     id,
     destination,
-    contract,
+    contractId,
     amount: BigInt(amount),
     denom,
     executeContractMessageId: id,
