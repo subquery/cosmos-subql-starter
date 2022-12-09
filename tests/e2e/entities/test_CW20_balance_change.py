@@ -103,7 +103,7 @@ class TestCw20BalanceChange(EntityTest):
         latest_block_timestamp = self.get_latest_block_timestamp()
         # create a second timestamp for five minutes before
         min_timestamp = (
-                latest_block_timestamp - dt.timedelta(minutes=5)
+            latest_block_timestamp - dt.timedelta(minutes=5)
         ).isoformat()  # convert both to JSON ISO format
         max_timestamp = latest_block_timestamp.isoformat()
 
@@ -231,16 +231,16 @@ class TestCw20BalanceChange(EntityTest):
                         )
 
         for (name, query, orderAssert) in (
-                (
-                        "order by block height ascending",
-                        order_by_block_height_asc,
-                        self.assertGreaterEqual,
-                ),
-                (
-                        "order by block height descending",
-                        order_by_block_height_desc,
-                        self.assertLessEqual,
-                ),
+            (
+                "order by block height ascending",
+                order_by_block_height_asc,
+                self.assertGreaterEqual,
+            ),
+            (
+                "order by block height descending",
+                order_by_block_height_desc,
+                self.assertLessEqual,
+            ),
         ):
             with self.subTest(name):
                 result = self.gql_client.execute(query)
