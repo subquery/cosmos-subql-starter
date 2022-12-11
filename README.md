@@ -51,13 +51,23 @@ yarn start:docker
 pipenv install
 ```
 
-### 2. Run all e2e tests
+### 2. Run e2e tests
 
 _Note: end-to-end tests will truncate tables in the DB and interact with the configured fetchd node._
 
+#### All tests
+
 ```shell
-pipenv run python -m unittest discover -s ./test
+pipenv run python -m unittest discover -s ./tests/e2e
 ```
+
+#### Specific test module
+
+```shell
+pipenv run python -m unittest tests.e2e.entities.<module>
+```
+
+_(see: `pipenv run python -m unittest --help` for more)_
 
 ## Tracing
 
