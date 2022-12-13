@@ -34,7 +34,7 @@ yarn codegen
 yarn build
 
 # build submodule
-(cd ./subql && yarn install && yarn build)
+(cd ./subql && yarn build)
 ```
 
 ### 5. Run locally
