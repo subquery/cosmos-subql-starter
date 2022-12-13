@@ -1,12 +1,12 @@
 # SubQuery - Starter Package for Cosmos/CosmosHub
 
-A basic Cosmos (based on Thorchain) example project with an event and message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
+A basic Cosmos (based on Thorchain) example project with a message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
 
 The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
 
 A SubQuery package defines which data SubQuery will index from the blockchain, and how it will store it.
 
-This Starter Package by default allows **indexing transfer events and messages from Thorchain**.
+This Starter Package by default allows **indexing deposit events from Thorchain**.
 
 ## Preparation
 
@@ -85,26 +85,40 @@ Finally, you should see a GraphQL playground is showing in the explorer and the 
 With this project can try to query with the following code to get a taste of how it works.
 
 ```graphql
-{
-  query {
-    transferEvents(first: 5) {
-      nodes {
-        id
-        blockHeight
-        txHash
-        recipient
-        sender
-        amount
+query {
+  deposits(first: 5) {
+    totalCount
+    nodes {
+      id
+      depositCoins(first: 5) {
+        nodes {
+          amount
+          coin {
+            id
+            chain
+            symbol
+            ticker
+          }
+        }
       }
     }
-    messages(first: 5) {
-      nodes {
-        id
-        blockHeight
-        txHash
-        from
-        to
-        amount
+  }
+}
+```
+
+```graphql
+query {
+  coins(first: 5, orderBy: DEPOSIT_COINS_SUM_AMOUNT_DESC) {
+    totalCount
+    nodes {
+      chain
+      symbol
+      ticker
+      depositCoins(first: 5, orderBy: AMOUNT_DESC) {
+        totalCount
+        nodes {
+          amount
+        }
       }
     }
   }
