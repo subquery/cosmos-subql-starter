@@ -223,7 +223,7 @@ class ExecuteContractMessageFields(NamedFields):
     message_id = 1
     transaction_id = 2
     block_id = 3
-    contract = 4
+    contract_id = 4
     method = 5
     funds = 6
 

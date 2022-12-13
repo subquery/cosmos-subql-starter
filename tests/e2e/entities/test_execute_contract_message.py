@@ -40,40 +40,38 @@ class TestContractExecution(EntityTest):
                 funds=str(cls.amount) + cls.denom,
             )
             cls.ledger_client.wait_for_query_tx(resp.tx_hash)
-        # stil need to give some extra time for the indexer to pickup the tx
+        # extra time needed for the indexer to pick up on the tx
         time.sleep(5)
 
-    def test_contract_execution(self):
-        execMsgs = self.db_cursor.execute(
+    def test_contract_execution(self,):
+        executes = self.db_cursor.execute(
             ExecuteContractMessageFields.select_query()
         ).fetchone()
         self.assertIsNotNone(
-            execMsgs, "\nDBError: table is empty - maybe indexer did not find an entry?"
+            executes, "\nDBError: table is empty - maybe indexer did not find an entry?"
         )
         self.assertEqual(
-            execMsgs[ExecuteContractMessageFields.contract.value],
+            executes[ExecuteContractMessageFields.contract_id.value],
             self._contract.address,
             "\nDBError: contract address does not match",
         )
         self.assertEqual(
-            execMsgs[ExecuteContractMessageFields.method.value],
+            executes[ExecuteContractMessageFields.method.value],
             self.method,
             "\nDBError: contract method does not match",
         )
         self.assertEqual(
-            execMsgs[ExecuteContractMessageFields.funds.value][0]["amount"],
+            executes[ExecuteContractMessageFields.funds.value][0]["amount"],
             self.amount,
             "\nDBError: fund amount does not match",
         )
         self.assertEqual(
-            execMsgs[ExecuteContractMessageFields.funds.value][0]["denom"],
+            executes[ExecuteContractMessageFields.funds.value][0]["denom"],
             self.denom,
             "\nDBError: fund denomination does not match",
         )
 
-    def test_contract_execution_retrieval(
-        self,
-    ):  # As of now, this test depends on the execution of the previous test in this class.
+    def test_contract_execution_retrieval(self):
         latest_block_timestamp = self.get_latest_block_timestamp()
         # create a second timestamp for five minutes before
         min_timestamp = (
@@ -90,7 +88,9 @@ class TestContractExecution(EntityTest):
                     id
                     height 
                 }
-                contract
+                contract {
+                    id
+                }
                 method
                 funds
             }
@@ -139,25 +139,25 @@ class TestContractExecution(EntityTest):
             This provides {"contract":contract address, "method":method, "funds":funds}
             which can be destructured for the values of interest.
             """
-            execMsgs = results["executeContractMessages"]["nodes"]
-            self.assertTrue(execMsgs, "\nGQLError: No results returned from query")
+            executes = results["executeContractMessages"]["nodes"]
+            self.assertTrue(executes, "\nGQLError: No results returned from query")
             self.assertEqual(
-                execMsgs[0]["contract"],
+                executes[0]["contract"]["id"],
                 self._contract.address,
                 "\nGQLError: contract address does not match",
             )
             self.assertEqual(
-                execMsgs[0]["method"],
+                executes[0]["method"],
                 self.method,
                 "\nGQLError: contract method does not match",
             )
             self.assertEqual(
-                int(execMsgs[0]["funds"][0]["amount"]),
+                int(executes[0]["funds"][0]["amount"]),
                 int(self.amount),
                 "\nGQLError: fund amount does not match",
             )
             self.assertEqual(
-                execMsgs[0]["funds"][0]["denom"],
+                executes[0]["funds"][0]["denom"],
                 self.denom,
                 "\nGQLError: fund denomination does not match",
             )

@@ -59,9 +59,7 @@ class TestDelegation(EntityTest):
             "\nDBError: delegation address does not match",
         )
 
-    def test_retrieve_claim(
-        self,
-    ):  # As of now, this test depends on the execution of the previous test in this class.
+    def test_retrieve_claim(self):
         latest_block_timestamp = self.get_latest_block_timestamp()
         # create a second timestamp for five minutes before
         min_timestamp = (
