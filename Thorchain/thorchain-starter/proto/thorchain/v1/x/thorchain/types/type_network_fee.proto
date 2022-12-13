@@ -1,0 +1,18 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "gogoproto/gogo.proto";
+
+// NetworkFee represent the fee rate and typical transaction size outbound from
+// THORNode This is to keep the information reported by bifrost For BTC chain,
+// TransactionFeeRate should be sats/vbyte For Binance chain , given fee is
+// fixed , thus for single coin , transaction size will be 1, and the rate
+// should be 37500, for multiple coin , Transaction size should the number of
+// coins
+message NetworkFee {
+  string chain = 1 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Chain"];
+  uint64 transaction_size = 2;
+  uint64 transaction_fee_rate = 3;
+}

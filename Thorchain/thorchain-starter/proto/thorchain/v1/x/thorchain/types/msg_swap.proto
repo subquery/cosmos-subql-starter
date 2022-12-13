@@ -1,0 +1,27 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "thorchain/v1/common/common.proto";
+import "gogoproto/gogo.proto";
+
+enum OrderType {
+  market = 0;
+  limit = 1;
+}
+
+
+message MsgSwap {
+  common.Tx tx = 1 [(gogoproto.nullable) = false];
+  common.Asset target_asset = 2 [(gogoproto.nullable) = false];
+  string destination = 3 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
+  string trade_target = 4 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string affiliate_address = 5 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
+  string affiliate_basis_points = 6 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  bytes signer = 7  [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+  string aggregator = 8;
+  string aggregator_target_address = 9;
+  string aggregator_target_limit = 10 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = true];
+  OrderType order_type = 11;
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "thorchain/v1/common/common.proto";
+import "gogoproto/gogo.proto";
+
+message MsgYggdrasil {
+  common.Tx tx = 1 [(gogoproto.nullable) = false];
+  string pub_key = 2 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.PubKey"];
+  bool add_funds = 3;
+  repeated common.Coin coins = 4 [(gogoproto.castrepeated) = "gitlab.com/thorchain/thornode/common.Coins", (gogoproto.nullable) = false];
+  int64 block_height = 5;
+  bytes signer = 6  [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+}

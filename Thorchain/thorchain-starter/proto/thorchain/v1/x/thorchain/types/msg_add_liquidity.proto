@@ -1,0 +1,19 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "thorchain/v1/common/common.proto";
+import "gogoproto/gogo.proto";
+
+message MsgAddLiquidity {
+  common.Tx tx = 1 [(gogoproto.nullable) = false];
+  common.Asset asset = 2 [(gogoproto.nullable) = false];
+  string asset_amount = 3 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string rune_amount = 4 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string rune_address = 5 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
+  string asset_address = 6 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
+  string affiliate_address = 7 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
+  string affiliate_basis_points = 8 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  bytes signer = 9  [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+}
