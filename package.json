@@ -11,7 +11,6 @@
     "test": "jest",
     "codegen": "subql codegen",
     "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
-    "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
     "start:tracing": "docker-compose -f docker-compose.tracing.yml pull && docker-compose -f docker-compose.tracing.yml up --remove-orphans",
     "stop:tracing": "docker-compose -f docker-compose.tracing.yml down",
     "db:dump": "pg_dump --schema app -c --if-exists --file migrations/current_schema.sql postgres://subquery:subquery@localhost/subquery",
