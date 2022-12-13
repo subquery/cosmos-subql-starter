@@ -1,15 +1,8 @@
 import json
-import sys
 import time
 import unittest
-from pathlib import Path
 
 from gql import gql
-
-from tests.helpers.graphql import filtered_test_query
-
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
 
 from src.genesis.helpers.field_enums import (
     BlockFields,
@@ -18,15 +11,13 @@ from src.genesis.helpers.field_enums import (
     TxFields,
 )
 from tests.helpers.entity_test import EntityTest
+from tests.helpers.graphql import filtered_test_query
 from tests.helpers.regexes import (
     block_id_regex,
     event_id_regex,
     msg_id_regex,
     tx_id_regex,
 )
-
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
 
 
 class TestNativePrimitives(EntityTest):
@@ -307,9 +298,7 @@ class TestNativePrimitives(EntityTest):
         }
 
         def filtered_event_query(_filter, order=""):
-            return filtered_test_query(
-                "events", _filter, event_nodes, _order=order
-            )
+            return filtered_test_query("events", _filter, event_nodes, _order=order)
 
         def filtered_transaction_query(_filter, order=""):
             return filtered_test_query(

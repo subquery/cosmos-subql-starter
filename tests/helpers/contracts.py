@@ -106,7 +106,4 @@ class BridgeContract(LedgerContract):
 
     def _instantiate(self) -> Address:
         assert (self.admin and self.cfg) is not None
-        return self.instantiate(
-            self.cfg.to_dict(),
-            self.admin
-        )
+        return self.instantiate(self.cfg.to_dict(), self.admin)

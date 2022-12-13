@@ -94,7 +94,9 @@ class TestGovernance(EntityTest):
             "\nDBError: voter option does not match",
         )
 
-    def test_retrieve_vote(self,):
+    def test_retrieve_vote(
+        self,
+    ):
         latest_block_timestamp = self.get_latest_block_timestamp()
         # create a second timestamp for five minutes before
         min_timestamp = (

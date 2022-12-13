@@ -42,7 +42,9 @@ class TestContractExecution(EntityTest):
         # extra time needed for the indexer to pick up on the tx
         time.sleep(5)
 
-    def test_contract_execution(self,):
+    def test_contract_execution(
+        self,
+    ):
         executes = self.db_cursor.execute(
             ExecuteContractMessageFields.select_query()
         ).fetchone()
