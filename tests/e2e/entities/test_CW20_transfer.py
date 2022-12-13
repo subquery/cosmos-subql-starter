@@ -10,7 +10,7 @@ sys.path.insert(0, str(repo_root_path))
 from src.genesis.helpers.field_enums import Cw20TransferFields
 from tests.helpers.contracts import Cw20Contract
 from tests.helpers.entity_test import EntityTest
-from tests.helpers.graphql import test_filtered_query
+from tests.helpers.graphql import filtered_test_query
 
 
 class TestCw20Transfer(EntityTest):
@@ -94,7 +94,7 @@ class TestCw20Transfer(EntityTest):
         }
 
         def filtered_cw20_transfer_query(_filter, order=""):
-            return test_filtered_query(
+            return filtered_test_query(
                 "cw20Transfers", _filter, cw20_transfer_nodes, _order=order
             )
 

@@ -11,7 +11,7 @@ sys.path.insert(0, str(repo_root_path))
 from src.genesis.helpers.field_enums import LegacyBridgeSwapFields
 from tests.helpers.contracts import BridgeContract, DefaultBridgeContractConfig
 from tests.helpers.entity_test import EntityTest
-from tests.helpers.graphql import test_filtered_query
+from tests.helpers.graphql import filtered_test_query
 
 
 class TestContractSwap(EntityTest):
@@ -98,7 +98,7 @@ class TestContractSwap(EntityTest):
         }
 
         def filtered_legacy_bridge_swap_query(_filter, order=""):
-            return test_filtered_query(
+            return filtered_test_query(
                 "legacyBridgeSwaps", _filter, legacy_bridge_swap_nodes, _order=order
             )
 

@@ -5,7 +5,7 @@ import time
 import unittest
 from pathlib import Path
 
-from tests.helpers.graphql import test_filtered_query
+from tests.helpers.graphql import filtered_test_query
 
 repo_root_path = Path(__file__).parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
@@ -97,7 +97,7 @@ class TestContractExecution(EntityTest):
             """
 
         def filtered_execute_contract_messages_query(_filter, order=""):
-            return test_filtered_query(
+            return filtered_test_query(
                 "executeContractMessages",
                 _filter,
                 contract_execution_messages_swap_nodes,

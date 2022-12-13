@@ -14,7 +14,7 @@ from src.genesis.helpers.field_enums import (
 )
 from tests.helpers.contracts import Cw20Contract
 from tests.helpers.entity_test import EntityTest
-from tests.helpers.graphql import test_filtered_query
+from tests.helpers.graphql import filtered_test_query
 
 
 class TestContractDeploy(EntityTest):
@@ -120,7 +120,7 @@ class TestContractDeploy(EntityTest):
         """
 
         def filtered_store_contract_message_query(_filter, order="CODE_ID_ASC"):
-            return test_filtered_query(
+            return filtered_test_query(
                 "storeContractMessages", _filter, store_contract_nodes, _order=order
             )
 
@@ -218,7 +218,7 @@ class TestContractDeploy(EntityTest):
             """
 
         def filtered_instantiate_contract_message_query(_filter, order="CODE_ID_ASC"):
-            return test_filtered_query(
+            return filtered_test_query(
                 "instantiateContractMessages",
                 _filter,
                 instantiate_contract_nodes,
@@ -357,7 +357,7 @@ class TestContractDeploy(EntityTest):
         def filtered_contract_query(
             _filter, order="CONTRACTS_BY_STORE_CONTRACT_MESSAGES_CODE_ID_ASC"
         ):
-            return test_filtered_query(
+            return filtered_test_query(
                 "contracts", _filter, contract_nodes, _order=order
             )
 

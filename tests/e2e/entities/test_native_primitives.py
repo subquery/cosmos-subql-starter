@@ -6,7 +6,7 @@ from pathlib import Path
 
 from gql import gql
 
-from tests.helpers.graphql import test_filtered_query
+from tests.helpers.graphql import filtered_test_query
 
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
@@ -304,17 +304,17 @@ class TestNativePrimitives(EntityTest):
         }
 
         def filtered_event_query(_filter, order=""):
-            return test_filtered_query(
+            return filtered_test_query(
                 "events", _filter, event_nodes, _order=order
             )
 
         def filtered_transaction_query(_filter, order=""):
-            return test_filtered_query(
+            return filtered_test_query(
                 "transactions", _filter, transaction_nodes, _order=order
             )
 
         def filtered_messages_query(_filter, order=""):
-            return test_filtered_query(
+            return filtered_test_query(
                 "messages", _filter, messages_nodes, _order=order
             )
 
