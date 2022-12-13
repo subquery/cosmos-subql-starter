@@ -11,7 +11,7 @@ from src.genesis.helpers.field_enums import (
 )
 from tests.helpers.contracts import Cw20Contract
 from tests.helpers.entity_test import EntityTest
-from tests.helpers.graphql import test_filtered_query
+from tests.helpers.graphql import filtered_test_query
 
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
@@ -27,7 +27,7 @@ class TestContractDeploy(EntityTest):
         cls.clean_db({"contracts"})
         cls._contract = Cw20Contract(cls.ledger_client, cls.validator_wallet)
         code_id = cls._contract._store()
-        address = cls._contract._instantiate(code_id)
+        address = cls._contract._instantiate()
         """
         An initial proposal is created in order to make value assertions. These values are stored within a dictionary
         to be recalled for the assertions. However to create enough data for sorting tests, two further contracts are
@@ -70,8 +70,8 @@ class TestContractDeploy(EntityTest):
             },
         }
         for i in range(2):
-            code_id = cls._contract._store()
-            cls._contract._instantiate(code_id)
+            cls._contract._store()
+            cls._contract._instantiate()
         time.sleep(5)
 
     def test_execute_transfer(self):
@@ -120,7 +120,7 @@ class TestContractDeploy(EntityTest):
         """
 
         def filtered_store_contract_message_query(_filter, order="CODE_ID_ASC"):
-            return test_filtered_query(
+            return filtered_test_query(
                 "storeContractMessages", _filter, store_contract_nodes, _order=order
             )
 
@@ -218,7 +218,7 @@ class TestContractDeploy(EntityTest):
             """
 
         def filtered_instantiate_contract_message_query(_filter, order="CODE_ID_ASC"):
-            return test_filtered_query(
+            return filtered_test_query(
                 "instantiateContractMessages",
                 _filter,
                 instantiate_contract_nodes,
@@ -357,7 +357,7 @@ class TestContractDeploy(EntityTest):
         def filtered_contract_query(
             _filter, order="CONTRACTS_BY_STORE_CONTRACT_MESSAGES_CODE_ID_ASC"
         ):
-            return test_filtered_query(
+            return filtered_test_query(
                 "contracts", _filter, contract_nodes, _order=order
             )
 

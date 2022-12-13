@@ -7,7 +7,7 @@ from pathlib import Path
 from src.genesis.helpers.field_enums import Cw20BalanceChangeFields
 from tests.helpers.contracts import Cw20Contract
 from tests.helpers.entity_test import EntityTest
-from tests.helpers.graphql import test_filtered_query
+from tests.helpers.graphql import filtered_test_query
 
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
@@ -23,8 +23,8 @@ class TestCw20BalanceChange(EntityTest):
         super().setUpClass()
         cls.clean_db({"cw20_transfers"})
         cls._contract = Cw20Contract(cls.ledger_client, cls.validator_wallet)
-        code_id = cls._contract._store()
-        address = cls._contract._instantiate(code_id)
+        cls._contract._store()
+        address = cls._contract._instantiate()
         cls.methods = {
             "burn": {
                 "balance_offset": [-cls.amount],
@@ -72,15 +72,15 @@ class TestCw20BalanceChange(EntityTest):
 
     def test_execute_balance_change(self):
         for method in list(self.methods.keys()):
-            transfer = self.db_cursor.execute(
+            changes = self.db_cursor.execute(
                 Cw20BalanceChangeFields.by_execute_contract_method(str(method))
             ).fetchall()
             entry = self.methods[method]
             """Due to differences in structure of each tabled test case, self.assertIn checks if the entry is in
                the short list of possible values given in the methods dict"""
-            for query in transfer:
+            for query in changes:
                 self.assertIsNotNone(
-                    transfer,
+                    changes,
                     "\nDBError: table is empty - maybe indexer did not find an entry?",
                 )
                 self.assertIn(
@@ -130,7 +130,7 @@ class TestCw20BalanceChange(EntityTest):
         }
 
         def filtered_cw20_balance_change_query(_filter, order=""):
-            return test_filtered_query(
+            return filtered_test_query(
                 "cw20BalanceChanges", _filter, cw20_balance_change_nodes, _order=order
             )
 
@@ -207,10 +207,10 @@ class TestCw20BalanceChange(EntityTest):
                     This provides {"accountId":Account address/id, "balanceOffset: balance change amount, "contract":contract address}
                     which can be destructured for the values of interest.
                     """
-                    transfer = result["cw20BalanceChanges"]["nodes"]
+                    changes = result["cw20BalanceChanges"]["nodes"]
                     entry = self.methods[method]
                     # assuming that some queries return a list of values, iterate - such as with the method "transfer"
-                    for result in transfer:
+                    for result in changes:
                         self.assertNotEqual(
                             result, [], "\nGQLError: No results returned from query"
                         )

@@ -8,7 +8,7 @@ from pathlib import Path
 from src.genesis.helpers.field_enums import LegacyBridgeSwapFields
 from tests.helpers.contracts import BridgeContract, DefaultBridgeContractConfig
 from tests.helpers.entity_test import EntityTest
-from tests.helpers.graphql import test_filtered_query
+from tests.helpers.graphql import filtered_test_query
 
 repo_root_path = Path(__file__).parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
@@ -27,8 +27,8 @@ class TestContractSwap(EntityTest):
         cls._contract = BridgeContract(
             cls.ledger_client, cls.validator_wallet, DefaultBridgeContractConfig
         )
-        code_id = cls._contract._store()
-        cls._contract._instantiate(code_id)
+        cls._contract._store()
+        cls._contract._instantiate()
         # repeat entity creation three times to create enough data to verify sorting
         for i in range(3):
             resp = cls._contract.execute(
@@ -98,7 +98,7 @@ class TestContractSwap(EntityTest):
         }
 
         def filtered_legacy_bridge_swap_query(_filter, order=""):
-            return test_filtered_query(
+            return filtered_test_query(
                 "legacyBridgeSwaps", _filter, legacy_bridge_swap_nodes, _order=order
             )
 

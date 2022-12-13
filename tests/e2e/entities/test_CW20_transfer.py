@@ -7,7 +7,7 @@ from pathlib import Path
 from src.genesis.helpers.field_enums import Cw20TransferFields
 from tests.helpers.contracts import Cw20Contract
 from tests.helpers.entity_test import EntityTest
-from tests.helpers.graphql import test_filtered_query
+from tests.helpers.graphql import filtered_test_query
 
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
@@ -22,11 +22,10 @@ class TestCw20Transfer(EntityTest):
         super().setUpClass()
         cls.clean_db({"cw20_transfers"})
         cls._contract = Cw20Contract(cls.ledger_client, cls.validator_wallet)
-        code_id = cls._contract._store()
-        cls._contract._instantiate(code_id)
-        for i in range(
-            3
-        ):  # repeat entity creation three times to create enough data to verify sorting
+        cls._contract._store()
+        cls._contract._instantiate()
+        # repeat entity creation three times to create enough data to verify sorting
+        for i in range(3):
             resp = cls._contract.execute(
                 {
                     "transfer": {
@@ -94,7 +93,7 @@ class TestCw20Transfer(EntityTest):
         }
 
         def filtered_cw20_transfer_query(_filter, order=""):
-            return test_filtered_query(
+            return filtered_test_query(
                 "cw20Transfers", _filter, cw20_transfer_nodes, _order=order
             )
 

@@ -7,7 +7,7 @@ from pathlib import Path
 
 from src.genesis.helpers.field_enums import DistDelegatorClaimFields
 from tests.helpers.entity_test import EntityTest
-from tests.helpers.graphql import test_filtered_query
+from tests.helpers.graphql import filtered_test_query
 from tests.helpers.regexes import block_id_regex, msg_id_regex, tx_id_regex
 
 repo_root_path = Path(__file__).parent.parent.parent.absolute()
@@ -59,9 +59,7 @@ class TestDelegation(EntityTest):
             "\nDBError: delegation address does not match",
         )
 
-    def test_retrieve_claim(
-        self,
-    ):  # As of now, this test depends on the execution of the previous test in this class.
+    def test_retrieve_claim(self):
         latest_block_timestamp = self.get_latest_block_timestamp()
         # create a second timestamp for five minutes before
         min_timestamp = (
@@ -70,7 +68,7 @@ class TestDelegation(EntityTest):
         max_timestamp = latest_block_timestamp.isoformat()
 
         def filtered_dist_delegate_claim_query(_filter, order=""):
-            return test_filtered_query(
+            return filtered_test_query(
                 "distDelegatorClaims", _filter, dist_delegate_claim_nodes, _order=order
             )
 

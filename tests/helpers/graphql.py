@@ -11,7 +11,7 @@ def to_gql(obj):
     return json_keys_regex.sub("\g<1>:", json.dumps(obj))  # noqa: W605
 
 
-def test_filtered_query(root_entity, _filter, nodes_string, _order=""):
+def filtered_test_query(root_entity, _filter, nodes_string, _order=""):
     filter_string = to_gql(_filter)
 
     return gql(

@@ -13,7 +13,6 @@
     "pylint-checks": "black --check --verbose src/genesis tests && isort --check-only src/genesis tests && flake8 src/genesis tests",
     "pylint": "black src/genesis tests && isort src/genesis tests && flake8 src/genesis tests && mypy src/genesis --disable-error-code import && mypy tests --disable-error-code import && pylint src/genesis tests",
     "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
-    "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
     "start:tracing": "docker-compose -f docker-compose.tracing.yml pull && docker-compose -f docker-compose.tracing.yml up --remove-orphans",
     "stop:tracing": "docker-compose -f docker-compose.tracing.yml down",
     "db:dump": "pg_dump --schema app -c --if-exists --file migrations/current_schema.sql postgres://subquery:subquery@localhost/subquery",

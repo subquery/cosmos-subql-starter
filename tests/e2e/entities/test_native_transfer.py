@@ -6,7 +6,7 @@ from pathlib import Path
 
 from src.genesis.helpers.field_enums import NativeTransferFields
 from tests.helpers.entity_test import EntityTest
-from tests.helpers.graphql import test_filtered_query
+from tests.helpers.graphql import filtered_test_query
 from tests.helpers.regexes import block_id_regex, msg_id_regex, tx_id_regex
 
 repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
@@ -91,7 +91,7 @@ class TestNativeTransfer(EntityTest):
         }
 
         def filtered_native_transfer_query(_filter, order=""):
-            return test_filtered_query(
+            return filtered_test_query(
                 "nativeTransfers", _filter, native_transfer_nodes, _order=order
             )
 

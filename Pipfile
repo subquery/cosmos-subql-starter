@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-cosmpy = "*"
+cosmpy = "==0.6.2"
 protobuf = "==3.20.*"
 bip-utils = "*"
 gql = {extras = ["all"], version = "*"}
