@@ -27,7 +27,7 @@ class TestContractDeploy(EntityTest):
         cls.clean_db({"contracts"})
         cls._contract = Cw20Contract(cls.ledger_client, cls.validator_wallet)
         code_id = cls._contract._store()
-        address = cls._contract._instantiate(code_id)
+        address = cls._contract._instantiate()
         """
         An initial proposal is created in order to make value assertions. These values are stored within a dictionary
         to be recalled for the assertions. However to create enough data for sorting tests, two further contracts are 
@@ -70,8 +70,8 @@ class TestContractDeploy(EntityTest):
             },
         }
         for i in range(2):
-            code_id = cls._contract._store()
-            cls._contract._instantiate(code_id)
+            cls._contract._store()
+            cls._contract._instantiate()
         time.sleep(5)
 
     def test_execute_transfer(self):

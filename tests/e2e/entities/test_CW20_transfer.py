@@ -22,11 +22,10 @@ class TestCw20Transfer(EntityTest):
         super().setUpClass()
         cls.clean_db({"cw20_transfers"})
         cls._contract = Cw20Contract(cls.ledger_client, cls.validator_wallet)
-        code_id = cls._contract._store()
-        cls._contract._instantiate(code_id)
-        for i in range(
-            3
-        ):  # repeat entity creation three times to create enough data to verify sorting
+        cls._contract._store()
+        cls._contract._instantiate()
+        # repeat entity creation three times to create enough data to verify sorting
+        for i in range(3):
             resp = cls._contract.execute(
                 {
                     "transfer": {

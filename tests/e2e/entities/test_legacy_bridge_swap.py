@@ -27,8 +27,8 @@ class TestContractSwap(EntityTest):
         cls._contract = BridgeContract(
             cls.ledger_client, cls.validator_wallet, DefaultBridgeContractConfig
         )
-        code_id = cls._contract._store()
-        cls._contract._instantiate(code_id)
+        cls._contract._store()
+        cls._contract._instantiate()
         # repeat entity creation three times to create enough data to verify sorting
         for i in range(3):
             resp = cls._contract.execute(
