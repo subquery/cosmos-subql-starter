@@ -1,5 +1,4 @@
 import datetime as dt
-import json
 import sys
 import time
 import unittest
@@ -11,15 +10,13 @@ from cosmpy.protos.cosmos.base.v1beta1 import coin_pb2
 from cosmpy.protos.cosmos.gov.v1beta1 import gov_pb2
 from cosmpy.protos.cosmos.gov.v1beta1 import tx_pb2 as gov_tx
 from google.protobuf import any_pb2
-from gql import gql
 
+from src.genesis.helpers.field_enums import GovProposalVoteFields
+from tests.helpers.entity_test import EntityTest
 from tests.helpers.graphql import filtered_test_query
 
 repo_root_path = Path(__file__).parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
-
-from src.genesis.helpers.field_enums import GovProposalVoteFields
-from tests.helpers.entity_test import EntityTest
 
 
 class TestGovernance(EntityTest):
@@ -32,7 +29,7 @@ class TestGovernance(EntityTest):
     def setUpClass(cls):
         super().setUpClass()
         cls.clean_db({"gov_proposal_votes"})
-        """ 
+        """
         As voting can only occur once from an address per proposal, three must be created and voted upon individually.
         All proposals must reach the voting stage and be voted upon to create enough data to assert correct sorting.
         """
@@ -97,7 +94,9 @@ class TestGovernance(EntityTest):
             "\nDBError: voter option does not match",
         )
 
-    def test_retrieve_vote(self,):
+    def test_retrieve_vote(
+        self,
+    ):
         latest_block_timestamp = self.get_latest_block_timestamp()
         # create a second timestamp for five minutes before
         min_timestamp = (

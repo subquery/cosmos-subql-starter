@@ -1,15 +1,8 @@
 import json
-import sys
 import time
 import unittest
-from pathlib import Path
 
 from gql import gql
-
-from tests.helpers.graphql import filtered_test_query
-
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
 
 from src.genesis.helpers.field_enums import (
     BlockFields,
@@ -18,6 +11,7 @@ from src.genesis.helpers.field_enums import (
     TxFields,
 )
 from tests.helpers.entity_test import EntityTest
+from tests.helpers.graphql import filtered_test_query
 from tests.helpers.regexes import (
     block_id_regex,
     event_id_regex,
@@ -52,13 +46,13 @@ class TestNativePrimitives(EntityTest):
             cls.delegator_address, cls.amount, cls.denom, cls.validator_wallet
         )
         tx.wait_to_complete()
-        cls.assertTrue(tx.response.is_successful(), f"first set-up tx failed")
+        cls.assertTrue(tx.response.is_successful(), "first set-up tx failed")
 
         tx = cls.ledger_client.send_tokens(
             cls.validator_address, int(cls.amount / 10), cls.denom, cls.delegator_wallet
         )
         tx.wait_to_complete()
-        cls.assertTrue(tx.response.is_successful(), f"second set-up tx failed")
+        cls.assertTrue(tx.response.is_successful(), "second set-up tx failed")
 
         # Wait for subql node to sync
         time.sleep(5)
@@ -68,7 +62,7 @@ class TestNativePrimitives(EntityTest):
         self.assertNotEqual(
             blocks,
             [],
-            f"\nDBError: block table is empty - maybe indexer did not find an entry?",
+            "\nDBError: block table is empty - maybe indexer did not find an entry?",
         )
 
         self.assertGreaterEqual(len(blocks), self.expected_blocks_len)
@@ -304,9 +298,7 @@ class TestNativePrimitives(EntityTest):
         }
 
         def filtered_event_query(_filter, order=""):
-            return filtered_test_query(
-                "events", _filter, event_nodes, _order=order
-            )
+            return filtered_test_query("events", _filter, event_nodes, _order=order)
 
         def filtered_transaction_query(_filter, order=""):
             return filtered_test_query(

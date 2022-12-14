@@ -4,13 +4,13 @@ import time
 import unittest
 from pathlib import Path
 
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
-
 from src.genesis.helpers.field_enums import Cw20BalanceChangeFields
 from tests.helpers.contracts import Cw20Contract
 from tests.helpers.entity_test import EntityTest
 from tests.helpers.graphql import filtered_test_query
+
+repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
 
 class TestCw20BalanceChange(EntityTest):
@@ -76,7 +76,7 @@ class TestCw20BalanceChange(EntityTest):
                 Cw20BalanceChangeFields.by_execute_contract_method(str(method))
             ).fetchall()
             entry = self.methods[method]
-            """Due to differences in structure of each tabled test case, self.assertIn checks if the entry is in 
+            """Due to differences in structure of each tabled test case, self.assertIn checks if the entry is in
                the short list of possible values given in the methods dict"""
             for query in changes:
                 self.assertIsNotNone(
@@ -103,7 +103,7 @@ class TestCw20BalanceChange(EntityTest):
         latest_block_timestamp = self.get_latest_block_timestamp()
         # create a second timestamp for five minutes before
         min_timestamp = (
-                latest_block_timestamp - dt.timedelta(minutes=5)
+            latest_block_timestamp - dt.timedelta(minutes=5)
         ).isoformat()  # convert both to JSON ISO format
         max_timestamp = latest_block_timestamp.isoformat()
 
@@ -120,7 +120,7 @@ class TestCw20BalanceChange(EntityTest):
                 transaction { id }
                 block {
                     id
-                    height 
+                    height
                 }
             }
             """
@@ -231,16 +231,16 @@ class TestCw20BalanceChange(EntityTest):
                         )
 
         for (name, query, orderAssert) in (
-                (
-                        "order by block height ascending",
-                        order_by_block_height_asc,
-                        self.assertGreaterEqual,
-                ),
-                (
-                        "order by block height descending",
-                        order_by_block_height_desc,
-                        self.assertLessEqual,
-                ),
+            (
+                "order by block height ascending",
+                order_by_block_height_asc,
+                self.assertGreaterEqual,
+            ),
+            (
+                "order by block height descending",
+                order_by_block_height_desc,
+                self.assertLessEqual,
+            ),
         ):
             with self.subTest(name):
                 result = self.gql_client.execute(query)

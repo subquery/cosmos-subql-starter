@@ -4,13 +4,13 @@ import time
 import unittest
 from pathlib import Path
 
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
-
 from src.genesis.helpers.field_enums import Cw20TransferFields
 from tests.helpers.contracts import Cw20Contract
 from tests.helpers.entity_test import EntityTest
 from tests.helpers.graphql import filtered_test_query
+
+repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
 
 class TestCw20Transfer(EntityTest):
@@ -83,7 +83,7 @@ class TestCw20Transfer(EntityTest):
                 transaction { id }
                 block {
                     id
-                    height 
+                    height
                 }
             }
             """

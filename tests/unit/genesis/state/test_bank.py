@@ -2,11 +2,11 @@ import sys
 import unittest
 from pathlib import Path
 
-repo_root_path = Path(__file__).parent.parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
-
 from src.genesis.state.bank import BankState
 from tests.helpers.genesis_data import test_bank_state
+
+repo_root_path = Path(__file__).parent.parent.parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
 
 class TestBank(unittest.TestCase):

@@ -5,14 +5,13 @@ import time
 import unittest
 from pathlib import Path
 
+from src.genesis.helpers.field_enums import ExecuteContractMessageFields
+from tests.helpers.contracts import BridgeContract, DefaultBridgeContractConfig
+from tests.helpers.entity_test import EntityTest
 from tests.helpers.graphql import filtered_test_query
 
 repo_root_path = Path(__file__).parent.parent.parent.absolute()
 sys.path.insert(0, str(repo_root_path))
-
-from src.genesis.helpers.field_enums import ExecuteContractMessageFields
-from tests.helpers.contracts import BridgeContract, DefaultBridgeContractConfig
-from tests.helpers.entity_test import EntityTest
 
 
 class TestContractExecution(EntityTest):
@@ -43,7 +42,9 @@ class TestContractExecution(EntityTest):
         # extra time needed for the indexer to pick up on the tx
         time.sleep(5)
 
-    def test_contract_execution(self,):
+    def test_contract_execution(
+        self,
+    ):
         executes = self.db_cursor.execute(
             ExecuteContractMessageFields.select_query()
         ).fetchone()
@@ -86,7 +87,7 @@ class TestContractExecution(EntityTest):
                 transaction { id }
                 block {
                     id
-                    height 
+                    height
                 }
                 contract {
                     id

@@ -21,7 +21,7 @@ class TestNativeBalances(EntityTest):
         # enough entities are created to verify sorting
         tx = cls.ledger_client.send_tokens(
             cls.delegator_wallet.address(),
-            10 * 10 ** 18,
+            10 * 10**18,
             "atestfet",
             cls.validator_wallet,
         )
@@ -30,7 +30,7 @@ class TestNativeBalances(EntityTest):
 
         tx = cls.ledger_client.send_tokens(
             cls.validator_wallet.address(),
-            3 * 10 ** 18,
+            3 * 10**18,
             "atestfet",
             cls.delegator_wallet,
         )
@@ -70,8 +70,8 @@ class TestNativeBalances(EntityTest):
             ]
 
         # TODO: Represent variable fees in more robust way
-        self.assertLessEqual(total[self.validator_wallet.address()], -7 * 10 ** 18)
-        self.assertLessEqual(total[self.delegator_wallet.address()], 7 * 10 ** 18)
+        self.assertLessEqual(total[self.validator_wallet.address()], -7 * 10**18)
+        self.assertLessEqual(total[self.delegator_wallet.address()], 7 * 10**18)
 
     def test_account_balance_tracking_query(self):
         query = gql(

@@ -48,7 +48,7 @@ class Cw20Contract(LedgerContract):
         try:
             temp = open(".contract/cw20.wasm", "rb")
             temp.close()
-        except:
+        except:  # noqa: E722
             contract_request = requests.get(url)
             with open(".contract/cw20.wasm", "wb") as file:
                 file.write(contract_request.content)
@@ -92,7 +92,7 @@ class BridgeContract(LedgerContract):
         try:
             temp = open(".contract/bridge.wasm", "rb")
             temp.close()
-        except:
+        except:  # noqa: E722
             contract_request = requests.get(url)
             with open(".contract/bridge.wasm", "wb") as file:
                 file.write(contract_request.content)
@@ -106,7 +106,4 @@ class BridgeContract(LedgerContract):
 
     def _instantiate(self) -> Address:
         assert (self.admin and self.cfg) is not None
-        return self.instantiate(
-            self.cfg.to_dict(),
-            self.admin
-        )
+        return self.instantiate(self.cfg.to_dict(), self.admin)

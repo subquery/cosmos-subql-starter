@@ -4,9 +4,6 @@ import time
 import unittest
 from pathlib import Path
 
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
-
 from src.genesis.helpers.field_enums import (
     ContractFields,
     InstantiateMessageFields,
@@ -15,6 +12,9 @@ from src.genesis.helpers.field_enums import (
 from tests.helpers.contracts import Cw20Contract
 from tests.helpers.entity_test import EntityTest
 from tests.helpers.graphql import filtered_test_query
+
+repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
 
 class TestContractDeploy(EntityTest):
@@ -30,7 +30,7 @@ class TestContractDeploy(EntityTest):
         address = cls._contract._instantiate()
         """
         An initial proposal is created in order to make value assertions. These values are stored within a dictionary
-        to be recalled for the assertions. However to create enough data for sorting tests, two further contracts are 
+        to be recalled for the assertions. However to create enough data for sorting tests, two further contracts are
         stored and instantiated afterwards. These two additional contracts are used only for sorting test data, and their
         unique addresses and contents are ignored.
         """
@@ -114,7 +114,7 @@ class TestContractDeploy(EntityTest):
             }
             """
 
-        """ 
+        """
         Each query is sorted by codeId to allow us to test only the initial created contract, from which our tabled
         data is stored.
         """
@@ -338,8 +338,8 @@ class TestContractDeploy(EntityTest):
                     id
                     codeId
                 }
-                instantiateMessage { 
-                    id 
+                instantiateMessage {
+                    id
                     codeId
                 }
             }
@@ -349,8 +349,8 @@ class TestContractDeploy(EntityTest):
             "storeMessage": {"codeId": {"greaterThanOrEqualTo": 0}}
         }
 
-        """ 
-        Again here our queries used to assert contract values are by default sorted by codeId in order to allow us to 
+        """
+        Again here our queries used to assert contract values are by default sorted by codeId in order to allow us to
         separate the initial contract from the dummy contracts used for sorting
         """
 

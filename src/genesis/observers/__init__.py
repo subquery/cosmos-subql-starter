@@ -6,9 +6,9 @@ from reactivex.scheduler import ThreadPoolScheduler
 
 from src.genesis.genesis import GenesisSingleton
 
-from .accounts import *
-from .balances import *
-from .chain_id import *
+from .accounts import *  # noqa: F401
+from .balances import *  # noqa: F401
+from .chain_id import *  # noqa: F401
 
 
 def process_genesis(db_conn_factory):
@@ -30,12 +30,12 @@ def process_genesis(db_conn_factory):
 
     # TODO: unworkaround a DB connection per concurrent "table manager"
     accounts_db_conn = db_conn_factory()
-    AccountsManager(
+    AccountsManager(  # noqa: F405
         accounts_db_conn, on_error=on_error, on_completed=on_accounts_completed
     ).observe(genesis.source, scheduler=scheduler)
 
     balances_db_conn = db_conn_factory()
-    NativeBalancesManager(
+    NativeBalancesManager(  # noqa: F405
         balances_db_conn,
         on_error=on_error,
         on_completed=lambda: balances_done.release(),

@@ -8,15 +8,15 @@ from unittest.mock import patch
 from gql import gql
 from reactivex.operators import map as map_
 
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
-
 from src.genesis.genesis import Genesis
 from src.genesis.helpers.field_enums import Accounts
 from src.genesis.observers import Account, AccountsManager, AccountsObserver
 from src.genesis.state.bank import Balance
 from tests.helpers.clients import TestWithDBConn, TestWithGQLClient
 from tests.helpers.genesis_data import test_bank_state_balances, test_genesis_data
+
+repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
+sys.path.insert(0, str(repo_root_path))
 
 
 class TestAccountsObserver(TestWithDBConn):

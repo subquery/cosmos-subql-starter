@@ -1,0 +1,33 @@
+name: Python Linting Checks
+'on':
+  push:
+    branches:
+      - main
+  pull_request: null
+jobs:
+  style_checks:
+    name: Check Python Code Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+       - uses: actions/checkout@v2
+       - uses: actions/setup-python@v4
+         with:
+           python-version: 3.9
+       - name: Update
+         run: sudo apt update
+       - name: Install OS dependencies
+         run: sudo apt install -y python3-dev nodejs
+
+       - name: Install pipenv
+         run: pip3 install pipenv
+       - name: Install dependencies
+         run: pipenv install --dev
+
+       - name: Install NodeJS dependencies
+         run: pipenv run yarn install
+       - name: Run style checks
+         run: pipenv run yarn pylint-checks
