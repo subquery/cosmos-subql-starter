@@ -158,7 +158,7 @@ class Cw20TransferFields(NamedFields):
     amount = 4
     to_address = 5
     from_address = 6
-    contract = 7
+    contract_id = 7
 
     @classmethod
     @property

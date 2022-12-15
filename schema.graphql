@@ -135,7 +135,7 @@ type Cw20Transfer @entity {
   id: ID!
   toAddress: String! @index
   fromAddress: String! @index
-  contract: String! @index
+  contract: Contract!
   amount: BigInt!
   message: Message!
   transaction: Transaction!

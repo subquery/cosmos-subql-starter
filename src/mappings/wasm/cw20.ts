@@ -46,12 +46,12 @@ async function _handleCw20Transfer(event: CosmosEvent): Promise<void> { // TODO:
   logger.debug(`[handleCw20Transfer] (event.msg.msg): ${JSON.stringify(event.msg.msg, null, 2)}`);
 
   const msg = event.msg?.msg?.decodedMsg;
-  const contract = msg?.contract, fromAddress = msg?.sender;
+  const contractId = msg?.contract, fromAddress = msg?.sender;
   const toAddress = msg?.msg?.transfer?.recipient;
   const amount = msg?.msg?.transfer?.amount;
 
 
-  if (!fromAddress || !amount || !toAddress || !contract) {
+  if (!fromAddress || !amount || !toAddress || !contractId) {
     logger.warn(`[handleCw20Transfer] (tx ${event.tx.hash}): cannot index event (event.event): ${JSON.stringify(event.event, null, 2)}`);
     return;
   }
@@ -60,7 +60,7 @@ async function _handleCw20Transfer(event: CosmosEvent): Promise<void> { // TODO:
     id,
     toAddress,
     fromAddress,
-    contract,
+    contractId,
     amount,
     messageId: id,
     transactionId: event.tx.hash,
