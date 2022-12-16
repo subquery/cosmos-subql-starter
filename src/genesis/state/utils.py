@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
-from typing import Dict, List, Union
+from typing import Any, Dict, List, Optional
 
 
-def list_field_with_default(default: any):
+def list_field_with_default(default: Any):
     field(default_factory=lambda: [default])
 
 
@@ -18,7 +18,7 @@ class OwnAttrsMixin:
 
 class ListConstructorMixin:
     @classmethod
-    def from_dict_list(cls, list_: Union[List[Dict], type(None)]):
+    def from_dict_list(cls, list_: Optional[Dict]):
         if list_ is None:
             return []
 

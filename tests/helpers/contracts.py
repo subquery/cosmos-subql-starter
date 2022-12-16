@@ -80,7 +80,7 @@ class Cw20Contract(LedgerContract):
 
 class BridgeContract(LedgerContract):
     admin: Wallet = None
-    cfg: BridgeContractConfig = None
+    cfg: BridgeContractConfig
     gas_limit: int = 3000000
 
     def __init__(self, client: LedgerClient, admin: Wallet, cfg: BridgeContractConfig):
@@ -106,4 +106,4 @@ class BridgeContract(LedgerContract):
 
     def _instantiate(self) -> Address:
         assert (self.admin and self.cfg) is not None
-        return self.instantiate(self.cfg.to_dict(), self.admin)
+        return self.instantiate(self.cfg.to_dict(), self.admin)  # type: ignore

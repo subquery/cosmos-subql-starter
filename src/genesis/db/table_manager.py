@@ -8,7 +8,7 @@ from src.genesis.db.types import DBTypes
 
 def table_exists(db_conn: Connection, table: str) -> bool:
     with db_conn.cursor() as db:
-        return db.execute(
+        res_db_execute = db.execute(
             f"""
                 SELECT EXISTS (
                     SELECT FROM pg_tables WHERE
@@ -16,7 +16,11 @@ def table_exists(db_conn: Connection, table: str) -> bool:
                         tablename  = '{table}'
                 )
             """
-        ).fetchone()[0]
+        ).fetchone()
+
+        assert res_db_execute is not None
+
+        return res_db_execute[0]
 
 
 class TableManager:
@@ -29,14 +33,13 @@ class TableManager:
         self._db_conn = db_conn
 
     @classmethod
-    @property
-    def column_names(cls) -> Generator[str, Any, None]:
+    def get_column_names(cls) -> Generator[str, Any, None]:
         return (name for name, _ in cls._columns)
 
     @classmethod
     def select_query(cls) -> str:
         return f"""
-            SELECT {",".join(cls.column_names)} FROM {cls._table}
+            SELECT {",".join(cls.get_column_names())} FROM {cls._table}
         """
 
     def _ensure_table(self):

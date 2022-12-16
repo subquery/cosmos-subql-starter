@@ -1,16 +1,11 @@
-import sys
 import time
 import unittest
-from pathlib import Path
 
 from gql import gql
 
 from src.genesis.helpers.field_enums import NativeBalanceChangeFields
 from tests.helpers.entity_test import EntityTest
 from tests.helpers.graphql import filtered_test_query
-
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
 
 
 class TestNativeBalances(EntityTest):

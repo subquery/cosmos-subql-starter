@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-test_bank_state_balances = [
+test_bank_state_balances: List[Dict] = [
     {
         "address": "addr123",
         "coins": [
@@ -22,14 +22,14 @@ test_bank_state_supply: List[Dict] = [
     {"amount": "654", "denom": "b-token"},
 ]
 
-test_bank_state = {
+test_bank_state: Dict = {
     "balances": test_bank_state_balances,
     "denom_metadata": [],
     "params": {},
     "supply": test_bank_state_supply,
 }
 
-test_app_state = {
+test_app_state: Dict = {
     "airdrop": {},
     "auth": {},
     "authz": {},
@@ -52,7 +52,7 @@ test_app_state = {
     "wasm": {},
 }
 
-test_genesis_data = {
+test_genesis_data: Dict = {
     "app_hash": {},
     "app_state": test_app_state,
     "chain_id": "test",

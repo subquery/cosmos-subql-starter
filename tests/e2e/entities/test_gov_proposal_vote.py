@@ -1,8 +1,6 @@
 import datetime as dt
-import sys
 import time
 import unittest
-from pathlib import Path
 
 from cosmpy.aerial.client import utils
 from cosmpy.aerial.tx import Transaction
@@ -14,9 +12,6 @@ from google.protobuf import any_pb2
 from src.genesis.helpers.field_enums import GovProposalVoteFields
 from tests.helpers.entity_test import EntityTest
 from tests.helpers.graphql import filtered_test_query
-
-repo_root_path = Path(__file__).parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
 
 
 class TestGovernance(EntityTest):

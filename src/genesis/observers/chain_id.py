@@ -15,15 +15,20 @@ class ChainIdObserver(Observer):
     def filter_chain_id(next_: Tuple[str, Any]) -> bool:
         return next_[0].startswith(chain_id_keys_path)
 
+    @staticmethod
+    def map_chain_id(next_: Tuple[str, Any]) -> str:
+        return next_[1]
+
     def __init__(self, on_next=None, on_completed=None, on_error=None) -> None:
         super().__init__(on_next=on_next, on_completed=on_completed, on_error=on_error)
 
     def subscribe_to(
         self, observable: Observable, scheduler: Optional[Scheduler] = None
     ) -> DisposableBase:
+
         operators = [
             filter_(self.filter_chain_id),
-            map_(lambda next_: next_[1]),
+            map_(self.map_chain_id),
         ]
         if scheduler is not None:
             operators.insert(0, observe_on(scheduler=scheduler))

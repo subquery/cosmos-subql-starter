@@ -1,6 +1,4 @@
-import sys
 import unittest
-from pathlib import Path
 
 import grpc
 from cosmpy.aerial.client import LedgerClient, NetworkConfig
@@ -14,10 +12,6 @@ from tests.helpers.clients import (
     TestWithDBConn,
     TestWithGQLClient,
 )
-
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
-
 
 VALIDATOR_MNEMONIC = "nut grocery slice visit barrel peanut tumble patch slim logic install evidence fiction shield rich brown around arrest fresh position animal butter forget cost"
 DELEGATOR_MNEMONIC = "dismiss domain uniform image cute buzz ride anxiety nose canvas ripple stock buffalo bitter spirit maximum tone inner couch forum equal usage state scan"

@@ -25,7 +25,7 @@ class BankStateData:
 
 
 class BankState(OwnAttrsMixin, BankStateData):
-    def __init__(self, **kwargs: Dict[str, any]):
+    def __init__(self, **kwargs):
         kwargs["balances"] = Balance.from_dict_list(kwargs.get("balances"))
         kwargs["supply"] = Coin.from_dict_list(kwargs.get("supply"))
         super().__init__(**kwargs)

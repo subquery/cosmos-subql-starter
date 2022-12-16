@@ -1,7 +1,5 @@
-import sys
 import unittest
 from http.server import HTTPServer
-from pathlib import Path
 from threading import Thread
 from time import sleep
 from typing import List, Tuple
@@ -13,9 +11,6 @@ from src.genesis.state.bank import Balance
 from tests.helpers.genesis_data import test_genesis_data
 from tests.helpers.http_server import serve_test_data
 from tests.helpers.utils import check_attrs, check_genesis_entries
-
-repo_root_path = Path(__file__).parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
 
 
 class TestGenesis(unittest.TestCase):

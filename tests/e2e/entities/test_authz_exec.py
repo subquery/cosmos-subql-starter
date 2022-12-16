@@ -1,8 +1,6 @@
-import sys
 import time
 import unittest
 from datetime import datetime, timedelta
-from pathlib import Path
 
 from bip_utils import Bip39MnemonicGenerator, Bip39WordsNum
 from cosmpy.aerial.client.staking import create_delegate_msg
@@ -26,9 +24,6 @@ from src.genesis.helpers.field_enums import (
 )
 from tests.helpers.entity_test import EntityTest
 from tests.helpers.regexes import msg_id_regex
-
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.insert(0, str(repo_root_path))
 
 
 class TestAuthzExec(EntityTest):

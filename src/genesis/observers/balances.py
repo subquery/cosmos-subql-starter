@@ -24,7 +24,7 @@ _logger = get_logger(__name__)
 
 class NativeBalancesObserver(Observer):
     @staticmethod
-    def filter_balances(next_: Tuple[str, any]) -> bool:
+    def filter_balances(next_: Tuple[str, Balance]) -> bool:
         return next_[0].startswith(native_balances_keys_path)
 
     @staticmethod
@@ -54,7 +54,7 @@ class NativeBalancesManager(TableManager):
     _observer: NativeBalancesObserver
     _subscription: DisposableBase
     _db_conn: Connection
-    _table = NativeBalances.table
+    _table = NativeBalances.get_table()
     _columns = (
         ("id", DBTypes.text),
         ("account_id", DBTypes.text),
@@ -81,13 +81,13 @@ class NativeBalancesManager(TableManager):
     @classmethod
     def _get_name_and_index(
         cls, e: UniqueViolation, balances: List[Balance]
-    ) -> Tuple[str, Tuple[int, int]]:
+    ) -> Tuple[str, Optional[int], Optional[int]]:
         # Extract account name and coin from error string
         duplicate_balance_id = cls._extract_id_from_unique_violation_exception(e)
 
         # Find duplicate balance index
-        duplicate_balance_index = None
-        duplicate_coin_index = None
+        duplicate_balance_index: Optional[int] = None
+        duplicate_coin_index: Optional[int] = None
         for i in range(len(balances)):
             for j in range(len(balances[i].coins)):
                 if (
@@ -107,20 +107,17 @@ class NativeBalancesManager(TableManager):
                 try:
                     duplicate_occured = False
                     with db.copy(
-                        f'COPY {self._table} ({",".join(self.column_names)}) FROM STDIN'
+                        f'COPY {self._table} ({",".join(self.get_column_names())}) FROM STDIN'
                     ) as copy:
                         for balance in balances:
                             for coin in balance.coins:
                                 id_ = self._get_db_id(balance.address, coin.denom)
                                 copy.write_row(
                                     (
-                                        f"{v}"
-                                        for v in (
-                                            id_,
-                                            balance.address,
-                                            coin.amount,
-                                            coin.denom,
-                                        )
+                                        str(id_),
+                                        str(balance.address),
+                                        str(coin.amount),
+                                        str(coin.denom),
                                     )
                                 )
 
@@ -140,14 +137,18 @@ class NativeBalancesManager(TableManager):
                         )
 
                     # Compare balance in genesis with balance in db
-                    amount_on_list = (
+                    amount_on_list: str = (
                         balances[duplicate_balance_index]
                         .coins[duplicate_coin_index]
                         .amount
                     )
-                    amount_in_db = db.execute(
+                    res_db_select = db.execute(
                         NativeBalances.select_where(f"id = '{duplicate_balance_id}'")
-                    ).fetchone()[2]
+                    ).fetchone()
+
+                    assert res_db_select is not None
+
+                    amount_in_db: str = res_db_select[2]
 
                     if amount_on_list != amount_in_db:
                         raise RuntimeError(

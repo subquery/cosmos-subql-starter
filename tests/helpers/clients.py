@@ -1,7 +1,5 @@
 import logging
-import sys
 import unittest
-from pathlib import Path
 from typing import List, Union
 
 import dateutil.parser as dp
@@ -14,10 +12,6 @@ from psycopg import Connection, Cursor
 from src.genesis.db import table_exists
 
 from .gql_queries import latest_block_timestamp
-
-repo_root_path = Path(__file__).parent.parent.parent.parent.absolute()
-sys.path.append(repo_root_path)
-
 
 aiohttp_logger.setLevel(logging.WARNING)
 
