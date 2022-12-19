@@ -14,9 +14,14 @@ jobs:
         shell: bash
     steps:
        - uses: actions/checkout@v2
+         with:
+           submodules: recursive
+           token: ${{ secrets.GH_ACCESS_TOKEN }}
+
        - uses: actions/setup-python@v4
          with:
            python-version: 3.9
+
        - name: Update
          run: sudo apt update
        - name: Install OS dependencies

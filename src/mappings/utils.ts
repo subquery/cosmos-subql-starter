@@ -1,6 +1,16 @@
 import {CosmosBlock, CosmosEvent, CosmosMessage, CosmosTransaction} from "@subql/types-cosmos";
 import {Account, Interface, UnprocessedEntity} from "../types";
-import { createHash } from "crypto";
+import {createHash} from "crypto";
+import {Attribute} from "@cosmjs/stargate/build/logs";
+
+export type Primitive = CosmosEvent | CosmosMessage | CosmosTransaction | CosmosBlock;
+
+export interface Primitives {
+  event?: CosmosEvent;
+  msg?: CosmosMessage;
+  tx?: CosmosTransaction;
+  block?: CosmosBlock;
+}
 
 // messageId returns the id of the message passed or
 // that of the message which generated the event passed.
@@ -43,15 +53,6 @@ export function getJaccardResult(payload: object): Interface {
   return prediction.getInterface(); // return best matched Interface to contract
 }
 
-export type Primitive = CosmosEvent | CosmosMessage | CosmosTransaction | CosmosBlock;
-
-export interface Primitives {
-  event?: CosmosEvent;
-  msg?: CosmosMessage;
-  tx?: CosmosTransaction;
-  block?: CosmosBlock;
-}
-
 export async function attemptHandling(input: Primitive,
   handlerFn: (primitive) => Promise<void>,
   errorFn: (Error, Primitive) => void): Promise<void> {
@@ -92,7 +93,9 @@ export async function trackUnprocessed(error: Error, primitives: Primitives): Pr
             block.block.id : error.stack;
     sha256.write(hashInput);
     sha256.end();
-    // NB: ID is base64 encoded representation of the sha256 of `raw`.
+    // NB: ID is base64 encoded representation of the sha256 of either:
+    // 1. the conventional ID of the "highest-level" primitive available or
+    // 2. the error stacktrace, if none are available (i.e. handle block error)
     const id = sha256.read().toString("base64");
     const eventId = event ? messageId(event) : undefined;
     const _messageId = event ? messageId(event) : undefined;
@@ -165,4 +168,22 @@ class LegacyBridgeSwapStructure extends Structure {
   static getInterface() {
     return Interface.LegacyBridgeSwap;
   }
+}
+
+export interface BaseEventAttributesI {
+  action: string;
+}
+
+// (see: https://github.com/CosmWasm/wasmd/blob/main/x/wasm/keeper/events.go)
+export interface WasmdEventAttributesI extends BaseEventAttributesI {
+  _contract_address: string;
+}
+
+export function parseAttributes<T extends BaseEventAttributesI>(attributes: readonly Attribute[]): T {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return attributes.reduce((acc, curr) => {
+    acc[curr.key] = curr.value;
+    return acc as T;
+  }, {});
 }

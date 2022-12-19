@@ -130,3 +130,10 @@ dataSources:
           kind: cosmos/MessageHandler
           filter:
             type: "/cosmos.authz.v1beta1.MsgExec"
+        - handler: handleAlmanacRegistration
+          kind: cosmos/EventHandler
+          filter:
+            type: "wasm"
+            messageFilter:
+              type: "/cosmwasm.wasm.v1.MsgExecuteContract"
+              contractCall: "register"

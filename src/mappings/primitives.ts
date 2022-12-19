@@ -143,6 +143,7 @@ async function _handleEvent(event: CosmosEvent): Promise<void> {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function _handleBlockError(err: Error, _: CosmosBlock): Promise<void> {
   // NB: we won't have persisted any related entities yet.
   await trackUnprocessed(err, {});

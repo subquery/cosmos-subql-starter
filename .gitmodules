@@ -2,3 +2,7 @@
 	path = subql
 	url = https://github.com/fetchai/subql
 	branch = main
+[submodule "uagents"]
+	path = uagents
+	url = https://github.com/fetchai/uagents
+  branch = main

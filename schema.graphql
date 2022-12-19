@@ -167,6 +167,45 @@ type AuthzExec @entity {
   block: Block!
 }
 
+type Endpoint @jsonField {
+  url: String!
+  weight: Int!
+}
+
+type Agent @entity {
+  # id is the agent's address
+  id: ID!
+  almanacRegistrations: [AlmanacRegistration] @derivedFrom(field: "agent")
+}
+
+type AlmanacService @jsonField {
+  protocols: [String!]
+  endpoints: [Endpoint!]!
+}
+
+type AlmanacRecord @entity {
+  id: ID!
+  service: AlmanacService
+#  registration: AlmanacRegistration! @derivedFrom(field: "record")
+#  event: Event!
+  transaction: Transaction!
+  block: Block!
+}
+
+type AlmanacRegistration @entity {
+  id: ID!
+  expiryHeight: BigInt! @index
+  agent: Agent!
+  signature: String!
+  sequence: Int!
+  contract: Contract!
+  record: AlmanacRecord!
+#  TODO(workaround): consider relating to message
+#  event: Event!
+  transaction: Transaction!
+  block: Block!
+}
+
 # NB: AuthzExec --|{ Message join table
 type AuthzExecMessage @entity {
   id: ID!

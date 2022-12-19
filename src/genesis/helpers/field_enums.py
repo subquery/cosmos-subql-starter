@@ -308,3 +308,40 @@ class AuthzExecMessageFields(NamedFields):
     @classmethod
     def get_table(cls):
         return "authz_exec_messages"
+
+
+class Agents(NamedFields):
+    id = 0
+
+    @classmethod
+    def get_table(self):
+        return "agents"
+
+
+class AlmanacRegistrations(NamedFields):
+    id = 0
+    expiry_height = 1
+    signature = 2
+    sequence = 3
+    agent_id = 4
+    record_id = 5
+    transaction_id = 6
+    block_id = 7
+    #     event_id = 8
+    #     record_id = 9
+
+    @classmethod
+    def get_table(self):
+        return "almanac_registrations"
+
+
+class AlmanacRecords(NamedFields):
+    id = 0
+    service = 1
+    transaction_id = 2
+    block_id = 3
+    #     event_id = 4
+
+    @classmethod
+    def get_table(self):
+        return "almanac_records"

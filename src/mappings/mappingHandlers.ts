@@ -1,4 +1,5 @@
 export * from "./authz";
+export * from "./almanac";
 export * from "./bank";
 export * from "./dist";
 export * from "./gov";
