@@ -137,7 +137,7 @@ async function saveContractEvent(instantiateMsg: InstantiateContractMessage, con
 
   const contract = Contract.create({
     id: contract_address,
-    interfaces: [getJaccardResult(JSON.parse(instantiateMsg.payload))],
+    interface: getJaccardResult(JSON.parse(instantiateMsg.payload)),
     storeMessageId: storeCodeMsg.id,
     instantiateMessageId: instantiateMsg.id
   });

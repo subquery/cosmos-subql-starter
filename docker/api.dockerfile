@@ -27,7 +27,7 @@ WORKDIR /app
 
 COPY --from=builder /build/packages/query/dist /app/dist
 COPY --from=builder /build/packages/query/bin /app/bin
-COPY --from=builder /build/packages/query/package.json /app/
+COPY --from=builder /build/packages/query/package.json /app/package.json
 COPY --from=builder /build/node_modules /app/node_modules
 
 COPY --from=builder /build/packages/common /app/node_modules/@subql/common

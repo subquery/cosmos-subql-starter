@@ -38,6 +38,7 @@ services:
       CHAIN_ID: "fetchchain"
     volumes:
       - ./:/app
+      - ./docker/node-cosmos/package.json:/usr/local/lib/node_modules/@subql/node-cosmos/package.json
     command:
       - -f=/app
       - --db-schema=app
@@ -68,6 +69,7 @@ services:
       DB_PORT: 5432
     volumes:
       - ./subql/packages/query/dist:/app/dist
+      - ./subql/packages/query/package.json:/app/package.json
       - ./subql/node_modules:/app/node_modules
       - ./subql/packages/query/node_modules/.bin:/app/node_modules/.bin
       - ./subql/packages/common:/app/node_modules/@subql/common

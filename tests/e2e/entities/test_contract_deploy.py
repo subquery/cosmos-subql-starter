@@ -55,7 +55,7 @@ class TestContractDeploy(EntityTest):
             "contractEntity": {
                 "query": ContractFields.select_query(),
                 "equal": {
-                    ContractFields.interfaces.value: "{CW20}",
+                    ContractFields.interface.value: "CW20",
                     ContractFields.id.value: address,
                 },
                 "not_null": {
@@ -328,7 +328,7 @@ class TestContractDeploy(EntityTest):
         contract_nodes = """
             {
                 id
-                interfaces
+                interface
                 storeMessage {
                     id
                     codeId
@@ -399,21 +399,21 @@ class TestContractDeploy(EntityTest):
             }
         )
 
-        # query contract, filter by interfaces
-        filter_by_interfaces_equals = filtered_contract_query(
-            {"interfaces": {"isNull": False}}
+        # query contract, filter by contract interface
+        filter_by_interface_equals = filtered_contract_query(
+            {"interface": {"isNull": False}}
         )
 
         for (name, query) in [
             ("by block timestamp range", filter_by_block_timestamp_range),
             ("by id equals", filter_by_id_equals),
-            ("by interfaces equals", filter_by_interfaces_equals),
+            ("by interface equals", filter_by_interface_equals),
         ]:
             with self.subTest(name):
                 result = self.gql_client.execute(query)
                 """
                 ["contracts"]["nodes"][0] denotes the sequence of keys to access the message contents queried for above.
-                This provides {"id":contract address, "interfaces: predicted contract interface}
+                This provides {"id":contract address, "interface: predicted contract interface}
                 which can be destructured for the values of interest.
                 """
                 contracts = result["contracts"]["nodes"]
@@ -430,7 +430,7 @@ class TestContractDeploy(EntityTest):
                     "\nGQLError: contract address does not match",
                 )
                 self.assertIsNotNone(
-                    contracts[0]["interfaces"],
+                    contracts[0]["interface"],
                     "\nGQLError: contract interface prediction is null",
                 )
 

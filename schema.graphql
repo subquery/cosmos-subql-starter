@@ -98,7 +98,7 @@ type DistDelegatorClaim @entity {
 
 type Contract @entity {
   id: ID!
-  interfaces: [Interface]
+  interface: Interface!
   storeMessage: StoreContractMessage!
   instantiateMessage: InstantiateContractMessage!
 }
