@@ -36,6 +36,8 @@ services:
       START_BLOCK: "1"
       NETWORK_ENDPOINT: "http://fetch-node:26657"
       CHAIN_ID: "fetchchain"
+    volumes:
+      - ./docker/node-cosmos/package.json:/usr/local/lib/node_modules/@subql/node-cosmos/package.json
     command:
       - -f=/app
       - --db-schema=app
@@ -64,6 +66,8 @@ services:
       DB_DATABASE: "subquery"
       DB_HOST: postgres
       DB_PORT: 5432
+    volumes:
+      - ./subql/packages/query/package.json:/app/package.json
     entrypoint: ["/sbin/tini", "--", "yarn", "start:prod"]
     command:
       - --name=app

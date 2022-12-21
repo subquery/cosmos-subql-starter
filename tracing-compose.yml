@@ -38,6 +38,7 @@ services:
       OPEN_TELEMETRY_COLLECTOR_URL: "http://otel-collector:4317"
     volumes:
       - ./:/app
+      - ./docker/node-cosmos/package.json:/usr/local/lib/node_modules/@subql/node-cosmos/package.json
       - ./docker/node-cosmos:/usr/local/lib/node_modules/@subql/node-cosmos
       - ./subql/packages/common:/usr/local/lib/node_modules/@subql/node-cosmos/node_modules/@subql/common
     command:
@@ -77,6 +78,7 @@ services:
       - ./subql/node_modules:/app/node_modules
       - ./subql/packages/query/node_modules/.bin:/app/node_modules/.bin
       - ./subql/packages/common:/app/node_modules/@subql/common
+      - ./subql/packages/query/package.json:/app/package.json
     entrypoint: ["/sbin/tini", "--", "yarn", "start:prod"]
     command:
       - --name=app
