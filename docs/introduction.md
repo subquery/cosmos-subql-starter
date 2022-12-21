@@ -186,6 +186,7 @@ _(see: [schema.graphql](https://github.com/ledger-subquery/blob/main/schema.grap
 - transactions
 - messages
 - events
+- event attributes
 
 ### Entity relationship diagrams
 
