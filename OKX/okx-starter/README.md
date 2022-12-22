@@ -1,4 +1,4 @@
-# SubQuery - Starter Package for Cosmos/Cronos
+# SubQuery - Starter Package for OKX/OKC
 
 A basic Cronos EVM example project that uses the Ethereum API with an event and call handler. Read more about this at https://academy.subquery.network/build/cosmos-evm.html.
 
@@ -6,7 +6,7 @@ The Starter Package is an example that you can use as a starting point for devel
 
 A SubQuery package defines which data SubQuery will index from the blockchain, and how it will store it.
 
-This Starter Package by default allows **indexing transactions and approvals of Wrapped CRO Token**.
+This Starter Package by default allows **indexing transactions and approvals [USDT](https://www.oklink.com/en/okc/address/0x382bb369d343125bfb2117af9c149795c6c65c50)**.
 
 ## Preparation
 
