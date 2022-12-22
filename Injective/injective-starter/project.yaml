@@ -21,9 +21,14 @@ network:
   endpoint: "http://archival-sentry-equinix-2.injective.dev:26657"
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   # dictionary: "https://api.subquery.network/sq/subquery/injective-hub-dictionary"
+  chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
+    injective.exchange.v1beta1.MsgCreateSpotLimitOrder: # Key is not used, it matches the one above and is inferred from the file
+      file: ./proto/injective/exchange/v1beta1.MsgCreateSpotLimitOrder.proto
+      messages:
+        - MsgCreateSpotLimitOrder
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 1
+    startBlock: 22186475
     mapping:
       file: ./dist/index.js
       handlers:
@@ -32,13 +37,13 @@ dataSources:
         #   kind: cosmos/BlockHandler
         # Using transaction handlers without filters slows your project down as they can be executed with each and every block
         # - handler: handleTransaction
-        - handler: handleEvent
-          kind: cosmos/EventHandler
-          filter:
-            type: transfer
-            messageFilter:
-              type: /cosmos.bank.v1beta1.MsgSend
+        # - handler: handleEvent
+        #   kind: cosmos/EventHandler
+        #   filter:
+        #     type: transfer
+        #     messageFilter:
+        #       type: /injective.exchange.v1beta1.MsgCreateSpotLimitOrder
         - handler: handleMessage
           kind: cosmos/MessageHandler
           filter:
-            type: /cosmos.bank.v1beta1.MsgSend
+            type: /injective.exchange.v1beta1.MsgCreateSpotLimitOrder

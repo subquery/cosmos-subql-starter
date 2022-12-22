@@ -1,10 +1,17 @@
-import { TransferEvent, Message } from "../types";
-import {
-  CosmosEvent,
-  CosmosBlock,
-  CosmosMessage,
-  CosmosTransaction,
-} from "@subql/types-cosmos";
+import { SpotLimitOrder } from "../types";
+import { CosmosMessage } from "@subql/types-cosmos";
+
+type SpotLimitOrderMessage = {
+  market_id: string;
+  order_info: {
+    subaccount_id: string;
+    fee_recipient: string;
+    price: string;
+    quantity: string;
+  };
+  order_type: string;
+  trigger_price?: any;
+};
 
 /*
 export async function handleBlock(block: CosmosBlock): Promise<void> {
@@ -21,19 +28,6 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
     timestamp: tx.block.block.header.time,
   });
   await transactionRecord.save();
-}
-*/
-
-export async function handleMessage(msg: CosmosMessage): Promise<void> {
-  const messageRecord = Message.create({
-    id: `${msg.tx.hash}-${msg.idx}`,
-    blockHeight: BigInt(msg.block.block.header.height),
-    txHash: msg.tx.hash,
-    from: msg.msg.decodedMsg.fromAddress,
-    to: msg.msg.decodedMsg.toAddress,
-    amount: JSON.stringify(msg.msg.decodedMsg.amount),
-  });
-  await messageRecord.save();
 }
 
 export async function handleEvent(event: CosmosEvent): Promise<void> {
@@ -58,4 +52,25 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
     }
   }
   await eventRecord.save();
+}
+*/
+
+export async function handleMessage(
+  msg: CosmosMessage<SpotLimitOrderMessage>
+): Promise<void> {
+  logger.info(JSON.stringify(msg));
+  const spotLimitOrder = SpotLimitOrder.create({
+    id: `${msg.tx.hash}-${msg.idx}`,
+    blockHeight: BigInt(msg.block.block.header.height),
+    txHash: msg.tx.hash,
+    marketID: "",
+    from: "",
+    orderType: msg.msg.decodedMsg.order_type,
+    triggerPrice: msg.msg.decodedMsg.trigger_price,
+    subAccountID: msg.msg.decodedMsg.order_info.subaccount_id,
+    feeRecipient: msg.msg.decodedMsg.order_info.fee_recipient,
+    price: BigInt(msg.msg.decodedMsg.order_info.price),
+    quantity: BigInt(msg.msg.decodedMsg.order_info.quantity),
+  });
+  await spotLimitOrder.save();
 }
