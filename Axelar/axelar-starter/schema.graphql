@@ -13,20 +13,15 @@
 #   timestamp: String!
 # }
 
-type TransferEvent @entity {
+type depositConfirmation @entity {
   id: ID!
   blockHeight: BigInt!
   txHash: String!
-  recipient: String!
-  sender: String!
+  type: String!
+  sourceChain: String!
+  depositAddress: String!
+  destinationChain: String!
+  destinationAddress: String!
   amount: String!
-}
-
-type Message @entity {
-  id: ID!
-  blockHeight: BigInt!
-  txHash: String!
-  from: String!
-  to: String!
-  amount: String!
+  action: String!
 }

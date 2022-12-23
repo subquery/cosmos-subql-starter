@@ -23,7 +23,7 @@ network:
   # dictionary: "https://api.subquery.network/sq/subquery/axelar-hub-dictionary"
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 1
+    startBlock: 5308110
     mapping:
       file: ./dist/index.js
       handlers:
@@ -35,10 +35,10 @@ dataSources:
         - handler: handleEvent
           kind: cosmos/EventHandler
           filter:
-            type: transfer
-            messageFilter:
-              type: /cosmos.bank.v1beta1.MsgSend
-        - handler: handleMessage
-          kind: cosmos/MessageHandler
-          filter:
-            type: /cosmos.bank.v1beta1.MsgSend
+            type: "depositConfirmation"
+            # messageFilter:
+            #   type: /axelar.nexus.v1beta1.FeeDeducted
+        # - handler: handleMessage
+        #   kind: cosmos/MessageHandler
+        #   filter:
+        #     type: /cosmos.bank.v1beta1.MsgSend
