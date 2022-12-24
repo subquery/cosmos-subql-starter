@@ -13,15 +13,15 @@
 #   timestamp: String!
 # }
 
-type depositConfirmation @entity {
+type DepositConfirmation @entity {
   id: ID!
   blockHeight: BigInt!
   txHash: String!
-  type: String!
   sourceChain: String!
-  depositAddress: String!
-  destinationChain: String!
-  destinationAddress: String!
+  from: String!
+  toChain: String!
+  to: String!
   amount: String!
-  action: String!
+  asset: String
+  transferID: String!
 }

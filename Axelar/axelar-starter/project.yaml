@@ -23,7 +23,7 @@ network:
   # dictionary: "https://api.subquery.network/sq/subquery/axelar-hub-dictionary"
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 5308110
+    startBlock: 5262 # The first deposit event occurs on this block
     mapping:
       file: ./dist/index.js
       handlers:
@@ -36,8 +36,6 @@ dataSources:
           kind: cosmos/EventHandler
           filter:
             type: "depositConfirmation"
-            # messageFilter:
-            #   type: /axelar.nexus.v1beta1.FeeDeducted
         # - handler: handleMessage
         #   kind: cosmos/MessageHandler
         #   filter:

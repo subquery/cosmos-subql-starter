@@ -6,7 +6,7 @@ The Starter Package is an example that you can use as a starting point for devel
 
 A SubQuery package defines which data SubQuery will index from the blockchain, and how it will store it.
 
-This Starter Package by default allows **indexing transfer events and messages from CosmosHub**.
+This Starter Package by default allows **indexing all confirmed deposits from Axelar**.
 
 ## Preparation
 
