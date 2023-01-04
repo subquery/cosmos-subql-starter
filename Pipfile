@@ -16,7 +16,6 @@ click = "*"
 
 [dev-packages]
 pytest = "*"
-uagents = {path = "./uagents", editable = true}
 black = "*"
 isort = "*"
 flake8 = "*"

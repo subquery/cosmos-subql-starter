@@ -11,8 +11,8 @@ from src.genesis.helpers.field_enums import Agents, AlmanacRecords, AlmanacRegis
 from tests.helpers.contracts import AlmanacContract, DefaultAlmanacContractConfig
 from tests.helpers.entity_test import EntityTest
 from tests.helpers.graphql import filtered_test_query
+from tests.helpers.identity import Identity
 from tests.helpers.regexes import block_id_regex, msg_id_regex, tx_id_regex
-from uagents.src.nexus.crypto import Identity
 
 
 def gql_by_expiry_height(registration_node: Dict) -> int:
