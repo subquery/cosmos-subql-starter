@@ -19,7 +19,7 @@ network:
   # This endpoint must be a public non-pruned archive node
   # Public nodes may be rate limited, which can affect indexing speed
   # When developing your project we suggest getting a private API key
-  endpoint: "https://rpc.cosmos.network"
+  endpoint: "https://cosmos-mainnet-archive.allthatnode.com:26657"
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   dictionary: "https://api.subquery.network/sq/subquery/cosmos-hub-dictionary"
   chainTypes:
