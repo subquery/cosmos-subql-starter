@@ -1,4 +1,4 @@
-import { TransferEvent, Message, Transaction } from "../types";
+import { TransferEvent, Message } from "../types";
 import {
   CosmosEvent,
   CosmosBlock,
@@ -31,17 +31,19 @@ export async function handleMessage(msg: CosmosMessage): Promise<void> {
     txHash: msg.tx.hash,
     from: msg.msg.decodedMsg.fromAddress,
     to: msg.msg.decodedMsg.toAddress,
-    amount: JSON.stringify(msg.msg.decodedMsg.amount)
+    amount: JSON.stringify(msg.msg.decodedMsg.amount),
   });
   await messageRecord.save();
 }
 
 export async function handleEvent(event: CosmosEvent): Promise<void> {
-  const eventRecord = new TransferEvent(`${event.tx.hash}-${event.msg.idx}-${event.idx}`,);
+  const eventRecord = new TransferEvent(
+    `${event.tx.hash}-${event.msg.idx}-${event.idx}`
+  );
   eventRecord.blockHeight = BigInt(event.block.block.header.height);
   eventRecord.txHash = event.tx.hash;
-  for(const attr of event.event.attributes) {
-    switch(attr.key) {
+  for (const attr of event.event.attributes) {
+    switch (attr.key) {
       case "recipient":
         eventRecord.recipient = attr.value;
         break;
