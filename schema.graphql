@@ -148,6 +148,7 @@ type Account @entity {
   chainId: String! @index
   nativeBalanceChanges: [NativeBalanceChange]! @derivedFrom(field: "account")
   cw20BalanceChanges: [Cw20BalanceChange]! @derivedFrom(field: "account")
+  tuningData: [Cw20BalanceChange]! @derivedFrom(field: "account")
   genesisBalances: [GenesisBalance] @derivedFrom(field: "account")
 }
 
@@ -238,6 +239,18 @@ type IbcTransfer @entity {
 }
 
 type Cw20BalanceChange @entity {
+  id: ID!
+  balanceOffset: BigInt!
+  contract: Contract!
+  account: Account!
+  executeContractMessage: ExecuteContractMessage!
+  event: Event!
+  message: Message!
+  transaction: Transaction!
+  block: Block!
+}
+
+type TuningData @entity {
   id: ID!
   balanceOffset: BigInt!
   contract: Contract!

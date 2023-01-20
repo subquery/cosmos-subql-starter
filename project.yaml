@@ -137,3 +137,10 @@ dataSources:
             messageFilter:
               type: "/cosmwasm.wasm.v1.MsgExecuteContract"
               contractCall: "register"
+        - handler: handleTuningContractExecute
+          kind: cosmos/EventHandler
+          filter:
+            type: "execute"
+            messageFilter:
+              type: "/cosmwasm.wasm.v1.MsgExecuteContract"
+              contractCall: "tuning"
