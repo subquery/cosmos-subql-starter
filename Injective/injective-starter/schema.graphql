@@ -29,7 +29,6 @@ type SpotLimitOrder @entity {
   from: String! # sender
   marketID: String!
   orderType: String!
-  triggerPrice: String
   subAccountID: String!
   feeRecipient: String!
   price: BigInt!

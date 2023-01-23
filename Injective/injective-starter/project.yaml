@@ -26,6 +26,10 @@ network:
       file: ./proto/injective/exchange/v1beta1/tx.proto
       messages:
         - MsgCreateSpotLimitOrder
+    injective.exchange.v1beta1.SpotOrder:
+      file: ./proto/injective/exchange/v1beta1/exchange.proto
+      messages:
+        - SpotOrder
 dataSources:
   - kind: cosmos/Runtime
     startBlock: 22186475

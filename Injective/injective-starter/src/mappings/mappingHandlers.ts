@@ -2,15 +2,17 @@ import { SpotLimitOrder } from "../types";
 import { CosmosMessage } from "@subql/types-cosmos";
 
 type SpotLimitOrderMessage = {
-  market_id: string;
-  order_info: {
-    subaccount_id: string;
-    fee_recipient: string;
-    price: string;
-    quantity: string;
+  sender: string;
+  order: {
+    marketId: string;
+    orderType: string;
+    orderInfo: {
+      subaccountId: string;
+      feeRecipient: string;
+      price: string;
+      quantity: string;
+    };
   };
-  order_type: string;
-  trigger_price?: any;
 };
 
 /*
@@ -55,21 +57,21 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
 }
 */
 
-export async function handleMessage(msg: CosmosMessage<SpotLimitOrderMessage>): Promise<void> {
-  logger.info(JSON.stringify(msg));
+export async function handleMessage(
+  msg: CosmosMessage<SpotLimitOrderMessage>
+): Promise<void> {
+  //logger.info(JSON.stringify(msg));
   const spotLimitOrder = SpotLimitOrder.create({
     id: `${msg.tx.hash}-${msg.idx}`,
     blockHeight: BigInt(msg.block.block.header.height),
     txHash: msg.tx.hash,
-    marketID: "",
-    from: "",
-    orderType: msg.msg.decodedMsg.order_type,
-    triggerPrice: msg.msg.decodedMsg.trigger_price,
-    subAccountID: msg.msg.decodedMsg.order_info.subaccount_id,
-    feeRecipient: msg.msg.decodedMsg.order_info.fee_recipient,
-    price: BigInt(msg.msg.decodedMsg.order_info.price),
-    quantity: BigInt(msg.msg.decodedMsg.order_info.quantity),
+    from: msg.msg.decodedMsg.sender,
+    marketID: msg.msg.decodedMsg.order.marketId,
+    orderType: msg.msg.decodedMsg.order.orderType,
+    subAccountID: msg.msg.decodedMsg.order.orderInfo.subaccountId,
+    feeRecipient: msg.msg.decodedMsg.order.orderInfo.feeRecipient,
+    price: BigInt(msg.msg.decodedMsg.order.orderInfo.price),
+    quantity: BigInt(msg.msg.decodedMsg.order.orderInfo.quantity),
   });
   await spotLimitOrder.save();
-  
 }
