@@ -55,9 +55,7 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
 }
 */
 
-export async function handleMessage(
-  msg: CosmosMessage<SpotLimitOrderMessage>
-): Promise<void> {
+export async function handleMessage(msg: CosmosMessage<SpotLimitOrderMessage>): Promise<void> {
   logger.info(JSON.stringify(msg));
   const spotLimitOrder = SpotLimitOrder.create({
     id: `${msg.tx.hash}-${msg.idx}`,
@@ -73,4 +71,5 @@ export async function handleMessage(
     quantity: BigInt(msg.msg.decodedMsg.order_info.quantity),
   });
   await spotLimitOrder.save();
+  
 }

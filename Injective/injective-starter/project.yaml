@@ -23,7 +23,7 @@ network:
   # dictionary: "https://api.subquery.network/sq/subquery/injective-hub-dictionary"
   chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
     injective.exchange.v1beta1.MsgCreateSpotLimitOrder: # Key is not used, it matches the one above and is inferred from the file
-      file: ./proto/injective/exchange/v1beta1.MsgCreateSpotLimitOrder.proto
+      file: ./proto/injective/exchange/v1beta1/tx.proto
       messages:
         - MsgCreateSpotLimitOrder
 dataSources:
