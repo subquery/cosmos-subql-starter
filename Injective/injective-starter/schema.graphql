@@ -33,4 +33,5 @@ type SpotLimitOrder @entity {
   feeRecipient: String!
   price: BigInt!
   quantity: BigInt!
+  amount: BigInt!
 }

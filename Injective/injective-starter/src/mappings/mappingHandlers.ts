@@ -72,6 +72,9 @@ export async function handleMessage(
     feeRecipient: msg.msg.decodedMsg.order.orderInfo.feeRecipient,
     price: BigInt(msg.msg.decodedMsg.order.orderInfo.price),
     quantity: BigInt(msg.msg.decodedMsg.order.orderInfo.quantity),
+    amount:
+      BigInt(msg.msg.decodedMsg.order.orderInfo.price) *
+      BigInt(msg.msg.decodedMsg.order.orderInfo.quantity),
   });
   await spotLimitOrder.save();
 }

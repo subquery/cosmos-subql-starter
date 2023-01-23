@@ -1,12 +1,12 @@
-# SubQuery - Starter Package for Cosmos Axelar
+# SubQuery - Starter Package for Cosmos Injective
 
-A basic Cosmos (based on Axelar) example project with an event and message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
+A basic Cosmos (based on Injective) example project with an event and message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
 
 The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
 
 A SubQuery package defines which data SubQuery will index from the blockchain, and how it will store it.
 
-This Starter Package by default allows **indexing transfer events and messages from CosmosHub**.
+This Starter Package by default allows **indexing all spot limit orders from Injective**.
 
 ## Preparation
 
@@ -85,27 +85,20 @@ Finally, you should see a GraphQL playground is showing in the explorer and the 
 With this project can try to query with the following code to get a taste of how it works.
 
 ```graphql
-{
-  query {
-    transferEvents(first: 5) {
-      nodes {
-        id
-        blockHeight
-        txHash
-        recipient
-        sender
-        amount
-      }
-    }
-    messages(first: 5) {
-      nodes {
-        id
-        blockHeight
-        txHash
-        from
-        to
-        amount
-      }
+query {
+  spotLimitOrders(first: 50, orderBy: AMOUNT_DESC) {
+    totalCount
+    nodes {
+      id
+      blockHeight
+      txHash
+      marketID
+      orderType
+      subAccountID
+      feeRecipient
+      price
+      quantity
+      amount
     }
   }
 }
