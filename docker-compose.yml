@@ -80,7 +80,7 @@ services:
       - --indexer=http://subquery-node:3000
 
   fetch-node:
-    image: fetchai/fetchd:0.10.6
+    image: jonathansumner/fetchd-fees-test:latest
     entrypoint: ["sh", "-c", "/scripts/start_cosmos_node.sh"]
     environment:
       BINARY: fetchd

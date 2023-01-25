@@ -107,6 +107,7 @@ async function _handleMessage(msg: CosmosMessage): Promise<void> {
 }
 
 async function _handleEvent(event: CosmosEvent): Promise<void> {
+  logger.fatal(`${JSON.stringify(JSON.stringify(event.event.type, null, 2))}`);
   logger.info(`[handleEvent] (tx ${event.tx.hash}): indexing event ${event.idx + 1} / ${event.tx.tx.events.length}`);
   logger.debug(`[handleEvent] (event.event): ${JSON.stringify(event.event, null, 2)}`);
   logger.debug(`[handleEvent] (event.log): ${JSON.stringify(event.log, null, 2)}`);
