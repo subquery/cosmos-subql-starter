@@ -41,7 +41,7 @@ network:
         - MsgInitialClaim
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 1
+    startBlock: 6000000
     mapping:
       file: ./dist/index.js
       handlers:
