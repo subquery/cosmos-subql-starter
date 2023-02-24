@@ -87,14 +87,13 @@ With this project can try to query with the following code to get a taste of how
 ```graphql
 {
   query {
-    transfersEvents(first: 5) {
+    transferEvents(first: 5) {
       nodes {
         id
         blockHeight
         recipient
         sender
         amount
-        spender
       }
     }
     messages(first: 5) {

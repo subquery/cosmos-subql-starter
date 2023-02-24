@@ -1,4 +1,4 @@
-import { TransferEvent, Message, Transaction } from "../types";
+import { TransferEvent, Message } from "../types";
 import {
   CosmosEvent,
   CosmosBlock,
