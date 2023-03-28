@@ -1,0 +1,10 @@
+type DelegatorReward @entity {
+  id: ID!
+  blockHeight: BigInt
+  txHash: String
+  feeDenomination: String
+  feeAmount: String
+  rewardAmount: String
+  delegatorAddress: String
+  validatorAddress: String
+}

@@ -1,0 +1,45 @@
+specVersion: 1.0.0
+name: comdex-subql-starter
+version: 0.0.1
+runner:
+  node:
+    name: "@subql/node-cosmos"
+    version: "*"
+  query:
+    name: "@subql/query"
+    version: "*"
+description: >-
+  This project can be use as a starting point for developing your Cosmos (Injective) based SubQuery project
+repository: "https://github.com/subquery/cosmos-subql-starter"
+schema:
+  file: ./schema.graphql
+network:
+  chainId: comdex-1
+  # This endpoint must be a public non-pruned archive node
+  # Public nodes may be rate limited, which can affect indexing speed
+  # When developing your project we suggest getting a private API key
+  endpoint: "https://rpc-comdex.zenchainlabs.io/"
+  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+  #dictionary: "https://api.subquery.network/sq/subquery/injective-hub-dictionary"
+  chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
+    cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward: #CIRCUMVENTING VIA ORDER
+      file: ./proto/cosmos/distribution/v1beta1/tx.proto
+      messages:
+        - MsgWithdrawDelegatorReward
+dataSources:
+  - kind: cosmos/Runtime
+    startBlock: 5941395 #6781500
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        #- handler: handleMessage
+        #  kind: cosmos/MessageHandler
+        #  filter:
+        #    type: /cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward
+        - handler: handleEvent
+          kind: cosmos/EventHandler
+          filter:
+            type: coin_spent
+            messageFilter:
+              type: /cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward
+                 
