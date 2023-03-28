@@ -1,12 +1,12 @@
 # SubQuery - Starter Package for Cosmos Comdex
 
-A basic Comdex example project with an event and message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
+A basic Comdex example project with an event handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
 
 The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
 
 A SubQuery package defines which data SubQuery will index from the blockchain, and how it will store it.
 
-This Starter Package by default allows **indexing all spot limit orders from Injective**.
+This Starter Package by default allows **indexing all Delegator Reward withdrawls on Comdex**.
 
 ## Preparation
 
@@ -85,15 +85,82 @@ Finally, you should see a GraphQL playground is showing in the explorer and the 
 With this project can try to query with the following code to get a taste of how it works.
 
 ```graphql
-query {
-  delegatorRewards(first: 20 orderBy: BLOCK_HEIGHT_ASC) {
-    totalCount
-    nodes {
-      blockHeight
-      txHash
-      rewardAmount
-      delegatorAddress
-      validatorAddress
+{
+  query {
+    delegatorRewards(first: 5, orderBy: REWARD_AMOUNT_DESC) {
+      nodes {
+        id
+        blockHeight
+        txHash
+        feeDenomination
+        feeAmount
+        rewardAmount
+        delegatorAddress
+        validatorAddress
+      }
+    }
+  }
+}
+```
+
+```json
+{
+  "data": {
+    "query": {
+      "delegatorRewards": {
+        "nodes": [
+          {
+            "id": "F6006AED17A78B6D4B77AFB1A860591ED71225E2E7B7A7E439DB825447739E48-0-1",
+            "blockHeight": "925",
+            "txHash": "F6006AED17A78B6D4B77AFB1A860591ED71225E2E7B7A7E439DB825447739E48",
+            "feeDenomination": null,
+            "feeAmount": null,
+            "rewardAmount": "9936251ucmdx",
+            "delegatorAddress": "comdex1dfsdsecpxycnf4rzt5f3h387d0aujvn3r2wfyy",
+            "validatorAddress": "comdexvaloper1dfsdsecpxycnf4rzt5f3h387d0aujvn3sa5m69"
+          },
+          {
+            "id": "E9E6E17C8437655B44C7BF7F3449D7DE37E422B13329612947B1B110180234DC-0-1",
+            "blockHeight": "1908",
+            "txHash": "E9E6E17C8437655B44C7BF7F3449D7DE37E422B13329612947B1B110180234DC",
+            "feeDenomination": null,
+            "feeAmount": null,
+            "rewardAmount": "9918768ucmdx",
+            "delegatorAddress": "comdex1kqv0ky7xmjqwlnqaalqcj2yr262w9zs7nyv9nd",
+            "validatorAddress": "comdexvaloper1kqv0ky7xmjqwlnqaalqcj2yr262w9zs7qnkhdv"
+          },
+          {
+            "id": "27A426BB250C1BAEECE9F93DF256580D22F4BB4E3B9F3B5913BAD9D052C787E6-0-1",
+            "blockHeight": "891",
+            "txHash": "27A426BB250C1BAEECE9F93DF256580D22F4BB4E3B9F3B5913BAD9D052C787E6",
+            "feeDenomination": null,
+            "feeAmount": null,
+            "rewardAmount": "9889891ucmdx",
+            "delegatorAddress": "comdex1dfsdsecpxycnf4rzt5f3h387d0aujvn3r2wfyy",
+            "validatorAddress": "comdexvaloper1dfsdsecpxycnf4rzt5f3h387d0aujvn3sa5m69"
+          },
+          {
+            "id": "A980E8D47C022B820CB5DC77FDA3F46D12054BDFDF1E8E0AA509E3A5983ED900-0-1",
+            "blockHeight": "1441",
+            "txHash": "A980E8D47C022B820CB5DC77FDA3F46D12054BDFDF1E8E0AA509E3A5983ED900",
+            "feeDenomination": null,
+            "feeAmount": null,
+            "rewardAmount": "9885533ucmdx",
+            "delegatorAddress": "comdex17lehl7q4ua3t28pzh2edv2flsc9mt7xcwmm5f5",
+            "validatorAddress": "comdexvaloper17lehl7q4ua3t28pzh2edv2flsc9mt7xcavpxh4"
+          },
+          {
+            "id": "9D93F6A00274EB5C73261909ADE2F40FBEEB5F4DDDE10B580386816CC026CB72-0-1",
+            "blockHeight": "856",
+            "txHash": "9D93F6A00274EB5C73261909ADE2F40FBEEB5F4DDDE10B580386816CC026CB72",
+            "feeDenomination": null,
+            "feeAmount": null,
+            "rewardAmount": "9877250ucmdx",
+            "delegatorAddress": "comdex1dfsdsecpxycnf4rzt5f3h387d0aujvn3r2wfyy",
+            "validatorAddress": "comdexvaloper1dfsdsecpxycnf4rzt5f3h387d0aujvn3sa5m69"
+          }
+        ]
+      }
     }
   }
 }

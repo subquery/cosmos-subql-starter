@@ -1,18 +1,27 @@
 import { DelegatorReward } from "../types";
 import { CosmosEvent } from "@subql/types-cosmos";
 
-export async function handleEvent(evt: CosmosEvent): Promise<void> {
-  const eventRecord = new DelegatorReward(`${evt.tx.hash}-${evt.msg.idx}-${evt.idx}`);
+export async function handleEvent(event: CosmosEvent): Promise<void> {
+  // We create a new entity using the transaction hash and message index as a unique ID
+  logger.info(
+    `New delegator reward event at block ${event.block.block.header.height}`
+  );
+  const newDelegatorReward = new DelegatorReward(
+    `${event.tx.hash}-${event.msg.idx}-${event.idx}`
+  );
 
-  eventRecord.blockHeight = BigInt(evt.block.block.header.height);
-  eventRecord.txHash = evt.tx.hash;
-  eventRecord.delegatorAddress = evt.msg.msg.decodedMsg.delegatorAddress
-  eventRecord.validatorAddress = evt.msg.msg.decodedMsg.validatorAddress
+  newDelegatorReward.blockHeight = BigInt(event.block.block.header.height);
+  newDelegatorReward.txHash = event.tx.hash;
+  newDelegatorReward.delegatorAddress =
+    event.msg.msg.decodedMsg.delegatorAddress;
+  newDelegatorReward.validatorAddress =
+    event.msg.msg.decodedMsg.validatorAddress;
 
-  for(const attr of evt.event.attributes){
-    if(attr.key === "amount") {
-      eventRecord.rewardAmount = attr.value;
+  // Cosmos events code attributes as an array of key value pairs, we're looking for an amount
+  for (const attr of event.event.attributes) {
+    if (attr.key === "amount") {
+      newDelegatorReward.rewardAmount = attr.value;
     }
   }
-  await eventRecord.save();
+  await newDelegatorReward.save();
 }

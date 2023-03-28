@@ -20,15 +20,14 @@ network:
   # When developing your project we suggest getting a private API key
   endpoint: "https://rpc-comdex.zenchainlabs.io/"
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-  #dictionary: "https://api.subquery.network/sq/subquery/injective-hub-dictionary"
-  chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
+  chainTypes: # This feature allows support for any Cosmos chain by importing the correct protobuf messages
     cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward: #CIRCUMVENTING VIA ORDER
       file: ./proto/cosmos/distribution/v1beta1/tx.proto
       messages:
         - MsgWithdrawDelegatorReward
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 5941395 #6781500
+    startBlock: 1
     mapping:
       file: ./dist/index.js
       handlers:
@@ -38,8 +37,8 @@ dataSources:
         #    type: /cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward
         - handler: handleEvent
           kind: cosmos/EventHandler
+          # An example of https://www.mintscan.io/comdex/txs/6DB31FF17697FDB422EC885E184917C3EFAE1D522E47C654A093B6C7A62AD94D
           filter:
             type: coin_spent
             messageFilter:
               type: /cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward
-                 
