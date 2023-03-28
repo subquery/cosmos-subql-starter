@@ -1,4 +1,4 @@
-# SubQuery - Starter Package for Cosmos Injective
+# SubQuery - Starter Package for Cosmos Comdex
 
 A basic Comdex example project with an event and message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
 
