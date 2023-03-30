@@ -9,7 +9,7 @@ runner:
     name: "@subql/query"
     version: "*"
 description: >-
-  This project can be use as a starting point for developing your Cosmos (Injective) based SubQuery project
+  This project can be use as a starting point for developing your Cosmos (Comdex) based SubQuery project
 repository: "https://github.com/subquery/cosmos-subql-starter"
 schema:
   file: ./schema.graphql
