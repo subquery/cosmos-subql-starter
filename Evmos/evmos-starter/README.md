@@ -1,12 +1,10 @@
 # SubQuery - Starter Package for Cosmos/Fetch.ai
 
-A basic Cosmos (based on Fetch.ai) example project with an event and message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
+A basic Evmos (based on Fetch.ai) example project with an event and message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
 
 The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
 
 A SubQuery package defines which data SubQuery will index from the blockchain, and how it will store it.
-
-This Starter Package by default allows **indexing events and messages from Fetch.ai**.
 
 ## Preparation
 
@@ -87,16 +85,18 @@ With this project can try to query with the following code to get a taste of how
 ```graphql
 {
   query {
-    transferEvents(first: 5) {
+    transferEvents(first: 2, orderBy:BLOCK_HEIGHT_ASC) {
+      totalCount
       nodes {
         id
         blockHeight
-        recipient
+        txHash
         sender
+        recipient
         amount
       }
     }
-    messages(first: 5) {
+    messages(first: 2) {
       nodes {
         id
         blockHeight
