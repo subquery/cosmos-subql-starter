@@ -1,6 +1,6 @@
 # SubQuery - Starter Package for Cosmos/Fetch.ai
 
-A basic Evmos (based on Fetch.ai) example project with an event and message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
+A basic Evmos (based on Fetch.ai) example project that indexes all Evmos transfers event with an event and message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
 
 The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
 

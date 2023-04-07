@@ -11,7 +11,7 @@ runner:
 description: >-
   This project can be use as a starting point for developing your Cosmos
   (Fetch.ai) based SubQuery project
-repository: "https://github.com/subquery/juno-subql-starter"
+repository: "https://github.com/subquery/cosmos-subql-starter"
 schema:
   file: ./schema.graphql
 network:
