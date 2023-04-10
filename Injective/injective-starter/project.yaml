@@ -32,7 +32,7 @@ network:
         - SpotOrder
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 30405001
+    startBlock: 22186475
     mapping:
       file: ./dist/index.js
       handlers:
