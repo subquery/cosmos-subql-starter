@@ -1,0 +1,44 @@
+specVersion: 1.0.0
+name: persistence-subql-starter
+version: 0.0.1
+runner:
+  node:
+    name: "@subql/node-cosmos"
+    version: "*"
+  query:
+    name: "@subql/query"
+    version: "*"
+description: >-
+  This project can be use as a starting point for developing your Cosmos (Persistence) based SubQuery project
+repository: "https://github.com/subquery/cosmos-subql-starter"
+schema:
+  file: ./schema.graphql
+network:
+  chainId: core-1
+  # This endpoint must be a public non-pruned archive node
+  # Public nodes may be rate limited, which can affect indexing speed
+  # When developing your project we suggest getting a private API key
+  endpoint: "https://rpc-persistent-ia.cosmosia.notional.ventures/"
+  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+  chainTypes: # This feature allows support for any Cosmos chain by importing the correct protobuf messages
+    cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward: #CIRCUMVENTING VIA ORDER
+      file: ./proto/cosmos/distribution/v1beta1/tx.proto
+      messages:
+        - MsgWithdrawDelegatorReward
+dataSources:
+  - kind: cosmos/Runtime
+    startBlock: 10737679
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        #- handler: handleMessage
+        #  kind: cosmos/MessageHandler
+        #  filter:
+        #    type: /cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward
+        - handler: handleEvent
+          kind: cosmos/EventHandler
+          # An example of https://www.mintscan.io/comdex/txs/6DB31FF17697FDB422EC885E184917C3EFAE1D522E47C654A093B6C7A62AD94D
+          filter:
+            type: coin_spent
+            messageFilter:
+              type: /cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward
