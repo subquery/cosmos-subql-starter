@@ -12,8 +12,6 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
 
   newPlacedOrders.blockHeight = BigInt(event.block.block.header.height);
   newPlacedOrders.txHash = event.tx.hash;
-  //newPlacedOrders.delegatorAddress = event.msg.msg.decodedMsg.delegatorAddress;
-  //newPlacedOrders.validatorAddress = event.msg.msg.decodedMsg.validatorAddress;
 
   // Cosmos events code attributes as an array of key value pairs, we're looking for an amount
   for (const attr of event.event.attributes) {

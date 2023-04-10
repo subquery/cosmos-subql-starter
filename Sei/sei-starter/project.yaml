@@ -14,14 +14,13 @@ repository: "https://github.com/subquery/cosmos-subql-starter"
 schema:
   file: ./schema.graphql
 network:
-  #chainId: sei-testnet-1
-  chainId: atlantic-2
+  chainId: sei-devnet-3
+  #chainId: atlantic-2
   # This endpoint must be a public non-pruned archive node
   # Public nodes may be rate limited, which can affect indexing speed
   # When developing your project we suggest getting a private API key
-  #endpoint: "https://rpc.sei-devnet-3.seinetwork.io"
-  #endpoint: "tcp://54.67.88.181:26657"
-  endpoint: "https://rest.atlantic-2.seinetwork.io "
+  endpoint: "https://rpc.sei-devnet-3.seinetwork.io"
+  #endpoint: "https://rest.atlantic-2.seinetwork.io"
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   chainTypes: # This feature allows support for any Cosmos chain by importing the correct protobuf messages
     cosmos.bank.v1beta1.MsgSend:
