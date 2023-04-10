@@ -1,0 +1,51 @@
+specVersion: 1.0.0
+name: sei-subql-starter
+version: 0.0.1
+runner:
+  node:
+    name: "@subql/node-cosmos"
+    version: "*"
+  query:
+    name: "@subql/query"
+    version: "*"
+description: >-
+  This project can be use as a starting point for developing your Cosmos (Sei) based SubQuery project
+repository: "https://github.com/subquery/cosmos-subql-starter"
+schema:
+  file: ./schema.graphql
+network:
+  #chainId: sei-testnet-1
+  chainId: atlantic-2
+  # This endpoint must be a public non-pruned archive node
+  # Public nodes may be rate limited, which can affect indexing speed
+  # When developing your project we suggest getting a private API key
+  #endpoint: "https://rpc.sei-devnet-3.seinetwork.io"
+  #endpoint: "tcp://54.67.88.181:26657"
+  endpoint: "https://rest.atlantic-2.seinetwork.io "
+  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+  chainTypes: # This feature allows support for any Cosmos chain by importing the correct protobuf messages
+    cosmos.bank.v1beta1.MsgSend:
+      file: ./proto/cosmos/bank/v1beta1/tx.proto
+      messages:
+        - MsgSend
+    cosmos.base.v1beta1.Coin:
+      file: ./proto/cosmos/base/v1beta1/coin.proto
+      messages:
+        - Coin
+dataSources:
+  - kind: cosmos/Runtime
+    startBlock: 10335999
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        #- handler: handleMessage
+        #  kind: cosmos/MessageHandler
+        #  filter:
+        #    type: /cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward
+        - handler: handleEvent
+          kind: cosmos/EventHandler
+          # An example of https://www.mintscan.io/comdex/txs/6DB31FF17697FDB422EC885E184917C3EFAE1D522E47C654A093B6C7A62AD94D
+          #filter:
+          #  type: coin_spent
+          #  messageFilter:
+          #    type: /cosmos.bank.v1beta1.MsgSend
