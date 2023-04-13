@@ -35,6 +35,8 @@ services:
       - -f=/app
       - --db-schema=app
       - --disable-historical=false
+      - --batch-size=1
+      - --debug
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
       interval: 3s
