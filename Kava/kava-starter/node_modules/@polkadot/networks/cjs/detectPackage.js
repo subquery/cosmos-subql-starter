@@ -1,0 +1,7 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = require("tslib");
+const util_1 = require("@polkadot/util");
+const detectOther_js_1 = tslib_1.__importDefault(require("./detectOther.js"));
+const packageInfo_js_1 = require("./packageInfo.js");
+(0, util_1.detectPackage)(packageInfo_js_1.packageInfo, null, detectOther_js_1.default);
