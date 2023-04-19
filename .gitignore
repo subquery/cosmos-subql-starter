@@ -1,2 +1,5 @@
 .idea
-.DS_Store
+.DS_Store.data
+yarn.lock
+/Kava/kava-starter/node_modules
+/Kava/kava-starter/.data
