@@ -1,9 +1,0 @@
-type Transfers @entity {
-  id: ID!
-  blockHeight: BigInt
-  txHash: String
-  fromAddress: String
-  toAddress: String
-  amount: String
-  denomination: String
-}
