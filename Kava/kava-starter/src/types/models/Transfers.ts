@@ -5,7 +5,7 @@ import assert from 'assert';
 
 
 
-export type TransfersProps = Omit<Transfers, NonNullable<FunctionPropertyNames<Transfers>>>;
+export type TransfersProps = Omit<Transfers, NonNullable<FunctionPropertyNames<Transfers>>| '_name'>;
 
 export class Transfers implements Entity {
 
@@ -28,6 +28,10 @@ export class Transfers implements Entity {
 
     public denomination?: string;
 
+
+    get _name(): string {
+        return 'Transfers';
+    }
 
     async save(): Promise<void>{
         let id = this.id;

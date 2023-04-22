@@ -21,6 +21,7 @@
   "author": "SubQuery Team Tony",
   "license": "MIT",
   "devDependencies": {
+    "@polkadot/api": "^10",
     "@cosmjs/stargate": "^0.28.9",
     "@subql/cli": "latest",
     "typescript": "^4.7.4"

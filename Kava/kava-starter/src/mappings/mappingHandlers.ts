@@ -1,4 +1,3 @@
-import { stringify } from "querystring";
 import { Transfers } from "../types";
 import { CosmosEvent } from "@subql/types-cosmos";
 
@@ -15,19 +14,8 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
  newTransfers.txHash = event.tx.hash;
  newTransfers.fromAddress = event.msg.msg.decodedMsg.fromAddress;
  newTransfers.toAddress = event.msg.msg.decodedMsg.toAddress;
-
- for(const attr of event.event.attributes) {
-  switch(attr.key) {
-    case "amount":
-      newTransfers.amount = attr.value;
-      break;
-    case "denomination":
-      newTransfers.denomination = attr.value;
-      break;
-    default:
-      break;
-  }
-}
+ newTransfers.amount = event.msg.msg.decodedMsg.amount[0].amount;
+ newTransfers.denomination = event.msg.msg.decodedMsg.amount[0].denom;
 
  await newTransfers.save();
 }
