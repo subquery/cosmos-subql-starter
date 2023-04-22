@@ -21,7 +21,6 @@
   "author": "SubQuery Team Tony",
   "license": "MIT",
   "devDependencies": {
-    "@polkadot/api": "^10",
     "@cosmjs/stargate": "^0.28.9",
     "@subql/cli": "latest",
     "typescript": "^4.7.4"
@@ -32,5 +31,8 @@
     "pino": "^7.8.0",
     "ts-proto": "^1.112.1",
     "tslib": "^2.3.1"
+  },
+  "resolutions": {
+    "@polkadot/util": "11.1.3"
   }
 }
