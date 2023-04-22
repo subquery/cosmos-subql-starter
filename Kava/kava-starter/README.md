@@ -1,4 +1,4 @@
-# SubQuery - Starter Package for Cosmos Injective
+# SubQuery - Starter Package for Cosmos Kava
 
 A basic Kava example project with an event handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
 
