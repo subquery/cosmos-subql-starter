@@ -86,7 +86,7 @@ With this project can try to query with the following code to get a taste of how
 
 ```graphql
 query {
-	transfers{
+  transfers{
     totalCount
     nodes{
       id
