@@ -1,12 +1,12 @@
-# SubQuery - Starter Package for Cosmos Comdex
+# SubQuery - Starter Package for Cosmos Zone Persistence
 
-A basic Comdex example project with an event handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
+A basic Persistence example project with an event handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
 
 The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
 
 A SubQuery package defines which data SubQuery will index from the blockchain, and how it will store it.
 
-This Starter Package by default allows **indexing all Delegator Reward withdrawls on Comdex**.
+This Starter Package by default allows **indexing all Delegator Reward withdrawls on Persistence**.
 
 ## Preparation
 
@@ -88,6 +88,7 @@ With this project can try to query with the following code to get a taste of how
 {
   query {
     delegatorRewards(first: 5, orderBy: REWARD_AMOUNT_DESC) {
+      totalCount
       nodes {
         id
         blockHeight
