@@ -87,7 +87,7 @@ With this project can try to query with the following code to get a taste of how
 ```graphql
 {
   query {
-    delegatorRewards(first: 5, orderBy: REWARD_AMOUNT_DESC) {
+    delegatorRewards(first: 2 orderBy: BLOCK_HEIGHT_ASC) {
       totalCount
       nodes {
         id
@@ -95,9 +95,9 @@ With this project can try to query with the following code to get a taste of how
         txHash
         feeDenomination
         feeAmount
-        rewardAmount
         delegatorAddress
         validatorAddress
+        rewardAmount
       }
     }
   }
