@@ -1,7 +1,7 @@
 {
   "name": "kava-starter",
   "version": "0.0.1",
-  "description": "Indexing Cosmos (Kava) by Tony",
+  "description": "Indexing Cosmos (Kava) (with contribution from Tony)",
   "main": "dist/index.js",
   "scripts": {
     "build": "subql build",
@@ -18,7 +18,7 @@
     "schema.graphql",
     "project.yaml"
   ],
-  "author": "SubQuery Team Tony",
+  "author": "SubQuery Team",
   "license": "MIT",
   "devDependencies": {
     "@cosmjs/stargate": "^0.28.9",
