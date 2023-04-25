@@ -91,8 +91,8 @@ query {
     nodes{
       id
       blockHeight
-      toAddress
       fromAddress
+      toAddress
       amount
       denomination
     }
