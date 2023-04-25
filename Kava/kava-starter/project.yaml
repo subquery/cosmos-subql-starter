@@ -8,7 +8,7 @@ runner:
   query:
     name: "@subql/query"
     version: "*"
-description: Indexing Cosmos chain (Kava) by Tony
+description: Indexing Cosmos chain (Kava) (with contribution from Tony)
 repository: "https://github.com/subquery/cosmos-subql-starter"
 schema:
   file: ./schema.graphql
