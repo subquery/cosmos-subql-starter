@@ -18,3 +18,7 @@ jobs:
         run: yarn codegen
       - name: Build
         run: yarn build
+      - name: Install subql-node
+        run: yarn global add @subql/node
+      - name: Run tests with Subquery Node
+        run: subql-node test -f ${{ github.workspace }}
