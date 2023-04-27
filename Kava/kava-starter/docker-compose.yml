@@ -31,14 +31,10 @@ services:
       DB_PORT: 5432
     volumes:
       - ./:/app
-    command: >
-      /bin/sh -c '
-      CMD_OPTIONS="-f=/app --db-schema=app --disable-historical=false";
-      if [ "$$RUN_TESTS" = "true" ]; then
-        subql-node test $$CMD_OPTIONS;
-      else
-        subql-node $$CMD_OPTIONS;
-      fi'
+    command: 
+      - ${SUB_COMMAND} # set SUB_COMMAND env variable to "test" to run tests
+      - -f=/app
+      - --db-schema=app
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
       interval: 3s
