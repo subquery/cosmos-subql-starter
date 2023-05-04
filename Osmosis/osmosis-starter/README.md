@@ -87,7 +87,8 @@ With this project can try to query with the following code to get a taste of how
 ```graphql
 {
   query {
-    executeEvents(first: 5) {
+    executeEvents(first: 2 orderBy:BLOCK_HEIGHT_ASC) {
+      totalCount
       nodes {
         id
         blockHeight
@@ -95,13 +96,16 @@ With this project can try to query with the following code to get a taste of how
         contractAddress
       }
     }
-    messages(first: 5) {
+    messages(first: 2 orderBy:BLOCK_HEIGHT_ASC) {
+      totalCount
       nodes {
         id
         blockHeight
         txHash
         sender
         contract
+        fundDenom
+        fundAmount
       }
     }
   }
