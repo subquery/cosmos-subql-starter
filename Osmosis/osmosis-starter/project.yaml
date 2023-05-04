@@ -45,7 +45,7 @@ network:
         - MsgSwapExactAmountIn
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 1
+    startBlock: 9302510
     mapping:
       file: ./dist/index.js
       handlers:
