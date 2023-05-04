@@ -31,6 +31,8 @@ export async function handleMessage(msg: CosmosMessage): Promise<void> {
     txHash: msg.tx.hash,
     sender: msg.msg.decodedMsg.sender,
     contract: msg.msg.decodedMsg.contract,
+    fundDenom: msg.msg.decodedMsg.funds[0].denom,
+    fundAmount: msg.msg.decodedMsg.funds[0].amount,
   });
   await messageRecord.save();
 }

@@ -26,4 +26,7 @@ type Message @entity {
   txHash: String!
   sender: String!
   contract: String!
+  fundAmount: BigInt
+  fundDenom: String
+  
 }
