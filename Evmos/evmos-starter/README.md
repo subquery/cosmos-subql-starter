@@ -1,4 +1,4 @@
-# SubQuery - Starter Package for Cosmos/Fetch.ai
+# SubQuery - Starter Package for Cosmos Zone Evmos
 
 A basic Evmos (based on Fetch.ai) example project that indexes all Evmos transfers event with an event and message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
 
