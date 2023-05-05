@@ -16,9 +16,10 @@ schema:
 network:
   chainId: thorchain-mainnet-v1
   # This endpoint must be a public non-pruned archive node
+  # We recommend providing more than one endpoint for improved reliability, performance, and uptime
   # Public nodes may be rate limited, which can affect indexing speed
   # When developing your project we suggest getting a private API key
-  endpoint: "https://rpc.ninerealms.com/"
+  endpoint: ["https://rpc.ninerealms.com/"]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   # dictionary: "https://api.subquery.network/sq/subquery/cosmos-hub-dictionary"
   chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages

@@ -16,9 +16,10 @@ schema:
 network:
   chainId: core-1
   # This endpoint must be a public non-pruned archive node
+  # We recommend providing more than one endpoint for improved reliability, performance, and uptime
   # Public nodes may be rate limited, which can affect indexing speed
   # When developing your project we suggest getting a private API key
-  endpoint: "https://rpc-persistent-ia.cosmosia.notional.ventures/"
+  endpoint: ["https://rpc-persistent-ia.cosmosia.notional.ventures/"]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   chainTypes: # This feature allows support for any Cosmos chain by importing the correct protobuf messages
     cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward: #CIRCUMVENTING VIA ORDER

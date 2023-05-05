@@ -15,9 +15,10 @@ schema:
 network:
   chainId: kava_2222-10
   # This endpoint must be a public non-pruned archive node
+  # We recommend providing more than one endpoint for improved reliability, performance, and uptime
   # Public nodes may be rate limited, which can affect indexing speed
   # When developing your project we suggest getting a private API key
-  endpoint: "https://kava-rpc.ibs.team"
+  endpoint: ["https://kava-rpc.ibs.team"]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   # dictionary: "https://api.subquery.network/sq/subquery/injective-hub-dictionary"
   chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages

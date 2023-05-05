@@ -16,9 +16,10 @@ schema:
 network:
   chainId: injective-1
   # This endpoint must be a public non-pruned archive node
+  # We recommend providing more than one endpoint for improved reliability, performance, and uptime
   # Public nodes may be rate limited, which can affect indexing speed
   # When developing your project we suggest getting a private API key
-  endpoint: "http://archival-sentry-equinix-2.injective.dev:26657"
+  endpoint: ["http://archival-sentry-equinix-2.injective.dev:26657"]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   # dictionary: "https://api.subquery.network/sq/subquery/injective-hub-dictionary"
   chainTypes: # This feature allows support for any Cosmos chain by importing the correct protobuf messages

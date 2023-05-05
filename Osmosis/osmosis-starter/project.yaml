@@ -16,10 +16,11 @@ schema:
   file: ./schema.graphql
 network:
   chainId: osmosis-1
-  # This endpoint must be a public non-pruned archive node.
+  # This endpoint must be a public non-pruned archive node
+  # We recommend providing more than one endpoint for improved reliability, performance, and uptime.
   # This is a public node that is rate limited, which will affect indexing speed.
   # When developing your project we strongly suggest getting a private API key.
-  endpoint: "https://osmosis-mainnet-archive.allthatnode.com:26657"
+  endpoint: ["https://osmosis-mainnet-archive.allthatnode.com:26657"]
   dictionary: "https://api.subquery.network/sq/subquery/cosmos-osmosis-dictionary"
   chainTypes:
     cosmos.slashing.v1beta1:
