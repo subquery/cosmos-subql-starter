@@ -31,7 +31,8 @@ services:
       DB_PORT: 5432
     volumes:
       - ./:/app
-    command:
+    command: 
+      - ${SUB_COMMAND} # set SUB_COMMAND env variable to "test" to run tests
       - -f=/app
       - --db-schema=app
     healthcheck:
