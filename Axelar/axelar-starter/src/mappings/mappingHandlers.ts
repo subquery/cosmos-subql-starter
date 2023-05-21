@@ -39,11 +39,19 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
   );
   if (actionAttribute && actionAttribute.value == "confirm") {
     // We are only looking for events with the confirm type
-    const eventRecord = new DepositConfirmation(
-      `${event.tx.hash}-${event.msg.idx}-${event.idx}`
-    );
-    eventRecord.blockHeight = BigInt(event.block.block.header.height);
-    eventRecord.txHash = event.tx.hash;
+    const eventRecord = DepositConfirmation.create({
+      id: `${event.tx.hash}-${event.msg.idx}-${event.idx}`,
+      blockHeight: BigInt(event.block.block.header.height),
+      txHash: event.tx.hash,
+      sourceChain: '', // Initialize optional properties with empty string
+      from: '',
+      to: '',
+      toChain: '',
+      amount: '',
+      asset: undefined,
+      transferID: ''
+
+    });
     for (const attr of event.event.attributes) {
       switch (attr.key) {
         case "sourceChain":
