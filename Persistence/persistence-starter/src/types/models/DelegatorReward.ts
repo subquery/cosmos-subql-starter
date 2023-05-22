@@ -5,12 +5,25 @@ import assert from 'assert';
 
 
 
-export type DelegatorRewardProps = Omit<DelegatorReward, NonNullable<FunctionPropertyNames<DelegatorReward>>>;
+export type DelegatorRewardProps = Omit<DelegatorReward, NonNullable<FunctionPropertyNames<DelegatorReward>>| '_name'>;
 
 export class DelegatorReward implements Entity {
 
-    constructor(id: string) {
-        this.id = id;
+    constructor(
+        
+            id: string,
+        
+        
+        
+        
+        
+        
+        
+        
+    ) {
+        
+            this.id = id;
+        
     }
 
 
@@ -30,6 +43,10 @@ export class DelegatorReward implements Entity {
 
     public validatorAddress?: string;
 
+
+    get _name(): string {
+        return 'DelegatorReward';
+    }
 
     async save(): Promise<void>{
         let id = this.id;
@@ -55,7 +72,10 @@ export class DelegatorReward implements Entity {
 
     static create(record: DelegatorRewardProps): DelegatorReward {
         assert(typeof record.id === 'string', "id must be provided");
-        let entity = new this(record.id);
+        let entity = new this(
+        
+            record.id,
+        );
         Object.assign(entity,record);
         return entity;
     }

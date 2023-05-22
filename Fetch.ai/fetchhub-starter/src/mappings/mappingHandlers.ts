@@ -37,9 +37,14 @@ export async function handleMessage(msg: CosmosMessage): Promise<void> {
 }
 
 export async function handleEvent(event: CosmosEvent): Promise<void> {
-  const eventRecord = new TransferEvent(`${event.tx.hash}-${event.msg.idx}-${event.idx}`,);
-  eventRecord.blockHeight = BigInt(event.block.block.header.height);
-  eventRecord.txHash = event.tx.hash;
+  const eventRecord = TransferEvent.create({
+    id: `${event.tx.hash}-${event.msg.idx}-${event.idx}`,
+    blockHeight: BigInt(event.block.block.header.height),
+    txHash: event.tx.hash,
+    recipient: '',
+    amount: '',
+    sender: ''
+  });
   for(const attr of event.event.attributes) {
     switch(attr.key) {
       case "recipient":
