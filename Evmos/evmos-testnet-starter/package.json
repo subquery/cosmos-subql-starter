@@ -1,7 +1,7 @@
 {
-  "name": "evmos-subql-starter",
+  "name": "evmos-testnet-subql-starter",
   "version": "0.0.1",
-  "description": "This project can be use as a starting point for developing your Cosmos (Evmos) based SubQuery project",
+  "description": "This project can be use as a starting point for developing your Cosmos (Evmos Testnet) based SubQuery project",
   "main": "dist/index.js",
   "scripts": {
     "build": "subql build",
