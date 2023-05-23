@@ -15,14 +15,14 @@ repository: "https://github.com/subquery/cosmos-subql-starter"
 schema:
   file: ./schema.graphql
 network:
-  chainId: xxxx
+  chainId: evmos_9000-4
   # This endpoint must be a public non-pruned archive node
   # We recommend providing more than one endpoint for improved reliability, performance, and uptime
   # Public nodes may be rate limited, which can affect indexing speed
   # When developing your project we suggest getting a private API key
   # You can get them from OnFinality for free https://app.onfinality.io
   # https://documentation.onfinality.io/support/the-enhanced-api-service
-  endpoint: ["xxxxx"]
+  endpoint: ["https://eth.bd.evmos.dev:8545"]
   chainTypes:
     cosmos.slashing.v1beta1:
       file: ./proto/cosmos/slashing/v1beta1/tx.proto
