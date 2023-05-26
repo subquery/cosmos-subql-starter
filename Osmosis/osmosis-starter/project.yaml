@@ -10,7 +10,7 @@ runner:
     version: "*"
 description: >-
   This project can be use as a starting point for developing your Cosmos
-  (Osmosis) based SubQuery project
+  (Osmosis) based SubQuery project. This Cosmos Example Project indexes all swaps on Osmosis' on chain DEX
 repository: "https://github.com/subquery/cosmos-subql-starter"
 schema:
   file: ./schema.graphql
@@ -20,33 +20,24 @@ network:
   # We recommend providing more than one endpoint for improved reliability, performance, and uptime.
   # This is a public node that is rate limited, which will affect indexing speed.
   # When developing your project we strongly suggest getting a private API key.
-  endpoint: ["https://osmosis-mainnet-archive.allthatnode.com:26657"]
+  endpoint: ["https://osmosis.api.onfinality.io/public"]
   dictionary: "https://api.subquery.network/sq/subquery/cosmos-osmosis-dictionary"
   chainTypes:
-    cosmos.slashing.v1beta1:
-      file: "./proto/cosmos/slashing/v1beta1/tx.proto"
-      messages:
-        - "MsgUnjail"
-    cosmos.gov.v1beta1:
-      file: "./proto/cosmos/gov/v1beta1/tx.proto"
-      messages:
-        - "MsgVoteWeighted"
-    cosmos.gov.v1beta1.gov: # Key is not used, it matches the one above and is inferred from the file
-      file: "./proto/cosmos/gov/v1beta1/gov.proto"
-      messages:
-        - "WeightedVoteOption"
-    cosmos.base.v1beta1: # needed by MsgCreateVestingAccount
-      file: "./proto/cosmos/cosmos.base.v1beta1.coin.proto"
-      messages:
-        - "Coin"
     osmosis.gamm.v1beta1:
       file: "./proto/cosmos/osmosis/gamm/v1beta1/tx.proto"
       messages:
-        - MsgJoinPool
         - MsgSwapExactAmountIn
+    osmosis.poolmanager.v1beta1: # needed by MsgSwapExactAmountIn
+      file: "./proto/cosmos/osmosis/poolmanager/v1beta1/swap_route.proto"
+      messages:
+        - SwapAmountInRoute
+    cosmos.base.v1beta1: # needed by MsgSwapExactAmountIn
+      file: "./proto/cosmos/cosmos.base.v1beta1.coin.proto"
+      messages:
+        - "Coin"
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 9302510
+    startBlock: 9798050
     mapping:
       file: ./dist/index.js
       handlers:
@@ -56,13 +47,13 @@ dataSources:
         # Using transaction handlers without filters slows your project down as they can be executed with each and every transaction
         # - handler: handleTransaction
         #   kind: cosmos/TransactionHandler
-        - handler: handleEvent
-          kind: cosmos/EventHandler
-          filter:
-            type: execute
-            messageFilter:
-              type: /cosmwasm.wasm.v1.MsgExecuteContract
+        # - handler: handleEvent
+        #  kind: cosmos/EventHandler
+        #  filter:
+        #    type: token_swapped
+        #    messageFilter:
+        #      type: /osmosis.gamm.v1beta1.MsgSwapExactAmountIn
         - handler: handleMessage
           kind: cosmos/MessageHandler
           filter:
-            type: /cosmwasm.wasm.v1.MsgExecuteContract
+            type: /osmosis.gamm.v1beta1.MsgSwapExactAmountIn

@@ -1,7 +1,7 @@
 {
-  "name": "Osmosis",
+  "name": "evmos-testnet-subql-starter",
   "version": "0.0.1",
-  "description": "This project can be use as a starting point for developing your Cosmos (Osmosis) based SubQuery project. This Cosmos Example Project indexes all swaps on Osmosis' on chain DEX",
+  "description": "This project can be use as a starting point for developing your Cosmos (Evmos Testnet) based SubQuery project",
   "main": "dist/index.js",
   "scripts": {
     "build": "subql build",
@@ -21,7 +21,6 @@
   "author": "SubQuery Team",
   "license": "MIT",
   "devDependencies": {
-    "@cosmjs/stargate": "^0.28.9",
     "@subql/cli": "latest",
     "@subql/testing": "latest",
     "@subql/node-cosmos": "latest",
