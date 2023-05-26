@@ -13,20 +13,24 @@
 #   timestamp: String!
 # }
 
-type ExecuteEvent @entity {
+type Swap @entity {
   id: ID!
-  blockHeight: BigInt!
-  txHash: String!
-  contractAddress: String!
+  sender: String!
+  tokenInDenom: String!
+  tokenInAmount: BigInt!
+  tokenOutMin: BigInt!
+  swapRoutes: [SwapRoute] @derivedFrom(field: "swap") #This is virtual field
 }
 
-type Message @entity {
+type SwapRoute @entity {
   id: ID!
-  blockHeight: BigInt!
-  txHash: String!
-  sender: String!
-  contract: String!
-  fundAmount: BigInt
-  fundDenom: String
-  
+  pool: Pool!
+  swap: Swap!
+  tokenInDenom: String!
+  tokenOutDenom: String!
+}
+
+type Pool @entity {
+  id: ID!
+  swapRoutes: [SwapRoute] @derivedFrom(field: "pool") #This is virtual field
 }

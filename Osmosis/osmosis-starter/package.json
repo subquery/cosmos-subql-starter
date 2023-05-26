@@ -1,7 +1,7 @@
 {
   "name": "Osmosis",
   "version": "0.0.1",
-  "description": "This project can be use as a starting point for developing your Cosmos (Osmosis) based SubQuery project",
+  "description": "This project can be use as a starting point for developing your Cosmos (Osmosis) based SubQuery project. This Cosmos Example Project indexes all swaps on Osmosis' on chain DEX",
   "main": "dist/index.js",
   "scripts": {
     "build": "subql build",

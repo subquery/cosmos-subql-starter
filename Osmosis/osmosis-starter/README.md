@@ -6,7 +6,7 @@ The Starter Package is an example that you can use as a starting point for devel
 
 A SubQuery package defines which data SubQuery will index from the blockchain, and how it will store it.
 
-This Starter Package by default allows **indexing events and messages from Osmosis**.
+**This Cosmos Example Project indexes all swaps on Osmosis' on chain DEX**.
 
 ## Preparation
 
@@ -87,7 +87,7 @@ With this project can try to query with the following code to get a taste of how
 ```graphql
 {
   query {
-    executeEvents(first: 2 orderBy:BLOCK_HEIGHT_ASC) {
+    executeEvents(first: 2, orderBy: BLOCK_HEIGHT_ASC) {
       totalCount
       nodes {
         id
@@ -96,7 +96,7 @@ With this project can try to query with the following code to get a taste of how
         contractAddress
       }
     }
-    messages(first: 2 orderBy:BLOCK_HEIGHT_ASC) {
+    messages(first: 2, orderBy: BLOCK_HEIGHT_ASC) {
       totalCount
       nodes {
         id
