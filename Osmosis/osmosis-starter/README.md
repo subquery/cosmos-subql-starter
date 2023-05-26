@@ -85,27 +85,21 @@ Finally, you should see a GraphQL playground is showing in the explorer and the 
 With this project can try to query with the following code to get a taste of how it works.
 
 ```graphql
-{
-  query {
-    executeEvents(first: 2, orderBy: BLOCK_HEIGHT_ASC) {
-      totalCount
-      nodes {
-        id
-        blockHeight
-        txHash
-        contractAddress
-      }
+query {
+  pools(first: 5, orderBy: SWAP_ROUTES_COUNT_DESC) {
+    nodes {
+      id
     }
-    messages(first: 2, orderBy: BLOCK_HEIGHT_ASC) {
-      totalCount
-      nodes {
-        id
-        blockHeight
-        txHash
-        sender
-        contract
-        fundDenom
-        fundAmount
+  }
+  swaps(first: 5) {
+    nodes {
+      id
+      sender
+      tokenInDenom
+      tokenInAmount
+      tokenOutMin
+      swapRoutes(first: 5) {
+        totalCount
       }
     }
   }
