@@ -23,13 +23,14 @@
   "devDependencies": {
     "@cosmjs/stargate": "^0.28.9",
     "@subql/cli": "latest",
-    "@subql/testing": "latest",
     "@subql/node-cosmos": "latest",
+    "@subql/testing": "latest",
     "typescript": "^4.7.4"
   },
   "dependencies": {
     "@subql/types-cosmos": "latest",
     "@types/node": "^17.0.21",
+    "osmojs": "^15.2.1",
     "pino": "^7.8.0",
     "ts-proto": "^1.112.1",
     "tslib": "^2.3.1"
