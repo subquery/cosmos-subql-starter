@@ -16,8 +16,8 @@
 type Swap @entity {
   id: ID!
   sender: String!
-  tokenInDenom: String!
-  tokenInAmount: BigInt!
+  tokenInDenom: String
+  tokenInAmount: BigInt
   tokenOutMin: BigInt!
   swapRoutes: [SwapRoute] @derivedFrom(field: "swap") #This is virtual field
 }
@@ -26,7 +26,7 @@ type SwapRoute @entity {
   id: ID!
   pool: Pool!
   swap: Swap!
-  tokenInDenom: String!
+  tokenInDenom: String
   tokenOutDenom: String!
 }
 
