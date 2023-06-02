@@ -16,6 +16,8 @@
 type Swap @entity {
   id: ID!
   sender: String!
+  txHash: String!
+  blockHeight: BigInt!
   tokenInDenom: String
   tokenInAmount: BigInt
   tokenOutMin: BigInt!

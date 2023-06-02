@@ -22,9 +22,13 @@ export async function handleMessage(
   // We first create a new swap record
   const swap = Swap.create({
     id: `${msg.tx.hash}-${msg.idx}`,
+    txHash: msg.tx.hash,
+    blockHeight: BigInt(msg.block.block.header.height),
     sender: msg.msg.decodedMsg.sender,
     tokenInDenom: msg.msg.decodedMsg.tokenIn?.denom,
-    tokenInAmount: msg.msg.decodedMsg.tokenIn ? BigInt(msg.msg.decodedMsg.tokenIn.amount) : undefined,
+    tokenInAmount: msg.msg.decodedMsg.tokenIn
+      ? BigInt(msg.msg.decodedMsg.tokenIn.amount)
+      : undefined,
     tokenOutMin: BigInt(msg.msg.decodedMsg.tokenOutMinAmount),
   });
 
