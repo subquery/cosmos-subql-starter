@@ -36,26 +36,21 @@ export async function handleMessage(
   await swap.save();
 
   // Create swap routes from the array on the message
-  const swapRoutes: SwapRoute[] = [];
   let lastTokenOutDenom = swap.tokenInDenom;
   msg.msg.decodedMsg.routes.forEach(async (route, index) => {
     // Check that the pool aready exists
     const pool = await checkGetPool(route.poolId.toString());
 
-    swapRoutes.push(
-      SwapRoute.create({
-        id: `${msg.tx.hash}-${msg.idx}-${index}`,
-        poolId: pool.id,
-        swapId: swap.id,
-        tokenInDenom: lastTokenOutDenom,
-        tokenOutDenom: route.tokenOutDenom,
-      })
-    );
+    const swapRoute = SwapRoute.create({
+      id: `${msg.tx.hash}-${msg.idx}-${index}`,
+      poolId: pool.id,
+      swapId: swap.id,
+      tokenInDenom: lastTokenOutDenom,
+      tokenOutDenom: route.tokenOutDenom,
+    });
     lastTokenOutDenom = route.tokenOutDenom;
+    await swapRoute.save();
   });
-
-  // Bulk save swap routes to store
-  await store.bulkCreate(`SwapRoute`, swapRoutes);
 }
 
 /*
