@@ -85,19 +85,30 @@ Finally, you should see a GraphQL playground is showing in the explorer and the 
 With this project can try to query with the following code to get a taste of how it works.
 
 ```graphql
-{
-  query {
-    delegatorRewards(first: 5, orderBy: REWARD_AMOUNT_DESC) {
-      nodes {
-        id
-        blockHeight
-        txHash
-        feeDenomination
-        feeAmount
-        rewardAmount
-        delegatorAddress
-        validatorAddress
-      }
+query {
+  exchangeRates(first: 5, orderBy: BLOCK_HEIGHT_DESC) {
+    totalCount
+    nodes {
+      id
+      blockHeight
+      timestamp
+      txHash
+      contractName
+      contractAddress
+      contractVersion
+      longRate
+      shortRate
+      priceNotional
+      priceUSD
+    }
+  }
+  dailyAggregations(first: 5, orderBy: ID_DESC) {
+    nodes {
+      id
+      openPriceUSD
+      lowPriceUSD
+      highPriceUSD
+      closePriceUSD
     }
   }
 }
@@ -106,61 +117,86 @@ With this project can try to query with the following code to get a taste of how
 ```json
 {
   "data": {
-    "query": {
-      "delegatorRewards": {
-        "nodes": [
-          {
-            "id": "F6006AED17A78B6D4B77AFB1A860591ED71225E2E7B7A7E439DB825447739E48-0-1",
-            "blockHeight": "925",
-            "txHash": "F6006AED17A78B6D4B77AFB1A860591ED71225E2E7B7A7E439DB825447739E48",
-            "feeDenomination": null,
-            "feeAmount": null,
-            "rewardAmount": "9936251ucmdx",
-            "delegatorAddress": "comdex1dfsdsecpxycnf4rzt5f3h387d0aujvn3r2wfyy",
-            "validatorAddress": "comdexvaloper1dfsdsecpxycnf4rzt5f3h387d0aujvn3sa5m69"
-          },
-          {
-            "id": "E9E6E17C8437655B44C7BF7F3449D7DE37E422B13329612947B1B110180234DC-0-1",
-            "blockHeight": "1908",
-            "txHash": "E9E6E17C8437655B44C7BF7F3449D7DE37E422B13329612947B1B110180234DC",
-            "feeDenomination": null,
-            "feeAmount": null,
-            "rewardAmount": "9918768ucmdx",
-            "delegatorAddress": "comdex1kqv0ky7xmjqwlnqaalqcj2yr262w9zs7nyv9nd",
-            "validatorAddress": "comdexvaloper1kqv0ky7xmjqwlnqaalqcj2yr262w9zs7qnkhdv"
-          },
-          {
-            "id": "27A426BB250C1BAEECE9F93DF256580D22F4BB4E3B9F3B5913BAD9D052C787E6-0-1",
-            "blockHeight": "891",
-            "txHash": "27A426BB250C1BAEECE9F93DF256580D22F4BB4E3B9F3B5913BAD9D052C787E6",
-            "feeDenomination": null,
-            "feeAmount": null,
-            "rewardAmount": "9889891ucmdx",
-            "delegatorAddress": "comdex1dfsdsecpxycnf4rzt5f3h387d0aujvn3r2wfyy",
-            "validatorAddress": "comdexvaloper1dfsdsecpxycnf4rzt5f3h387d0aujvn3sa5m69"
-          },
-          {
-            "id": "A980E8D47C022B820CB5DC77FDA3F46D12054BDFDF1E8E0AA509E3A5983ED900-0-1",
-            "blockHeight": "1441",
-            "txHash": "A980E8D47C022B820CB5DC77FDA3F46D12054BDFDF1E8E0AA509E3A5983ED900",
-            "feeDenomination": null,
-            "feeAmount": null,
-            "rewardAmount": "9885533ucmdx",
-            "delegatorAddress": "comdex17lehl7q4ua3t28pzh2edv2flsc9mt7xcwmm5f5",
-            "validatorAddress": "comdexvaloper17lehl7q4ua3t28pzh2edv2flsc9mt7xcavpxh4"
-          },
-          {
-            "id": "9D93F6A00274EB5C73261909ADE2F40FBEEB5F4DDDE10B580386816CC026CB72-0-1",
-            "blockHeight": "856",
-            "txHash": "9D93F6A00274EB5C73261909ADE2F40FBEEB5F4DDDE10B580386816CC026CB72",
-            "feeDenomination": null,
-            "feeAmount": null,
-            "rewardAmount": "9877250ucmdx",
-            "delegatorAddress": "comdex1dfsdsecpxycnf4rzt5f3h387d0aujvn3r2wfyy",
-            "validatorAddress": "comdexvaloper1dfsdsecpxycnf4rzt5f3h387d0aujvn3sa5m69"
-          }
-        ]
-      }
+    "exchangeRates": {
+      "totalCount": 23,
+      "nodes": [
+        {
+          "id": "15613515-sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "blockHeight": "15613515",
+          "timestamp": "2023-06-16T06:59:29.321",
+          "txHash": "3BCCD70CCA957630D33E059EA9F74882A53B74603FCFAED0EFB5A4F8DB761153",
+          "contractName": "levana.finance:market",
+          "contractAddress": "sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "contractVersion": "0.1.0-beta.15",
+          "longRate": -0.11993339988124402,
+          "shortRate": 0.11803523598915301,
+          "priceNotional": 0.000598617598372426,
+          "priceUSD": 1670.515539000002
+        },
+        {
+          "id": "15613506-sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "blockHeight": "15613506",
+          "timestamp": "2023-06-16T06:59:25.818",
+          "txHash": "EB1839610D908D1D3DF71E89EB0CE7C10582FC85EE4A8070298E859AADC03B51",
+          "contractName": "levana.finance:market",
+          "contractAddress": "sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "contractVersion": "0.1.0-beta.15",
+          "longRate": -0.11993339988124402,
+          "shortRate": 0.11803523598915301,
+          "priceNotional": 0.000598619969003707,
+          "priceUSD": 1670.5089234900004
+        },
+        {
+          "id": "15613502-sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "blockHeight": "15613502",
+          "timestamp": "2023-06-16T06:59:23.04",
+          "txHash": "65E8CB054C8508A7C26AB9E096CBB5006D2DDA48845DAFE8EB272F71AB4E74C6",
+          "contractName": "levana.finance:market",
+          "contractAddress": "sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "contractVersion": "0.1.0-beta.15",
+          "longRate": -0.11993339988124402,
+          "shortRate": 0.11803523598915301,
+          "priceNotional": 0.000598615999812026,
+          "priceUSD": 1670.5199999900008
+        },
+        {
+          "id": "15613497-sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "blockHeight": "15613497",
+          "timestamp": "2023-06-16T06:59:19.829",
+          "txHash": "88FCEB4157E6C88455DF227A2627F621484ABE8F8C150CC1A4A55AF6AE79FC7A",
+          "contractName": "levana.finance:market",
+          "contractAddress": "sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "contractVersion": "0.1.0-beta.15",
+          "longRate": -0.11993339988124402,
+          "shortRate": 0.11803523598915301,
+          "priceNotional": 0.000598615999812026,
+          "priceUSD": 1670.5199999900008
+        },
+        {
+          "id": "15613491-sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "blockHeight": "15613491",
+          "timestamp": "2023-06-16T06:59:15.753",
+          "txHash": "85C0BF5704247B0E3132C55206CFD236BE2A2E5E25EEDB3F0D657C8A534328D3",
+          "contractName": "levana.finance:market",
+          "contractAddress": "sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "contractVersion": "0.1.0-beta.15",
+          "longRate": -0.11993339988124402,
+          "shortRate": 0.11803523598915301,
+          "priceNotional": 0.000598608833075524,
+          "priceUSD": 1670.5399999900003
+        }
+      ]
+    },
+    "dailyAggregations": {
+      "nodes": [
+        {
+          "id": "2023-06-16",
+          "openPriceUSD": 1670.76,
+          "lowPriceUSD": 1670.508887540001,
+          "highPriceUSD": 1670.8,
+          "closePriceUSD": 1670.515539000002
+        }
+      ]
     }
   }
 }
