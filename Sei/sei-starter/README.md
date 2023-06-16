@@ -1,6 +1,6 @@
-# SubQuery - Starter Package for Cosmos Comdex
+# SubQuery - Starter Package for Sei
 
-A basic Comdex example project with an event handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
+A basic example project with an event handler for Sei Network. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html. This project indexes all eth-usd prices provided to the Levana Dex protocol by the Pyth price oracle.
 
 The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
 

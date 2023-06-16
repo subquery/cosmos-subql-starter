@@ -2,5 +2,7 @@
 
 // Auto-generated , DO NOT EDIT
 
-export {PlacedOrders} from "./PlacedOrders"
+export {ExchangeRate} from "./ExchangeRate"
+
+export {DailyAggregation} from "./DailyAggregation"
 
