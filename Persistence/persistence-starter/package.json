@@ -9,7 +9,7 @@
     "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
     "dev": "subql codegen && subql build && docker-compose pull && docker-compose up --remove-orphans",
     "prepack": "rm -rf dist && npm run build",
-    "test": "jest"
+    "test": "subql build && subql-node-cosmos test"
   },
   "homepage": "https://github.com/subquery/cosmos-subql-starter",
   "repository": "github:subquery/cosmos-subql-starter",
@@ -23,6 +23,8 @@
   "devDependencies": {
     "@cosmjs/stargate": "^0.28.9",
     "@subql/cli": "latest",
+    "@subql/testing": "latest",
+    "@subql/node-cosmos": "latest",
     "typescript": "^4.7.4"
   },
   "dependencies": {
@@ -31,5 +33,8 @@
     "pino": "^7.8.0",
     "ts-proto": "^1.112.1",
     "tslib": "^2.3.1"
+  },
+  "resolutions": {
+    "@polkadot/util": "11.1.3"
   }
 }

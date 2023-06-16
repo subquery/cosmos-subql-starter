@@ -1,5 +1,5 @@
 {
-  "name": "Evmos",
+  "name": "evmos-subql-starter",
   "version": "0.0.1",
   "description": "This project can be use as a starting point for developing your Cosmos (Evmos) based SubQuery project",
   "main": "dist/index.js",
@@ -9,7 +9,7 @@
     "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
     "dev": "subql codegen && subql build && docker-compose pull && docker-compose up --remove-orphans",
     "prepack": "rm -rf dist && npm run build",
-    "test": "jest"
+    "test": "subql build && subql-node-cosmos test"
   },
   "homepage": "https://github.com/subquery/cosmos-subql-starter",
   "repository": "github:subquery/cosmos-subql-starter",
@@ -22,6 +22,8 @@
   "license": "MIT",
   "devDependencies": {
     "@subql/cli": "latest",
+    "@subql/testing": "latest",
+    "@subql/node-cosmos": "latest",
     "typescript": "^4.7.4"
   },
   "dependencies": {

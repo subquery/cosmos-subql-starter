@@ -17,13 +17,14 @@ schema:
 network:
   chainId: juno-1
   # This endpoint must be a public non-pruned archive node
+  # We recommend providing more than one endpoint for improved reliability, performance, and uptime
   # Public nodes may be rate limited, which can affect indexing speed
   # When developing your project we suggest getting a private API key
   # You can get them from OnFinality for free https://app.onfinality.io
   # https://documentation.onfinality.io/support/the-enhanced-api-service
-  endpoint: https://juno.api.onfinality.io/public
+  endpoint: ["https://juno.api.onfinality.io/public"]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-  dictionary: https://api.subquery.network/sq/subquery/cosmos-juno-dictionary
+  dictionary: "https://api.subquery.network/sq/subquery/cosmos-juno-dictionary"
   # chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
   #  cosmos.slashing.v1beta1:
   #    file: "./proto/cosmos/slashing/v1beta1/tx.proto"

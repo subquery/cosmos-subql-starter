@@ -18,3 +18,7 @@ jobs:
       run: yarn codegen
     - name: Build
       run: yarn build
+    - name: Install subql-node-cosmos
+      run: yarn global add @subql/node-cosmos
+    - name: Run tests with Subquery Node
+      run: subql-node-cosmos test -f ${{ github.workspace }}

@@ -1,7 +1,7 @@
 {
   "name": "Osmosis",
   "version": "0.0.1",
-  "description": "This project can be use as a starting point for developing your Cosmos (Osmosis) based SubQuery project",
+  "description": "This project can be use as a starting point for developing your Cosmos (Osmosis) based SubQuery project. This Cosmos Example Project indexes all swaps on Osmosis' on chain DEX",
   "main": "dist/index.js",
   "scripts": {
     "build": "subql build",
@@ -9,7 +9,7 @@
     "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
     "dev": "subql codegen && subql build && docker-compose pull && docker-compose up --remove-orphans",
     "prepack": "rm -rf dist && npm run build",
-    "test": "jest"
+    "test": "subql build && subql-node-cosmos test"
   },
   "homepage": "https://github.com/subquery/cosmos-subql-starter",
   "repository": "github:subquery/cosmos-subql-starter",
@@ -23,11 +23,14 @@
   "devDependencies": {
     "@cosmjs/stargate": "^0.28.9",
     "@subql/cli": "latest",
+    "@subql/node-cosmos": "latest",
+    "@subql/testing": "latest",
     "typescript": "^4.7.4"
   },
   "dependencies": {
     "@subql/types-cosmos": "latest",
     "@types/node": "^17.0.21",
+    "osmojs": "^15.2.1",
     "pino": "^7.8.0",
     "ts-proto": "^1.112.1",
     "tslib": "^2.3.1"

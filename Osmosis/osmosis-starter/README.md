@@ -1,12 +1,12 @@
 # SubQuery - Starter Package for Cosmos/Osmosis
 
-A basic Cosmos (based on Osmosis) example project with an event and message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
+A basic Cosmos example project with an event and message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
 
 The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
 
 A SubQuery package defines which data SubQuery will index from the blockchain, and how it will store it.
 
-This Starter Package by default allows **indexing events and messages from Osmosis**.
+**This Cosmos Example Project indexes all swaps on Osmosis' on chain DEX**.
 
 ## Preparation
 
@@ -85,23 +85,21 @@ Finally, you should see a GraphQL playground is showing in the explorer and the 
 With this project can try to query with the following code to get a taste of how it works.
 
 ```graphql
-{
-  query {
-    executeEvents(first: 5) {
-      nodes {
-        id
-        blockHeight
-        txHash
-        contractAddress
-      }
+query {
+  pools(first: 5, orderBy: SWAP_ROUTES_COUNT_DESC) {
+    nodes {
+      id
     }
-    messages(first: 5) {
-      nodes {
-        id
-        blockHeight
-        txHash
-        sender
-        contract
+  }
+  swaps(first: 5) {
+    nodes {
+      id
+      sender
+      tokenInDenom
+      tokenInAmount
+      tokenOutMin
+      swapRoutes(first: 5) {
+        totalCount
       }
     }
   }
