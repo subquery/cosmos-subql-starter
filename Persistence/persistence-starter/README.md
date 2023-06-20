@@ -8,6 +8,7 @@ A SubQuery package defines which data SubQuery will index from the blockchain, a
 
 This Starter Package by default allows **indexing all Delegator Reward withdrawals on Persistence**.
 
+
 ## Preparation
 
 #### Environment and dependencies
@@ -87,7 +88,7 @@ With this project can try to query with the following code to get a taste of how
 ```graphql
 {
   query {
-    delegatorRewards(first: 2 orderBy: BLOCK_HEIGHT_ASC) {
+    delegatorRewards(first: 5, orderBy: REWARD_AMOUNT_DESC) {
       totalCount
       nodes {
         id
