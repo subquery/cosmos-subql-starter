@@ -26,6 +26,7 @@ network:
       "https://sei-testnet-2-rpc.brocha.in/",
     ]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+  dictionary: "https://api.subquery.network/sq/subquery/cosmos-sei-dictionary"
   chainTypes: # This feature allows support for any Cosmos chain by importing the correct protobuf messages
     cosmos.bank.v1beta1.MsgSend:
       file: ./proto/cosmos/bank/v1beta1/tx.proto
