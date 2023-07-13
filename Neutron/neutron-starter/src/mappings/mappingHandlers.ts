@@ -58,10 +58,7 @@ export async function handleAirdropClaim(
     `New Airdrop Claim at block ${msg.block.header.height.toString()}`
   );
 
-  logger.info(JSON.stringify(msg.msg));
-
-  // contract metadata can be set and updated on the same contract call
-
+  // Claim records are created from on chain data
   const airdropClaimRecord = Claim.create({
     id: `${msg.tx.hash}-${msg.idx}`,
     blockHeight: BigInt(msg.block.block.header.height),

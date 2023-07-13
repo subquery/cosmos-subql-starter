@@ -86,21 +86,21 @@ With this project can try to query with the following code to get a taste of how
 
 ```graphql
 query {
-  contractMetadata(first: 5) {
+  claims(first: 5, orderBy: AMOUNT_DESC) {
+    totalCount
     nodes {
       id
-      ownerAddress
-      rewardsAddress
-      contractAddress
+      transactionHash
+      blockHeight
+      date
+      receiver
+      amount
     }
   }
-  rewardWithdrawls(first: 5, orderBy: AMOUNT_DESC) {
+  dailyClaimSummaries(first: 5, orderBy: ID_DESC) {
     nodes {
       id
-      date
-      amount
-      denom
-      rewardAddress
+      totalClaimed
     }
   }
 }

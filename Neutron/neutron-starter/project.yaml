@@ -33,7 +33,7 @@ network:
   #- MsgSetContractMetadata
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 1437614 # The first airdrop claim was on this block
+    startBlock: 1 # This contract was instantiated at genesis
     mapping:
       file: ./dist/index.js
       handlers:
