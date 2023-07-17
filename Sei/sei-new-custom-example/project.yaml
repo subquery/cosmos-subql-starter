@@ -44,22 +44,22 @@ dataSources:
         # Using transaction handlers without filters slows your project down as they can be executed with each and every block
         # - handler: handleTransaction
         #   kind: cosmos/TransactionHandler
-        - handler: handleFundingRateChangeEvent
+        - handler: handleBet
           kind: cosmos/EventHandler
-          # https://sei.explorers.guru/transaction/9A5D1FB99CDFB03282459355E4C7221D93D9971160AE79E201FA2B2895952878
+          # https://sei.explorers.guru/transaction/FD18039DE988771475B4AC744BF4D4E8048F0C913CF6B1D3F369ABA082618A51
           filter:
-            type: wasm-funding-rate-change
+            type: wasm-fuzio-bet
             messageFilter:
               type: "/cosmwasm.wasm.v1.MsgExecuteContract"
               # contractCall field can be specified here too
               #values: # A set of key/value pairs that are present in the message data
               #contract: "juno1v99ehkuetkpf0yxdry8ce92yeqaeaa7lyxr2aagkesrw67wcsn8qxpxay0"
-        - handler: handleSpotPriceEvent
-          kind: cosmos/EventHandler
-          filter:
-            type: wasm-spot-price
-            messageFilter:
-              type: "/cosmwasm.wasm.v1.MsgExecuteContract"
+        # - handler: handleSpotPriceEvent
+        #  kind: cosmos/EventHandler
+        #  filter:
+        #    type: wasm-spot-price
+        #    messageFilter:
+        #      type: "/cosmwasm.wasm.v1.MsgExecuteContract"
         # - handler: handleMessage
         #  kind: cosmos/MessageHandler
         #  filter:
