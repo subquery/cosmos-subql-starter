@@ -13,38 +13,44 @@ export class DailyAggregation implements Entity {
         
             id: string,
         
-            openPriceUSD: number,
+            bullBets: bigint,
         
-            closePriceUSD: number,
+            bearBets: bigint,
         
-            highPriceUSD: number,
+            bullBetSize: bigint,
         
-            lowPriceUSD: number,
+            bearBetSize: bigint,
+        
+            totalSize: bigint,
         
     ) {
         
             this.id = id;
         
-            this.openPriceUSD = openPriceUSD;
+            this.bullBets = bullBets;
         
-            this.closePriceUSD = closePriceUSD;
+            this.bearBets = bearBets;
         
-            this.highPriceUSD = highPriceUSD;
+            this.bullBetSize = bullBetSize;
         
-            this.lowPriceUSD = lowPriceUSD;
+            this.bearBetSize = bearBetSize;
+        
+            this.totalSize = totalSize;
         
     }
 
 
     public id: string;
 
-    public openPriceUSD: number;
+    public bullBets: bigint;
 
-    public closePriceUSD: number;
+    public bearBets: bigint;
 
-    public highPriceUSD: number;
+    public bullBetSize: bigint;
 
-    public lowPriceUSD: number;
+    public bearBetSize: bigint;
+
+    public totalSize: bigint;
 
 
     get _name(): string {
@@ -79,13 +85,15 @@ export class DailyAggregation implements Entity {
         
             record.id,
         
-            record.openPriceUSD,
+            record.bullBets,
         
-            record.closePriceUSD,
+            record.bearBets,
         
-            record.highPriceUSD,
+            record.bullBetSize,
         
-            record.lowPriceUSD,
+            record.bearBetSize,
+        
+            record.totalSize,
         );
         Object.assign(entity,record);
         return entity;

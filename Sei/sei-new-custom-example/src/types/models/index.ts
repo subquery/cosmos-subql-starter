@@ -2,7 +2,7 @@
 
 // Auto-generated , DO NOT EDIT
 
-export {ExchangeRate} from "./ExchangeRate"
+export {Bet} from "./Bet"
 
 export {DailyAggregation} from "./DailyAggregation"
 
