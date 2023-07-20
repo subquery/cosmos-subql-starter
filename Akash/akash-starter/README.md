@@ -1,12 +1,10 @@
-# SubQuery - Starter Package for Cosmos Axelar
+# SubQuery - Starter Package for Sei
 
-A basic Cosmos (based on Axelar) example project with an event and message handler. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html.
+A basic example project with an event handler for Sei Network. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html. This project indexes all eth-usd prices provided to the Levana Dex protocol by the Pyth price oracle.
 
 The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
 
 A SubQuery package defines which data SubQuery will index from the blockchain, and how it will store it.
-
-This Starter Package by default allows **indexing all confirmed deposits from Axelar**.
 
 ## Preparation
 
@@ -85,27 +83,118 @@ Finally, you should see a GraphQL playground is showing in the explorer and the 
 With this project can try to query with the following code to get a taste of how it works.
 
 ```graphql
-{
-  query {
-    transferEvents(first: 5) {
-      nodes {
-        id
-        blockHeight
-        txHash
-        recipient
-        sender
-        amount
-      }
+query {
+  exchangeRates(first: 5, orderBy: BLOCK_HEIGHT_DESC) {
+    totalCount
+    nodes {
+      id
+      blockHeight
+      timestamp
+      txHash
+      contractName
+      contractAddress
+      contractVersion
+      longRate
+      shortRate
+      priceNotional
+      priceUSD
     }
-    messages(first: 5) {
-      nodes {
-        id
-        blockHeight
-        txHash
-        from
-        to
-        amount
-      }
+  }
+  dailyAggregations(first: 5, orderBy: ID_DESC) {
+    nodes {
+      id
+      openPriceUSD
+      lowPriceUSD
+      highPriceUSD
+      closePriceUSD
+    }
+  }
+}
+```
+
+```json
+{
+  "data": {
+    "exchangeRates": {
+      "totalCount": 23,
+      "nodes": [
+        {
+          "id": "15613515-sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "blockHeight": "15613515",
+          "timestamp": "2023-06-16T06:59:29.321",
+          "txHash": "3BCCD70CCA957630D33E059EA9F74882A53B74603FCFAED0EFB5A4F8DB761153",
+          "contractName": "levana.finance:market",
+          "contractAddress": "sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "contractVersion": "0.1.0-beta.15",
+          "longRate": -0.11993339988124402,
+          "shortRate": 0.11803523598915301,
+          "priceNotional": 0.000598617598372426,
+          "priceUSD": 1670.515539000002
+        },
+        {
+          "id": "15613506-sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "blockHeight": "15613506",
+          "timestamp": "2023-06-16T06:59:25.818",
+          "txHash": "EB1839610D908D1D3DF71E89EB0CE7C10582FC85EE4A8070298E859AADC03B51",
+          "contractName": "levana.finance:market",
+          "contractAddress": "sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "contractVersion": "0.1.0-beta.15",
+          "longRate": -0.11993339988124402,
+          "shortRate": 0.11803523598915301,
+          "priceNotional": 0.000598619969003707,
+          "priceUSD": 1670.5089234900004
+        },
+        {
+          "id": "15613502-sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "blockHeight": "15613502",
+          "timestamp": "2023-06-16T06:59:23.04",
+          "txHash": "65E8CB054C8508A7C26AB9E096CBB5006D2DDA48845DAFE8EB272F71AB4E74C6",
+          "contractName": "levana.finance:market",
+          "contractAddress": "sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "contractVersion": "0.1.0-beta.15",
+          "longRate": -0.11993339988124402,
+          "shortRate": 0.11803523598915301,
+          "priceNotional": 0.000598615999812026,
+          "priceUSD": 1670.5199999900008
+        },
+        {
+          "id": "15613497-sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "blockHeight": "15613497",
+          "timestamp": "2023-06-16T06:59:19.829",
+          "txHash": "88FCEB4157E6C88455DF227A2627F621484ABE8F8C150CC1A4A55AF6AE79FC7A",
+          "contractName": "levana.finance:market",
+          "contractAddress": "sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "contractVersion": "0.1.0-beta.15",
+          "longRate": -0.11993339988124402,
+          "shortRate": 0.11803523598915301,
+          "priceNotional": 0.000598615999812026,
+          "priceUSD": 1670.5199999900008
+        },
+        {
+          "id": "15613491-sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "blockHeight": "15613491",
+          "timestamp": "2023-06-16T06:59:15.753",
+          "txHash": "85C0BF5704247B0E3132C55206CFD236BE2A2E5E25EEDB3F0D657C8A534328D3",
+          "contractName": "levana.finance:market",
+          "contractAddress": "sei1xg9nz66lw2u6esc036tcjug35s06wljenjfn9qntzv6pcee3782q8hyx28",
+          "contractVersion": "0.1.0-beta.15",
+          "longRate": -0.11993339988124402,
+          "shortRate": 0.11803523598915301,
+          "priceNotional": 0.000598608833075524,
+          "priceUSD": 1670.5399999900003
+        }
+      ]
+    },
+    "dailyAggregations": {
+      "nodes": [
+        {
+          "id": "2023-06-16",
+          "openPriceUSD": 1670.76,
+          "lowPriceUSD": 1670.508887540001,
+          "highPriceUSD": 1670.8,
+          "closePriceUSD": 1670.515539000002
+        }
+      ]
     }
   }
 }

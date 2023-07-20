@@ -1,0 +1,16 @@
+syntax = "proto3";
+package akash.staking.v1beta3;
+
+import "gogoproto/gogo.proto";
+import "akash/staking/v1beta3/params.proto";
+
+option go_package = "github.com/akash-network/akash-api/go/node/staking/v1beta3";
+
+// GenesisState stores slice of genesis deployment instance
+message GenesisState {
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.jsontag)  = "params",
+    (gogoproto.moretags) = "yaml:\"params\""
+  ];
+}

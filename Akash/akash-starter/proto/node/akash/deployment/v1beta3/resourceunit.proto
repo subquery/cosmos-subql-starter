@@ -1,0 +1,29 @@
+syntax = "proto3";
+package akash.deployment.v1beta3;
+
+import "gogoproto/gogo.proto";
+import "akash/base/v1beta3/resources.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/akash-network/akash-api/go/node/deployment/v1beta3";
+
+// ResourceUnit extends Resources and adds Count along with the Price
+message ResourceUnit {
+  option (gogoproto.equal) = false;
+
+  akash.base.v1beta3.Resources resource = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.embed)    = true,
+    (gogoproto.jsontag)  = "resource",
+    (gogoproto.moretags) = "yaml:\"resource\""
+  ];
+  uint32 count = 2 [
+    (gogoproto.jsontag)  = "count",
+    (gogoproto.moretags) = "yaml:\"count\""
+  ];
+  cosmos.base.v1beta1.DecCoin price = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.jsontag)  = "price",
+    (gogoproto.moretags) = "yaml:\"price\""
+  ];
+}

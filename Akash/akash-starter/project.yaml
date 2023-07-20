@@ -1,5 +1,5 @@
 specVersion: 1.0.0
-name: akash-starter
+name: akash-starter-2
 version: 0.0.1
 runner:
   node:
@@ -9,35 +9,33 @@ runner:
     name: "@subql/query"
     version: "*"
 description: >-
-  This project can be use as a starting point for developing your Akash
+  This project can be use as a starting point for developing your Cosmos (Sei)
   based SubQuery project
-repository: https://github.com/subquery/subql-starter
+repository: "https://github.com/subquery/cosmos-subql-starter"
 schema:
   file: ./schema.graphql
-
 network:
+  #chainId: sei-devnet-3
   chainId: akashnet-2
   # This endpoint must be a public non-pruned archive node
-  # We recommend providing more than one endpoint for improved reliability, performance, and uptime
   # Public nodes may be rate limited, which can affect indexing speed
   # When developing your project we suggest getting a private API key
-  # You can get them from OnFinality for free https://app.onfinality.io
-  # https://documentation.onfinality.io/support/the-enhanced-api-service
   endpoint:
+    - https://rpc-akash.ecostake.com:443
     - https://rpc.akashnet.net:443
-    - https://rpc-akash.ecostake.com:443y
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-  # dictionary: "https://api.subquery.network/sq/subquery/cosmos-juno-dictionary"
-  chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
-      cosmos.slashing.v1beta1:
-      file: "./proto/cosmos/slashing/v1beta1/tx.proto"
+  # dictionary: "https://api.subquery.network/sq/subquery/cosmos-sei-dictionary"
+  chainTypes:
+    # This feature allows support for any Cosmos chain by importing the correct protobuf messages
+    akash.staking.v1beta3:
+      file: ./proto/node/akash/staking/v1beta3/params.proto
       messages:
-       - "MsgUnjail"
+        - Params
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 0 # first block on the fourth iteration of juno
+    startBlock: 11364001
     mapping:
-      file: "./dist/index.js"
+      file: ./dist/index.js
       handlers:
         # Using block handlers slows your project down as they can be executed with each and every block. Only use if you need to
         # - handler: handleBlock
@@ -47,6 +45,7 @@ dataSources:
         #   kind: cosmos/TransactionHandler
         - handler: handleReward
           kind: cosmos/EventHandler
+          # https://sei.explorers.guru/transaction/9A5D1FB99CDFB03282459355E4C7221D93D9971160AE79E201FA2B2895952878
           filter:
             type: withdraw_rewards
             messageFilter:
@@ -54,11 +53,17 @@ dataSources:
               # contractCall field can be specified here too
               #values: # A set of key/value pairs that are present in the message data
               #contract: "juno1v99ehkuetkpf0yxdry8ce92yeqaeaa7lyxr2aagkesrw67wcsn8qxpxay0"
-        - # handler: handleMessage
-          # kind: cosmos/MessageHandler
-          # filter:
-            # type: "/cosmos.tx.v1beta1.Tx"
-            # Filter to only messages with the provide_liquidity function call
-            #contractCall: "provide_liquidity" # The name of the contract function that was called
-            #values: # A set of key/value pairs that are present in the message data
-            #contract: "juno1v99ehkuetkpf0yxdry8ce92yeqaeaa7lyxr2aagkesrw67wcsn8qxpxay0"
+        #- handler: handleSpotPriceEvent
+        #  kind: cosmos/EventHandler
+        #  filter:
+        #    type: wasm-spot-price
+         #   messageFilter:
+          #    type: "/cosmwasm.wasm.v1.MsgExecuteContract"
+        # - handler: handleMessage
+        #  kind: cosmos/MessageHandler
+        #  filter:
+        #    type: "/cosmwasm.wasm.v1.MsgExecuteContract"
+        # Filter to only messages with the provide_liquidity function call
+        #contractCall: "provide_liquidity" # The name of the contract function that was called
+        #values: # A set of key/value pairs that are present in the message data
+        #contract: "juno1v99ehkuetkpf0yxdry8ce92yeqaeaa7lyxr2aagkesrw67wcsn8qxpxay0"

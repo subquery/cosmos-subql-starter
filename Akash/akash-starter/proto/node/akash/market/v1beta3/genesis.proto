@@ -1,0 +1,34 @@
+syntax = "proto3";
+package akash.market.v1beta3;
+
+import "gogoproto/gogo.proto";
+import "akash/market/v1beta3/order.proto";
+import "akash/market/v1beta3/lease.proto";
+import "akash/market/v1beta3/bid.proto";
+import "akash/market/v1beta3/params.proto";
+
+option go_package = "github.com/akash-network/akash-api/go/node/market/v1beta3";
+
+// GenesisState defines the basic genesis state used by market module
+message GenesisState {
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.jsontag)  = "params",
+    (gogoproto.moretags) = "yaml:\"params\""
+  ];
+  repeated Order orders = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.jsontag) = "orders",
+    (gogoproto.moretags) = "yaml:\"orders\""
+  ];
+  repeated Lease leases = 3 [
+    (gogoproto.nullable) = false,
+    (gogoproto.jsontag) = "leases",
+    (gogoproto.moretags) = "yaml:\"leases\""
+  ];
+  repeated Bid bids = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.jsontag) = "bids",
+    (gogoproto.moretags) = "yaml:\"bids\""
+  ];
+}
