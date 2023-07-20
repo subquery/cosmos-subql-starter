@@ -1,6 +1,6 @@
 # SubQuery - Starter Package for Akash
 
-A basic example project with an event handler for Akash Network. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html. This project indexes all eth-usd prices provided to the Levana Dex protocol by the Pyth price oracle.
+A basic example project with an event handler for Akash Network. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html. This project indexes all rewards paid to delegators on the Akash blockchain.
 
 The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
 
