@@ -84,7 +84,7 @@ With this project can try to query with the following code to get a taste of how
 
 ```graphql
 query {
-    delegatorRewards (first: 5 orderBy: REWARD_AMOUNT_ASC) {
+    delegatorRewards (first: 5 orderBy: REWARD_AMOUNT_DESC) {
     	nodes {
         id
         delegatorAddress
@@ -102,34 +102,34 @@ This is the result we should be getting:
     "delegatorRewards": {
       "nodes": [
         {
-          "id": "86E85192624C393A450CAA09B62B436CB98F9C0F96D8F08D845E715913A35002",
+          "id": "D8BFFFDC059A9DEA863700F77C61F81B1E4CE1C994E3BC8C2A29E16ECE5F263A",
           "delegatorAddress": null,
           "validatorAddress": null,
-          "rewardAmount": "0stake"
+          "rewardAmount": "9924148uakt"
         },
         {
-          "id": "A592D901A5EDF31E8470DDD6C35DC0098EEB1B844FFAF3B23A6EEDA4B2FCCF6F",
+          "id": "A3548DB94512F3BB9F1C8336CDCC8F55C6C90823D3CA236B6857BD5A84510391",
           "delegatorAddress": null,
           "validatorAddress": null,
-          "rewardAmount": "0stake"
+          "rewardAmount": "9915678uakt"
         },
         {
-          "id": "1EDC72AFF48A1EE0A6BD51E84760FB56ECCC5B9D935CABF5C10B1FF4956AF952",
+          "id": "7BB563443B2AF235DBF2D604872BF6A54C3811A806450D34A87AEBD14B86B021",
           "delegatorAddress": null,
           "validatorAddress": null,
-          "rewardAmount": "0stake"
+          "rewardAmount": "98991uakt"
         },
         {
-          "id": "727DC29BD21F0B4CB1B7C07856598A304A00D2CABCA850841F696E0FBC10BCBC",
+          "id": "1D7AA39EAD90D0F88F8DADD49A286B2F981A662D8E94907E2E78B132D74453FB",
           "delegatorAddress": null,
           "validatorAddress": null,
-          "rewardAmount": "0stake"
+          "rewardAmount": "9876904uakt"
         },
         {
-          "id": "3C90507786EEDB3254ABAE59A8C307595763AFB52433637843E0FDE371DF102D",
+          "id": "D638D609C2AF578F8BCA64F3C56D0461C8996DBC3B8FA4623E5E8F4F207DE916",
           "delegatorAddress": null,
           "validatorAddress": null,
-          "rewardAmount": "0stake"
+          "rewardAmount": "987440uakt"
         }
       ]
     }
