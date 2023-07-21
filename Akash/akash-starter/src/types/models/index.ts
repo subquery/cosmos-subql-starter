@@ -4,3 +4,5 @@
 
 export {DelegatorReward} from "./DelegatorReward"
 
+export {Delegator} from "./Delegator"
+

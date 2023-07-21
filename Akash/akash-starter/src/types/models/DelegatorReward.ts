@@ -17,12 +17,15 @@ export class DelegatorReward implements Entity {
         
         
         
+            rewardAmount: string,
         
         
         
     ) {
         
             this.id = id;
+        
+            this.rewardAmount = rewardAmount;
         
     }
 
@@ -37,7 +40,7 @@ export class DelegatorReward implements Entity {
 
     public feeAmount?: string;
 
-    public rewardAmount?: string;
+    public rewardAmount: string;
 
     public delegatorAddress?: string;
 
@@ -75,6 +78,8 @@ export class DelegatorReward implements Entity {
         let entity = new this(
         
             record.id,
+        
+            record.rewardAmount,
         );
         Object.assign(entity,record);
         return entity;
