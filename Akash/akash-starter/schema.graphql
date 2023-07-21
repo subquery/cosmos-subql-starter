@@ -9,7 +9,7 @@ type DelegatorReward @entity {
   feeDenomination: String
   feeAmount: String
   rewardAmount: String!
-  delegatorAddress: String
+  delegatorAddress: String!
   validatorAddress: String
 }
 

@@ -32,7 +32,7 @@ export async function handleReward(event: CosmosEvent): Promise<void> {
   const validatorAddress = event.event.attributes.find((a) => a.key === "validator")?.value;
   const delegatorAddress = event.tx.tx.events.find((e) => e.type === "coins_received")?.attributes.find((a) => a.key === "receiver")?.value;
   
-  if (!recordAmount) {
+  if (!recordAmount || !validatorAddress || !delegatorAddress) {
     logger.info("No reward or no msg found");
     return;
   }

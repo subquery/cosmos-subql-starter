@@ -19,6 +19,7 @@ export class DelegatorReward implements Entity {
         
             rewardAmount: string,
         
+            delegatorAddress: string,
         
         
     ) {
@@ -26,6 +27,8 @@ export class DelegatorReward implements Entity {
             this.id = id;
         
             this.rewardAmount = rewardAmount;
+        
+            this.delegatorAddress = delegatorAddress;
         
     }
 
@@ -42,7 +45,7 @@ export class DelegatorReward implements Entity {
 
     public rewardAmount: string;
 
-    public delegatorAddress?: string;
+    public delegatorAddress: string;
 
     public validatorAddress?: string;
 
@@ -80,6 +83,8 @@ export class DelegatorReward implements Entity {
             record.id,
         
             record.rewardAmount,
+        
+            record.delegatorAddress,
         );
         Object.assign(entity,record);
         return entity;
