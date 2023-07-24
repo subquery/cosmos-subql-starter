@@ -7,14 +7,13 @@ type DelegatorReward @entity {
   blockHeight: BigInt
   txHash: String
   feeDenomination: String
-  feeAmount: String
-  rewardAmount: String!
-  delegatorAddress: String!
+  feeAmount: BigInt
+  rewardAmount: BigInt!
+  delegator: Delegator!
   validatorAddress: String
 }
 
 type Delegator @entity {
   id: ID!
-  rewardsList: [BigInt]!
   totalRewards: BigInt!
 }
