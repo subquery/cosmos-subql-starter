@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package akash.manifest.v2beta1;
+
+import "gogoproto/gogo.proto";
+import "akash/manifest/v2beta1/service.proto";
+
+option (gogoproto.goproto_stringer_all) = false;
+option (gogoproto.stringer_all)         = true;
+option go_package                       = "github.com/akash-network/akash-api/go/manifest/v2beta1";
+
+// Group store name and list of services
+message Group {
+  // getters must be implemented as value receiver
+  // due to GetName collision
+  option (gogoproto.goproto_getters) = false;
+  string name = 1 [
+    (gogoproto.jsontag)  = "name",
+    (gogoproto.moretags) = "yaml:\"name\""
+  ];
+  repeated Service services = 2 [
+    (gogoproto.nullable)     = false,
+    (gogoproto.jsontag)      = "services",
+    (gogoproto.moretags)     = "yaml:\"services\""
+  ];
+}

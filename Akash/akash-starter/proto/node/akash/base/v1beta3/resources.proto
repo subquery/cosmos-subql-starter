@@ -1,0 +1,51 @@
+syntax = "proto3";
+package akash.base.v1beta3;
+
+import "gogoproto/gogo.proto";
+import "akash/base/v1beta3/cpu.proto";
+import "akash/base/v1beta3/gpu.proto";
+import "akash/base/v1beta3/memory.proto";
+import "akash/base/v1beta3/storage.proto";
+import "akash/base/v1beta3/endpoint.proto";
+
+option go_package = "github.com/akash-network/akash-api/go/node/types/v1beta3";
+
+// Resources describes all available resources types for deployment/node etc
+// if field is nil resource is not present in the given data-structure
+message Resources {
+  option (gogoproto.equal) = true;
+  uint32 id = 1 [
+    (gogoproto.customname) = "ID",
+    (gogoproto.jsontag)    = "id",
+    (gogoproto.moretags)   = "yaml:\"id\""
+  ];
+  CPU cpu                  = 2 [
+    (gogoproto.nullable)   = true,
+    (gogoproto.customname) = "CPU",
+    (gogoproto.jsontag)    = "cpu,omitempty",
+    (gogoproto.moretags)   = "yaml:\"cpu,omitempty\""
+  ];
+  Memory memory = 3 [
+    (gogoproto.nullable) = true,
+    (gogoproto.jsontag)  = "memory,omitempty",
+    (gogoproto.moretags) = "yaml:\"memory,omitempty\""
+  ];
+  repeated Storage storage   = 4 [
+    (gogoproto.nullable)     = false,
+    (gogoproto.castrepeated) = "Volumes",
+    (gogoproto.jsontag)      = "storage,omitempty",
+    (gogoproto.moretags)     = "yaml:\"storage,omitempty\""
+  ];
+  GPU gpu = 5 [
+    (gogoproto.nullable)     = true,
+    (gogoproto.customname)   = "GPU",
+    (gogoproto.jsontag)      = "gpu,omitempty",
+    (gogoproto.moretags)     = "yaml:\"gpu,omitempty\""
+  ];
+  repeated Endpoint endpoints = 6 [
+    (gogoproto.nullable)     = false,
+    (gogoproto.castrepeated) = "Endpoints",
+    (gogoproto.jsontag)      = "endpoints",
+    (gogoproto.moretags)     = "yaml:\"endpoints\""
+  ];
+}

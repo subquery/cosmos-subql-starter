@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package akash.manifest.v2beta2;
+
+import "gogoproto/gogo.proto";
+import "akash/manifest/v2beta2/httpoptions.proto";
+
+option (gogoproto.goproto_stringer_all) = false;
+option (gogoproto.stringer_all)         = true;
+option go_package                       = "github.com/akash-network/akash-api/go/manifest/v2beta2";
+
+//// State is an enum which refers to state of deployment
+//enum ServiceProtocol {
+//  option (gogoproto.goproto_enum_prefix) = false;
+//  // invalid describes unsupported protocol
+//  invalid = 0 [(gogoproto.enumvalue_customname) = "InvalidProtocol"];
+//  // tcp
+//  tcp     = 1 [(gogoproto.enumvalue_customname) = "TCP"];
+//  // udp
+//  udp     = 2 [(gogoproto.enumvalue_customname) = "UDP"];
+//}
+
+// ServiceExpose stores exposed ports and hosts details
+message ServiceExpose {
+  option (gogoproto.goproto_getters) = false;
+
+  // port on the container
+  uint32 port = 1 [
+    (gogoproto.jsontag)  = "port",
+    (gogoproto.moretags) = "yaml:\"port\""
+  ];
+  // port on the service definition
+  uint32 external_port = 2 [
+    (gogoproto.jsontag)  = "externalPort",
+    (gogoproto.moretags) = "yaml:\"externalPort\""
+  ];
+  string proto = 3 [
+    (gogoproto.casttype) = "ServiceProtocol",
+    (gogoproto.jsontag)  = "proto",
+    (gogoproto.moretags) = "yaml:\"proto\""
+  ];
+  string service = 4 [
+    (gogoproto.jsontag)  = "service",
+    (gogoproto.moretags) = "yaml:\"service\""
+  ];
+  bool global = 5 [
+    (gogoproto.jsontag)  = "global",
+    (gogoproto.moretags) = "yaml:\"global\""
+  ];
+  repeated string hosts = 6 [
+    (gogoproto.jsontag)  = "hosts",
+    (gogoproto.moretags) = "yaml:\"hosts\""
+  ];
+  ServiceExposeHTTPOptions http_options = 7 [
+    (gogoproto.nullable)   = false,
+    (gogoproto.customname) = "HTTPOptions",
+    (gogoproto.jsontag)    = "httpOptions",
+    (gogoproto.moretags)   = "yaml:\"httpOptions\""
+  ];
+  // The name of the IP address associated with this, if any
+  string ip = 8 [
+    (gogoproto.customname) = "IP",
+    (gogoproto.jsontag)    = "ip",
+    (gogoproto.moretags)   = "yaml:\"ip\""
+  ];
+  // The sequence number of the associated endpoint in the on-chain data
+  uint32 endpoint_sequence_number = 9 [
+    (gogoproto.jsontag)  = "endpointSequenceNumber",
+    (gogoproto.moretags) = "yaml:\"endpointSequenceNumber\""
+  ];
+}

@@ -1,0 +1,20 @@
+syntax = "proto3";
+package akash.base.v1beta3;
+
+import "gogoproto/gogo.proto";
+import "akash/base/v1beta3/attribute.proto";
+import "akash/base/v1beta3/resourcevalue.proto";
+
+option go_package = "github.com/akash-network/akash-api/go/node/types/v1beta3";
+
+// CPU stores resource units and cpu config attributes
+message CPU {
+  option (gogoproto.equal)      = true;
+  ResourceValue      units      = 1 [(gogoproto.nullable) = false];
+  repeated Attribute attributes = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "Attributes",
+    (gogoproto.jsontag)  = "attributes,omitempty",
+    (gogoproto.moretags) = "yaml:\"attributes,omitempty\""
+  ];
+}

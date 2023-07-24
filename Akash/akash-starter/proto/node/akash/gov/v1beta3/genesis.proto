@@ -1,0 +1,16 @@
+syntax = "proto3";
+package akash.gov.v1beta3;
+
+import "gogoproto/gogo.proto";
+import "akash/gov/v1beta3/params.proto";
+
+option go_package = "github.com/akash-network/akash-api/go/node/gov/v1beta3";
+
+// GenesisState stores slice of genesis deployment instance
+message GenesisState {
+  DepositParams deposit_params = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.jsontag)  = "deposit_params",
+    (gogoproto.moretags) = "yaml:\"deposit_params\""
+  ];
+}

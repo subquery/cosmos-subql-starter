@@ -1,0 +1,42 @@
+# This module represents buf.build/akash-network/node
+version: v1
+name: buf.build/akash-network/node
+#deps:
+#  - buf.build/cosmos/cosmos-proto
+#  - buf.build/cosmos/cosmos-sdk
+#  - buf.build/cosmos/gogo-proto
+#  - buf.build/googleapis/googleapis
+breaking:
+  use:
+    - FILE
+lint:
+  allow_comment_ignores: true
+  use:
+    - DEFAULT
+    - COMMENTS
+    - FILE_LOWER_SNAKE_CASE
+  except:
+    - UNARY_RPC
+    - COMMENT_FIELD
+    - SERVICE_SUFFIX
+    - ENUM_VALUE_PREFIX
+    - ENUM_VALUE_UPPER_SNAKE_CASE
+    - ENUM_ZERO_VALUE_SUFFIX
+    - RPC_REQUEST_STANDARD_NAME
+  ignore:
+    - akash/audit/v1beta1/
+    - akash/audit/v1beta2/
+    - akash/base/v1beta1
+    - akash/base/v1beta2
+    - akash/cert/v1beta1
+    - akash/cert/v1beta2
+    - akash/escrow/v1beta1
+    - akash/escrow/v1beta2
+    - akash/inflation/v1beta1
+    - akash/inflation/v1beta2
+    - akash/market/v1beta1
+    - akash/market/v1beta2
+    - akash/deployment/v1beta1
+    - akash/deployment/v1beta2
+    - akash/provider/v1beta1
+    - akash/provider/v1beta2
