@@ -1,146 +1,77 @@
-# SubQuery - Starter Package for Akash
+# SubQuery - Example Project for Akash
 
-A basic example project with an event handler for Akash Network. Read more about SubQuery support for Cosmos at https://academy.subquery.network/quickstart/quickstart_chains/cosmos.html. This project indexes all rewards paid to delegators on the Akash blockchain.
+[SubQuery](https://subquery.network) is a fast, flexible, and reliable open-source data indexer that provides you with custom APIs for your web3 project across all of our supported networks. To learn about how to get started with SubQuery, [visit our docs](https://academy.subquery.network).
 
-The Starter Package is an example that you can use as a starting point for developing your SubQuery project.
+**This SubQuery project indexes all rewards paid to delegators on Akash Network**
 
-A SubQuery package defines which data SubQuery will index from the blockchain, and how it will store it.
+## Start
 
-## Preparation
+First, install SubQuery CLI globally on your terminal by using NPM `npm install -g @subql/cli`
 
-#### Environment and dependencies
+You can either clone this GitHub repo, or use the `subql` CLI to bootstrap a clean project in the network of your choosing by running `subql init` and following the prompts.
 
-- [Typescript](https://www.typescriptlang.org/) is required to compile project and define types.
+Don't forget to install dependencies with `npm install` or `yarn install`!
 
-- Both SubQuery CLI and generated Project have dependencies and require [Node](https://nodejs.org/en/).
+## Editing your SubQuery project
 
-- You will also need [Yarn](https://classic.yarnpkg.com/lang/en/docs/install) or [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) and [Docker](https://docs.docker.com/engine/install/).
+Although this is a working example SubQuery project, you can edit the SubQuery project by changing the following files:
 
-#### Install the SubQuery CLI and Project Dependencies
+- The project manifest in `project.yaml` defines the key project configuration and mapping handler filters
+- The GraphQL Schema (`schema.graphql`) defines the shape of the resulting data that you are using SubQuery to index
+- The Mapping functions in `src/mappings/` directory are typescript functions that handle transformation logic
 
-Install SubQuery CLI globally on your terminal by using NPM (we don't recommend using Yarn to install global dependencies):
+SubQuery supports various layer-1 blockchain networks and provides [dedicated quick start guides](https://academy.subquery.network/quickstart/quickstart.html) as well as [detailed technical documentation](https://academy.subquery.network/build/introduction.html) for each of them.
 
-```
-npm install -g @subql/cli
-```
+## Run your project
 
-Under the project directory, install the node dependencies by running the following command ([Learn more](https://academy.subquery.network/build/install.html#)):
+_If you get stuck, find out how to get help below._
 
-```
-yarn OR npm install
-```
+The simplest way to run your project is by running `yarn dev` or `npm run-script dev`. This does all of the following:
 
-## Configure the Project Further
+1.  `yarn codegen` - Generates types from the GraphQL schema definition and contract ABIs and saves them in the `/src/types` directory. This must be done after each change to the `schema.graphql` file or the contract ABIs
+2.  `yarn build` - Builds and packages the SubQuery project into the `/dist` directory
+3.  `docker-compose pull && docker-compose up` - Runs a Docker container with an indexer, PostgeSQL DB, and a query service. This requires [Docker to be installed](https://docs.docker.com/engine/install) and running locally. The configuration for this container is set from your `docker-compose.yml`
 
-If you want to change your project you will need to work on the following files:
+You can observe the three services start, and once all are running (it may take a few minutes on your first start), please open your browser and head to [http://localhost:3000](http://localhost:3000) - you should see a GraphQL playground showing with the schemas ready to query. [Read the docs for more information](https://academy.subquery.network/run_publish/run.html) or [explore the possible service configuration for running SubQuery](https://academy.subquery.network/run_publish/references.html).
 
-- The Manifest in `project.yaml` to **configure your project**
-- The GraphQL Schema in `schema.graphql` to **define shape of the data**
-- The Mapping functions in `src/mappings/` directory to **transform data coming from blockchain**
+## Query your project
 
-[Learn more](https://academy.subquery.network/build/introduction.html)
-
-## Build the Project
-
-#### 1. Generate Associated Typescript
-
-We will generate the defined entity models with the following command:
-
-```
-yarn codegen OR npm run-script codegen
-```
-
-If you change any data in your `schema.graphql`, you should run this command again. You should also consider deleting your local database in the `.data/` directory.
-
-#### 2. Build the project
-
-This builds your project into static files within the `/dist` for running.
-
-```
-yarn build OR npm run-script codegen
-```
-
-If you change any data in your `src/mappings/` directory you should run this command again.
-
-## Indexing and Query
-
-#### 1. Run Docker
-
-Under the project directory run following command:
-
-```
-yarn start:docker
-```
-
-This will download packages from Docker, create a new Postgres database, and start an indexing an query service. When you first run this, it may take some time to start, please be patient.
-
-#### 2. Query this Project
-
-Open your browser and head to `http://localhost:3000`.
-
-Finally, you should see a GraphQL playground is showing in the explorer and the schemas that ready to query. On the right hand side is a documentation button that shows you what models you have to construct queries.
-
-With this project can try to query with the following code to get a taste of how it works.
+For this project, you can try to query with the following GraphQL code to get a taste of how it works.
 
 ```graphql
-query {
-    delegatorRewards (first: 5 orderBy: REWARD_AMOUNT_DESC) {
-    	nodes {
+{
+  query {
+    delegatorRewards(first: 5, orderBy: REWARD_AMOUNT_DESC) {
+      nodes {
         id
         delegatorAddress
         validatorAddress
         rewardAmount
-        }
-    }	
-}
-```
-This is the result we should be getting:
-
-```json
-{
-  "data": {
-    "delegatorRewards": {
-      "nodes": [
-        {
-          "id": "D8BFFFDC059A9DEA863700F77C61F81B1E4CE1C994E3BC8C2A29E16ECE5F263A",
-          "delegatorAddress": null,
-          "validatorAddress": null,
-          "rewardAmount": "9924148uakt"
-        },
-        {
-          "id": "A3548DB94512F3BB9F1C8336CDCC8F55C6C90823D3CA236B6857BD5A84510391",
-          "delegatorAddress": null,
-          "validatorAddress": null,
-          "rewardAmount": "9915678uakt"
-        },
-        {
-          "id": "7BB563443B2AF235DBF2D604872BF6A54C3811A806450D34A87AEBD14B86B021",
-          "delegatorAddress": null,
-          "validatorAddress": null,
-          "rewardAmount": "98991uakt"
-        },
-        {
-          "id": "1D7AA39EAD90D0F88F8DADD49A286B2F981A662D8E94907E2E78B132D74453FB",
-          "delegatorAddress": null,
-          "validatorAddress": null,
-          "rewardAmount": "9876904uakt"
-        },
-        {
-          "id": "D638D609C2AF578F8BCA64F3C56D0461C8996DBC3B8FA4623E5E8F4F207DE916",
-          "delegatorAddress": null,
-          "validatorAddress": null,
-          "rewardAmount": "987440uakt"
-        }
-      ]
+      }
     }
   }
 }
 ```
 
-## Useful Resources
+You can explore the different possible queries and entities to help you with GraphQL using the documentation draw on the right.
 
-- [SubQuery Documentation](https://academy.subquery.network/)
-- [Tips and Tricks for Performance Improvements](https://academy.subquery.network/faqs/faqs.html#how-can-i-optimise-my-project-to-speed-it-up)
-- [Automated Historical State tracking](https://academy.subquery.network/th/run_publish/historical.html)
-- [GraphQL Subscriptions](https://academy.subquery.network/run_publish/subscription.html)
-- [Discord with Technical Support Channel](https://discord.com/invite/subquery)
+## Publish your project
+
+SubQuery is open-source, meaning you have the freedom to run it in the following three ways:
+
+- Locally on your own computer (or a cloud provider of your choosing), [view the instructions on how to run SubQuery Locally](https://academy.subquery.network/run_publish/run.html)
+- By publishing it to our enterprise-level [Managed Service](https://managedservice.subquery.network), where we'll host your SubQuery project in production ready services for mission critical data with zero-downtime blue/green deployments. We even have a generous free tier. [Find out how](https://academy.subquery.network/run_publish/publish.html)
+- [Coming Soon] By publishing it to the decentralised [SubQuery Network](https://subquery.network/network), the most open, performant, reliable, and scalable data service for dApp developers. The SubQuery Network indexes and services data to the global community in an incentivised and verifiable way
+
+## What Next?
+
+Take a look at some of our advanced features to take your project to the next level!
+
+- [**Multi-chain indexing support**](https://academy.subquery.network/build/multi-chain.html) - SubQuery allows you to index data from across different layer-1 networks into the same database, this allows you to query a single endpoint to get data for all supported networks.
+- [**Dynamic Data Sources**](https://academy.subquery.network/build/dynamicdatasources.html) - When you want to index factory contracts, for example on a DEX or generative NFT project.
+- [**Project Optimisation Advice**](https://academy.subquery.network/build/optimisation.html) - Some common tips on how to tweak your project to maximise performance.
+- [**GraphQL Subscriptions**](https://academy.subquery.network/run_publish/subscription.html) - Build more reactive front end applications that subscribe to changes in your SubQuery project.
+
+## Need Help?
+
+The fastest way to get support is by [searching our documentation](https://academy.subquery.network), or by [joining our discord](https://discord.com/invite/subquery) and messaging us in the `#technical-support` channel.
