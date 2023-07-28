@@ -1,0 +1,25 @@
+# To improve query performance, we strongly suggest adding indexes to any field that you plan to filter or sort by
+# Add the `@index` or `@index(unique: true)` annotation after any non-key field
+# https://academy.subquery.network/build/graphql.html#indexing-by-non-primary-key-field
+
+type ExchangeRate @entity {
+  id: ID! # Blockheight-contractaddress
+  blockHeight: BigInt!
+  timestamp: Date!
+  txHash: String!
+  contractAddress: String!
+  priceNotional: Float
+  priceUSD: Float
+  longRate: Float
+  shortRate: Float
+  contractName: String
+  contractVersion: String
+}
+
+type DailyAggregation @entity {
+  id: ID! # 2023-03-05
+  openPriceUSD: Float!
+  closePriceUSD: Float!
+  highPriceUSD: Float!
+  lowPriceUSD: Float!
+}

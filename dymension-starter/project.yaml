@@ -1,0 +1,70 @@
+specVersion: 1.0.0
+name: sei-subql-starter
+version: 0.0.1
+runner:
+  node:
+    name: "@subql/node-cosmos"
+    version: "*"
+  query:
+    name: "@subql/query"
+    version: "*"
+description: >-
+  This project can be use as a starting point for developing your Cosmos (Sei) based SubQuery project
+repository: "https://github.com/subquery/cosmos-subql-starter"
+schema:
+  file: ./schema.graphql
+network:
+  #chainId: sei-devnet-3
+  chainId: atlantic-2
+  # This endpoint must be a public non-pruned archive node
+  # Public nodes may be rate limited, which can affect indexing speed
+  # When developing your project we suggest getting a private API key
+  endpoint:
+    [
+      "https://sei.kingnodes.com/",
+      "https://rpc.atlantic-2.seinetwork.io/",
+      "https://sei-testnet-2-rpc.brocha.in/",
+    ]
+  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+  dictionary: "https://api.subquery.network/sq/subquery/cosmos-sei-dictionary"
+  chainTypes: # This feature allows support for any Cosmos chain by importing the correct protobuf messages
+    cosmos.bank.v1beta1.MsgSend:
+      file: ./proto/cosmos/bank/v1beta1/tx.proto
+      messages:
+        - MsgSend
+dataSources:
+  - kind: cosmos/Runtime
+    startBlock: 15613354
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        # Using block handlers slows your project down as they can be executed with each and every block. Only use if you need to
+        # - handler: handleBlock
+        #   kind: cosmos/BlockHandler
+        # Using transaction handlers without filters slows your project down as they can be executed with each and every block
+        # - handler: handleTransaction
+        #   kind: cosmos/TransactionHandler
+        - handler: handleFundingRateChangeEvent
+          kind: cosmos/EventHandler
+          # https://sei.explorers.guru/transaction/9A5D1FB99CDFB03282459355E4C7221D93D9971160AE79E201FA2B2895952878
+          filter:
+            type: wasm-funding-rate-change
+            messageFilter:
+              type: "/cosmwasm.wasm.v1.MsgExecuteContract"
+              # contractCall field can be specified here too
+              #values: # A set of key/value pairs that are present in the message data
+              #contract: "juno1v99ehkuetkpf0yxdry8ce92yeqaeaa7lyxr2aagkesrw67wcsn8qxpxay0"
+        - handler: handleSpotPriceEvent
+          kind: cosmos/EventHandler
+          filter:
+            type: wasm-spot-price
+            messageFilter:
+              type: "/cosmwasm.wasm.v1.MsgExecuteContract"
+        # - handler: handleMessage
+        #  kind: cosmos/MessageHandler
+        #  filter:
+        #    type: "/cosmwasm.wasm.v1.MsgExecuteContract"
+        # Filter to only messages with the provide_liquidity function call
+        #contractCall: "provide_liquidity" # The name of the contract function that was called
+        #values: # A set of key/value pairs that are present in the message data
+        #contract: "juno1v99ehkuetkpf0yxdry8ce92yeqaeaa7lyxr2aagkesrw67wcsn8qxpxay0"
