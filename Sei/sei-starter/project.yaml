@@ -21,9 +21,7 @@ network:
   # When developing your project we suggest getting a private API key
   endpoint:
     [
-      "https://sei.kingnodes.com/",
-      "https://rpc.atlantic-2.seinetwork.io/",
-      "https://sei-testnet-2-rpc.brocha.in/",
+      "https://rpc-sei-testnet.rhinostake.com/",
     ]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   dictionary: "https://api.subquery.network/sq/subquery/cosmos-sei-dictionary"
@@ -34,7 +32,7 @@ network:
         - MsgSend
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 15613354
+    startBlock: 24596905
     mapping:
       file: ./dist/index.js
       handlers:
