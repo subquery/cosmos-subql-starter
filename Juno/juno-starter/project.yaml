@@ -22,7 +22,7 @@ network:
   # When developing your project we suggest getting a private API key
   # You can get them from OnFinality for free https://app.onfinality.io
   # https://documentation.onfinality.io/support/the-enhanced-api-service
-  endpoint: ["https://juno.api.onfinality.io/public"]
+  endpoint: ["https://rpc-juno.whispernode.com"]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   dictionary: "https://api.subquery.network/sq/subquery/cosmos-juno-dictionary"
   # chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
