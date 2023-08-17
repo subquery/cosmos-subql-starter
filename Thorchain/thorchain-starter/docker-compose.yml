@@ -31,13 +31,12 @@ services:
       DB_PORT: 5432
     volumes:
       - ./:/app
-    command: 
+    command:
       - ${SUB_COMMAND} # set SUB_COMMAND env variable to "test" to run tests
       - -f=/app
       - --db-schema=app
       - --workers=4
       - --batch-size=30
-      - # --unsafe=true #use this if you need to make network requests
       - --unfinalized-blocks=true
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
