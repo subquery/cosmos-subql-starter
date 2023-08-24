@@ -1,20 +1,16 @@
-import { EthereumTransaction, EthereumLog } from "@subql/types-ethereum";
+import { EthereumTransaction } from "@subql/types-ethereum";
 import { BigNumber } from "@ethersproject/bignumber";
 import { Approval, Transaction } from "../types";
+import { TransferLog} from "../types/abi-interfaces/Erc20Abi";
 
-// Setup types from ABI
-type TransferEventArgs = [string, string, BigNumber] & {
-  src: string;
-  dst: string;
-  wad: BigNumber;
-};
+// // Setup types from ABI
 type ApproveCallArgs = [string, BigNumber] & {
   guy: string;
   wad: BigNumber;
 };
 
 export async function handleLog(
-  transferLog: EthereumLog<TransferEventArgs>
+  transferLog: TransferLog
 ): Promise<void> {
   logger.info("transaction: " + transferLog.transactionHash);
   const transaction = Transaction.create({
