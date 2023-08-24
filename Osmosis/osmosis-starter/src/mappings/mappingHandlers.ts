@@ -1,6 +1,5 @@
-import { CosmosMessage } from "@subql/types-cosmos";
-import { Pool, Swap, SwapRoute } from "../types";
-import { MsgSwapExactAmountIn } from "../types/proto-interfaces/osmosis/gamm/v1beta1/tx";
+import {MsgSwapExactAmountInMessage} from "../types/CosmosMessageTypes";
+import {Pool, Swap, SwapRoute} from "../types";
 
 async function checkGetPool(id: string): Promise<Pool> {
   // Check that the pool exists and create new ones if now
@@ -13,7 +12,7 @@ async function checkGetPool(id: string): Promise<Pool> {
 }
 
 export async function handleMessage(
-  msg: CosmosMessage<MsgSwapExactAmountIn>
+  msg: MsgSwapExactAmountInMessage
 ): Promise<void> {
   // You can see an example record here https://www.mintscan.io/osmosis/txs/6A22C6C978A96D99FCB08826807C6EB1DCBDCEC6044C35105B624A81A1CB6E24?height=9798771
   logger.info(`New Swap Message received at block ${msg.block.header.height}`);
@@ -37,7 +36,8 @@ export async function handleMessage(
 
   // Create swap routes from the array on the message
   let lastTokenOutDenom = swap.tokenInDenom;
-  msg.msg.decodedMsg.routes.forEach(async (route, index) => {
+  for (const route of msg.msg.decodedMsg.routes) {
+    const index = msg.msg.decodedMsg.routes.indexOf(route);
     // Check that the pool aready exists
     const pool = await checkGetPool(route.poolId.toString());
 
@@ -50,7 +50,7 @@ export async function handleMessage(
     });
     lastTokenOutDenom = route.tokenOutDenom;
     await swapRoute.save();
-  });
+  }
 }
 
 /*
