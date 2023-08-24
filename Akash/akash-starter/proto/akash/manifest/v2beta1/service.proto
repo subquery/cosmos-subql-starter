@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package akash.manifest.v2beta1;
+
+import "gogoproto/gogo.proto";
+import "akash/manifest/v2beta1/serviceexpose.proto";
+import "akash/base/v1beta2/resourceunits.proto";
+
+option (gogoproto.goproto_stringer_all) = false;
+option (gogoproto.stringer_all)         = true;
+option go_package                       = "github.com/akash-network/akash-api/go/manifest/v2beta1";
+
+// StorageParams
+message StorageParams {
+    string name   = 1 [
+      (gogoproto.jsontag)  = "name",
+      (gogoproto.moretags) = "yaml:\"name\""
+    ];
+    string mount  = 2 [
+      (gogoproto.jsontag)  = "mount",
+      (gogoproto.moretags) = "yaml:\"mount\""
+    ];
+    bool read_only = 3 [
+      (gogoproto.jsontag)  = "readOnly",
+      (gogoproto.moretags) = "yaml:\"readOnly\""
+    ];
+}
+
+// ServiceParams
+message ServiceParams {
+  repeated StorageParams storage = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.jsontag)  = "storage",
+    (gogoproto.moretags) = "yaml:\"storage\""
+  ];
+}
+
+// Service stores name, image, args, env, unit, count and expose list of service
+message Service {
+  string name = 1 [
+    (gogoproto.jsontag)  = "name",
+    (gogoproto.moretags) = "yaml:\"name\""
+  ];
+  string image = 2 [
+    (gogoproto.jsontag)  = "image",
+    (gogoproto.moretags) = "yaml:\"image\""
+  ];
+  repeated string command = 3 [
+    (gogoproto.jsontag)  = "command",
+    (gogoproto.moretags) = "yaml:\"command\""
+  ];
+  repeated string args = 4 [
+    (gogoproto.jsontag)  = "args",
+    (gogoproto.moretags) = "yaml:\"args\""
+  ];
+  repeated string env = 5 [
+    (gogoproto.nullable) = true,
+    (gogoproto.jsontag)  = "env",
+    (gogoproto.moretags) = "yaml:\"env\""
+  ];
+  akash.base.v1beta2.ResourceUnits resources = 6 [
+    (gogoproto.nullable) = false,
+    (gogoproto.jsontag)  = "resources",
+    (gogoproto.moretags) = "yaml:\"resources\""
+  ];
+  uint32 count = 7 [
+    (gogoproto.jsontag)  = "count",
+    (gogoproto.moretags) = "yaml:\"count\""
+  ];
+  repeated ServiceExpose expose = 8 [
+    (gogoproto.nullable) = false,
+    (gogoproto.jsontag)  = "expose",
+    (gogoproto.moretags) = "yaml:\"expose\""
+  ];
+  ServiceParams params = 9 [
+    (gogoproto.nullable) = true,
+    (gogoproto.jsontag)  = "params",
+    (gogoproto.moretags) = "yaml:\"params\""
+  ];
+}
