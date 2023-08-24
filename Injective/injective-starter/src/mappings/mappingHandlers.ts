@@ -1,6 +1,5 @@
 import { SpotLimitOrder } from "../types";
-import { CosmosMessage } from "@subql/types-cosmos";
-import { MsgCreateSpotLimitOrder } from "../types/proto-interfaces/injective/exchange/v1beta1/tx";
+import {MsgCreateSpotLimitOrderMessage} from "../types/CosmosMessageTypes";
 
 /*
 export async function handleBlock(block: CosmosBlock): Promise<void> {
@@ -45,7 +44,7 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
 */
 
 export async function handleMessage(
-  msg: CosmosMessage<MsgCreateSpotLimitOrder>
+  msg: MsgCreateSpotLimitOrderMessage
 ): Promise<void> {
   //logger.info(JSON.stringify(msg));
   const spotLimitOrder = SpotLimitOrder.create({
