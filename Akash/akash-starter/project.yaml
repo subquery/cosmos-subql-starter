@@ -28,7 +28,7 @@ network:
   chainTypes:
     # This feature allows support for any Cosmos chain by importing the correct protobuf messages
     akash.staking.v1beta3:
-      file: ./proto/node/akash/staking/v1beta3/params.proto
+      file: ./proto/akash/staking/v1beta3/params.proto
       messages:
         - Params
 dataSources:
@@ -57,8 +57,8 @@ dataSources:
         #  kind: cosmos/EventHandler
         #  filter:
         #    type: wasm-spot-price
-         #   messageFilter:
-          #    type: "/cosmwasm.wasm.v1.MsgExecuteContract"
+        #   messageFilter:
+        #    type: "/cosmwasm.wasm.v1.MsgExecuteContract"
         # - handler: handleMessage
         #  kind: cosmos/MessageHandler
         #  filter:
