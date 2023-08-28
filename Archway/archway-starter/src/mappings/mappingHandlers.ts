@@ -5,15 +5,7 @@ import {
   CosmosTransaction,
 } from "@subql/types-cosmos";
 import { ContractMetadata, RewardWithdrawl } from "../types";
-
-type MsgSetContractMetadataMessage = {
-  senderAddress: string;
-  metadata: {
-    contractAddress: string;
-    ownerAddress: string;
-    rewardsAddress: string;
-  };
-};
+import { MsgSetContractMetadataMessage } from "../types/CosmosMessageTypes";
 
 /*
 export async function handleBlock(block: CosmosBlock): Promise<void> {
@@ -41,29 +33,30 @@ export async function handleSetContractMetadata(
 
   // contract metadata can be set and updated on the same contract call
   let contractMetadataRecord = await ContractMetadata.get(
-    msg.msg.decodedMsg.metadata.contractAddress
+    msg.msg.decodedMsg.msg.decodedMsg.metadata.contractAddress
   );
   if (!contractMetadataRecord) {
     // we are creating a new one
     contractMetadataRecord = ContractMetadata.create({
-      id: msg.msg.decodedMsg.metadata.contractAddress,
+      id: msg.msg.decodedMsg.msg.decodedMsg.metadata.contractAddress,
       createdBlockHeight: BigInt(msg.block.block.header.height),
       createdDate: new Date(msg.block.header.time.toISOString()),
       createdTxHash: msg.tx.hash,
-      contractAddress: msg.msg.decodedMsg.metadata.contractAddress,
+      contractAddress:
+        msg.msg.decodedMsg.msg.decodedMsg.metadata.contractAddress,
       ownerAddress:
-        msg.msg.decodedMsg.metadata.ownerAddress ||
-        msg.msg.decodedMsg.senderAddress,
-      rewardsAddress: msg.msg.decodedMsg.metadata.rewardsAddress,
+        msg.msg.decodedMsg.msg.decodedMsg.metadata.ownerAddress ||
+        msg.msg.decodedMsg.msg.decodedMsg.senderAddress,
+      rewardsAddress: msg.msg.decodedMsg.msg.decodedMsg.metadata.rewardsAddress,
     });
   } else {
     // we are updating
     contractMetadataRecord.contractAddress =
-      msg.msg.decodedMsg.metadata.contractAddress;
+      msg.msg.decodedMsg.msg.decodedMsg.metadata.contractAddress;
     contractMetadataRecord.ownerAddress =
-      msg.msg.decodedMsg.metadata.ownerAddress;
+      msg.msg.decodedMsg.msg.decodedMsg.metadata.ownerAddress;
     contractMetadataRecord.rewardsAddress =
-      msg.msg.decodedMsg.metadata.rewardsAddress;
+      msg.msg.decodedMsg.msg.decodedMsg.metadata.rewardsAddress;
   }
   // Save the data
   await contractMetadataRecord.save();
