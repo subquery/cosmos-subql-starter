@@ -1,19 +1,6 @@
 import { SpotLimitOrder } from "../types";
 import { CosmosMessage } from "@subql/types-cosmos";
-
-type SpotLimitOrderMessage = {
-  sender: string;
-  order: {
-    marketId: string;
-    orderType: string;
-    orderInfo: {
-      subaccountId: string;
-      feeRecipient: string;
-      price: string;
-      quantity: string;
-    };
-  };
-};
+import { MsgCreateSpotLimitOrder } from "../types/proto-interfaces/injective/exchange/v1beta1/tx";
 
 /*
 export async function handleBlock(block: CosmosBlock): Promise<void> {
@@ -58,7 +45,7 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
 */
 
 export async function handleMessage(
-  msg: CosmosMessage<SpotLimitOrderMessage>
+  msg: CosmosMessage<MsgCreateSpotLimitOrder>
 ): Promise<void> {
   //logger.info(JSON.stringify(msg));
   const spotLimitOrder = SpotLimitOrder.create({
@@ -67,7 +54,7 @@ export async function handleMessage(
     txHash: msg.tx.hash,
     from: msg.msg.decodedMsg.sender,
     marketID: msg.msg.decodedMsg.order.marketId,
-    orderType: msg.msg.decodedMsg.order.orderType,
+    orderType: msg.msg.decodedMsg.order.orderType.toString(),
     subAccountID: msg.msg.decodedMsg.order.orderInfo.subaccountId,
     feeRecipient: msg.msg.decodedMsg.order.orderInfo.feeRecipient,
     price: BigInt(msg.msg.decodedMsg.order.orderInfo.price),

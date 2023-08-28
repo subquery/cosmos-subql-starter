@@ -1,6 +1,6 @@
-import { Pool, Swap, SwapRoute } from "../types";
 import { CosmosMessage } from "@subql/types-cosmos";
-import { MsgSwapExactAmountIn } from "osmojs/types/codegen/osmosis/gamm/v1beta1/tx";
+import { Pool, Swap, SwapRoute } from "../types";
+import { MsgSwapExactAmountIn } from "../types/proto-interfaces/osmosis/gamm/v1beta1/tx";
 
 async function checkGetPool(id: string): Promise<Pool> {
   // Check that the pool exists and create new ones if now

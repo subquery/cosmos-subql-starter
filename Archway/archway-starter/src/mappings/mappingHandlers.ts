@@ -5,7 +5,7 @@ import {
   CosmosTransaction,
 } from "@subql/types-cosmos";
 import { ContractMetadata, RewardWithdrawl } from "../types";
-import { MsgSetContractMetadataMessage } from "../types/CosmosMessageTypes";
+import { MsgSetContractMetadata } from "../types/proto-interfaces/archway/rewards/v1/tx";
 
 /*
 export async function handleBlock(block: CosmosBlock): Promise<void> {
@@ -24,7 +24,7 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 */
 
 export async function handleSetContractMetadata(
-  msg: CosmosMessage<MsgSetContractMetadataMessage>
+  msg: CosmosMessage<MsgSetContractMetadata>
 ): Promise<void> {
   // Example https://archway.explorers.guru/transaction/485EC908712CCDC0D65918F0E8E90E291D32720F2D0C691CCC055544B98C14A1
   logger.info(
@@ -33,30 +33,29 @@ export async function handleSetContractMetadata(
 
   // contract metadata can be set and updated on the same contract call
   let contractMetadataRecord = await ContractMetadata.get(
-    msg.msg.decodedMsg.msg.decodedMsg.metadata.contractAddress
+    msg.msg.decodedMsg.metadata.contractAddress
   );
   if (!contractMetadataRecord) {
     // we are creating a new one
     contractMetadataRecord = ContractMetadata.create({
-      id: msg.msg.decodedMsg.msg.decodedMsg.metadata.contractAddress,
+      id: msg.msg.decodedMsg.metadata.contractAddress,
       createdBlockHeight: BigInt(msg.block.block.header.height),
       createdDate: new Date(msg.block.header.time.toISOString()),
       createdTxHash: msg.tx.hash,
-      contractAddress:
-        msg.msg.decodedMsg.msg.decodedMsg.metadata.contractAddress,
+      contractAddress: msg.msg.decodedMsg.metadata.contractAddress,
       ownerAddress:
-        msg.msg.decodedMsg.msg.decodedMsg.metadata.ownerAddress ||
-        msg.msg.decodedMsg.msg.decodedMsg.senderAddress,
-      rewardsAddress: msg.msg.decodedMsg.msg.decodedMsg.metadata.rewardsAddress,
+        msg.msg.decodedMsg.metadata.ownerAddress ||
+        msg.msg.decodedMsg.senderAddress,
+      rewardsAddress: msg.msg.decodedMsg.metadata.rewardsAddress,
     });
   } else {
     // we are updating
     contractMetadataRecord.contractAddress =
-      msg.msg.decodedMsg.msg.decodedMsg.metadata.contractAddress;
+      msg.msg.decodedMsg.metadata.contractAddress;
     contractMetadataRecord.ownerAddress =
-      msg.msg.decodedMsg.msg.decodedMsg.metadata.ownerAddress;
+      msg.msg.decodedMsg.metadata.ownerAddress;
     contractMetadataRecord.rewardsAddress =
-      msg.msg.decodedMsg.msg.decodedMsg.metadata.rewardsAddress;
+      msg.msg.decodedMsg.metadata.rewardsAddress;
   }
   // Save the data
   await contractMetadataRecord.save();
