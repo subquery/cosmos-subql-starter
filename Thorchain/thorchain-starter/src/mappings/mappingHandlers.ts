@@ -1,5 +1,5 @@
-import { Coin, Deposit, DepositCoin } from "../types";
 import { CosmosMessage } from "@subql/types-cosmos";
+import { Coin, Deposit, DepositCoin } from "../types";
 import { MsgDeposit } from "../types/proto-interfaces/thorchain/v1/x/thorchain/types/msg_deposit";
 
 /*
