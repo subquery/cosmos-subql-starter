@@ -32,7 +32,7 @@ network:
       messages:
         - SwapAmountInRoute
     cosmos.base.v1beta1: # needed by MsgSwapExactAmountIn
-      file: "./proto/cosmos/cosmos.base.v1beta1.coin.proto"
+      file: "./proto/cosmos/base/v1beta1/coin.proto"
       messages:
         - "Coin"
 dataSources:
