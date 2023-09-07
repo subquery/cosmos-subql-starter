@@ -56,6 +56,37 @@ For this project, you can try to query with the following GraphQL code to get a 
 }
 ```
 
+Expected output:
+```
+{
+  "data": {
+    "query": {
+      "transfers": {
+        "totalCount": 3,
+        "nodes": [
+          {
+            "id": "9CD40C74F5EAD9FF1A3FBDC5431FA77654AC330000D3F89318F4427694DF462D-0-1061",
+            "blockHeight": "5397298",
+            "fromAddress": "kava1hmdwj6g25f0ku4epaff24e5fd89tft3luhzm9h",
+            "toAddress": "kava1svgnfkalayygw68n4f2jwqpyf3wly654q35faq",
+            "amount": "857743163",
+            "denomination": "swp"
+          },
+          {
+            "id": "300D0C867225E128F64739CE9487D0074FA42E356C0D3C9D79CDF597D357412C-0-1069",
+            "blockHeight": "5397309",
+            "fromAddress": "kava1vzmty0xhx8ggfpn636c96mlpmad3kcwe5ssjzp",
+            "toAddress": "kava12ln9l5egqfemvztz2juvwdx90cld4240lqf56n",
+            "amount": "10000000",
+            "denomination": "ukava"
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
 You can explore the different possible queries and entities to help you with GraphQL using the documentation draw on the right.
 
 ## Publish your project
