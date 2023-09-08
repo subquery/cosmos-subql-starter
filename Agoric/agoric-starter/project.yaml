@@ -9,7 +9,7 @@ runner:
     name: "@subql/query"
     version: "*"
 description: >-
-  This project can be use as a starting point for developing your Agoric based SubQuery project
+  This project can be use as a starting point for developing your Cosmos (%NETWORK_NAME%) based SubQuery project
 repository: "https://github.com/subquery/cosmos-subql-starter"
 schema:
   file: ./schema.graphql
@@ -21,7 +21,7 @@ network:
   # When developing your project we suggest getting a private API key
   endpoint: ["https://agoric-rpc.stakely.io"]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-  dictionary: "https://api.subquery.network/sq/subquery/agoric-hub-dictionary"
+  dictionary: "https://api.subquery.network/sq/subquery/agoric-dictionary"
   chainTypes:
     cosmos.slashing.v1beta1:
       file: ./proto/cosmos/slashing/v1beta1/tx.proto
@@ -37,7 +37,7 @@ network:
         - WeightedVoteOption
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 11253519
+    startBlock: 11447935
     mapping:
       file: ./dist/index.js
       handlers:
