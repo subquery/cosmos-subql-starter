@@ -1,20 +1,8 @@
-import { EthereumTransaction, EthereumLog } from "@subql/types-ethereum";
-import { BigNumber } from "@ethersproject/bignumber";
 import { Approval, Transaction } from "../types";
-
-// Setup types from ABI
-type TransferEventArgs = [string, string, BigNumber] & {
-  from: string;
-  to: string;
-  value: BigNumber;
-};
-type ApproveCallArgs = [string, BigNumber] & {
-  _spender: string;
-  _value: BigNumber;
-};
+import {ApproveTransaction, TransferLog} from "../types/abi-interfaces/Erc20Abi";
 
 export async function handleLog(
-  transferLog: EthereumLog<TransferEventArgs>
+  transferLog: TransferLog
 ): Promise<void> {
   logger.info("transaction: " + transferLog.transactionHash);
   const transaction = Transaction.create({
@@ -29,14 +17,14 @@ export async function handleLog(
 }
 
 export async function handleTransaction(
-  approveCallTransaction: EthereumTransaction<ApproveCallArgs>
+  approveCallTransaction: ApproveTransaction
 ): Promise<void> {
   logger.info("approval: " + approveCallTransaction.hash);
   const approval = Approval.create({
     id: approveCallTransaction.hash,
     owner: approveCallTransaction.from,
-    value: approveCallTransaction.args._value.toBigInt(),
-    spender: approveCallTransaction.args._spender,
+    value: BigInt((await approveCallTransaction.args[1]).toString()),
+    spender: (await approveCallTransaction.args[0]).toString(),
     contractAddress: approveCallTransaction.to,
   });
 

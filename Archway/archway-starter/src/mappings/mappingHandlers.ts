@@ -5,15 +5,7 @@ import {
   CosmosTransaction,
 } from "@subql/types-cosmos";
 import { ContractMetadata, RewardWithdrawl } from "../types";
-
-type MsgSetContractMetadataMessage = {
-  senderAddress: string;
-  metadata: {
-    contractAddress: string;
-    ownerAddress: string;
-    rewardsAddress: string;
-  };
-};
+import { MsgSetContractMetadata } from "../types/proto-interfaces/archway/rewards/v1/tx";
 
 /*
 export async function handleBlock(block: CosmosBlock): Promise<void> {
@@ -32,7 +24,7 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 */
 
 export async function handleSetContractMetadata(
-  msg: CosmosMessage<MsgSetContractMetadataMessage>
+  msg: CosmosMessage<MsgSetContractMetadata>
 ): Promise<void> {
   // Example https://archway.explorers.guru/transaction/485EC908712CCDC0D65918F0E8E90E291D32720F2D0C691CCC055544B98C14A1
   logger.info(

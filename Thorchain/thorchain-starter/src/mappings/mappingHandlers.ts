@@ -1,19 +1,5 @@
 import { Coin, Deposit, DepositCoin } from "../types";
-import { CosmosMessage } from "@subql/types-cosmos";
-
-type DepositMessage = {
-  coins: {
-    asset: {
-      chain: string;
-      symbol: string;
-      ticker: string;
-      synth: boolean;
-    };
-    amount: string;
-  }[];
-  memo: string;
-  signer: any;
-};
+import {MsgDepositMessage} from "../types/CosmosMessageTypes";
 
 /*
 export async function handleBlock(block: CosmosBlock): Promise<void> {
@@ -34,7 +20,7 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 */
 
 export async function handleMessage(
-  msg: CosmosMessage<DepositMessage>
+  msg: MsgDepositMessage
 ): Promise<void> {
   // Create Deposit record
   const depositEntity = Deposit.create({

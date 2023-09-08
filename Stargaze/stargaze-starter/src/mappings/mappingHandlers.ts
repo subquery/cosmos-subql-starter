@@ -40,7 +40,9 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
     id: `${event.tx.hash}-${event.msg.idx}-${event.idx}`,
     blockHeight: BigInt(event.block.block.header.height),
     txHash: event.tx.hash,
-    contractAddress: event.event.attributes.find(attr => attr.key === '_contract_address').value
+    contractAddress: event.event.attributes.find(
+      (attr) => attr.key === "_contract_address"
+    )!.value,
   });
 
   await eventRecord.save();

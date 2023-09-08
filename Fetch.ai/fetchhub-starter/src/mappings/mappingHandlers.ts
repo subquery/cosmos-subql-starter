@@ -5,6 +5,7 @@ import {
   CosmosMessage,
   CosmosTransaction,
 } from "@subql/types-cosmos";
+import { MsgSend } from "../types/proto-interfaces/cosmos/bank/v1beta1/tx";
 
 /*
 export async function handleBlock(block: CosmosBlock): Promise<void> {
@@ -24,14 +25,16 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 }
 */
 
-export async function handleMessage(msg: CosmosMessage): Promise<void> {
+export async function handleMessage(
+  msg: CosmosMessage<MsgSend>
+): Promise<void> {
   const messageRecord = Message.create({
     id: `${msg.tx.hash}-${msg.idx}`,
     blockHeight: BigInt(msg.block.block.header.height),
     txHash: msg.tx.hash,
     from: msg.msg.decodedMsg.fromAddress,
     to: msg.msg.decodedMsg.toAddress,
-    amount: JSON.stringify(msg.msg.decodedMsg.amount)
+    amount: JSON.stringify(msg.msg.decodedMsg.amount),
   });
   await messageRecord.save();
 }
@@ -41,12 +44,12 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
     id: `${event.tx.hash}-${event.msg.idx}-${event.idx}`,
     blockHeight: BigInt(event.block.block.header.height),
     txHash: event.tx.hash,
-    recipient: '',
-    amount: '',
-    sender: ''
+    recipient: "",
+    amount: "",
+    sender: "",
   });
-  for(const attr of event.event.attributes) {
-    switch(attr.key) {
+  for (const attr of event.event.attributes) {
+    switch (attr.key) {
       case "recipient":
         eventRecord.recipient = attr.value;
         break;

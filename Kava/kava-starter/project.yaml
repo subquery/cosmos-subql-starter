@@ -32,7 +32,7 @@ network:
         - Coin
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 3871667
+    startBlock: 5397233
     mapping:
       file: ./dist/index.js
       handlers:
