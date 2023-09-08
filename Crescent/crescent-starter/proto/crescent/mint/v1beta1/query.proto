@@ -1,0 +1,40 @@
+syntax = "proto3";
+package crescent.mint.v1beta1;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "crescent/mint/v1beta1/mint.proto";
+
+option go_package = "github.com/crescent-network/crescent/v5/x/mint/types";
+
+// Query provides defines the gRPC querier service.
+service Query {
+  // Params returns the total set of minting parameters.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/crescent/mint/v1beta1/params";
+  }
+
+  // LastBlockTime returns the last block time.
+  rpc LastBlockTime(QueryLastBlockTimeRequest) returns (QueryLastBlockTimeResponse) {
+    option (google.api.http).get = "/crescent/mint/v1beta1/last_block_time";
+  }
+}
+
+// QueryParamsRequest is the request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is the response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params defines the parameters of the module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryLastBlockTimeRequest is the request type for the Query/LastBlockTime RPC method.
+message QueryLastBlockTimeRequest {}
+
+// QueryLastBlockTimeResponse is the response type for the Query/LastBlockTime RPC method.
+message QueryLastBlockTimeResponse {
+  google.protobuf.Timestamp last_block_time = 1
+      [(gogoproto.stdtime) = true, (gogoproto.moretags) = "yaml:\"last_block_time\""];
+}
