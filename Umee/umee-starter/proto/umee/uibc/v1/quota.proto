@@ -1,0 +1,49 @@
+syntax = "proto3";
+package umee.uibc.v1;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/umee-network/umee/v6/x/uibc";
+
+// Params of x/uibc module
+message Params {
+  // ibc_status defines the IBC ICS20 status (transfer quota or transfers disabled).
+  IBCTransferStatus ibc_status = 1;
+  // total_quota defines the total outflow limit of ibc-transfer in USD
+  string total_quota = 2 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable)   = false
+  ];
+  // token_quota defines the outflow limit per token in USD
+  string token_quota = 3 [
+    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable)   = false
+  ];
+  // quota_duration defines quota expires for each ibc-transfer denom in seconds
+  google.protobuf.Duration quota_duration = 4 [
+    (gogoproto.nullable)    = false,
+    (gogoproto.stdduration) = true,
+    (gogoproto.jsontag)     = "quota_duration,omitempty",
+    (gogoproto.moretags)    = "yaml:\"quota_duration\""
+  ];
+}
+
+// IBCTransferStatus status of ibc-transfer quota check for inflow and outflow
+enum IBCTransferStatus {
+  // UNSPECIFIED  defines a no-op status.
+  IBC_TRANSFER_STATUS_UNSPECIFIED = 0;
+  // DISABLED: all inflow and outflow quota checks are disabled.
+  IBC_TRANSFER_STATUS_QUOTA_DISABLED = 1;
+  // ENABLED: all inflow and outflow quota checks are enabled.
+  IBC_TRANSFER_STATUS_QUOTA_ENABLED = 2;
+  // DISABLED OUT: outflow quota check is disabled, while the inflow quota check is enabled.
+  IBC_TRANSFER_STATUS_QUOTA_OUT_DISABLED = 3;
+  // DISABLED IN: inflow quota check is disabled, while the outflow quota check is enabled.
+  IBC_TRANSFER_STATUS_QUOTA_IN_DISABLED = 4;
+  // PAUSED: all IBC transfers are paused.
+  IBC_TRANSFER_STATUS_TRANSFERS_PAUSED = 5;
+}
