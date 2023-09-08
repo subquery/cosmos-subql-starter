@@ -1,0 +1,7 @@
+syntax = "proto3";
+package mars.envoy.v1beta1;
+
+option go_package = "github.com/mars-protocol/hub/x/envoy/types";
+
+// GenesisState defines the module's genesis state.
+message GenesisState {}

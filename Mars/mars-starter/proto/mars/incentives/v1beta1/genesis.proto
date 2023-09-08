@@ -1,0 +1,16 @@
+syntax = "proto3";
+package mars.incentives.v1beta1;
+
+import "gogoproto/gogo.proto";
+import "mars/incentives/v1beta1/store.proto";
+
+option go_package = "github.com/mars-protocol/hub/x/incentives/types";
+
+// GenesisState defines the incentives module's genesis state
+message GenesisState {
+  // NextScheduleId is the id for the next incentives schedule to be created
+  uint64 next_schedule_id = 1 [(gogoproto.moretags) = "yaml:\"next_schedule_id\""];
+
+  // Schedules is an array of active incentives schedules
+  repeated Schedule schedules = 2 [(gogoproto.nullable) = false];
+}
