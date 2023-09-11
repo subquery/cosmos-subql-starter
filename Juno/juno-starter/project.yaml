@@ -32,7 +32,7 @@ network:
   #     - "MsgUnjail"
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 4415041 # first block on the fourth iteration of juno
+    startBlock: 9700000 # Set this to the start block
     mapping:
       file: "./dist/index.js"
       handlers:
