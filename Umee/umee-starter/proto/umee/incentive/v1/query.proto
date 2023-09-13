@@ -1,0 +1,253 @@
+syntax = "proto3";
+package umee.incentive.v1;
+
+import "google/api/annotations.proto";
+import "gogoproto/gogo.proto";
+import "umee/incentive/v1/incentive.proto";
+import "umee/incentive/v1/genesis.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/umee-network/umee/v6/x/incentive";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Params queries the parameters of the x/incentive module.
+  rpc Params(QueryParams) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/umee/incentive/v1/params";
+  }
+
+  // TotalBonded queries the sum of all bonded collateral uTokens.
+  rpc TotalBonded(QueryTotalBonded)
+      returns (QueryTotalBondedResponse) {
+    option (google.api.http).get = "/umee/incentive/v1/total_bonded";
+  }
+
+  // TotalUnbonding queries the sum of all unbonding collateral uTokens.
+  rpc TotalUnbonding(QueryTotalUnbonding)
+      returns (QueryTotalUnbondingResponse) {
+    option (google.api.http).get = "/umee/incentive/v1/total_unbonding";
+  }
+
+  // AccountBonds queries all bonded collateral and unbondings associated with an account.
+  rpc AccountBonds(QueryAccountBonds)
+      returns (QueryAccountBondsResponse) {
+    option (google.api.http).get = "/umee/incentive/v1/account_bonds/{address}";
+  }
+
+  // PendingRewards queries unclaimed incentive rewards associated with an account.
+  rpc PendingRewards(QueryPendingRewards)
+      returns (QueryPendingRewardsResponse) {
+    option (google.api.http).get = "/umee/incentive/v1/pending_rewards/{address}";
+  }
+
+  // CompletedIncentivePrograms queries for all incentives programs that have been passed
+  // by governance, and either run to completion or expired immediately due to not being funded.
+  rpc CompletedIncentivePrograms(QueryCompletedIncentivePrograms)
+      returns (QueryCompletedIncentiveProgramsResponse) {
+    option (google.api.http).get = "/umee/incentive/v1/programs/completed";
+  }
+
+  // OngoingIncentivePrograms queries for all incentives programs that have been passed
+  // by governance, funded, and started but not yet completed.
+  rpc OngoingIncentivePrograms(QueryOngoingIncentivePrograms)
+      returns (QueryOngoingIncentiveProgramsResponse) {
+    option (google.api.http).get = "/umee/incentive/v1/programs/ongoing";
+  }
+
+  // UpcomingIncentivePrograms queries for all incentives programs that have been passed
+  // by governance, but not yet started. They may or may not have been funded.
+  rpc UpcomingIncentivePrograms(QueryUpcomingIncentivePrograms)
+      returns (QueryUpcomingIncentiveProgramsResponse) {
+    option (google.api.http).get = "/umee/incentive/v1/programs/upcoming";
+  }
+
+  // IncentiveProgram queries a single incentive program by ID.
+  rpc IncentiveProgram(QueryIncentiveProgram)
+      returns (QueryIncentiveProgramResponse) {
+    option (google.api.http).get = "/umee/incentive/v1/program/{id}";
+  }
+
+  // CurrentRates queries the hypothetical return of a bonded uToken denomination
+  // if current incentive rewards continued for one year. The response is an sdk.Coins
+  // of base token rewards, per reference amount (usually 10^exponent of the uToken.)
+  rpc CurrentRates(QueryCurrentRates)
+      returns (QueryCurrentRatesResponse) {
+    option (google.api.http).get = "/umee/incentive/v1/current_rates";
+  }
+
+  // ActualRates queries the hypothetical return of a bonded uToken denomination
+  // if current incentive rewards continued for one year. The response is an sdk.Dec
+  // representing an oracle-adjusted APY.
+  rpc ActualRates(QueryActualRates)
+      returns (QueryActualRatesResponse) {
+    option (google.api.http).get = "/umee/incentive/v1/actual_rates";
+  }
+
+  // LastRewardTime queries the last block time at which incentive rewards were calculated.
+  rpc LastRewardTime(QueryLastRewardTime)
+      returns (QueryLastRewardTimeResponse) {
+    option (google.api.http).get = "/umee/incentive/v1/last_reward_time";
+  }
+}
+
+// QueryParams defines the request structure for the Params gRPC service
+// handler.
+message QueryParams {}
+
+// QueryParamsResponse defines the response structure for the Params gRPC
+// service handler.
+message QueryParamsResponse {
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryPendingRewards defines the request structure for the PendingRewards gRPC service handler.
+message QueryPendingRewards {
+  string address = 1;
+}
+
+// QueryPendingRewardsResponse defines the response structure for the PendingRewards gRPC service handler.
+message QueryPendingRewardsResponse {
+  repeated cosmos.base.v1beta1.Coin rewards = 1 [
+    (gogoproto.nullable)     = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+// QueryAccountBonds defines the request structure for the AccountBonds gRPC service handler.
+message QueryAccountBonds {
+  string address = 1;
+}
+
+// QueryAccountBondsResponse defines the response structure for the AccountBonds gRPC service handler.
+message QueryAccountBondsResponse {
+  repeated cosmos.base.v1beta1.Coin bonded = 1 [
+    (gogoproto.nullable)     = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated cosmos.base.v1beta1.Coin unbonding = 2 [
+    (gogoproto.nullable)     = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+  repeated Unbonding unbondings = 3 [(gogoproto.nullable) = false];
+}
+
+// QueryTotalBonded defines the request structure for the TotalBonded gRPC service handler.
+message QueryTotalBonded {
+  // denom is an optional field which causes the query to return the totals of only one uToken
+  string denom = 1;
+}
+
+// QueryTotalBondedResponse defines the response structure for the TotalBonded gRPC service handler.
+message QueryTotalBondedResponse {
+  repeated cosmos.base.v1beta1.Coin bonded = 1 [
+    (gogoproto.nullable)     = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+// QueryTotalUnbonding defines the request structure for the TotalUnbonding gRPC service handler.
+message QueryTotalUnbonding {
+  // denom is an optional field which causes the query to return the totals of only one uToken
+  string denom = 1;
+}
+
+// QueryTotalUnbondingResponse defines the response structure for the TotalUnbonding gRPC service handler.
+message QueryTotalUnbondingResponse {
+  repeated cosmos.base.v1beta1.Coin unbonding = 1 [
+    (gogoproto.nullable)     = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+// QueryUpcomingIncentivePrograms defines the request structure for the
+// OngoingIncentivePrograms and UpcomingIncentivePrograms gRPC service handlers.
+message QueryUpcomingIncentivePrograms {
+}
+
+// QueryUpcomingIncentiveProgramsResponse defines the response structure for the
+// OngoingIncentivePrograms and UpcomingIncentivePrograms gRPC service handlers.
+message QueryUpcomingIncentiveProgramsResponse {
+  repeated IncentiveProgram programs = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryOngoingIncentivePrograms defines the request structure for the
+// OngoingIncentivePrograms and UpcomingIncentivePrograms gRPC service handlers.
+message QueryOngoingIncentivePrograms {
+}
+
+// QueryOngoingIncentiveProgramsResponse defines the response structure for the
+// OngoingIncentivePrograms and UpcomingIncentivePrograms gRPC service handlers.
+message QueryOngoingIncentiveProgramsResponse {
+  repeated IncentiveProgram programs = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryCompletedIncentivePrograms defines the request structure for the
+// CompletedIncentivePrograms gRPC service handler.
+message QueryCompletedIncentivePrograms {}
+
+// QueryCompletedIncentiveProgramsResponse defines the response structure for the
+// CompletedIncentivePrograms gRPC service handler.
+message QueryCompletedIncentiveProgramsResponse {
+  repeated IncentiveProgram programs = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryIncentiveProgram defines the request structure for the IncentiveProgram
+// gRPC service handler.
+message QueryIncentiveProgram {
+  // ID specifies which program to query for
+  uint32 id = 1;
+}
+
+// QueryIncentivePrograResponse defines the response structure for the
+// IncentiveProgram gRPC service handler.
+message QueryIncentiveProgramResponse {
+  IncentiveProgram program = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryCurrentRates defines the request structure for the CurrentRates gRPC service handler.
+message QueryCurrentRates {
+  // uToken is the uToken denomination whose current annual rate of rewards is being queried
+  string uToken = 1;
+}
+
+// QueryCurrentRatesResponse defines the response structure for the CurrentRates gRPC service handler.
+message QueryCurrentRatesResponse {
+  // Reference Bond is an amount of bonded uTokens (usually 10^exponent) whose current rewards are being
+  // calculated. This amount can be used to compute an individual user's rewards: for example, if a user has
+  // 2.5x the reference amount currently bonded, then they would receive 2.5x the rewards below annually
+  // at current rates.
+  cosmos.base.v1beta1.Coin reference_bond = 1 [
+    (gogoproto.nullable) = false
+  ];
+  // Rewards are the amount of base token rewards that the reference amount of bonded uTokens would earn
+  // if current rates continued for a full year.
+  repeated cosmos.base.v1beta1.Coin rewards = 2 [
+    (gogoproto.nullable)     = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+// QueryLastRewardTime defines the request structure for the LastRewardTime gRPC service
+// handler.
+message QueryLastRewardTime {}
+
+// QueryLastRewardTimeResponse defines the response structure for the LastRewardTime gRPC
+// service handler.
+message QueryLastRewardTimeResponse {
+  int64 time = 1;
+}
+
+// QueryActualRates defines the request structure for the ActualRates gRPC service handler.
+message QueryActualRates {
+  // uToken is the uToken denomination whose current annual rate of rewards is being queried
+  string uToken = 1;
+}
+
+// QueryActualRatesResponse defines the response structure for the ActualRates gRPC service handler.
+message QueryActualRatesResponse {
+  // APY is the oracle price-adjusted APY of the bonded uToken.
+  string APY = 1 [
+    (gogoproto.nullable)   = false,
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"
+  ];
+}

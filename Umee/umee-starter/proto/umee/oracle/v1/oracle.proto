@@ -1,0 +1,150 @@
+syntax = "proto3";
+package umee.oracle.v1;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "github.com/umee-network/umee/v6/x/oracle/types";
+
+option (gogoproto.goproto_getters_all) = false;
+
+// Params defines the parameters for the oracle module.
+message Params {
+  option (gogoproto.equal)            = true;
+  option (gogoproto.goproto_stringer) = false;
+
+  uint64 vote_period    = 1 [(gogoproto.moretags) = "yaml:\"vote_period\""];
+  string vote_threshold = 2 [
+    (gogoproto.moretags)   = "yaml:\"vote_threshold\"",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable)   = false
+  ];
+  string reward_band = 3 [
+    (gogoproto.moretags)   = "yaml:\"reward_band\"",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable)   = false
+  ];
+  uint64 reward_distribution_window = 4
+      [(gogoproto.moretags) = "yaml:\"reward_distribution_window\""];
+  repeated Denom accept_list = 5 [
+    (gogoproto.moretags)     = "yaml:\"accept_list\"",
+    (gogoproto.castrepeated) = "DenomList",
+    (gogoproto.nullable)     = false
+  ];
+  string slash_fraction = 6 [
+    (gogoproto.moretags)   = "yaml:\"slash_fraction\"",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable)   = false
+  ];
+  uint64 slash_window         = 7 [(gogoproto.moretags) = "yaml:\"slash_window\""];
+  string min_valid_per_window = 8 [
+    (gogoproto.moretags)   = "yaml:\"min_valid_per_window\"",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable)   = false
+  ];
+  // Historic Stamp Period represents the amount of blocks the oracle
+  // module waits before recording a new historic price.
+  uint64 historic_stamp_period = 9;
+  // Median Stamp Period represents the amount blocks the oracle module
+  // waits between calculating and stamping a new median and standard
+  // deviation of that median.
+  uint64 median_stamp_period = 10;
+  // Maximum Price Stamps represents the maximum amount of historic prices
+  // the oracle module will store before pruning via FIFO.
+  uint64 maximum_price_stamps = 11;
+  // Maximum Median Stamps represents the maximum amount of medians the
+  // oracle module will store before pruning via FIFO.
+  uint64 maximum_median_stamps = 12;
+}
+
+// AvgCounterParams - Historic avg counter params
+message AvgCounterParams {
+  // avg_period
+  google.protobuf.Duration avg_period = 1 [
+    (gogoproto.nullable)    = false,
+    (gogoproto.stdduration) = true,
+    (gogoproto.jsontag)     = "avg_period,omitempty",
+    (gogoproto.moretags)    = "yaml:\"avg_period\""
+  ];
+  // avg shift
+  google.protobuf.Duration avg_shift = 2 [
+    (gogoproto.nullable)    = false,
+    (gogoproto.stdduration) = true,
+    (gogoproto.jsontag)     = "avg_shift,omitempty",
+    (gogoproto.moretags)    = "yaml:\"avg_shift\""
+  ];
+}
+
+// Denom - the object to hold configurations of each denom
+message Denom {
+  option (gogoproto.equal)            = false;
+  option (gogoproto.goproto_getters)  = false;
+  option (gogoproto.goproto_stringer) = false;
+
+  string base_denom   = 1 [(gogoproto.moretags) = "yaml:\"base_denom\""];
+  string symbol_denom = 2 [(gogoproto.moretags) = "yaml:\"symbol_denom\""];
+  uint32 exponent     = 3 [(gogoproto.moretags) = "yaml:\"exponent\""];
+}
+
+// AggregateExchangeRatePrevote -
+// struct for aggregate prevoting on the ExchangeRateVote.
+// The purpose of aggregate prevote is to hide vote exchange rates with hash
+// which is formatted as hex string in SHA256("{salt}:{exchange
+// rate}{denom},...,{exchange rate}{denom}:{voter}")
+message AggregateExchangeRatePrevote {
+  option (gogoproto.equal)            = false;
+  option (gogoproto.goproto_getters)  = false;
+  option (gogoproto.goproto_stringer) = false;
+
+  string hash         = 1 [(gogoproto.moretags) = "yaml:\"hash\""];
+  string voter        = 2 [(gogoproto.moretags) = "yaml:\"voter\""];
+  uint64 submit_block = 3 [(gogoproto.moretags) = "yaml:\"submit_block\""];
+}
+
+// AggregateExchangeRateVote - struct for voting on
+// the exchange rates of USD denominated in various assets.
+message AggregateExchangeRateVote {
+  option (gogoproto.equal)            = false;
+  option (gogoproto.goproto_getters)  = false;
+  option (gogoproto.goproto_stringer) = false;
+
+  repeated ExchangeRateTuple exchange_rate_tuples = 1 [
+    (gogoproto.moretags)     = "yaml:\"exchange_rate_tuples\"",
+    (gogoproto.castrepeated) = "ExchangeRateTuples",
+    (gogoproto.nullable)     = false
+  ];
+
+  string voter = 2 [(gogoproto.moretags) = "yaml:\"voter\""];
+}
+
+// ExchangeRateTuple - struct to store interpreted exchange rates data to store
+message ExchangeRateTuple {
+  option (gogoproto.equal)            = false;
+  option (gogoproto.goproto_getters)  = false;
+  option (gogoproto.goproto_stringer) = false;
+
+  string denom         = 1 [(gogoproto.moretags) = "yaml:\"denom\""];
+  string exchange_rate = 2 [
+    (gogoproto.moretags)   = "yaml:\"exchange_rate\"",
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable)   = false
+  ];
+}
+
+// AvgCounter is holds information about the active avg aggreator windows, used
+// to quickly compute average price of an asset.
+message AvgCounter {
+  option (gogoproto.equal)           = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // sum of prices in the counter
+  string sum = 1 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable)   = false
+  ];
+  // number of aggregated prices in the counter
+  uint32 num = 2;
+  // Unix timestamp when the first price was aggregated in the counter
+  google.protobuf.Timestamp start = 3 [(gogoproto.nullable) = false, (gogoproto.stdtime) = true];
+}

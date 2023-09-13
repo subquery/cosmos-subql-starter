@@ -1,0 +1,69 @@
+syntax = "proto3";
+package umee.incentive.v1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/umee-network/umee/v6/x/incentive";
+
+// Params defines the parameters for the incentive module.
+message Params {
+  option (gogoproto.equal) = true;
+
+  // max_unbondings is the maximum amount of concurrent unbondings an address can have
+  // of each bonded uToken denom. Zero is interpreted as no limit.
+  uint32 max_unbondings = 1;
+
+  // unbonding_duration is the unbonding duration (in seconds).
+  int64 unbonding_duration = 2;
+
+  // emergency_unbond_fee is the portion of a bond that is paid when it is instantly
+  // released using MsgEmergencyUnbond. For example, 0.01 is a 1% fee. Ranges 0-1.
+  string emergency_unbond_fee = 3 [
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
+    (gogoproto.nullable)   = false
+  ];
+}
+
+// IncentiveProgram defines a liquidity mining incentive program on a single
+// locked uToken denom that will run for a set amount of time.
+message IncentiveProgram {
+  option (gogoproto.equal) = true;
+
+  // ID uniquely identifies the incentive program after it has been created.
+  // It is zero when the program is being proposed by governance, and is set
+  // to its final value when the proposal passes.
+  uint32 ID = 1;
+
+  // start_time is the unix time (in seconds) at which the incentives begin.
+  // If a program is passed after its intended start time, its start time
+  // will be increased to the current time, with program duration unchanged.
+  int64 start_time = 2;
+
+  // duration is the length of the incentive program from start time to
+  // completion in seconds.
+  int64 duration = 3;
+
+  // uToken is the incentivized uToken collateral denom. Suppliers who collateralize
+  // this asset then bond it to the incentive module are eligible for this program's
+  // rewards.
+  string uToken = 4;
+
+  // funded indicates whether a program bas been funded. This can happen when
+  // a program passes if funding from community fund, or any time before the
+  // program's start time if funding with MsgSponsor. A program that reaches
+  // its start time without being funded is cancelled.
+  bool funded = 5;
+
+  // total_rewards are total amount of rewards which can be distributed to
+  // suppliers by this program. This is set to its final value when the program
+  // is proposed by governance.
+  cosmos.base.v1beta1.Coin total_rewards = 6 [(gogoproto.nullable) = false];
+
+  // remaining_rewards are total amount of this program's funded rewards
+  // which have not yet been allocated to suppliers. This is zero until the
+  // program is both passed by governance and funded, at which point it
+  // starts at the same value as total_rewards then begins decreasing
+  // to zero as the program runs to completion.
+  cosmos.base.v1beta1.Coin remaining_rewards = 7 [(gogoproto.nullable) = false];
+}

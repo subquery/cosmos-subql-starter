@@ -1,0 +1,325 @@
+syntax = "proto3";
+package umee.leverage.v1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "umee/leverage/v1/leverage.proto";
+
+option go_package = "github.com/umee-network/umee/v6/x/leverage/types";
+
+option (gogoproto.goproto_getters_all) = false;
+option (gogoproto.messagename_all)     = true;
+
+// Msg defines the x/leverage module's Msg service.
+service Msg {
+  // Supply moves tokens from user balance to the module for lending or collateral.
+  // The user receives uTokens in return.
+  rpc Supply(MsgSupply) returns (MsgSupplyResponse);
+
+  // Withdraw moves previously supplied tokens from the module back to the user balance in
+  // exchange for burning uTokens.
+  rpc Withdraw(MsgWithdraw) returns (MsgWithdrawResponse);
+
+  // MaxWithdraw moves previously supplied tokens from the module back to the user balance in
+  // exchange for burning uTokens. It automatically calculates the maximum valid amount to withdraw.
+  // Zero is returned if no more tokens can be withdrawn.
+  rpc MaxWithdraw(MsgMaxWithdraw) returns (MsgMaxWithdrawResponse);
+
+  // Collateralize enables selected uTokens as collateral, which moves them to the module.
+  rpc Collateralize(MsgCollateralize) returns (MsgCollateralizeResponse);
+
+  // Decollateralize disables selected uTokens as collateral. They are returned to the user's
+  // balance from the module.
+  rpc Decollateralize(MsgDecollateralize) returns (MsgDecollateralizeResponse);
+
+  // Borrow allows a user to borrow tokens from the module if they have sufficient collateral.
+  rpc Borrow(MsgBorrow) returns (MsgBorrowResponse);
+
+  // MaxBorrow allows a user to borrow the maximum amount of tokens their collateral will allow.
+  // Zero is returned if no more can be borrowed.
+  rpc MaxBorrow(MsgMaxBorrow) returns (MsgMaxBorrowResponse);
+
+  // Repay allows a user to repay previously borrowed tokens and interest.
+  rpc Repay(MsgRepay) returns (MsgRepayResponse);
+
+  // Liquidate allows a user to repay a different user's borrowed coins in exchange for some
+  // of the target's collateral.
+  rpc Liquidate(MsgLiquidate) returns (MsgLiquidateResponse);
+
+  // LeveragedLiquidate allows a user to repay a different user's borrowed coins in exchange for some
+  // of the target's collateral. For leveraged liquidations, the tokens to repay are borrowed instead of
+  // being taken from the liquidator's wallet, and the reward is immediately collateralized. Borrow
+  // limit checks for the liquidator are deferred until after the reward is collateralized, allowing
+  // this initial borrow to exceed the liquidator's borrow limit as long as it is healthy by the end
+  // of the transaction. Repay amount is calculated automatically, so the liquidator only specifies
+  // repay and reward token denoms. For safety, the liquidator cannot exceed 80% of their borrow limit when
+  // executing this transaction, instead of the regular 100%. Also allows repayment and reward denoms to
+  // be left blank - if not specified, the module will automatically select the first (alphabetically by denom)
+  // borrow and/or collateral on the target account and the proceed normally.
+  rpc LeveragedLiquidate(MsgLeveragedLiquidate) returns (MsgLeveragedLiquidateResponse);
+
+  // SupplyCollateral combines the Supply and Collateralize actions.
+  rpc SupplyCollateral(MsgSupplyCollateral) returns (MsgSupplyCollateralResponse);
+
+  // GovUpdateRegistry adds new tokens to the token registry or
+  // updates existing tokens with new settings.
+  rpc GovUpdateRegistry(MsgGovUpdateRegistry) returns (MsgGovUpdateRegistryResponse);
+
+  // GovUpdateSpecialAssets adds, updates, or removes special asset pairs. Note that a special asset
+  // pair can be removed by setting its special collateral weight to negative one. Also allows for the creation
+  // of sets of assets, where each asset in the set forms a special asset pair with all of the others.
+  rpc GovUpdateSpecialAssets(MsgGovUpdateSpecialAssets) returns (MsgGovUpdateSpecialAssetsResponse);
+
+  // GovSetParams is used by governance proposals to update parameters.
+  rpc GovSetParams(MsgGovSetParams) returns (MsgGovSetParamsResponse);
+}
+
+// MsgSupply represents a user's request to supply assets to the module.
+message MsgSupply {
+  // Supplier is the account address supplying assets and the signer of the message.
+  string                   supplier = 1;
+  cosmos.base.v1beta1.Coin asset    = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgWithdraw represents a user's request to withdraw supplied assets.
+// Asset must be a uToken.
+message MsgWithdraw {
+  // Supplier is the account address withdrawing assets and the signer of the message.
+  string                   supplier = 1;
+  cosmos.base.v1beta1.Coin asset    = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgMaxWithdraw represents a user's request to withdraw the maximum valid amount of supplied assets.
+message MsgMaxWithdraw {
+  // Supplier is the account address withdrawing assets and the signer of the message.
+  string supplier = 1;
+  // Denom is base token denom to withdraw
+  string denom = 2;
+}
+
+// MsgCollateralize represents a user's request to enable selected
+// uTokens as collateral.
+message MsgCollateralize {
+  // Borrower is the account address adding collateral and the signer of the message.
+  string                   borrower = 1;
+  cosmos.base.v1beta1.Coin asset    = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgDecollateralize represents a user's request to disable selected
+// uTokens as collateral.
+message MsgDecollateralize {
+  // Borrower is the account address removing collateral and the signer of the message.
+  string                   borrower = 1;
+  cosmos.base.v1beta1.Coin asset    = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgBorrow represents a user's request to borrow a base asset type
+// from the module.
+message MsgBorrow {
+  // Borrower is the account address taking a loan and the signer
+  // of the message.
+  string                   borrower = 1;
+  cosmos.base.v1beta1.Coin asset    = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgMaxBorrow represents a user's request to borrow a base asset type
+// from the module, using the maximum available amount.
+message MsgMaxBorrow {
+  // Borrower is the account address taking a loan and the signer
+  // of the message.
+  string borrower = 1;
+  string denom    = 2;
+}
+
+// MsgRepay represents a user's request to repay a borrowed base asset
+// type to the module.
+message MsgRepay {
+  // Borrower is the account address repaying a loan and the signer
+  // of the message.
+  string                   borrower = 1;
+  cosmos.base.v1beta1.Coin asset    = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgLiquidate is the request structure for the Liquidate RPC.
+message MsgLiquidate {
+  // Liquidator is the account address performing a liquidation and the signer
+  // of the message.
+  string liquidator = 1;
+  // Borrower is the account whose borrow is being repaid, and collateral consumed,
+  // by the liquidation. It does not sign the message.
+  string borrower = 2;
+  // Repayment is the maximum amount of base tokens that the liquidator is willing
+  // to repay.
+  cosmos.base.v1beta1.Coin repayment = 3 [(gogoproto.nullable) = false];
+  // RewardDenom is the denom that the liquidator will receive as a liquidation reward.
+  // If it is a uToken, the liquidator will receive uTokens from the borrower's
+  // collateral. If it is a base token, the uTokens will be redeemed directly at
+  // a reduced Liquidation Incentive, and the liquidator will receive base tokens.
+  string reward_denom = 4;
+}
+
+// MsgLeveragedLiquidate is the request structure for the LeveragedLiquidate RPC.
+message MsgLeveragedLiquidate {
+  // Liquidator is the account address performing a liquidation and the signer
+  // of the message.
+  string liquidator = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  // Borrower is the account whose borrow is being repaid, and collateral consumed,
+  // by the liquidation. It does not sign the message.
+  string borrower = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  // RepayDenom is the base token that the liquidator will borrow in order to repay on behalf of
+  // the borrower.
+  string repay_denom = 3;
+  // RewardDenom is the uToken denom that the liquidator will receive as a liquidation reward
+  // and immediately collateralize.
+  string reward_denom = 4;
+}
+
+// MsgSupplyCollateral represents a user's request to supply and collateralize assets to the module.
+message MsgSupplyCollateral {
+  // Supplier is the account address supplying assets and the signer of the message.
+  string                   supplier = 1;
+  cosmos.base.v1beta1.Coin asset    = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgSupplyResponse defines the Msg/Supply response type.
+message MsgSupplyResponse {
+  // Received is the amount of uTokens received.
+  cosmos.base.v1beta1.Coin received = 1 [(gogoproto.nullable) = false];
+}
+
+// MsgWithdrawResponse defines the Msg/Withdraw response type.
+message MsgWithdrawResponse {
+  // Received is the amount of base tokens received.
+  cosmos.base.v1beta1.Coin received = 1 [(gogoproto.nullable) = false];
+}
+
+// MsgMaxWithdrawResponse defines the Msg/MaxWithdraw response type.
+message MsgMaxWithdrawResponse {
+  // Withdrawn is the amount of uTokens withdrawn.
+  cosmos.base.v1beta1.Coin withdrawn = 1 [(gogoproto.nullable) = false];
+  // Received is the amount of base tokens received.
+  cosmos.base.v1beta1.Coin received = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgCollateralizeResponse defines the Msg/Collateralize response type.
+message MsgCollateralizeResponse {}
+
+// MsgDecollateralizeResponse defines the Msg/Decollateralize response type.
+message MsgDecollateralizeResponse {}
+
+// MsgBorrowResponse defines the Msg/Borrow response type.
+message MsgBorrowResponse {}
+
+// MsgMaxBorrowResponse defines the Msg/MaxBorrow response type.
+message MsgMaxBorrowResponse {
+  // Borrowed is the amount of tokens borrowed.
+  cosmos.base.v1beta1.Coin borrowed = 1 [(gogoproto.nullable) = false];
+}
+
+// MsgRepayResponse defines the Msg/Repay response type.
+message MsgRepayResponse {
+  // Repaid is the amount of base tokens repaid to the module.
+  cosmos.base.v1beta1.Coin repaid = 1 [(gogoproto.nullable) = false];
+}
+
+// MsgLiquidateResponse defines the Msg/Liquidate response type.
+message MsgLiquidateResponse {
+  // Repaid is the amount of borrowed base tokens that the liquidator repaid
+  // to the module on behalf of the borrower.
+  cosmos.base.v1beta1.Coin repaid = 1 [(gogoproto.nullable) = false];
+  // Collateral is the amount of the borrower's uToken collateral that
+  // was liquidated.
+  cosmos.base.v1beta1.Coin collateral = 2 [(gogoproto.nullable) = false];
+  // Reward is the amount of base tokens that the liquidator received from
+  // the module as reward for the liquidation.
+  cosmos.base.v1beta1.Coin reward = 3 [(gogoproto.nullable) = false];
+}
+
+// MsgLeveragedLiquidateResponse defines the Msg/LeveragedLiquidate response type.
+message MsgLeveragedLiquidateResponse {
+  // Repaid is the amount of base tokens that the liquidator borrowed and repaid
+  // to the module on behalf of the borrower.
+  cosmos.base.v1beta1.Coin repaid = 1 [(gogoproto.nullable) = false];
+  // Reward is the amount of collateral that the liquidator gained
+  // as reward for the liquidation.
+  cosmos.base.v1beta1.Coin reward = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgSupplyCollateralResponse defines the Msg/SupplyCollateral response type.
+message MsgSupplyCollateralResponse {
+  // Collateralized is the amount of uTokens collateralized.
+  cosmos.base.v1beta1.Coin collateralized = 1 [(gogoproto.nullable) = false];
+}
+
+// MsgGovUpdateRegistry defines the Msg/GovUpdateRegistry request type.
+message MsgGovUpdateRegistry {
+  option (gogoproto.equal)            = true;
+  option (gogoproto.goproto_getters)  = false;
+  option (gogoproto.goproto_stringer) = false;
+  option (cosmos.msg.v1.signer)       = "authority";
+
+  // field 2 (title) is removed. Proposal metadata should be used instead.
+  reserved 2;
+
+  // authority is the address of the governance account or the Emergency Group.
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  // description motivating the change. Should be used only when executing by the
+  // Emergency Group. Otherwise the x/gov Proposal metadata should be used.
+  string description = 3;
+  // add_tokens defines new token settings.
+  repeated Token add_tokens = 4 [(gogoproto.nullable) = false];
+  // update_tokens defines the new settings for existed tokens.
+  repeated Token update_tokens = 5 [(gogoproto.nullable) = false];
+}
+
+// MsgGovUpdateRegistryResponse defines the Msg/GovUpdateRegistry response type.
+message MsgGovUpdateRegistryResponse {}
+
+// MsgGovUpdateSpecialAssets defines the Msg/GovUpdateSpecialAssets request type.
+message MsgGovUpdateSpecialAssets {
+  option (gogoproto.equal)            = true;
+  option (gogoproto.goproto_getters)  = false;
+  option (gogoproto.goproto_stringer) = false;
+  option (cosmos.msg.v1.signer)       = "authority";
+
+  // authority is the address of the governance account or the Emergency Group.
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+  // description motivating the change. Should be used only when executing by the
+  // Emergency Group. Otherwise the x/gov Proposal metadata should be used.
+  string description = 2;
+
+  // sets are bidirectional groups of special asset pairs. Creating a special asset
+  // set causes all assets in the set to have a certain collateral weight when borrowing
+  // against each other (but not looping with themselves). Overrides any existing
+  // special asset pairs between assets in the set. Using both collateral weight
+  // and liquidation theshold of zero will clear all existing special pairs in the set instead.
+  repeated SpecialAssetSet sets = 3 [(gogoproto.nullable) = false];
+
+  // pairs are new or updated special asset pairs. Updating both a special asset pair's
+  // collateral weight and liquidation threshold to zero deletes the pair instead.
+  // These pairs will be applied after any sets above when passing a proposal,
+  // so they can be used to override certain set elements, set directional relationships,
+  // or set an asset's relation to itself (looping).
+  repeated SpecialAssetPair pairs = 4 [(gogoproto.nullable) = false];
+}
+
+// MsgGovUpdateSpecialAssetsResponse defines the Msg/GovUpdateSpecialAssets response type.
+message MsgGovUpdateSpecialAssetsResponse {}
+
+// MsgGovSetParams is used by governance to update module parameters.
+message MsgGovSetParams {
+  option (gogoproto.equal)            = true;
+  option (gogoproto.goproto_getters)  = false;
+  option (gogoproto.goproto_stringer) = false;
+  option (cosmos.msg.v1.signer)       = "authority";
+
+  // authority must be the address of the governance account.
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  Params params    = 2 [(gogoproto.nullable) = false];
+}
+
+// MsgGovSetParamsResponse defines the Msg/SetParams response type.
+message MsgGovSetParamsResponse {}
