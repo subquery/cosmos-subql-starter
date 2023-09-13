@@ -1,0 +1,55 @@
+syntax = "proto3";
+package mars.incentives.v1beta1;
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "mars/incentives/v1beta1/store.proto";
+
+option go_package = "github.com/mars-protocol/hub/x/incentives/types";
+
+// Query defines the gRPC querier service for the incentives module
+service Query {
+  // Schedule queries an incentives schedule by identifier
+  rpc Schedule(QueryScheduleRequest) returns (QueryScheduleResponse) {
+    option (google.api.http).get = "/mars/incentives/v1beta1/schedule/{id}";
+  }
+
+  // Schedules queries all incentives schedules
+  rpc Schedules(QuerySchedulesRequest) returns (QuerySchedulesResponse) {
+    option (google.api.http).get = "/mars/incentives/v1beta1/schedules";
+  }
+}
+
+// QueryScheduleRequest is the request type for the Query/Schedule RPC method
+message QueryScheduleRequest {
+  option (gogoproto.equal)           = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // ID is the identifier of the incentives schedule to be queried
+  uint64 id = 1;
+}
+
+// QueryScheduleResponse is the response type for the Query/Schedule RPC method
+message QueryScheduleResponse {
+  // Schedule is the parameters of the incentives schedule
+  Schedule schedule = 1 [(gogoproto.nullable) = false];
+}
+
+// QuerySchedulesRequest is the request type for the Query/Schedules RPC method
+message QuerySchedulesRequest {
+  option (gogoproto.equal)           = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // Pagination defines an optional pagination for the request
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryScheduleResponse is the response type for the Query/Schedules RPC method
+message QuerySchedulesResponse {
+  // Schedule is the parameters of the incentives schedule
+  repeated Schedule schedules = 1 [(gogoproto.nullable) = false];
+
+  // Pagination defines the pagination in the response
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

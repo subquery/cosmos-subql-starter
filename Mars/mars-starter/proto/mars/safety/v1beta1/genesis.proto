@@ -1,0 +1,7 @@
+syntax = "proto3";
+package mars.safety.v1beta1;
+
+option go_package = "github.com/mars-protocol/hub/x/safety/types";
+
+// GenesisState defines the safety module's genesis state
+message GenesisState {}

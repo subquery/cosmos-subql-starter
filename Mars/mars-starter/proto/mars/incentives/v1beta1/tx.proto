@@ -1,0 +1,88 @@
+syntax = "proto3";
+package mars.incentives.v1beta1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/mars-protocol/hub/x/incentives/types";
+
+// Msg defines the incentives module's Msg service
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // CreateSchedule is a governance operation for creating a new incentives
+  // schedule.
+  rpc CreateSchedule(MsgCreateSchedule) returns (MsgCreateScheduleResponse);
+
+  // TerminateSchedule is a governance operation for terminating one or more
+  // existing incentives schedules.
+  rpc TerminateSchedules(MsgTerminateSchedules) returns (MsgTerminateSchedulesResponse);
+}
+
+// MsgCreateSchedule defines the message for creating a new incentives schedule.
+//
+// This message is typically executed via a governance proposal with the gov
+// module being the executing authority.
+message MsgCreateSchedule {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // Authority is the account executing the safety fund spend.
+  // It should be the gov module account.
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+  // StartTime is the timestamp at which this incentives schedule shall begin.
+  google.protobuf.Timestamp start_time = 2 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false,
+    (gogoproto.moretags) = "yaml:\"start_time\""
+  ];
+
+  // EndTime is the timestamp at which this incentives schedule shall finish.
+  google.protobuf.Timestamp end_time = 3 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false,
+    (gogoproto.moretags) = "yaml:\"end_time\""
+  ];
+
+  // Amount is the total amount of coins that shall be released to stakers
+  // throughout the span of this incentives schedule.
+  repeated cosmos.base.v1beta1.Coin amount = 4 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+// MsgCreateScheduleResponse defines the response to executing a
+// MsgCreateSchedule message.
+message MsgCreateScheduleResponse {}
+
+// MsgTerminateSchedules defines the message for terminating one or more
+// existing incentives schedules.
+//
+// This message is typically executed via a governance proposal with the gov
+// module being the executing authority.
+message MsgTerminateSchedules {
+  option (cosmos.msg.v1.signer) = "authority";
+
+  // Authority is the account executing the safety fund spend.
+  // It should be the gov module account.
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+  // Ids is the array of identifiers of the incentives schedules which are to be
+  // terminated.
+  repeated uint64 ids = 2;
+}
+
+// MsgTerminateSchedulesResponse defines the response to executing a
+// MsgTerminateSchedules message.
+message MsgTerminateSchedulesResponse {
+  // RefundedAmount is the unreleased incentives that were refunded to the
+  // community pool.
+  repeated cosmos.base.v1beta1.Coin refunded_amount = 5 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}

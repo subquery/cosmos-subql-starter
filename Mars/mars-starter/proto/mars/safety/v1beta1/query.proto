@@ -1,0 +1,28 @@
+syntax = "proto3";
+package mars.safety.v1beta1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/mars-protocol/hub/x/safety/types";
+
+// Query defines the gRPC querier service for the safety fund module
+service Query {
+  // Balances queries coins available in the safety fund
+  rpc Balances(QueryBalancesRequest) returns (QueryBalancesResponse) {
+    option (google.api.http).get = "/mars/safety/v1beta1/balances";
+  }
+}
+
+// QueBalancesRequest is the request type of the QuerBalancesRPC method
+message QueryBalancesRequest {}
+
+// QueBalancesResponse is the response type of the QuerBalancesRPC method
+message QueryBalancesResponse {
+  // Balances is the coins available in the safety fund
+  repeated cosmos.base.v1beta1.Coin balances = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}

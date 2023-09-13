@@ -1,0 +1,72 @@
+syntax = "proto3";
+package mars.envoy.v1beta1;
+
+option go_package = "github.com/mars-protocol/hub/x/envoy/types";
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+
+// Query defines the module's gRPC query service.
+service Query {
+  // Account returns the interchain account owned by the module on a given
+  // connection pair.
+  rpc Account(QueryAccountRequest) returns (QueryAccountResponse) {
+    option (google.api.http).get = "/mars/envoy/v1beta1/account/{connection_id}";
+  }
+
+  // Accounts returns all interchain accounts owned by the module.
+  rpc Accounts(QueryAccountsRequest) returns (QueryAccountsResponse) {
+    option (google.api.http).get = "/mars/envoy/v1beta1/accounts";
+  }
+}
+
+//------------------------------------------------------------------------------
+// Account
+//------------------------------------------------------------------------------
+
+// QueryAccountRequest is the request type for the Query/Account RPC method.
+message QueryAccountRequest {
+  // ConnectionId identified the connection associated with the interchain
+  // account.
+  string connection_id = 1 [(gogoproto.moretags) = "yaml:\"connection_id\""];
+}
+
+// QueryAccountResponse is the response type for the Query/Account RPC method.
+message QueryAccountResponse {
+  AccountInfo account = 1;
+}
+
+//------------------------------------------------------------------------------
+// Accounts
+//------------------------------------------------------------------------------
+
+// QueryAccountsRequest is the request type for the Query/Accounts RPC method.
+message QueryAccountsRequest {}
+
+// QueryAccountsResponse is the response type for Query/Accounts RPC method.
+message QueryAccountsResponse {
+  repeated AccountInfo accounts = 1;
+}
+
+//------------------------------------------------------------------------------
+// Other types
+//------------------------------------------------------------------------------
+
+// AccountInfo describes an interchain account, including its address and info
+// of the controller and host chains.
+message AccountInfo {
+  ChainInfo controller = 1;
+  ChainInfo host       = 2;
+  string    address    = 3;
+}
+
+// ChainInfo describes the IBC connection/port/channel on either the controller
+// or host chain.
+message ChainInfo {
+  string client_id     = 1;
+  string connection_id = 2;
+  string port_id       = 3;
+  string channel_id    = 4;
+
+  // TODO: add chain id?
+}
