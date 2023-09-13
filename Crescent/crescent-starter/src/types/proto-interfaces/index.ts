@@ -8,6 +8,8 @@ export * from "./ics23/bundle";
 export * from "./cosmos_proto/bundle";
 export * from "./cosmos/bundle";
 export * from "./cosmwasm/bundle";
+export * from "./crescent/bundle";
 export * from "./google/bundle";
 export * from "./ibc/bundle";
+export * from "./grpc/bundle";
 export * from "./tendermint/bundle";

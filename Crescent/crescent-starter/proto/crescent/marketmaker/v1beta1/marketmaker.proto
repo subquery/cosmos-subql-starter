@@ -30,7 +30,7 @@ message Params {
 
   // Include the pairs that are incentive target pairs and the variables used in market maker scoring system
   repeated IncentivePair incentive_pairs = 4
-      [(gogoproto.moretags) = "yaml:\"incentive_pairs\"", (gogoproto.nullable) = false];
+      [(gogoproto.moretags) = "yaml:\"incentive_pairs\"", (gogoproto.nullable) = false]
   ;
 }
 

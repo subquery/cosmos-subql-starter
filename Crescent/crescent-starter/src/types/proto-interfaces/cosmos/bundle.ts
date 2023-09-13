@@ -74,6 +74,8 @@ import * as _74 from "./upgrade/v1beta1/tx";
 import * as _75 from "./upgrade/v1beta1/upgrade";
 import * as _76 from "./vesting/v1beta1/tx";
 import * as _77 from "./vesting/v1beta1/vesting";
+import * as _78 from "../tendermint/budget/v1beta1/budget";
+import * as _79 from "../tendermint/budget/v1beta1/genesis";
 export namespace cosmos {
   export namespace app {
     export const v1alpha1 = {
@@ -293,6 +295,12 @@ export namespace cosmos {
     export const v1beta1 = {
       ..._76,
       ..._77
+    };
+  }
+  export namespace budget {
+    export const v1beta1 = {
+      ..._78,
+      ..._79
     };
   }
 }
