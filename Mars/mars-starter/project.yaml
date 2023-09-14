@@ -1,5 +1,5 @@
 specVersion: 1.0.0
-name: mars-subql-starter
+name: mars-starter
 version: 0.0.1
 runner:
   node:
