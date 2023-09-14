@@ -1,4 +1,8 @@
-import { DidDocWithMetadata, DidDocWithMetadataAmino, DidDocWithMetadataSDKType } from "./diddoc";
+import {
+  DidDocWithMetadata,
+  DidDocWithMetadataAmino,
+  DidDocWithMetadataSDKType,
+} from "./diddoc";
 import { FeeParams, FeeParamsAmino, FeeParamsSDKType } from "./fee";
 /**
  * DidDocVersionSet contains all versions of DID Documents and their metadata for a given DID.

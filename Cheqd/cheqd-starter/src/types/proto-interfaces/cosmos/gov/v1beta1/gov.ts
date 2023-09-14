@@ -1,6 +1,10 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
-import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
+import {
+  Duration,
+  DurationAmino,
+  DurationSDKType,
+} from "../../../google/protobuf/duration";
 import { Long } from "../../../helpers";
 /** VoteOption enumerates the valid vote options for a given governance proposal. */
 export enum VoteOption {
@@ -138,7 +142,7 @@ export function proposalStatusToJSON(object: ProposalStatus): string {
 }
 /**
  * WeightedVoteOption defines a unit of vote for vote split.
- * 
+ *
  * Since: cosmos-sdk 0.43
  */
 export interface WeightedVoteOption {
@@ -151,7 +155,7 @@ export interface WeightedVoteOptionProtoMsg {
 }
 /**
  * WeightedVoteOption defines a unit of vote for vote split.
- * 
+ *
  * Since: cosmos-sdk 0.43
  */
 export interface WeightedVoteOptionAmino {
@@ -164,7 +168,7 @@ export interface WeightedVoteOptionAminoMsg {
 }
 /**
  * WeightedVoteOption defines a unit of vote for vote split.
- * 
+ *
  * Since: cosmos-sdk 0.43
  */
 export interface WeightedVoteOptionSDKType {

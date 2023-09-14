@@ -71,9 +71,13 @@ export enum ContractCodeHistoryOperationType {
   CONTRACT_CODE_HISTORY_OPERATION_TYPE_GENESIS = 3,
   UNRECOGNIZED = -1,
 }
-export const ContractCodeHistoryOperationTypeSDKType = ContractCodeHistoryOperationType;
-export const ContractCodeHistoryOperationTypeAmino = ContractCodeHistoryOperationType;
-export function contractCodeHistoryOperationTypeFromJSON(object: any): ContractCodeHistoryOperationType {
+export const ContractCodeHistoryOperationTypeSDKType =
+  ContractCodeHistoryOperationType;
+export const ContractCodeHistoryOperationTypeAmino =
+  ContractCodeHistoryOperationType;
+export function contractCodeHistoryOperationTypeFromJSON(
+  object: any
+): ContractCodeHistoryOperationType {
   switch (object) {
     case 0:
     case "CONTRACT_CODE_HISTORY_OPERATION_TYPE_UNSPECIFIED":
@@ -93,7 +97,9 @@ export function contractCodeHistoryOperationTypeFromJSON(object: any): ContractC
       return ContractCodeHistoryOperationType.UNRECOGNIZED;
   }
 }
-export function contractCodeHistoryOperationTypeToJSON(object: ContractCodeHistoryOperationType): string {
+export function contractCodeHistoryOperationTypeToJSON(
+  object: ContractCodeHistoryOperationType
+): string {
   switch (object) {
     case ContractCodeHistoryOperationType.CONTRACT_CODE_HISTORY_OPERATION_TYPE_UNSPECIFIED:
       return "CONTRACT_CODE_HISTORY_OPERATION_TYPE_UNSPECIFIED";

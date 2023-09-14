@@ -1,4 +1,14 @@
-import { VerificationMethod, VerificationMethodAmino, VerificationMethodSDKType, Service, ServiceAmino, ServiceSDKType, DidDocWithMetadata, DidDocWithMetadataAmino, DidDocWithMetadataSDKType } from "./diddoc";
+import {
+  VerificationMethod,
+  VerificationMethodAmino,
+  VerificationMethodSDKType,
+  Service,
+  ServiceAmino,
+  ServiceSDKType,
+  DidDocWithMetadata,
+  DidDocWithMetadataAmino,
+  DidDocWithMetadataSDKType,
+} from "./diddoc";
 /**
  * MsgCreateDidDoc defines the Msg/CreateDidDoc request type.
  * It describes the parameters of a request for creating a new DID document.
@@ -152,7 +162,7 @@ export interface MsgCreateDidDocPayload {
    * verificationMethod is a list of verification methods that can be used to
    * verify a digital signature or cryptographic proof.
    * Documentation: https://www.w3.org/TR/did-core/#verification-methods
-   * 
+   *
    * Required fields:
    * - id: A unique identifier for the verification method
    * - type: A supported verification method type (supported: Ed25519VerificationKey2018, Ed25519VerificationKey2020, JsonWebKey2020)
@@ -188,7 +198,7 @@ export interface MsgCreateDidDocPayload {
   /**
    * service is a list of services that can be used to interact with the DID subject.
    * Documentation: https://www.w3.org/TR/did-core/#services
-   * 
+   *
    * Required fields:
    * - id: A unique identifier for the service
    * - type: A service type defined in DID Specification Registries
@@ -199,7 +209,7 @@ export interface MsgCreateDidDocPayload {
   alsoKnownAs: string[];
   /**
    * Version ID of the DID Document to be created
-   * 
+   *
    * Format: <uuid>
    */
   versionId: string;
@@ -226,7 +236,7 @@ export interface MsgCreateDidDocPayloadAmino {
    * verificationMethod is a list of verification methods that can be used to
    * verify a digital signature or cryptographic proof.
    * Documentation: https://www.w3.org/TR/did-core/#verification-methods
-   * 
+   *
    * Required fields:
    * - id: A unique identifier for the verification method
    * - type: A supported verification method type (supported: Ed25519VerificationKey2018, Ed25519VerificationKey2020, JsonWebKey2020)
@@ -262,7 +272,7 @@ export interface MsgCreateDidDocPayloadAmino {
   /**
    * service is a list of services that can be used to interact with the DID subject.
    * Documentation: https://www.w3.org/TR/did-core/#services
-   * 
+   *
    * Required fields:
    * - id: A unique identifier for the service
    * - type: A service type defined in DID Specification Registries
@@ -273,7 +283,7 @@ export interface MsgCreateDidDocPayloadAmino {
   also_known_as: string[];
   /**
    * Version ID of the DID Document to be created
-   * 
+   *
    * Format: <uuid>
    */
   version_id: string;
@@ -337,7 +347,7 @@ export interface MsgUpdateDidDocPayload {
    * verificationMethod is a list of verification methods that can be used to
    * verify a digital signature or cryptographic proof.
    * Documentation: https://www.w3.org/TR/did-core/#verification-methods
-   * 
+   *
    * Required fields:
    * - id: A unique identifier for the verification method
    * - type: A supported verification method type (supported: Ed25519VerificationKey2018, Ed25519VerificationKey2020, JsonWebKey2020)
@@ -373,7 +383,7 @@ export interface MsgUpdateDidDocPayload {
   /**
    * service is a list of services that can be used to interact with the DID subject.
    * Documentation: https://www.w3.org/TR/did-core/#services
-   * 
+   *
    * Required fields:
    * - id: A unique identifier for the service
    * - type: A service type defined in DID Specification Registries
@@ -385,7 +395,7 @@ export interface MsgUpdateDidDocPayload {
   /**
    * Updated version ID of the DID Document.
    * Links to next/previous versions of the DID Document will be automatically updated.
-   * 
+   *
    * Format: <uuid>
    */
   versionId: string;
@@ -412,7 +422,7 @@ export interface MsgUpdateDidDocPayloadAmino {
    * verificationMethod is a list of verification methods that can be used to
    * verify a digital signature or cryptographic proof.
    * Documentation: https://www.w3.org/TR/did-core/#verification-methods
-   * 
+   *
    * Required fields:
    * - id: A unique identifier for the verification method
    * - type: A supported verification method type (supported: Ed25519VerificationKey2018, Ed25519VerificationKey2020, JsonWebKey2020)
@@ -448,7 +458,7 @@ export interface MsgUpdateDidDocPayloadAmino {
   /**
    * service is a list of services that can be used to interact with the DID subject.
    * Documentation: https://www.w3.org/TR/did-core/#services
-   * 
+   *
    * Required fields:
    * - id: A unique identifier for the service
    * - type: A service type defined in DID Specification Registries
@@ -460,7 +470,7 @@ export interface MsgUpdateDidDocPayloadAmino {
   /**
    * Updated version ID of the DID Document.
    * Links to next/previous versions of the DID Document will be automatically updated.
-   * 
+   *
    * Format: <uuid>
    */
   version_id: string;

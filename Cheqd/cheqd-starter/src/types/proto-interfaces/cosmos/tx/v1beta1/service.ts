@@ -1,8 +1,33 @@
 import { Tx, TxAmino, TxSDKType } from "./tx";
-import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../base/query/v1beta1/pagination";
-import { TxResponse, TxResponseAmino, TxResponseSDKType, GasInfo, GasInfoAmino, GasInfoSDKType, Result, ResultAmino, ResultSDKType } from "../../base/abci/v1beta1/abci";
-import { BlockID, BlockIDAmino, BlockIDSDKType } from "../../../tendermint/types/types";
-import { Block, BlockAmino, BlockSDKType } from "../../../tendermint/types/block";
+import {
+  PageRequest,
+  PageRequestAmino,
+  PageRequestSDKType,
+  PageResponse,
+  PageResponseAmino,
+  PageResponseSDKType,
+} from "../../base/query/v1beta1/pagination";
+import {
+  TxResponse,
+  TxResponseAmino,
+  TxResponseSDKType,
+  GasInfo,
+  GasInfoAmino,
+  GasInfoSDKType,
+  Result,
+  ResultAmino,
+  ResultSDKType,
+} from "../../base/abci/v1beta1/abci";
+import {
+  BlockID,
+  BlockIDAmino,
+  BlockIDSDKType,
+} from "../../../tendermint/types/types";
+import {
+  Block,
+  BlockAmino,
+  BlockSDKType,
+} from "../../../tendermint/types/block";
 import { Long } from "../../../helpers";
 /** OrderBy defines the sorting order */
 export enum OrderBy {
@@ -262,7 +287,7 @@ export interface SimulateRequest {
   tx: Tx;
   /**
    * tx_bytes is the raw transaction.
-   * 
+   *
    * Since: cosmos-sdk 0.43
    */
   txBytes: Uint8Array;
@@ -284,7 +309,7 @@ export interface SimulateRequestAmino {
   tx?: TxAmino;
   /**
    * tx_bytes is the raw transaction.
-   * 
+   *
    * Since: cosmos-sdk 0.43
    */
   tx_bytes: Uint8Array;
@@ -399,7 +424,7 @@ export interface GetTxResponseSDKType {
 /**
  * GetBlockWithTxsRequest is the request type for the Service.GetBlockWithTxs
  * RPC method.
- * 
+ *
  * Since: cosmos-sdk 0.45.2
  */
 export interface GetBlockWithTxsRequest {
@@ -415,7 +440,7 @@ export interface GetBlockWithTxsRequestProtoMsg {
 /**
  * GetBlockWithTxsRequest is the request type for the Service.GetBlockWithTxs
  * RPC method.
- * 
+ *
  * Since: cosmos-sdk 0.45.2
  */
 export interface GetBlockWithTxsRequestAmino {
@@ -431,7 +456,7 @@ export interface GetBlockWithTxsRequestAminoMsg {
 /**
  * GetBlockWithTxsRequest is the request type for the Service.GetBlockWithTxs
  * RPC method.
- * 
+ *
  * Since: cosmos-sdk 0.45.2
  */
 export interface GetBlockWithTxsRequestSDKType {
@@ -440,7 +465,7 @@ export interface GetBlockWithTxsRequestSDKType {
 }
 /**
  * GetBlockWithTxsResponse is the response type for the Service.GetBlockWithTxs method.
- * 
+ *
  * Since: cosmos-sdk 0.45.2
  */
 export interface GetBlockWithTxsResponse {
@@ -457,7 +482,7 @@ export interface GetBlockWithTxsResponseProtoMsg {
 }
 /**
  * GetBlockWithTxsResponse is the response type for the Service.GetBlockWithTxs method.
- * 
+ *
  * Since: cosmos-sdk 0.45.2
  */
 export interface GetBlockWithTxsResponseAmino {
@@ -474,7 +499,7 @@ export interface GetBlockWithTxsResponseAminoMsg {
 }
 /**
  * GetBlockWithTxsResponse is the response type for the Service.GetBlockWithTxs method.
- * 
+ *
  * Since: cosmos-sdk 0.45.2
  */
 export interface GetBlockWithTxsResponseSDKType {

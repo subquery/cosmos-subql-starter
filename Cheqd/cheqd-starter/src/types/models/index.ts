@@ -2,7 +2,6 @@
 
 // Auto-generated , DO NOT EDIT
 
-export {TransferEvent} from "./TransferEvent"
+export { TransferEvent } from "./TransferEvent";
 
-export {Message} from "./Message"
-
+export { Message } from "./Message";

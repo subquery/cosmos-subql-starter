@@ -1,4 +1,11 @@
-import { IdentifiedChannel, IdentifiedChannelAmino, IdentifiedChannelSDKType, PacketState, PacketStateAmino, PacketStateSDKType } from "./channel";
+import {
+  IdentifiedChannel,
+  IdentifiedChannelAmino,
+  IdentifiedChannelSDKType,
+  PacketState,
+  PacketStateAmino,
+  PacketStateSDKType,
+} from "./channel";
 import { Long } from "../../../../helpers";
 /** GenesisState defines the ibc channel submodule's genesis state. */
 export interface GenesisState {

@@ -1,4 +1,14 @@
-import { Did, DidAmino, DidSDKType, VerificationMethod, VerificationMethodAmino, VerificationMethodSDKType, Service, ServiceAmino, ServiceSDKType } from "./did";
+import {
+  Did,
+  DidAmino,
+  DidSDKType,
+  VerificationMethod,
+  VerificationMethodAmino,
+  VerificationMethodSDKType,
+  Service,
+  ServiceAmino,
+  ServiceSDKType,
+} from "./did";
 import { Metadata, MetadataAmino, MetadataSDKType } from "./stateValue";
 /** this line is used by starport scaffolding # proto/tx/message */
 export interface MsgCreateDid {

@@ -1,5 +1,9 @@
 import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
-import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import {
+  Coin,
+  CoinAmino,
+  CoinSDKType,
+} from "../../../cosmos/base/v1beta1/coin";
 import { Long } from "../../../helpers";
 /**
  * ContractExecutionAuthorization defines authorization for wasm execute.

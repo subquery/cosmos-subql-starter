@@ -1,5 +1,12 @@
 import { SignInfo, SignInfoAmino, SignInfoSDKType } from "../../did/v2/tx";
-import { AlternativeUri, AlternativeUriAmino, AlternativeUriSDKType, Metadata, MetadataAmino, MetadataSDKType } from "./resource";
+import {
+  AlternativeUri,
+  AlternativeUriAmino,
+  AlternativeUriSDKType,
+  Metadata,
+  MetadataAmino,
+  MetadataSDKType,
+} from "./resource";
 /**
  * MsgCreateResource defines the Msg/CreateResource request type.
  * It describes the parameters of a request for creating a resource.
@@ -38,15 +45,15 @@ export interface MsgCreateResourceSDKType {
 }
 /**
  * MsgCreateResourcePayload defines the structure of the payload for creating a resource.
- * 
+ *
  * If a resource with the given id does not exist already,
  * it will be created. The resource will be created in the resource collection.
- * 
+ *
  * If a resource with the given id, collection_id already exists, an error code 2200 will be returned.
- * 
+ *
  * A new version of the resource in an existing collection will be created,
  * if a resource in that collection with the same name, resource_type and empty next_version_id exists.
- * 
+ *
  * An update operation is not possible, because the resource is immutable by design.
  */
 export interface MsgCreateResourcePayload {
@@ -55,7 +62,7 @@ export interface MsgCreateResourcePayload {
   /**
    * collection_id is an identifier of the DidDocument the resource belongs to.
    * Format: <unique-identifier>
-   * 
+   *
    * Examples:
    * - c82f2b02-bdab-4dd7-b833-3e143745d612
    * - wGHEXrZvJxR8vw5P3UWH1j
@@ -69,7 +76,7 @@ export interface MsgCreateResourcePayload {
   /**
    * name is a human-readable name of the resource.
    * Format: <string>
-   * 
+   *
    * Does not change between different versions.
    * Example: PassportSchema, EducationTrustRegistry
    */
@@ -78,14 +85,14 @@ export interface MsgCreateResourcePayload {
    * version is a version of the resource.
    * Format: <string>
    * Stored as a string. OPTIONAL.
-   * 
+   *
    * Example: 1.0.0, v2.1.0
    */
   version?: string;
   /**
    * resource_type is a type of the resource.
    * Format: <string>
-   * 
+   *
    * This is NOT the same as the resource's media type.
    * Example: AnonCredsSchema, StatusList2021
    */
@@ -99,15 +106,15 @@ export interface MsgCreateResourcePayloadProtoMsg {
 }
 /**
  * MsgCreateResourcePayload defines the structure of the payload for creating a resource.
- * 
+ *
  * If a resource with the given id does not exist already,
  * it will be created. The resource will be created in the resource collection.
- * 
+ *
  * If a resource with the given id, collection_id already exists, an error code 2200 will be returned.
- * 
+ *
  * A new version of the resource in an existing collection will be created,
  * if a resource in that collection with the same name, resource_type and empty next_version_id exists.
- * 
+ *
  * An update operation is not possible, because the resource is immutable by design.
  */
 export interface MsgCreateResourcePayloadAmino {
@@ -116,7 +123,7 @@ export interface MsgCreateResourcePayloadAmino {
   /**
    * collection_id is an identifier of the DidDocument the resource belongs to.
    * Format: <unique-identifier>
-   * 
+   *
    * Examples:
    * - c82f2b02-bdab-4dd7-b833-3e143745d612
    * - wGHEXrZvJxR8vw5P3UWH1j
@@ -130,7 +137,7 @@ export interface MsgCreateResourcePayloadAmino {
   /**
    * name is a human-readable name of the resource.
    * Format: <string>
-   * 
+   *
    * Does not change between different versions.
    * Example: PassportSchema, EducationTrustRegistry
    */
@@ -139,14 +146,14 @@ export interface MsgCreateResourcePayloadAmino {
    * version is a version of the resource.
    * Format: <string>
    * Stored as a string. OPTIONAL.
-   * 
+   *
    * Example: 1.0.0, v2.1.0
    */
   version: string;
   /**
    * resource_type is a type of the resource.
    * Format: <string>
-   * 
+   *
    * This is NOT the same as the resource's media type.
    * Example: AnonCredsSchema, StatusList2021
    */
@@ -160,15 +167,15 @@ export interface MsgCreateResourcePayloadAminoMsg {
 }
 /**
  * MsgCreateResourcePayload defines the structure of the payload for creating a resource.
- * 
+ *
  * If a resource with the given id does not exist already,
  * it will be created. The resource will be created in the resource collection.
- * 
+ *
  * If a resource with the given id, collection_id already exists, an error code 2200 will be returned.
- * 
+ *
  * A new version of the resource in an existing collection will be created,
  * if a resource in that collection with the same name, resource_type and empty next_version_id exists.
- * 
+ *
  * An update operation is not possible, because the resource is immutable by design.
  */
 export interface MsgCreateResourcePayloadSDKType {

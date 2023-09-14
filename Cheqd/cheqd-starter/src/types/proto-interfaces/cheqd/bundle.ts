@@ -12,7 +12,7 @@ export namespace cheqd {
       ..._8,
       ..._9,
       ..._10,
-      ..._11
+      ..._11,
     };
   }
   export namespace resource {
@@ -20,7 +20,7 @@ export namespace cheqd {
       ..._12,
       ..._13,
       ..._14,
-      ..._15
+      ..._15,
     };
   }
 }

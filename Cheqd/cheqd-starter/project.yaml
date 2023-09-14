@@ -1,5 +1,5 @@
 specVersion: 1.0.0
-name: cheqd-subql-starter
+name: cheqd-starter
 version: 0.0.1
 runner:
   node:
@@ -9,7 +9,7 @@ runner:
     name: "@subql/query"
     version: "*"
 description: >-
-  This project can be use as a starting point for developing your Cosmos (%NETWORK_NAME%) based SubQuery project
+  This project can be use as a starting point for developing your Cosmos (Cheqd) based SubQuery project
 repository: "https://github.com/subquery/cosmos-subql-starter"
 schema:
   file: ./schema.graphql
@@ -37,7 +37,7 @@ network:
         - WeightedVoteOption
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 9744014
+    startBlock: 9758950
     mapping:
       file: ./dist/index.js
       handlers:

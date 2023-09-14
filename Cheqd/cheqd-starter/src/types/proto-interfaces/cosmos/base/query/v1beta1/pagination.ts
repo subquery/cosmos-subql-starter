@@ -2,7 +2,7 @@ import { Long } from "../../../../helpers";
 /**
  * PageRequest is to be embedded in gRPC request messages for efficient
  * pagination. Ex:
- * 
+ *
  *  message SomeRequest {
  *          Foo some_parameter = 1;
  *          PageRequest pagination = 2;
@@ -35,7 +35,7 @@ export interface PageRequest {
   countTotal: boolean;
   /**
    * reverse is set to true if results are to be returned in the descending order.
-   * 
+   *
    * Since: cosmos-sdk 0.43
    */
   reverse: boolean;
@@ -47,7 +47,7 @@ export interface PageRequestProtoMsg {
 /**
  * PageRequest is to be embedded in gRPC request messages for efficient
  * pagination. Ex:
- * 
+ *
  *  message SomeRequest {
  *          Foo some_parameter = 1;
  *          PageRequest pagination = 2;
@@ -80,7 +80,7 @@ export interface PageRequestAmino {
   count_total: boolean;
   /**
    * reverse is set to true if results are to be returned in the descending order.
-   * 
+   *
    * Since: cosmos-sdk 0.43
    */
   reverse: boolean;
@@ -92,7 +92,7 @@ export interface PageRequestAminoMsg {
 /**
  * PageRequest is to be embedded in gRPC request messages for efficient
  * pagination. Ex:
- * 
+ *
  *  message SomeRequest {
  *          Foo some_parameter = 1;
  *          PageRequest pagination = 2;
@@ -108,7 +108,7 @@ export interface PageRequestSDKType {
 /**
  * PageResponse is to be embedded in gRPC response messages where the
  * corresponding request message has used PageRequest.
- * 
+ *
  *  message SomeResponse {
  *          repeated Bar results = 1;
  *          PageResponse page = 2;
@@ -134,7 +134,7 @@ export interface PageResponseProtoMsg {
 /**
  * PageResponse is to be embedded in gRPC response messages where the
  * corresponding request message has used PageRequest.
- * 
+ *
  *  message SomeResponse {
  *          repeated Bar results = 1;
  *          PageResponse page = 2;
@@ -160,7 +160,7 @@ export interface PageResponseAminoMsg {
 /**
  * PageResponse is to be embedded in gRPC response messages where the
  * corresponding request message has used PageRequest.
- * 
+ *
  *  message SomeResponse {
  *          repeated Bar results = 1;
  *          PageResponse page = 2;

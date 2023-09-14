@@ -14,14 +14,14 @@ export namespace cheqdid {
         ..._1,
         ..._2,
         ..._3,
-        ..._4
+        ..._4,
       };
     }
     export namespace resource {
       export const v1 = {
         ..._5,
         ..._6,
-        ..._7
+        ..._7,
       };
     }
   }

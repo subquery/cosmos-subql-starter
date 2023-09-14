@@ -1,4 +1,8 @@
-import { ResourceWithMetadata, ResourceWithMetadataAmino, ResourceWithMetadataSDKType } from "./resource";
+import {
+  ResourceWithMetadata,
+  ResourceWithMetadataAmino,
+  ResourceWithMetadataSDKType,
+} from "./resource";
 import { FeeParams, FeeParamsAmino, FeeParamsSDKType } from "./fee";
 /** GenesisState defines the chqed Resource module's genesis state */
 export interface GenesisState {
