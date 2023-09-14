@@ -1,7 +1,7 @@
 import { Plan, PlanAmino, PlanSDKType } from "./upgrade";
 /**
  * MsgSoftwareUpgrade is the Msg/SoftwareUpgrade request type.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface MsgSoftwareUpgrade {
@@ -16,7 +16,7 @@ export interface MsgSoftwareUpgradeProtoMsg {
 }
 /**
  * MsgSoftwareUpgrade is the Msg/SoftwareUpgrade request type.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface MsgSoftwareUpgradeAmino {
@@ -31,7 +31,7 @@ export interface MsgSoftwareUpgradeAminoMsg {
 }
 /**
  * MsgSoftwareUpgrade is the Msg/SoftwareUpgrade request type.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface MsgSoftwareUpgradeSDKType {
@@ -40,7 +40,7 @@ export interface MsgSoftwareUpgradeSDKType {
 }
 /**
  * MsgSoftwareUpgradeResponse is the Msg/SoftwareUpgrade response type.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface MsgSoftwareUpgradeResponse {}
@@ -50,7 +50,7 @@ export interface MsgSoftwareUpgradeResponseProtoMsg {
 }
 /**
  * MsgSoftwareUpgradeResponse is the Msg/SoftwareUpgrade response type.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface MsgSoftwareUpgradeResponseAmino {}
@@ -60,13 +60,13 @@ export interface MsgSoftwareUpgradeResponseAminoMsg {
 }
 /**
  * MsgSoftwareUpgradeResponse is the Msg/SoftwareUpgrade response type.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface MsgSoftwareUpgradeResponseSDKType {}
 /**
  * MsgCancelUpgrade is the Msg/CancelUpgrade request type.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface MsgCancelUpgrade {
@@ -79,7 +79,7 @@ export interface MsgCancelUpgradeProtoMsg {
 }
 /**
  * MsgCancelUpgrade is the Msg/CancelUpgrade request type.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface MsgCancelUpgradeAmino {
@@ -92,7 +92,7 @@ export interface MsgCancelUpgradeAminoMsg {
 }
 /**
  * MsgCancelUpgrade is the Msg/CancelUpgrade request type.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface MsgCancelUpgradeSDKType {
@@ -100,7 +100,7 @@ export interface MsgCancelUpgradeSDKType {
 }
 /**
  * MsgCancelUpgradeResponse is the Msg/CancelUpgrade response type.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface MsgCancelUpgradeResponse {}
@@ -110,7 +110,7 @@ export interface MsgCancelUpgradeResponseProtoMsg {
 }
 /**
  * MsgCancelUpgradeResponse is the Msg/CancelUpgrade response type.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface MsgCancelUpgradeResponseAmino {}
@@ -120,7 +120,7 @@ export interface MsgCancelUpgradeResponseAminoMsg {
 }
 /**
  * MsgCancelUpgradeResponse is the Msg/CancelUpgrade response type.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface MsgCancelUpgradeResponseSDKType {}

@@ -1,6 +1,16 @@
 import { Header, HeaderAmino, HeaderSDKType } from "../types/types";
 import { ProofOps, ProofOpsAmino, ProofOpsSDKType } from "../crypto/proof";
-import { EvidenceParams, EvidenceParamsAmino, EvidenceParamsSDKType, ValidatorParams, ValidatorParamsAmino, ValidatorParamsSDKType, VersionParams, VersionParamsAmino, VersionParamsSDKType } from "../types/params";
+import {
+  EvidenceParams,
+  EvidenceParamsAmino,
+  EvidenceParamsSDKType,
+  ValidatorParams,
+  ValidatorParamsAmino,
+  ValidatorParamsSDKType,
+  VersionParams,
+  VersionParamsAmino,
+  VersionParamsSDKType,
+} from "../types/params";
 import { PublicKey, PublicKeyAmino, PublicKeySDKType } from "../crypto/keys";
 import { Long } from "../../helpers";
 export enum CheckTxType {
@@ -52,7 +62,9 @@ export enum ResponseOfferSnapshot_Result {
 }
 export const ResponseOfferSnapshot_ResultSDKType = ResponseOfferSnapshot_Result;
 export const ResponseOfferSnapshot_ResultAmino = ResponseOfferSnapshot_Result;
-export function responseOfferSnapshot_ResultFromJSON(object: any): ResponseOfferSnapshot_Result {
+export function responseOfferSnapshot_ResultFromJSON(
+  object: any
+): ResponseOfferSnapshot_Result {
   switch (object) {
     case 0:
     case "UNKNOWN":
@@ -78,7 +90,9 @@ export function responseOfferSnapshot_ResultFromJSON(object: any): ResponseOffer
       return ResponseOfferSnapshot_Result.UNRECOGNIZED;
   }
 }
-export function responseOfferSnapshot_ResultToJSON(object: ResponseOfferSnapshot_Result): string {
+export function responseOfferSnapshot_ResultToJSON(
+  object: ResponseOfferSnapshot_Result
+): string {
   switch (object) {
     case ResponseOfferSnapshot_Result.UNKNOWN:
       return "UNKNOWN";
@@ -112,9 +126,13 @@ export enum ResponseApplySnapshotChunk_Result {
   REJECT_SNAPSHOT = 5,
   UNRECOGNIZED = -1,
 }
-export const ResponseApplySnapshotChunk_ResultSDKType = ResponseApplySnapshotChunk_Result;
-export const ResponseApplySnapshotChunk_ResultAmino = ResponseApplySnapshotChunk_Result;
-export function responseApplySnapshotChunk_ResultFromJSON(object: any): ResponseApplySnapshotChunk_Result {
+export const ResponseApplySnapshotChunk_ResultSDKType =
+  ResponseApplySnapshotChunk_Result;
+export const ResponseApplySnapshotChunk_ResultAmino =
+  ResponseApplySnapshotChunk_Result;
+export function responseApplySnapshotChunk_ResultFromJSON(
+  object: any
+): ResponseApplySnapshotChunk_Result {
   switch (object) {
     case 0:
     case "UNKNOWN":
@@ -140,7 +158,9 @@ export function responseApplySnapshotChunk_ResultFromJSON(object: any): Response
       return ResponseApplySnapshotChunk_Result.UNRECOGNIZED;
   }
 }
-export function responseApplySnapshotChunk_ResultToJSON(object: ResponseApplySnapshotChunk_Result): string {
+export function responseApplySnapshotChunk_ResultToJSON(
+  object: ResponseApplySnapshotChunk_Result
+): string {
   switch (object) {
     case ResponseApplySnapshotChunk_Result.UNKNOWN:
       return "UNKNOWN";
@@ -1181,7 +1201,7 @@ export interface EventAttributeSDKType {
 }
 /**
  * TxResult contains results of executing the transaction.
- * 
+ *
  * One usage is indexing transaction results.
  */
 export interface TxResult {
@@ -1196,7 +1216,7 @@ export interface TxResultProtoMsg {
 }
 /**
  * TxResult contains results of executing the transaction.
- * 
+ *
  * One usage is indexing transaction results.
  */
 export interface TxResultAmino {
@@ -1211,7 +1231,7 @@ export interface TxResultAminoMsg {
 }
 /**
  * TxResult contains results of executing the transaction.
- * 
+ *
  * One usage is indexing transaction results.
  */
 export interface TxResultSDKType {

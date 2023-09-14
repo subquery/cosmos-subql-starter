@@ -1,4 +1,11 @@
-import { Counterparty, CounterpartyAmino, CounterpartySDKType, Version, VersionAmino, VersionSDKType } from "./connection";
+import {
+  Counterparty,
+  CounterpartyAmino,
+  CounterpartySDKType,
+  Version,
+  VersionAmino,
+  VersionSDKType,
+} from "./connection";
 import { Any, AnyAmino, AnySDKType } from "../../../../google/protobuf/any";
 import { Height, HeightAmino, HeightSDKType } from "../../client/v1/client";
 import { Long } from "../../../../helpers";

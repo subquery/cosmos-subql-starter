@@ -2,5 +2,4 @@
 
 // Auto-generated , DO NOT EDIT
 
-export {DelegatorReward} from "./DelegatorReward"
-
+export { DelegatorReward } from "./DelegatorReward";

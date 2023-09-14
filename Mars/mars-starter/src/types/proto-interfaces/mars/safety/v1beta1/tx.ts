@@ -1,8 +1,12 @@
-import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import {
+  Coin,
+  CoinAmino,
+  CoinSDKType,
+} from "../../../cosmos/base/v1beta1/coin";
 /**
  * MsgSafetyFundSpend defines the message for sending tokens from the safety
  * fund to a designated recipient.
- * 
+ *
  * This message is typically executed via a governance proposal with the gov
  * module being the executing authority.
  */
@@ -24,7 +28,7 @@ export interface MsgSafetyFundSpendProtoMsg {
 /**
  * MsgSafetyFundSpend defines the message for sending tokens from the safety
  * fund to a designated recipient.
- * 
+ *
  * This message is typically executed via a governance proposal with the gov
  * module being the executing authority.
  */
@@ -46,7 +50,7 @@ export interface MsgSafetyFundSpendAminoMsg {
 /**
  * MsgSafetyFundSpend defines the message for sending tokens from the safety
  * fund to a designated recipient.
- * 
+ *
  * This message is typically executed via a governance proposal with the gov
  * module being the executing authority.
  */

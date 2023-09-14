@@ -1,6 +1,10 @@
 import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { SignMode } from "../signing/v1beta1/signing";
-import { CompactBitArray, CompactBitArrayAmino, CompactBitArraySDKType } from "../../crypto/multisig/v1beta1/multisig";
+import {
+  CompactBitArray,
+  CompactBitArrayAmino,
+  CompactBitArraySDKType,
+} from "../../crypto/multisig/v1beta1/multisig";
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { Long } from "../../../helpers";
 /** Tx is the standard type used for broadcasting transactions. */
@@ -179,7 +183,7 @@ export interface SignDocSDKType {
 /**
  * SignDocDirectAux is the type used for generating sign bytes for
  * SIGN_MODE_DIRECT_AUX.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface SignDocDirectAux {
@@ -213,7 +217,7 @@ export interface SignDocDirectAuxProtoMsg {
 /**
  * SignDocDirectAux is the type used for generating sign bytes for
  * SIGN_MODE_DIRECT_AUX.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface SignDocDirectAuxAmino {
@@ -247,7 +251,7 @@ export interface SignDocDirectAuxAminoMsg {
 /**
  * SignDocDirectAux is the type used for generating sign bytes for
  * SIGN_MODE_DIRECT_AUX.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface SignDocDirectAuxSDKType {
@@ -367,7 +371,7 @@ export interface AuthInfo {
   fee: Fee;
   /**
    * Tip is the optional tip used for meta-transactions.
-   * 
+   *
    * Since: cosmos-sdk 0.46
    */
   tip: Tip;
@@ -397,7 +401,7 @@ export interface AuthInfoAmino {
   fee?: FeeAmino;
   /**
    * Tip is the optional tip used for meta-transactions.
-   * 
+   *
    * Since: cosmos-sdk 0.46
    */
   tip?: TipAmino;
@@ -645,7 +649,7 @@ export interface FeeSDKType {
 }
 /**
  * Tip is the tip used for meta-transactions.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface Tip {
@@ -660,7 +664,7 @@ export interface TipProtoMsg {
 }
 /**
  * Tip is the tip used for meta-transactions.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface TipAmino {
@@ -675,7 +679,7 @@ export interface TipAminoMsg {
 }
 /**
  * Tip is the tip used for meta-transactions.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface TipSDKType {
@@ -687,7 +691,7 @@ export interface TipSDKType {
  * tipper) builds and sends to the fee payer (who will build and broadcast the
  * actual tx). AuxSignerData is not a valid tx in itself, and will be rejected
  * by the node if sent directly as-is.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface AuxSignerData {
@@ -717,7 +721,7 @@ export interface AuxSignerDataProtoMsg {
  * tipper) builds and sends to the fee payer (who will build and broadcast the
  * actual tx). AuxSignerData is not a valid tx in itself, and will be rejected
  * by the node if sent directly as-is.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface AuxSignerDataAmino {
@@ -747,7 +751,7 @@ export interface AuxSignerDataAminoMsg {
  * tipper) builds and sends to the fee payer (who will build and broadcast the
  * actual tx). AuxSignerData is not a valid tx in itself, and will be rejected
  * by the node if sent directly as-is.
- * 
+ *
  * Since: cosmos-sdk 0.46
  */
 export interface AuxSignerDataSDKType {

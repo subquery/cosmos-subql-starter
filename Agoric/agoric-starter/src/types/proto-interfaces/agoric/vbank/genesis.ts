@@ -1,4 +1,11 @@
-import { Params, ParamsAmino, ParamsSDKType, State, StateAmino, StateSDKType } from "./vbank";
+import {
+  Params,
+  ParamsAmino,
+  ParamsSDKType,
+  State,
+  StateAmino,
+  StateSDKType,
+} from "./vbank";
 /** The initial and exported module state. */
 export interface GenesisState {
   /** parms defines all the parameters of the module. */

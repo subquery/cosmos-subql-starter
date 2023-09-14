@@ -1,4 +1,8 @@
-import { CapabilityOwners, CapabilityOwnersAmino, CapabilityOwnersSDKType } from "./capability";
+import {
+  CapabilityOwners,
+  CapabilityOwnersAmino,
+  CapabilityOwnersSDKType,
+} from "./capability";
 import { Long } from "../../../helpers";
 /** GenesisOwners defines the capability owners with their corresponding index. */
 export interface GenesisOwners {

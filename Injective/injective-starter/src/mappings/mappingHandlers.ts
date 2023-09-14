@@ -1,5 +1,5 @@
 import { SpotLimitOrder } from "../types";
-import {MsgCreateSpotLimitOrderMessage} from "../types/CosmosMessageTypes";
+import { MsgCreateSpotLimitOrderMessage } from "../types/CosmosMessageTypes";
 
 /*
 export async function handleBlock(block: CosmosBlock): Promise<void> {

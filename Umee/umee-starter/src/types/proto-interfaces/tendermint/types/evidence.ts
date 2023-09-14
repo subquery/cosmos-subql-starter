@@ -1,4 +1,11 @@
-import { Vote, VoteAmino, VoteSDKType, LightBlock, LightBlockAmino, LightBlockSDKType } from "./types";
+import {
+  Vote,
+  VoteAmino,
+  VoteSDKType,
+  LightBlock,
+  LightBlockAmino,
+  LightBlockSDKType,
+} from "./types";
 import { Validator, ValidatorAmino, ValidatorSDKType } from "./validator";
 import { Long } from "../../helpers";
 export interface Evidence {

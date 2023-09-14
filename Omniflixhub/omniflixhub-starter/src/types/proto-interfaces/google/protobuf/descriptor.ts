@@ -43,7 +43,9 @@ export enum FieldDescriptorProto_Type {
 }
 export const FieldDescriptorProto_TypeSDKType = FieldDescriptorProto_Type;
 export const FieldDescriptorProto_TypeAmino = FieldDescriptorProto_Type;
-export function fieldDescriptorProto_TypeFromJSON(object: any): FieldDescriptorProto_Type {
+export function fieldDescriptorProto_TypeFromJSON(
+  object: any
+): FieldDescriptorProto_Type {
   switch (object) {
     case 1:
     case "TYPE_DOUBLE":
@@ -105,7 +107,9 @@ export function fieldDescriptorProto_TypeFromJSON(object: any): FieldDescriptorP
       return FieldDescriptorProto_Type.UNRECOGNIZED;
   }
 }
-export function fieldDescriptorProto_TypeToJSON(object: FieldDescriptorProto_Type): string {
+export function fieldDescriptorProto_TypeToJSON(
+  object: FieldDescriptorProto_Type
+): string {
   switch (object) {
     case FieldDescriptorProto_Type.TYPE_DOUBLE:
       return "TYPE_DOUBLE";
@@ -157,7 +161,9 @@ export enum FieldDescriptorProto_Label {
 }
 export const FieldDescriptorProto_LabelSDKType = FieldDescriptorProto_Label;
 export const FieldDescriptorProto_LabelAmino = FieldDescriptorProto_Label;
-export function fieldDescriptorProto_LabelFromJSON(object: any): FieldDescriptorProto_Label {
+export function fieldDescriptorProto_LabelFromJSON(
+  object: any
+): FieldDescriptorProto_Label {
   switch (object) {
     case 1:
     case "LABEL_OPTIONAL":
@@ -174,7 +180,9 @@ export function fieldDescriptorProto_LabelFromJSON(object: any): FieldDescriptor
       return FieldDescriptorProto_Label.UNRECOGNIZED;
   }
 }
-export function fieldDescriptorProto_LabelToJSON(object: FieldDescriptorProto_Label): string {
+export function fieldDescriptorProto_LabelToJSON(
+  object: FieldDescriptorProto_Label
+): string {
   switch (object) {
     case FieldDescriptorProto_Label.LABEL_OPTIONAL:
       return "LABEL_OPTIONAL";
@@ -202,7 +210,9 @@ export enum FileOptions_OptimizeMode {
 }
 export const FileOptions_OptimizeModeSDKType = FileOptions_OptimizeMode;
 export const FileOptions_OptimizeModeAmino = FileOptions_OptimizeMode;
-export function fileOptions_OptimizeModeFromJSON(object: any): FileOptions_OptimizeMode {
+export function fileOptions_OptimizeModeFromJSON(
+  object: any
+): FileOptions_OptimizeMode {
   switch (object) {
     case 1:
     case "SPEED":
@@ -219,7 +229,9 @@ export function fileOptions_OptimizeModeFromJSON(object: any): FileOptions_Optim
       return FileOptions_OptimizeMode.UNRECOGNIZED;
   }
 }
-export function fileOptions_OptimizeModeToJSON(object: FileOptions_OptimizeMode): string {
+export function fileOptions_OptimizeModeToJSON(
+  object: FileOptions_OptimizeMode
+): string {
   switch (object) {
     case FileOptions_OptimizeMode.SPEED:
       return "SPEED";
@@ -325,9 +337,13 @@ export enum MethodOptions_IdempotencyLevel {
   IDEMPOTENT = 2,
   UNRECOGNIZED = -1,
 }
-export const MethodOptions_IdempotencyLevelSDKType = MethodOptions_IdempotencyLevel;
-export const MethodOptions_IdempotencyLevelAmino = MethodOptions_IdempotencyLevel;
-export function methodOptions_IdempotencyLevelFromJSON(object: any): MethodOptions_IdempotencyLevel {
+export const MethodOptions_IdempotencyLevelSDKType =
+  MethodOptions_IdempotencyLevel;
+export const MethodOptions_IdempotencyLevelAmino =
+  MethodOptions_IdempotencyLevel;
+export function methodOptions_IdempotencyLevelFromJSON(
+  object: any
+): MethodOptions_IdempotencyLevel {
   switch (object) {
     case 0:
     case "IDEMPOTENCY_UNKNOWN":
@@ -344,7 +360,9 @@ export function methodOptions_IdempotencyLevelFromJSON(object: any): MethodOptio
       return MethodOptions_IdempotencyLevel.UNRECOGNIZED;
   }
 }
-export function methodOptions_IdempotencyLevelToJSON(object: MethodOptions_IdempotencyLevel): string {
+export function methodOptions_IdempotencyLevelToJSON(
+  object: MethodOptions_IdempotencyLevel
+): string {
   switch (object) {
     case MethodOptions_IdempotencyLevel.IDEMPOTENCY_UNKNOWN:
       return "IDEMPOTENCY_UNKNOWN";
@@ -802,7 +820,7 @@ export interface EnumDescriptorProtoSDKType {
 /**
  * Range of reserved numeric values. Reserved values may not be used by
  * entries in the same enum. Reserved ranges may not overlap.
- * 
+ *
  * Note that this is distinct from DescriptorProto.ReservedRange in that it
  * is inclusive such that it can appropriately represent the entire int32
  * domain.
@@ -820,7 +838,7 @@ export interface EnumDescriptorProto_EnumReservedRangeProtoMsg {
 /**
  * Range of reserved numeric values. Reserved values may not be used by
  * entries in the same enum. Reserved ranges may not overlap.
- * 
+ *
  * Note that this is distinct from DescriptorProto.ReservedRange in that it
  * is inclusive such that it can appropriately represent the entire int32
  * domain.
@@ -838,7 +856,7 @@ export interface EnumDescriptorProto_EnumReservedRangeAminoMsg {
 /**
  * Range of reserved numeric values. Reserved values may not be used by
  * entries in the same enum. Reserved ranges may not overlap.
- * 
+ *
  * Note that this is distinct from DescriptorProto.ReservedRange in that it
  * is inclusive such that it can appropriately represent the entire int32
  * domain.
@@ -998,7 +1016,7 @@ export interface FileOptions {
    * main code generators in each language (without additional plugins).
    * Generic services were the only kind of service generation supported by
    * early versions of google.protobuf.
-   * 
+   *
    * Generic services are now considered deprecated in favor of using plugins
    * that generate code specific to your particular RPC system.  Therefore,
    * these default to false.  Old code which depends on generic services should
@@ -1119,7 +1137,7 @@ export interface FileOptionsAmino {
    * main code generators in each language (without additional plugins).
    * Generic services were the only kind of service generation supported by
    * early versions of google.protobuf.
-   * 
+   *
    * Generic services are now considered deprecated in favor of using plugins
    * that generate code specific to your particular RPC system.  Therefore,
    * these default to false.  Old code which depends on generic services should
@@ -1218,7 +1236,7 @@ export interface MessageOptions {
    * This is provided for backwards-compatibility with the MessageSet wire
    * format.  You should not use this for any other reason:  It's less
    * efficient, has fewer features, and is more complicated.
-   * 
+   *
    * The message must be defined exactly as follows:
    *   message Foo {
    *     option message_set_wire_format = true;
@@ -1226,10 +1244,10 @@ export interface MessageOptions {
    *   }
    * Note that the message cannot have any defined fields; MessageSets only
    * have extensions.
-   * 
+   *
    * All extensions of your type must be singular messages; e.g. they cannot
    * be int32s, enums, or repeated messages.
-   * 
+   *
    * Because this is an option, the above two restrictions are not enforced by
    * the protocol compiler.
    */
@@ -1250,7 +1268,7 @@ export interface MessageOptions {
   /**
    * Whether the message is an automatically generated map entry type for the
    * maps field.
-   * 
+   *
    * For maps fields:
    *     map<KeyType, ValueType> map_field = 1;
    * The parsed descriptor looks like:
@@ -1260,12 +1278,12 @@ export interface MessageOptions {
    *         optional ValueType value = 2;
    *     }
    *     repeated MapFieldEntry map_field = 1;
-   * 
+   *
    * Implementations may choose not to generate the map_entry=true message, but
    * use a native map in the target language to hold the keys and values.
    * The reflection APIs in such implementations still need to work as
    * if the field is a repeated message field.
-   * 
+   *
    * NOTE: Do not set the option in .proto files. Always use the maps syntax
    * instead. The option should only be implicitly set by the proto compiler
    * parser.
@@ -1284,7 +1302,7 @@ export interface MessageOptionsAmino {
    * This is provided for backwards-compatibility with the MessageSet wire
    * format.  You should not use this for any other reason:  It's less
    * efficient, has fewer features, and is more complicated.
-   * 
+   *
    * The message must be defined exactly as follows:
    *   message Foo {
    *     option message_set_wire_format = true;
@@ -1292,10 +1310,10 @@ export interface MessageOptionsAmino {
    *   }
    * Note that the message cannot have any defined fields; MessageSets only
    * have extensions.
-   * 
+   *
    * All extensions of your type must be singular messages; e.g. they cannot
    * be int32s, enums, or repeated messages.
-   * 
+   *
    * Because this is an option, the above two restrictions are not enforced by
    * the protocol compiler.
    */
@@ -1316,7 +1334,7 @@ export interface MessageOptionsAmino {
   /**
    * Whether the message is an automatically generated map entry type for the
    * maps field.
-   * 
+   *
    * For maps fields:
    *     map<KeyType, ValueType> map_field = 1;
    * The parsed descriptor looks like:
@@ -1326,12 +1344,12 @@ export interface MessageOptionsAmino {
    *         optional ValueType value = 2;
    *     }
    *     repeated MapFieldEntry map_field = 1;
-   * 
+   *
    * Implementations may choose not to generate the map_entry=true message, but
    * use a native map in the target language to hold the keys and values.
    * The reflection APIs in such implementations still need to work as
    * if the field is a repeated message field.
-   * 
+   *
    * NOTE: Do not set the option in .proto files. Always use the maps syntax
    * instead. The option should only be implicitly set by the proto compiler
    * parser.
@@ -1376,7 +1394,7 @@ export interface FieldOptions {
    * Specifying JS_NUMBER for the jstype causes the generated JavaScript code to
    * use the JavaScript "number" type.  The behavior of the default option
    * JS_NORMAL is implementation dependent.
-   * 
+   *
    * This option is an enum to permit additional types to be added, e.g.
    * goog.math.Integer.
    */
@@ -1386,20 +1404,20 @@ export interface FieldOptions {
    * fields.  It means that when the outer message is initially parsed, the
    * inner message's contents will not be parsed but instead stored in encoded
    * form.  The inner message will actually be parsed when it is first accessed.
-   * 
+   *
    * This is only a hint.  Implementations are free to choose whether to use
    * eager or lazy parsing regardless of the value of this option.  However,
    * setting this option true suggests that the protocol author believes that
    * using lazy parsing on this field is worth the additional bookkeeping
    * overhead typically needed to implement it.
-   * 
+   *
    * This option does not affect the public interface of any generated code;
    * all method signatures remain the same.  Furthermore, thread-safety of the
    * interface is not affected by this option; const methods remain safe to
    * call from multiple threads concurrently, while non-const methods continue
    * to require exclusive access.
-   * 
-   * 
+   *
+   *
    * Note that implementations may choose not to check required fields within
    * a lazy sub-message.  That is, calling IsInitialized() on the outer message
    * may return true even if the inner message has missing required fields.
@@ -1453,7 +1471,7 @@ export interface FieldOptionsAmino {
    * Specifying JS_NUMBER for the jstype causes the generated JavaScript code to
    * use the JavaScript "number" type.  The behavior of the default option
    * JS_NORMAL is implementation dependent.
-   * 
+   *
    * This option is an enum to permit additional types to be added, e.g.
    * goog.math.Integer.
    */
@@ -1463,20 +1481,20 @@ export interface FieldOptionsAmino {
    * fields.  It means that when the outer message is initially parsed, the
    * inner message's contents will not be parsed but instead stored in encoded
    * form.  The inner message will actually be parsed when it is first accessed.
-   * 
+   *
    * This is only a hint.  Implementations are free to choose whether to use
    * eager or lazy parsing regardless of the value of this option.  However,
    * setting this option true suggests that the protocol author believes that
    * using lazy parsing on this field is worth the additional bookkeeping
    * overhead typically needed to implement it.
-   * 
+   *
    * This option does not affect the public interface of any generated code;
    * all method signatures remain the same.  Furthermore, thread-safety of the
    * interface is not affected by this option; const methods remain safe to
    * call from multiple threads concurrently, while non-const methods continue
    * to require exclusive access.
-   * 
-   * 
+   *
+   *
    * Note that implementations may choose not to check required fields within
    * a lazy sub-message.  That is, calling IsInitialized() on the outer message
    * may return true even if the inner message has missing required fields.
@@ -1801,7 +1819,7 @@ export interface SourceCodeInfo {
    * corresponds to a particular definition.  This information is intended
    * to be useful to IDEs, code indexers, documentation generators, and similar
    * tools.
-   * 
+   *
    * For example, say we have a file like:
    *   message Foo {
    *     optional string foo = 1;
@@ -1817,7 +1835,7 @@ export interface SourceCodeInfo {
    *   [c,d)  [ 4, 0, 2, 0, 5 ]  The type (string).
    *   [e,f)  [ 4, 0, 2, 0, 1 ]  The name (foo).
    *   [g,h)  [ 4, 0, 2, 0, 3 ]  The number (1).
-   * 
+   *
    * Notes:
    * - A location may refer to a repeated field itself (i.e. not to any
    *   particular index within it).  This is used whenever a set of elements are
@@ -1857,7 +1875,7 @@ export interface SourceCodeInfoAmino {
    * corresponds to a particular definition.  This information is intended
    * to be useful to IDEs, code indexers, documentation generators, and similar
    * tools.
-   * 
+   *
    * For example, say we have a file like:
    *   message Foo {
    *     optional string foo = 1;
@@ -1873,7 +1891,7 @@ export interface SourceCodeInfoAmino {
    *   [c,d)  [ 4, 0, 2, 0, 5 ]  The type (string).
    *   [e,f)  [ 4, 0, 2, 0, 1 ]  The name (foo).
    *   [g,h)  [ 4, 0, 2, 0, 3 ]  The number (1).
-   * 
+   *
    * Notes:
    * - A location may refer to a repeated field itself (i.e. not to any
    *   particular index within it).  This is used whenever a set of elements are
@@ -1914,7 +1932,7 @@ export interface SourceCodeInfo_Location {
   /**
    * Identifies which part of the FileDescriptorProto was defined at this
    * location.
-   * 
+   *
    * Each element is a field number or an index.  They form a path from
    * the root FileDescriptorProto to the place where the definition.  For
    * example, this path:
@@ -1929,7 +1947,7 @@ export interface SourceCodeInfo_Location {
    *   repeated FieldDescriptorProto field = 2;
    * and FieldDescriptorProto.name has field number 1:
    *   optional string name = 1;
-   * 
+   *
    * Thus, the above path gives the location of a field name.  If we removed
    * the last element:
    *   [ 4, 3, 2, 7 ]
@@ -1949,41 +1967,41 @@ export interface SourceCodeInfo_Location {
    * If this SourceCodeInfo represents a complete declaration, these are any
    * comments appearing before and after the declaration which appear to be
    * attached to the declaration.
-   * 
+   *
    * A series of line comments appearing on consecutive lines, with no other
    * tokens appearing on those lines, will be treated as a single comment.
-   * 
+   *
    * leading_detached_comments will keep paragraphs of comments that appear
    * before (but not connected to) the current element. Each paragraph,
    * separated by empty lines, will be one comment element in the repeated
    * field.
-   * 
+   *
    * Only the comment content is provided; comment markers (e.g. //) are
    * stripped out.  For block comments, leading whitespace and an asterisk
    * will be stripped from the beginning of each line other than the first.
    * Newlines are included in the output.
-   * 
+   *
    * Examples:
-   * 
+   *
    *   optional int32 foo = 1;  // Comment attached to foo.
    *   // Comment attached to bar.
    *   optional int32 bar = 2;
-   * 
+   *
    *   optional string baz = 3;
    *   // Comment attached to baz.
    *   // Another line attached to baz.
-   * 
+   *
    *   // Comment attached to qux.
    *   //
    *   // Another line attached to qux.
    *   optional double qux = 4;
-   * 
+   *
    *   // Detached comment for corge. This is not leading or trailing comments
    *   // to qux or corge because there are blank lines separating it from
    *   // both.
-   * 
+   *
    *   // Detached comment for corge paragraph 2.
-   * 
+   *
    *   optional string corge = 5;
    *   /* Block comment attached
    *    * to corge.  Leading asterisks
@@ -1991,7 +2009,7 @@ export interface SourceCodeInfo_Location {
    *   /* Block comment attached to
    *    * grault. *\/
    *   optional int32 grault = 6;
-   * 
+   *
    *   // ignored detached comments.
    */
   leadingComments: string;
@@ -2006,7 +2024,7 @@ export interface SourceCodeInfo_LocationAmino {
   /**
    * Identifies which part of the FileDescriptorProto was defined at this
    * location.
-   * 
+   *
    * Each element is a field number or an index.  They form a path from
    * the root FileDescriptorProto to the place where the definition.  For
    * example, this path:
@@ -2021,7 +2039,7 @@ export interface SourceCodeInfo_LocationAmino {
    *   repeated FieldDescriptorProto field = 2;
    * and FieldDescriptorProto.name has field number 1:
    *   optional string name = 1;
-   * 
+   *
    * Thus, the above path gives the location of a field name.  If we removed
    * the last element:
    *   [ 4, 3, 2, 7 ]
@@ -2041,41 +2059,41 @@ export interface SourceCodeInfo_LocationAmino {
    * If this SourceCodeInfo represents a complete declaration, these are any
    * comments appearing before and after the declaration which appear to be
    * attached to the declaration.
-   * 
+   *
    * A series of line comments appearing on consecutive lines, with no other
    * tokens appearing on those lines, will be treated as a single comment.
-   * 
+   *
    * leading_detached_comments will keep paragraphs of comments that appear
    * before (but not connected to) the current element. Each paragraph,
    * separated by empty lines, will be one comment element in the repeated
    * field.
-   * 
+   *
    * Only the comment content is provided; comment markers (e.g. //) are
    * stripped out.  For block comments, leading whitespace and an asterisk
    * will be stripped from the beginning of each line other than the first.
    * Newlines are included in the output.
-   * 
+   *
    * Examples:
-   * 
+   *
    *   optional int32 foo = 1;  // Comment attached to foo.
    *   // Comment attached to bar.
    *   optional int32 bar = 2;
-   * 
+   *
    *   optional string baz = 3;
    *   // Comment attached to baz.
    *   // Another line attached to baz.
-   * 
+   *
    *   // Comment attached to qux.
    *   //
    *   // Another line attached to qux.
    *   optional double qux = 4;
-   * 
+   *
    *   // Detached comment for corge. This is not leading or trailing comments
    *   // to qux or corge because there are blank lines separating it from
    *   // both.
-   * 
+   *
    *   // Detached comment for corge paragraph 2.
-   * 
+   *
    *   optional string corge = 5;
    *   /* Block comment attached
    *    * to corge.  Leading asterisks
@@ -2083,7 +2101,7 @@ export interface SourceCodeInfo_LocationAmino {
    *   /* Block comment attached to
    *    * grault. *\/
    *   optional int32 grault = 6;
-   * 
+   *
    *   // ignored detached comments.
    */
   leading_comments: string;

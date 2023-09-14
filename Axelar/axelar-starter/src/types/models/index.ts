@@ -2,5 +2,4 @@
 
 // Auto-generated , DO NOT EDIT
 
-export {DepositConfirmation} from "./DepositConfirmation"
-
+export { DepositConfirmation } from "./DepositConfirmation";

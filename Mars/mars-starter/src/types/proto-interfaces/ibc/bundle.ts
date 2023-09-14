@@ -23,10 +23,10 @@ export namespace ibc {
       export const v1 = {
         ..._91,
         ..._92,
-        ..._93
+        ..._93,
       };
       export const v2 = {
-        ..._94
+        ..._94,
       };
     }
   }
@@ -35,51 +35,51 @@ export namespace ibc {
       export const v1 = {
         ..._95,
         ..._96,
-        ..._97
+        ..._97,
       };
     }
     export namespace client {
       export const v1 = {
         ..._98,
         ..._99,
-        ..._100
+        ..._100,
       };
     }
     export namespace commitment {
       export const v1 = {
-        ..._101
+        ..._101,
       };
     }
     export namespace connection {
       export const v1 = {
         ..._102,
         ..._103,
-        ..._104
+        ..._104,
       };
     }
     export namespace types {
       export const v1 = {
-        ..._105
+        ..._105,
       };
     }
   }
   export namespace lightclients {
     export namespace localhost {
       export const v1 = {
-        ..._106
+        ..._106,
       };
     }
     export namespace solomachine {
       export const v1 = {
-        ..._107
+        ..._107,
       };
       export const v2 = {
-        ..._108
+        ..._108,
       };
     }
     export namespace tendermint {
       export const v1 = {
-        ..._109
+        ..._109,
       };
     }
   }

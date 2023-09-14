@@ -41,10 +41,9 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
     id: `${event.tx.hash}-${event.msg.idx}-${event.idx}`,
     blockHeight: BigInt(event.block.block.header.height),
     txHash: event.tx.hash,
-    recipient: '',
-    amount: '',
-    sender: ''
-
+    recipient: "",
+    amount: "",
+    sender: "",
   });
   for (const attr of event.event.attributes) {
     switch (attr.key) {

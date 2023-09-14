@@ -1,9 +1,33 @@
-import { Duration, DurationAmino, DurationSDKType } from "../../../../google/protobuf/duration";
-import { Height, HeightAmino, HeightSDKType } from "../../../core/client/v1/client";
-import { ProofSpec, ProofSpecAmino, ProofSpecSDKType } from "../../../../confio/proofs";
-import { MerkleRoot, MerkleRootAmino, MerkleRootSDKType } from "../../../core/commitment/v1/commitment";
-import { SignedHeader, SignedHeaderAmino, SignedHeaderSDKType } from "../../../../tendermint/types/types";
-import { ValidatorSet, ValidatorSetAmino, ValidatorSetSDKType } from "../../../../tendermint/types/validator";
+import {
+  Duration,
+  DurationAmino,
+  DurationSDKType,
+} from "../../../../google/protobuf/duration";
+import {
+  Height,
+  HeightAmino,
+  HeightSDKType,
+} from "../../../core/client/v1/client";
+import {
+  ProofSpec,
+  ProofSpecAmino,
+  ProofSpecSDKType,
+} from "../../../../confio/proofs";
+import {
+  MerkleRoot,
+  MerkleRootAmino,
+  MerkleRootSDKType,
+} from "../../../core/commitment/v1/commitment";
+import {
+  SignedHeader,
+  SignedHeaderAmino,
+  SignedHeaderSDKType,
+} from "../../../../tendermint/types/types";
+import {
+  ValidatorSet,
+  ValidatorSetAmino,
+  ValidatorSetSDKType,
+} from "../../../../tendermint/types/validator";
 import { Long } from "../../../../helpers";
 /**
  * ClientState from Tendermint tracks the current validator set, latest height,

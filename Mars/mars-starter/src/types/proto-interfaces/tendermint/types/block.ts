@@ -1,5 +1,19 @@
-import { Header, HeaderAmino, HeaderSDKType, Data, DataAmino, DataSDKType, Commit, CommitAmino, CommitSDKType } from "./types";
-import { EvidenceList, EvidenceListAmino, EvidenceListSDKType } from "./evidence";
+import {
+  Header,
+  HeaderAmino,
+  HeaderSDKType,
+  Data,
+  DataAmino,
+  DataSDKType,
+  Commit,
+  CommitAmino,
+  CommitSDKType,
+} from "./types";
+import {
+  EvidenceList,
+  EvidenceListAmino,
+  EvidenceListSDKType,
+} from "./evidence";
 export interface Block {
   header: Header;
   data: Data;

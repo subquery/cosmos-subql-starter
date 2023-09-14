@@ -43,14 +43,13 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
       id: `${event.tx.hash}-${event.msg.idx}-${event.idx}`,
       blockHeight: BigInt(event.block.block.header.height),
       txHash: event.tx.hash,
-      sourceChain: '', // Initialize optional properties with empty string
-      from: '',
-      to: '',
-      toChain: '',
-      amount: '',
+      sourceChain: "", // Initialize optional properties with empty string
+      from: "",
+      to: "",
+      toChain: "",
+      amount: "",
       asset: undefined,
-      transferID: ''
-
+      transferID: "",
     });
     for (const attr of event.event.attributes) {
       switch (attr.key) {

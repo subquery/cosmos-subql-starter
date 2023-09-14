@@ -57,6 +57,7 @@ For this project, you can try to query with the following GraphQL code to get a 
 ```
 
 Expected output:
+
 ```
 {
   "data": {

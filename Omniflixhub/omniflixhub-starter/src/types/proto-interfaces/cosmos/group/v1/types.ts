@@ -1,4 +1,8 @@
-import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
+import {
+  Duration,
+  DurationAmino,
+  DurationSDKType,
+} from "../../../google/protobuf/duration";
 import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { Long } from "../../../helpers";
 /** VoteOption enumerates the valid vote options for a given proposal. */
@@ -179,7 +183,9 @@ export enum ProposalExecutorResult {
 }
 export const ProposalExecutorResultSDKType = ProposalExecutorResult;
 export const ProposalExecutorResultAmino = ProposalExecutorResult;
-export function proposalExecutorResultFromJSON(object: any): ProposalExecutorResult {
+export function proposalExecutorResultFromJSON(
+  object: any
+): ProposalExecutorResult {
   switch (object) {
     case 0:
     case "PROPOSAL_EXECUTOR_RESULT_UNSPECIFIED":
@@ -199,7 +205,9 @@ export function proposalExecutorResultFromJSON(object: any): ProposalExecutorRes
       return ProposalExecutorResult.UNRECOGNIZED;
   }
 }
-export function proposalExecutorResultToJSON(object: ProposalExecutorResult): string {
+export function proposalExecutorResultToJSON(
+  object: ProposalExecutorResult
+): string {
   switch (object) {
     case ProposalExecutorResult.PROPOSAL_EXECUTOR_RESULT_UNSPECIFIED:
       return "PROPOSAL_EXECUTOR_RESULT_UNSPECIFIED";
@@ -350,7 +358,7 @@ export interface DecisionPolicyWindows {
    * `[ submission + min_execution_period ; submission + voting_period + max_execution_period]`
    * where max_execution_period is a app-specific config, defined in the keeper.
    * If not set, min_execution_period will default to 0.
-   * 
+   *
    * Please make sure to set a `min_execution_period` that is smaller than
    * `voting_period + max_execution_period`, or else the above execution window
    * is empty, meaning that all proposals created with this decision policy
@@ -376,7 +384,7 @@ export interface DecisionPolicyWindowsAmino {
    * `[ submission + min_execution_period ; submission + voting_period + max_execution_period]`
    * where max_execution_period is a app-specific config, defined in the keeper.
    * If not set, min_execution_period will default to 0.
-   * 
+   *
    * Please make sure to set a `min_execution_period` that is smaller than
    * `voting_period + max_execution_period`, or else the above execution window
    * is empty, meaning that all proposals created with this decision policy

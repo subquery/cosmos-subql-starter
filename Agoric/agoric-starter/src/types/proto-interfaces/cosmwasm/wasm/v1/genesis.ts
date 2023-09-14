@@ -1,4 +1,20 @@
-import { Params, ParamsAmino, ParamsSDKType, CodeInfo, CodeInfoAmino, CodeInfoSDKType, ContractInfo, ContractInfoAmino, ContractInfoSDKType, Model, ModelAmino, ModelSDKType, ContractCodeHistoryEntry, ContractCodeHistoryEntryAmino, ContractCodeHistoryEntrySDKType } from "./types";
+import {
+  Params,
+  ParamsAmino,
+  ParamsSDKType,
+  CodeInfo,
+  CodeInfoAmino,
+  CodeInfoSDKType,
+  ContractInfo,
+  ContractInfoAmino,
+  ContractInfoSDKType,
+  Model,
+  ModelAmino,
+  ModelSDKType,
+  ContractCodeHistoryEntry,
+  ContractCodeHistoryEntryAmino,
+  ContractCodeHistoryEntrySDKType,
+} from "./types";
 import { Long } from "../../../helpers";
 /** GenesisState - genesis state of x/wasm */
 export interface GenesisState {

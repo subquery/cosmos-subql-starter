@@ -1,4 +1,11 @@
-import { Params, ParamsAmino, ParamsSDKType, State, StateAmino, StateSDKType } from "./swingset";
+import {
+  Params,
+  ParamsAmino,
+  ParamsSDKType,
+  State,
+  StateAmino,
+  StateSDKType,
+} from "./swingset";
 /** The initial or exported state. */
 export interface GenesisState {
   params: Params;

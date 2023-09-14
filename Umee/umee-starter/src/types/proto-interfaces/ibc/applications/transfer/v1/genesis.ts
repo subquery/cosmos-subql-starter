@@ -1,4 +1,11 @@
-import { DenomTrace, DenomTraceAmino, DenomTraceSDKType, Params, ParamsAmino, ParamsSDKType } from "./transfer";
+import {
+  DenomTrace,
+  DenomTraceAmino,
+  DenomTraceSDKType,
+  Params,
+  ParamsAmino,
+  ParamsSDKType,
+} from "./transfer";
 /** GenesisState defines the ibc-transfer genesis state */
 export interface GenesisState {
   portId: string;

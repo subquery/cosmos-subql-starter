@@ -1,4 +1,14 @@
-import { IdentifiedClientState, IdentifiedClientStateAmino, IdentifiedClientStateSDKType, ClientConsensusStates, ClientConsensusStatesAmino, ClientConsensusStatesSDKType, Params, ParamsAmino, ParamsSDKType } from "./client";
+import {
+  IdentifiedClientState,
+  IdentifiedClientStateAmino,
+  IdentifiedClientStateSDKType,
+  ClientConsensusStates,
+  ClientConsensusStatesAmino,
+  ClientConsensusStatesSDKType,
+  Params,
+  ParamsAmino,
+  ParamsSDKType,
+} from "./client";
 import { Long } from "../../../../helpers";
 /** GenesisState defines the ibc client submodule's genesis state. */
 export interface GenesisState {

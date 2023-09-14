@@ -1,8 +1,12 @@
-import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import {
+  Coin,
+  CoinAmino,
+  CoinSDKType,
+} from "../../../cosmos/base/v1beta1/coin";
 import { Long } from "../../../helpers";
 /**
  * MsgCreateSchedule defines the message for creating a new incentives schedule.
- * 
+ *
  * This message is typically executed via a governance proposal with the gov
  * module being the executing authority.
  */
@@ -28,7 +32,7 @@ export interface MsgCreateScheduleProtoMsg {
 }
 /**
  * MsgCreateSchedule defines the message for creating a new incentives schedule.
- * 
+ *
  * This message is typically executed via a governance proposal with the gov
  * module being the executing authority.
  */
@@ -54,7 +58,7 @@ export interface MsgCreateScheduleAminoMsg {
 }
 /**
  * MsgCreateSchedule defines the message for creating a new incentives schedule.
- * 
+ *
  * This message is typically executed via a governance proposal with the gov
  * module being the executing authority.
  */
@@ -90,7 +94,7 @@ export interface MsgCreateScheduleResponseSDKType {}
 /**
  * MsgTerminateSchedules defines the message for terminating one or more
  * existing incentives schedules.
- * 
+ *
  * This message is typically executed via a governance proposal with the gov
  * module being the executing authority.
  */
@@ -113,7 +117,7 @@ export interface MsgTerminateSchedulesProtoMsg {
 /**
  * MsgTerminateSchedules defines the message for terminating one or more
  * existing incentives schedules.
- * 
+ *
  * This message is typically executed via a governance proposal with the gov
  * module being the executing authority.
  */
@@ -136,7 +140,7 @@ export interface MsgTerminateSchedulesAminoMsg {
 /**
  * MsgTerminateSchedules defines the message for terminating one or more
  * existing incentives schedules.
- * 
+ *
  * This message is typically executed via a governance proposal with the gov
  * module being the executing authority.
  */

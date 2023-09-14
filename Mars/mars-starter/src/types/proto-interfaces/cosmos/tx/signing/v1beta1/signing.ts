@@ -1,9 +1,13 @@
-import { CompactBitArray, CompactBitArrayAmino, CompactBitArraySDKType } from "../../../crypto/multisig/v1beta1/multisig";
+import {
+  CompactBitArray,
+  CompactBitArrayAmino,
+  CompactBitArraySDKType,
+} from "../../../crypto/multisig/v1beta1/multisig";
 import { Any, AnyAmino, AnySDKType } from "../../../../google/protobuf/any";
 import { Long } from "../../../../helpers";
 /**
  * SignMode represents a signing mode with its own security guarantees.
- * 
+ *
  * This enum should be considered a registry of all known sign modes
  * in the Cosmos ecosystem. Apps are not expected to support all known
  * sign modes. Apps that would like to support custom  sign modes are
@@ -33,7 +37,7 @@ export enum SignMode {
    * SignDocDirectAux. As opposed to SIGN_MODE_DIRECT, this sign mode does not
    * require signers signing over other signers' `signer_info`. It also allows
    * for adding Tips in transactions.
-   * 
+   *
    * Since: cosmos-sdk 0.46
    */
   SIGN_MODE_DIRECT_AUX = 3,

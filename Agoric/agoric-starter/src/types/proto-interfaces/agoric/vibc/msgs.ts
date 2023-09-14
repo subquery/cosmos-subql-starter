@@ -1,4 +1,8 @@
-import { Packet, PacketAmino, PacketSDKType } from "../../ibc/core/channel/v1/channel";
+import {
+  Packet,
+  PacketAmino,
+  PacketSDKType,
+} from "../../ibc/core/channel/v1/channel";
 /** MsgSendPacket is an SDK message for sending an outgoing IBC packet */
 export interface MsgSendPacket {
   packet: Packet;

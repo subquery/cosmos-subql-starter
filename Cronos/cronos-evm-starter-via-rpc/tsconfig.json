@@ -11,8 +11,5 @@
     "rootDir": "src",
     "target": "es2017"
   },
-  "include": [
-    "src/**/*",
-    "node_modules/@subql/types/dist/global.d.ts"
-  ]
+  "include": ["src/**/*", "node_modules/@subql/types/dist/global.d.ts"]
 }

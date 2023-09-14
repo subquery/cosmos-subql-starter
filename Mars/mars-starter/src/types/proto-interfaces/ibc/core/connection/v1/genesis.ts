@@ -1,4 +1,14 @@
-import { IdentifiedConnection, IdentifiedConnectionAmino, IdentifiedConnectionSDKType, ConnectionPaths, ConnectionPathsAmino, ConnectionPathsSDKType, Params, ParamsAmino, ParamsSDKType } from "./connection";
+import {
+  IdentifiedConnection,
+  IdentifiedConnectionAmino,
+  IdentifiedConnectionSDKType,
+  ConnectionPaths,
+  ConnectionPathsAmino,
+  ConnectionPathsSDKType,
+  Params,
+  ParamsAmino,
+  ParamsSDKType,
+} from "./connection";
 import { Long } from "../../../../helpers";
 /** GenesisState defines the ibc connection submodule's genesis state. */
 export interface GenesisState {

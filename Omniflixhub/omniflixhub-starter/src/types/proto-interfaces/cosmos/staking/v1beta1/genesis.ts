@@ -1,4 +1,20 @@
-import { Params, ParamsAmino, ParamsSDKType, Validator, ValidatorAmino, ValidatorSDKType, Delegation, DelegationAmino, DelegationSDKType, UnbondingDelegation, UnbondingDelegationAmino, UnbondingDelegationSDKType, Redelegation, RedelegationAmino, RedelegationSDKType } from "./staking";
+import {
+  Params,
+  ParamsAmino,
+  ParamsSDKType,
+  Validator,
+  ValidatorAmino,
+  ValidatorSDKType,
+  Delegation,
+  DelegationAmino,
+  DelegationSDKType,
+  UnbondingDelegation,
+  UnbondingDelegationAmino,
+  UnbondingDelegationSDKType,
+  Redelegation,
+  RedelegationAmino,
+  RedelegationSDKType,
+} from "./staking";
 import { Long } from "../../../helpers";
 /** GenesisState defines the staking module's genesis state. */
 export interface GenesisState {

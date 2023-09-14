@@ -1,4 +1,8 @@
-import { MerklePrefix, MerklePrefixAmino, MerklePrefixSDKType } from "../../commitment/v1/commitment";
+import {
+  MerklePrefix,
+  MerklePrefixAmino,
+  MerklePrefixSDKType,
+} from "../../commitment/v1/commitment";
 import { Long } from "../../../../helpers";
 /**
  * State defines if a connection is in one of the following states:

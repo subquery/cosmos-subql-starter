@@ -8,13 +8,13 @@ import * as _101 from "./protobuf/timestamp";
 export namespace google {
   export const api = {
     ..._95,
-    ..._96
+    ..._96,
   };
   export const protobuf = {
     ..._97,
     ..._98,
     ..._99,
     ..._100,
-    ..._101
+    ..._101,
   };
 }

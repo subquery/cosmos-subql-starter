@@ -1,6 +1,14 @@
 import { Any, AnyAmino, AnySDKType } from "../../../../google/protobuf/any";
-import { ConnectionEnd, ConnectionEndAmino, ConnectionEndSDKType } from "../../../core/connection/v1/connection";
-import { Channel, ChannelAmino, ChannelSDKType } from "../../../core/channel/v1/channel";
+import {
+  ConnectionEnd,
+  ConnectionEndAmino,
+  ConnectionEndSDKType,
+} from "../../../core/connection/v1/connection";
+import {
+  Channel,
+  ChannelAmino,
+  ChannelSDKType,
+} from "../../../core/channel/v1/channel";
 import { Long } from "../../../../helpers";
 /**
  * DataType defines the type of solo machine proof being created. This is done

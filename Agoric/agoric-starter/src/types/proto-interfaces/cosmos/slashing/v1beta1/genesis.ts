@@ -1,4 +1,11 @@
-import { Params, ParamsAmino, ParamsSDKType, ValidatorSigningInfo, ValidatorSigningInfoAmino, ValidatorSigningInfoSDKType } from "./slashing";
+import {
+  Params,
+  ParamsAmino,
+  ParamsSDKType,
+  ValidatorSigningInfo,
+  ValidatorSigningInfoAmino,
+  ValidatorSigningInfoSDKType,
+} from "./slashing";
 import { Long } from "../../../helpers";
 /** GenesisState defines the slashing module's genesis state. */
 export interface GenesisState {

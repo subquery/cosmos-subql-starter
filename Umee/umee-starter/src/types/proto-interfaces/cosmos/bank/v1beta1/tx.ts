@@ -1,5 +1,12 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
-import { Input, InputAmino, InputSDKType, Output, OutputAmino, OutputSDKType } from "./bank";
+import {
+  Input,
+  InputAmino,
+  InputSDKType,
+  Output,
+  OutputAmino,
+  OutputSDKType,
+} from "./bank";
 /** MsgSend represents a message to send coins from one account to another. */
 export interface MsgSend {
   fromAddress: string;

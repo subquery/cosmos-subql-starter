@@ -1,4 +1,11 @@
-import { Minter, MinterAmino, MinterSDKType, Params, ParamsAmino, ParamsSDKType } from "./mint";
+import {
+  Minter,
+  MinterAmino,
+  MinterSDKType,
+  Params,
+  ParamsAmino,
+  ParamsSDKType,
+} from "./mint";
 /** GenesisState defines the mint module's genesis state. */
 export interface GenesisState {
   /** minter is a space for holding current inflation information. */

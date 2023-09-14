@@ -4,7 +4,7 @@ import {
   EthermintEvmCall,
 } from "@subql/ethermint-evm-processor";
 import { BigNumber } from "ethers";
-import { TransferEvent} from "../types/contracts/Erc20Abi";
+import { TransferEvent } from "../types/contracts/Erc20Abi";
 
 type ApproveCallArgs = [string, BigNumber] & {
   guy: string;
@@ -12,7 +12,7 @@ type ApproveCallArgs = [string, BigNumber] & {
 };
 
 export async function handleEthermintEvmEvent(
-  event: EthermintEvmEvent<TransferEvent['args']>
+  event: EthermintEvmEvent<TransferEvent["args"]>
 ): Promise<void> {
   logger.info("transaction: " + event.transactionHash);
   const transaction = Transaction.create({

@@ -1,4 +1,8 @@
-import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
+import {
+  Duration,
+  DurationAmino,
+  DurationSDKType,
+} from "../../../google/protobuf/duration";
 import { Long } from "../../../helpers";
 /**
  * ValidatorSigningInfo defines a validator's signing info for monitoring their

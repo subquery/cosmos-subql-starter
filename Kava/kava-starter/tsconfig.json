@@ -12,8 +12,5 @@
     "target": "es2017",
     "strict": true
   },
-  "include": [
-    "src/**/*",
-    "node_modules/@subql/types-cosmos/dist/global.d.ts"
-  ]
+  "include": ["src/**/*", "node_modules/@subql/types-cosmos/dist/global.d.ts"]
 }

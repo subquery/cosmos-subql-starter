@@ -9,20 +9,20 @@ export namespace mars {
   export namespace envoy {
     export const v1beta1 = {
       ..._110,
-      ..._111
+      ..._111,
     };
   }
   export namespace incentives {
     export const v1beta1 = {
       ..._112,
       ..._113,
-      ..._114
+      ..._114,
     };
   }
   export namespace safety {
     export const v1beta1 = {
       ..._115,
-      ..._116
+      ..._116,
     };
   }
 }

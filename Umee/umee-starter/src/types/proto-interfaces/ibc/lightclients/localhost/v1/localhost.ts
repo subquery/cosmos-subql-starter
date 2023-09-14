@@ -1,4 +1,8 @@
-import { Height, HeightAmino, HeightSDKType } from "../../../core/client/v1/client";
+import {
+  Height,
+  HeightAmino,
+  HeightSDKType,
+} from "../../../core/client/v1/client";
 /**
  * ClientState defines a loopback (localhost) client. It requires (read-only)
  * access to keys outside the client prefix.

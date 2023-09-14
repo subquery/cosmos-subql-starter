@@ -19,10 +19,7 @@ network:
   # This endpoint must be a public non-pruned archive node
   # Public nodes may be rate limited, which can affect indexing speed
   # When developing your project we suggest getting a private API key
-  endpoint:
-    [
-      "https://rpc-sei-testnet.rhinostake.com/",
-    ]
+  endpoint: ["https://rpc-sei-testnet.rhinostake.com/"]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   dictionary: "https://api.subquery.network/sq/subquery/cosmos-sei-dictionary"
   chainTypes: # This feature allows support for any Cosmos chain by importing the correct protobuf messages

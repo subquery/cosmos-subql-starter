@@ -98,10 +98,10 @@ export interface Params {
   /**
    * Map from unit name to a value in SwingSet "beans".
    * Must not be negative.
-   * 
+   *
    * These values are used by SwingSet to normalize named per-resource charges
    * (maybe rent) in a single Nat usage unit, the "bean".
-   * 
+   *
    * There is no required order to this list of entries, but all the chain
    * nodes must all serialize and deserialize the existing order without
    * permuting it.
@@ -110,7 +110,7 @@ export interface Params {
   /**
    * The price in Coins per the unit named "fee".  This value is used by
    * cosmic-swingset JS code to decide how many tokens to charge.
-   * 
+   *
    * cost = beans_used * fee_unit_price / beans_per_unit["fee"]
    */
   feeUnitPrice: Coin[];
@@ -131,7 +131,7 @@ export interface Params {
    * Maximum sizes for queues.
    * These values are used by SwingSet to compute how many messages should be
    * accepted in a block.
-   * 
+   *
    * There is no required order to this list of entries, but all the chain
    * nodes must all serialize and deserialize the existing order without
    * permuting it.
@@ -147,10 +147,10 @@ export interface ParamsAmino {
   /**
    * Map from unit name to a value in SwingSet "beans".
    * Must not be negative.
-   * 
+   *
    * These values are used by SwingSet to normalize named per-resource charges
    * (maybe rent) in a single Nat usage unit, the "bean".
-   * 
+   *
    * There is no required order to this list of entries, but all the chain
    * nodes must all serialize and deserialize the existing order without
    * permuting it.
@@ -159,7 +159,7 @@ export interface ParamsAmino {
   /**
    * The price in Coins per the unit named "fee".  This value is used by
    * cosmic-swingset JS code to decide how many tokens to charge.
-   * 
+   *
    * cost = beans_used * fee_unit_price / beans_per_unit["fee"]
    */
   fee_unit_price: CoinAmino[];
@@ -180,7 +180,7 @@ export interface ParamsAmino {
    * Maximum sizes for queues.
    * These values are used by SwingSet to compute how many messages should be
    * accepted in a block.
-   * 
+   *
    * There is no required order to this list of entries, but all the chain
    * nodes must all serialize and deserialize the existing order without
    * permuting it.

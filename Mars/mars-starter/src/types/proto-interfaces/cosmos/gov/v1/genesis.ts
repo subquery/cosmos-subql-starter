@@ -1,4 +1,23 @@
-import { Deposit, DepositAmino, DepositSDKType, Vote, VoteAmino, VoteSDKType, Proposal, ProposalAmino, ProposalSDKType, DepositParams, DepositParamsAmino, DepositParamsSDKType, VotingParams, VotingParamsAmino, VotingParamsSDKType, TallyParams, TallyParamsAmino, TallyParamsSDKType } from "./gov";
+import {
+  Deposit,
+  DepositAmino,
+  DepositSDKType,
+  Vote,
+  VoteAmino,
+  VoteSDKType,
+  Proposal,
+  ProposalAmino,
+  ProposalSDKType,
+  DepositParams,
+  DepositParamsAmino,
+  DepositParamsSDKType,
+  VotingParams,
+  VotingParamsAmino,
+  VotingParamsSDKType,
+  TallyParams,
+  TallyParamsAmino,
+  TallyParamsSDKType,
+} from "./gov";
 import { Long } from "../../../helpers";
 /** GenesisState defines the gov module's genesis state. */
 export interface GenesisState {

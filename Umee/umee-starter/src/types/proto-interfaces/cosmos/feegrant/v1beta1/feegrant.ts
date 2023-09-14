@@ -1,5 +1,9 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
-import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
+import {
+  Duration,
+  DurationAmino,
+  DurationSDKType,
+} from "../../../google/protobuf/duration";
 import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 /**
  * BasicAllowance implements Allowance with a one-time grant of tokens

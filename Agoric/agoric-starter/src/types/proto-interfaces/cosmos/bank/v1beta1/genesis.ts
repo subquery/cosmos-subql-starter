@@ -1,4 +1,11 @@
-import { Params, ParamsAmino, ParamsSDKType, Metadata, MetadataAmino, MetadataSDKType } from "./bank";
+import {
+  Params,
+  ParamsAmino,
+  ParamsSDKType,
+  Metadata,
+  MetadataAmino,
+  MetadataSDKType,
+} from "./bank";
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 /** GenesisState defines the bank module's genesis state. */
 export interface GenesisState {

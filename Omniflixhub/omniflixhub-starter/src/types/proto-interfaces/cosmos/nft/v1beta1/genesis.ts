@@ -1,4 +1,11 @@
-import { Class, ClassAmino, ClassSDKType, NFT, NFTAmino, NFTSDKType } from "./nft";
+import {
+  Class,
+  ClassAmino,
+  ClassSDKType,
+  NFT,
+  NFTAmino,
+  NFTSDKType,
+} from "./nft";
 /** GenesisState defines the nft module's genesis state. */
 export interface GenesisState {
   /** class defines the class of the nft type. */

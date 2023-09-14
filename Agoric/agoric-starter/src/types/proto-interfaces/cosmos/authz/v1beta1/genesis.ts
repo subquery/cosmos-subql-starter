@@ -1,4 +1,8 @@
-import { GrantAuthorization, GrantAuthorizationAmino, GrantAuthorizationSDKType } from "./authz";
+import {
+  GrantAuthorization,
+  GrantAuthorizationAmino,
+  GrantAuthorizationSDKType,
+} from "./authz";
 /** GenesisState defines the authz module's genesis state. */
 export interface GenesisState {
   authorization: GrantAuthorization[];

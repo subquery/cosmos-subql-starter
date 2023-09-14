@@ -12,23 +12,23 @@ import * as _10 from "./vstorage/vstorage";
 export namespace agoric {
   export const lien = {
     ..._0,
-    ..._1
+    ..._1,
   };
   export const swingset = {
     ..._2,
     ..._3,
-    ..._4
+    ..._4,
   };
   export const vbank = {
     ..._5,
     ..._6,
-    ..._7
+    ..._7,
   };
   export const vibc = {
-    ..._8
+    ..._8,
   };
   export const vstorage = {
     ..._9,
-    ..._10
+    ..._10,
   };
 }

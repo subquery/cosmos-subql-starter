@@ -1,5 +1,5 @@
 specVersion: 1.0.0
-name: agoric-subql-starter
+name: agoric-starter
 version: 0.0.1
 runner:
   node:
@@ -37,7 +37,7 @@ network:
         - WeightedVoteOption
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 11447935
+    startBlock: 11628269
     mapping:
       file: ./dist/index.js
       handlers:

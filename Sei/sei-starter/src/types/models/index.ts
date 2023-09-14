@@ -2,7 +2,6 @@
 
 // Auto-generated , DO NOT EDIT
 
-export {ExchangeRate} from "./ExchangeRate"
+export { ExchangeRate } from "./ExchangeRate";
 
-export {DailyAggregation} from "./DailyAggregation"
-
+export { DailyAggregation } from "./DailyAggregation";

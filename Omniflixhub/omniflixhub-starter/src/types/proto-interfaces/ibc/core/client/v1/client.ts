@@ -1,5 +1,9 @@
 import { Any, AnyAmino, AnySDKType } from "../../../../google/protobuf/any";
-import { Plan, PlanAmino, PlanSDKType } from "../../../../cosmos/upgrade/v1beta1/upgrade";
+import {
+  Plan,
+  PlanAmino,
+  PlanSDKType,
+} from "../../../../cosmos/upgrade/v1beta1/upgrade";
 import { Long } from "../../../../helpers";
 /**
  * IdentifiedClientState defines a client state with an additional client
@@ -225,7 +229,7 @@ export interface UpgradeProposalSDKType {
  * Height is a monotonically increasing data type
  * that can be compared against another Height for the purposes of updating and
  * freezing clients
- * 
+ *
  * Normally the RevisionHeight is incremented at each height while keeping
  * RevisionNumber the same. However some consensus algorithms may choose to
  * reset the height in certain conditions e.g. hard forks, state-machine
@@ -247,7 +251,7 @@ export interface HeightProtoMsg {
  * Height is a monotonically increasing data type
  * that can be compared against another Height for the purposes of updating and
  * freezing clients
- * 
+ *
  * Normally the RevisionHeight is incremented at each height while keeping
  * RevisionNumber the same. However some consensus algorithms may choose to
  * reset the height in certain conditions e.g. hard forks, state-machine
@@ -269,7 +273,7 @@ export interface HeightAminoMsg {
  * Height is a monotonically increasing data type
  * that can be compared against another Height for the purposes of updating and
  * freezing clients
- * 
+ *
  * Normally the RevisionHeight is incremented at each height while keeping
  * RevisionNumber the same. However some consensus algorithms may choose to
  * reset the height in certain conditions e.g. hard forks, state-machine

@@ -1,9 +1,10 @@
 import { Approval, Transaction } from "../types";
-import {ApproveTransaction, TransferLog} from "../types/abi-interfaces/Erc20Abi";
+import {
+  ApproveTransaction,
+  TransferLog,
+} from "../types/abi-interfaces/Erc20Abi";
 
-export async function handleLog(
-  transferLog: TransferLog
-): Promise<void> {
+export async function handleLog(transferLog: TransferLog): Promise<void> {
   logger.info("transaction: " + transferLog.transactionHash);
   const transaction = Transaction.create({
     id: transferLog.transactionHash,

@@ -1,6 +1,11 @@
 import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
-import { VoteOption, WeightedVoteOption, WeightedVoteOptionAmino, WeightedVoteOptionSDKType } from "./gov";
+import {
+  VoteOption,
+  WeightedVoteOption,
+  WeightedVoteOptionAmino,
+  WeightedVoteOptionSDKType,
+} from "./gov";
 import { Long } from "../../../helpers";
 /**
  * MsgSubmitProposal defines an sdk.Msg type that supports submitting arbitrary

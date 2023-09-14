@@ -1,4 +1,8 @@
-import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
+import {
+  Coin,
+  CoinAmino,
+  CoinSDKType,
+} from "../../../cosmos/base/v1beta1/coin";
 import { Long } from "../../../helpers";
 /** Schedule defines the parameters of an incentives releasing schedule */
 export interface Schedule {
