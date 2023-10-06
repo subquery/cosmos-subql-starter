@@ -9,9 +9,9 @@ import {
 const project: CosmosProject = {
     specVersion: "1.0.0",
     version: "0.0.1",
-    name: "agoric-starter",
+    name: "persistence-starter",
     description:
-        "This project can be use as a starting point for developing your Cosmos agoric based SubQuery project",
+        "This project can be use as a starting point for developing your Cosmos persistence based SubQuery project",
     runner: {
         node: {
             name: "@subql/node-cosmos",
@@ -27,8 +27,7 @@ const project: CosmosProject = {
     },
     network: {
         /* The genesis hash of the network (hash of block 0) */
-        chainId:
-            "agoric-3",
+        chainId: "core-1",
         /**
          * This endpoint must be a public non-pruned archive node
          * Public nodes may be rate limited, which can affect indexing speed
@@ -36,45 +35,34 @@ const project: CosmosProject = {
          * You can get them from OnFinality for free https://app.onfinality.io
          * https://documentation.onfinality.io/support/the-enhanced-api-service
          */
-        endpoint: ["https://agoric-rpc.stakely.io"],
-        dictionary: "https://api.subquery.network/sq/subquery/agoric-dictionary",
+        endpoint: ["https://rpc-persistent-ia.cosmosia.notional.ventures/"],
+// # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
         chaintypes: new Map([
-            ["cosmos.slashing.v1beta1", {file: "./proto/cosmos/slashing/v1beta1/tx.proto", messages: ["MsgUnjail"]}],
-            ["cosmos.gov.v1beta1", {file: "./proto/cosmos/gov/v1beta1/tx.proto", messages: ["MsgVoteWeighted"]}],
-            ["cosmos.gov.v1beta1.gov", {
-                file: "./proto/cosmos/gov/v1beta1/gov.proto",
-                messages: ["WeightedVoteOption"]
-            }],
+            [
+                "cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward", { // CIRCUMVENTING VIA ORDER
+                        file: "./proto/cosmos/distribution/v1beta1/tx.proto",
+                        messages: [
+                            "MsgWithdrawDelegatorReward"
+                        ]
+                }
+            ],
         ])
     },
     dataSources: [
         {
             kind: SubqlCosmosDatasourceKind.Runtime,
-            startBlock: 11628269,
+            startBlock: 10737679,
             mapping: {
                 file: './dist/index.js',
                 handlers: [
-                    // {
-                    //     Using block handlers slows your project down as they can be executed with each and every block.
-                    //     Only use if you need to
-                    //     handler: 'handleEvent',
-                    //     kind: SubqlCosmosHandlerKind.Block,
-                    // },
                     {
                         handler: 'handleEvent',
                         kind: SubqlCosmosHandlerKind.Event,
                         filter: {
-                            type: 'transfer',
-                            messageFilter: {
-                                type: '/cosmos.bank.v1beta1.MsgSend'
+                            type: "coin_spent",
+                            messageFilter:{
+                                type: '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward'
                             }
-                        }
-                    },
-                    {
-                        handler: 'handleMessage',
-                        kind: SubqlCosmosHandlerKind.Message,
-                        filter: {
-                            type: '/cosmos.bank.v1beta1.MsgSend'
                         }
                     }
                 ]
