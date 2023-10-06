@@ -69,7 +69,7 @@ const project: CosmosProject<EthermintEvmDatasource> = {
             kind: 'cosmos/EthermintEvm',
             startBlock: 446,
             processor: {
-                file: './node_modules/@subql/acala-evm-processor/dist/bundle.js',
+                file: './node_modules/@subql/ethermint-evm-processor/dist/bundle.js',
                 options: {
                     abi: 'erc20',
                     address: "0x5c7f8a570d578ed84e63fdfa7b1ee72deae1ae23" // Wrapped CRO
