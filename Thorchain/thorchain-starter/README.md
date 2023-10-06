@@ -16,7 +16,7 @@ Don't forget to install dependencies with `npm install` or `yarn install`!
 
 Although this is a working example SubQuery project, you can edit the SubQuery project by changing the following files:
 
-- The project manifest in `project.yaml` defines the key project configuration and mapping handler filters
+- The project manifest in `project.ts` defines the key project configuration and mapping handler filters
 - The GraphQL Schema (`schema.graphql`) defines the shape of the resulting data that you are using SubQuery to index
 - The Mapping functions in `src/mappings/` directory are typescript functions that handle transformation logic
 
