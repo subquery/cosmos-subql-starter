@@ -68,24 +68,32 @@ const project: CosmosProject<EthermintEvmDatasource> = {
         {
             kind: 'cosmos/EthermintEvm',
             startBlock: 446,
+            processor: {
+                file: './node_modules/@subql/acala-evm-processor/dist/bundle.js',
+                options: {
+                    abi: 'erc20',
+                    address: "0x5c7f8a570d578ed84e63fdfa7b1ee72deae1ae23" // Wrapped CRO
+                }
+            },
+            assets: new Map([['erc20', { file: './erc20.abi.json' }]]),
             mapping: {
                 file: './dist/index.js',
                 handlers: [
-                    // {
-                    //     handler: 'handleReward',
-                    //     kind: SubqlCosmosHandlerKind.Event,
-                    //     filter: {
-                    //         type: 'withdraw_rewards',
-                    //         messageFilter: {
-                    //             type: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward"
-                    //         }
-                    //         /*
-                    //             contractCall field can be specified here too
-                    //             values: # A set of key/value pairs that are present in the message data
-                    //             contract: "juno1v99ehkuetkpf0yxdry8ce92yeqaeaa7lyxr2aagkesrw67wcsn8qxpxay0"
-                    //          */
-                    //     }
-                    // }
+                    {
+                        handler: 'handleReward',
+                        kind: 'cosmos/EthermintEvmEvent',
+                        filter: {
+                            type: 'withdraw_rewards',
+                            messageFilter: {
+                                type: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward"
+                            }
+                            /*
+                                contractCall field can be specified here too
+                                values: # A set of key/value pairs that are present in the message data
+                                contract: "juno1v99ehkuetkpf0yxdry8ce92yeqaeaa7lyxr2aagkesrw67wcsn8qxpxay0"
+                             */
+                        }
+                    }
                 ]
             },
         },
