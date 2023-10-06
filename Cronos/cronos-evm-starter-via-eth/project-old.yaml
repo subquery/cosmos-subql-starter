@@ -1,0 +1,59 @@
+specVersion: 1.0.0
+
+name: cronos-evm-starter-via-eth
+version: 0.0.1
+runner:
+  node:
+    name: "@subql/node-ethereum"
+    version: "*"
+  query:
+    name: "@subql/query"
+    version: "*"
+description: "This project can be use as a starting point for developing your Cosmos (Cronos) based SubQuery project via the Etheruem API"
+repository: "https://github.com/subquery/cosmos-subql-starter/tree/main/Cronos/cronos-evm-starter-via-eth"
+schema:
+  file: ./schema.graphql
+network:
+  chainId: "25"
+  # This endpoint must be a public non-pruned archive node
+  # We recommend providing more than one endpoint for improved reliability, performance, and uptime
+  # Public nodes may be rate limited, which can affect indexing speed
+  # When developing your project we suggest getting a private API key
+  # Take a look here for some Cronos endpoints https://moonflow.solutions/rpc-servers
+  endpoint: ["https://evm.cronos.org/"]
+  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+  dictionary: "https://api.subquery.network/sq/subquery/cosmos-cronos-dictionary"
+dataSources:
+  - kind: ethereum/Runtime
+    startBlock: 446 # Block that this contract was created
+    options:
+      abi: erc20
+      address: "0x5c7f8a570d578ed84e63fdfa7b1ee72deae1ae23" # Wrapped CRO https://cronos.org/explorer/address/0x5C7F8A570d578ED84E63fdFA7b1eE72dEae1AE23
+    assets:
+      erc20:
+        file: "erc20.abi.json"
+    mapping:
+      file: "./dist/index.js"
+      handlers:
+        # Using block handlers slows your project down as they can be executed with each and every block. Only use if you need to
+        # - handler: handleBlock
+        #   kind: ethereum/BlockHandler
+        - handler: handleTransaction
+          kind: ethereum/TransactionHandler
+          filter:
+            ## The function can either be the function fragment or signature
+            ## https://docs.ethers.io/v5/api/utils/abi/fragments/#FunctionFragment
+            # function: '0x095ea7b3'
+            # function: '0x7ff36ab500000000000000000000000000000000000000000000000000000000'
+            function: approve(address guy, uint256 wad)
+        - handler: handleLog
+          kind: ethereum/LogHandler
+          filter:
+            topics:
+              # The topics filter follows the Ethereum JSON-PRC log filters
+              # https://docs.ethers.io/v5/concepts/events
+              # Example valid values:
+              # - '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
+              # - Transfer(address,address,u256)
+              - Transfer(address src, address dst, uint256 wad)
+              # address: "0x60781C2586D68229fde47564546784ab3fACA982"
