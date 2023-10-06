@@ -38,7 +38,7 @@ const project: CosmosProject = {
          */
         endpoint: ["https://axelar-archrpc.chainode.tech/"],
         // Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-        // dictionary: "https://api.subquery.network/sq/subquery/cosmos-archway-dictionary"
+        // dictionary: "https://api.subquery.network/sq/subquery/axelar-hub-dictionary"
     },
     dataSources: [
         {

@@ -47,7 +47,7 @@ const project: CosmosProject = {
             ],
             [
                 "cosmos.base.v1beta1.Coin", {
-                    file: "cosmos.base.v1beta1.Coin",
+                    file: "./proto/cosmos.base.v1beta1.Coin",
                     messages: [
                         "Coin"
                     ]

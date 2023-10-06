@@ -53,8 +53,8 @@ const project: CosmosProject = {
                 }
             ],
             [
-                "cosmwasm.wasm.v1.MsgSetContractMetadata", {
-                    file: "./proto/archway/rewards/v1/tx.proto",
+                "cosmwasm.wasm.v1.ContractMetadata", {
+                    file: "./proto/archway/rewards/v1/rewards.proto",
                     messages: [
                         "ContractMetadata"
                     ]

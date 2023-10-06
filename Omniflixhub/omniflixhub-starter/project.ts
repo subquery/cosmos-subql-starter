@@ -27,7 +27,7 @@ const project: CosmosProject = {
     },
     network: {
         /* The genesis hash of the network (hash of block 0) */
-        chainId: "migaloo-1",
+        chainId: "omniflixhub-1",
         /**
          * This endpoint must be a public non-pruned archive node
          * Public nodes may be rate limited, which can affect indexing speed
@@ -69,7 +69,7 @@ const project: CosmosProject = {
     dataSources: [
         {
             kind: SubqlCosmosDatasourceKind.Runtime,
-            startBlock: 3082328,
+            startBlock: 8279252,
             mapping: {
                 file: './dist/index.js',
                 handlers: [

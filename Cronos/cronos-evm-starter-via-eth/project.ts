@@ -47,7 +47,7 @@ const project: EthereumProject = {
                 // Wrapped CRO https://cronos.org/explorer/address/0x5C7F8A570d578ED84E63fdFA7b1eE72dEae1AE23
             },
             assets: new Map([
-                ['erc20', { file: "./abis/erc20.abi.json" }],
+                ['erc20', { file: "./erc20.abi.json" }],
             ]),
             mapping: {
                 file: "./dist/index.js",

@@ -9,9 +9,9 @@ import {
 const project: CosmosProject = {
     specVersion: "1.0.0",
     version: "0.0.1",
-    name: "sei-starter",
+    name: "persistence-starter",
     description:
-        "This project can be use as a starting point for developing your Cosmos sei based SubQuery project",
+        "This project can be use as a starting point for developing your Cosmos persistence based SubQuery project",
     runner: {
         node: {
             name: "@subql/node-cosmos",
@@ -27,7 +27,7 @@ const project: CosmosProject = {
     },
     network: {
         /* The genesis hash of the network (hash of block 0) */
-        chainId: "atlantic-1",
+        chainId: "core-1",
         /**
          * This endpoint must be a public non-pruned archive node
          * Public nodes may be rate limited, which can affect indexing speed
@@ -35,44 +35,33 @@ const project: CosmosProject = {
          * You can get them from OnFinality for free https://app.onfinality.io
          * https://documentation.onfinality.io/support/the-enhanced-api-service
          */
-        endpoint: ["https://rpc-sei-testnet.rhinostake.com/"],
-        // Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-        dictionary: "https://api.subquery.network/sq/subquery/cosmos-sei-dictionary",
-        chaintypes: new Map([ // This feature allows support for any Cosmos chain by importing the correct protobuf messages
+        endpoint: ["https://rpc-persistent-ia.cosmosia.notional.ventures/"],
+// # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+        chaintypes: new Map([
             [
-                "cosmos.bank.v1beta1.MsgSend", {
-                        file: "./proto/cosmos/bank/v1beta1/tx.proto",
-                        messages: [
-                            "MsgSend"
-                        ]
-                }
+                "cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward", { // CIRCUMVENTING VIA ORDER
+                file: "./proto/cosmos/distribution/v1beta1/tx.proto",
+                messages: [
+                    "MsgWithdrawDelegatorReward"
+                ]
+            }
             ],
         ])
     },
     dataSources: [
         {
             kind: SubqlCosmosDatasourceKind.Runtime,
-            startBlock: 24596905,
+            startBlock: 10737679,
             mapping: {
                 file: './dist/index.js',
                 handlers: [
                     {
-                        handler: 'handleFundingRateChangeEvent',
-                        kind: SubqlCosmosHandlerKind.Event,
-                        filter: { // https://sei.explorers.guru/transaction/9A5D1FB99CDFB03282459355E4C7221D93D9971160AE79E201FA2B2895952878
-                            type: "wasm-funding-rate-change",
-                            messageFilter:{
-                                type: '/cosmwasm.wasm.v1.MsgExecuteContract'
-                            }
-                        }
-                    },
-                    {
-                        handler: 'handleSpotPriceEvent',
+                        handler: 'handleEvent',
                         kind: SubqlCosmosHandlerKind.Event,
                         filter: {
-                            type: "wasm-spot-price",
+                            type: "coin_spent",
                             messageFilter:{
-                                type: '/cosmwasm.wasm.v1.MsgExecuteContract'
+                                type: '/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward'
                             }
                         }
                     }
