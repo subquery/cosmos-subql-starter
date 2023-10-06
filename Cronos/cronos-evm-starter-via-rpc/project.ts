@@ -80,18 +80,24 @@ const project: CosmosProject<EthermintEvmDatasource> = {
                 file: './dist/index.js',
                 handlers: [
                     {
-                        handler: 'handleReward',
+                        handler: 'handleEthermintEvmCall',
+                        kind: 'cosmos/EthermintEvmCall',
+                        filter: {
+                            // Either Function Signature strings or the function `sighash` to filter the function called on the contract
+                            // https://docs.ethers.io/v5/api/utils/abi/fragments/#FunctionFragment
+                            method: 'approve(address guy, uint256 wad)'
+                        }
+                    },
+                    {
+                        handler: 'handleEthermintEvmEvent',
                         kind: 'cosmos/EthermintEvmEvent',
                         filter: {
-                            type: 'withdraw_rewards',
-                            messageFilter: {
-                                type: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward"
-                            }
-                            /*
-                                contractCall field can be specified here too
-                                values: # A set of key/value pairs that are present in the message data
-                                contract: "juno1v99ehkuetkpf0yxdry8ce92yeqaeaa7lyxr2aagkesrw67wcsn8qxpxay0"
-                             */
+                            // The topics filter follows the Ethereum JSON-PRC log filters
+                            // https://docs.ethers.io/v5/concepts/events
+                            // Example valid values:
+                            // - '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
+                            // - Transfer(address,address,u256)
+                            topics: ['Transfer(address src, address dst, uint256 wad)']
                         }
                     }
                 ]
