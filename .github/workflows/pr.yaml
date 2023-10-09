@@ -15,10 +15,10 @@ jobs:
           node-version: 18
       - name: setup workspace
         run: cp .github/scripts/ci.package.json package.json
+      - name: update tsconfigs for workspace
+        run: ./.github/scripts/copy-ts-config.sh
       - run: yarn
       - name: codegen
         run: yarn codegen
-      - name: update tsconfigs for workspace
-        run: ./.github/scripts/copy-ts-config.sh
       - name: build
         run: yarn build
