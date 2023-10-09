@@ -1,0 +1,58 @@
+specVersion: 1.0.0
+name: mars-starter
+version: 0.0.1
+runner:
+  node:
+    name: "@subql/node-cosmos"
+    version: "*"
+  query:
+    name: "@subql/query"
+    version: "*"
+description: >-
+  This project can be use as a starting point for developing your Cosmos (%NETWORK_NAME%) based SubQuery project
+repository: "https://github.com/subquery/cosmos-subql-starter"
+schema:
+  file: ./schema.graphql
+network:
+  chainId: mars-1
+  # This endpoint must be a public non-pruned archive node
+  # We recommend providing more than one endpoint for improved reliability, performance, and uptime
+  # Public nodes may be rate limited, which can affect indexing speed
+  # When developing your project we suggest getting a private API key
+  endpoint: ["https://mars-rpc.publicnode.com"]
+  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+  dictionary: "https://api.subquery.network/sq/subquery/mars-dictionary"
+  chaintypes:
+    cosmos.slashing.v1beta1:
+      file: ./proto/cosmos/slashing/v1beta1/tx.proto
+      messages:
+        - MsgUnjail
+    cosmos.gov.v1beta1:
+      file: ./proto/cosmos/gov/v1beta1/tx.proto
+      messages:
+        - MsgVoteWeighted
+    cosmos.gov.v1beta1.gov:
+      file: ./proto/cosmos/gov/v1beta1/gov.proto
+      messages:
+        - WeightedVoteOption
+dataSources:
+  - kind: cosmos/Runtime
+    startBlock: 3169377
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        # Using block handlers slows your project down as they can be executed with each and every block. Only use if you need to
+        # - handler: handleBlock
+        #   kind: cosmos/BlockHandler
+        # Using transaction handlers without filters slows your project down as they can be executed with each and every block
+        # - handler: handleTransaction
+        - handler: handleEvent
+          kind: cosmos/EventHandler
+          filter:
+            type: transfer
+            messageFilter:
+              type: /cosmos.bank.v1beta1.MsgSend
+        - handler: handleMessage
+          kind: cosmos/MessageHandler
+          filter:
+            type: /cosmos.bank.v1beta1.MsgSend

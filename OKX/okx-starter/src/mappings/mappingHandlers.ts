@@ -1,3 +1,4 @@
+import assert from "assert";
 import { Approval, Transaction } from "../types";
 import {
   ApproveTransaction,
@@ -6,6 +7,7 @@ import {
 
 export async function handleLog(transferLog: TransferLog): Promise<void> {
   logger.info("transaction: " + transferLog.transactionHash);
+  assert(transferLog.args, "Expected args to exist");
   const transaction = Transaction.create({
     id: transferLog.transactionHash,
     value: transferLog.args.value.toBigInt(),
@@ -21,6 +23,7 @@ export async function handleTransaction(
   approveCallTransaction: ApproveTransaction
 ): Promise<void> {
   logger.info("approval: " + approveCallTransaction.hash);
+  assert(approveCallTransaction.args, "Expected args to exist");
   const approval = Approval.create({
     id: approveCallTransaction.hash,
     owner: approveCallTransaction.from,

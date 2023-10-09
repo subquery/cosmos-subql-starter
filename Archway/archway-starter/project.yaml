@@ -25,7 +25,7 @@ network:
     ]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   # dictionary: "https://api.subquery.network/sq/subquery/cosmos-archway-dictionary"
-  chainTypes: # This feature allows support for any Cosmos chain by importing the correct protobuf messages
+  chaintypes: # This feature allows support for any Cosmos chain by importing the correct protobuf messages
     cosmwasm.wasm.v1.MsgSetContractMetadata:
       file: ./proto/archway/rewards/v1/tx.proto
       messages:
