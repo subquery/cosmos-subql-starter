@@ -13,9 +13,12 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 18
+      - name: setup workspace
+        run: cp ci.package.json package.json
       - run: yarn
       - name: codegen
         run: yarn codegen
-    #  Need to update tsconfig inputs paths for this to work
-    # - name: build
-    #   run: yarn build
+      - name: update tsconfigs for workspace
+        run: .github/scripts/copy-ts-config.sh
+      - name: build
+        run: yarn build
