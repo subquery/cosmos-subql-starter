@@ -6,7 +6,7 @@ set -e
 
 for DEST_PATH in ./*/*/; do
 
-  SRC=".github/scripts/ci.tsconfig.json"
+  SRC="./.github/scripts/ci.tsconfig.json"
   DEST="${DEST_PATH}tsconfig.json"
 
   [ -f "$DEST" ] && cp "$SRC" "$DEST"

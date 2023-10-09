@@ -19,6 +19,6 @@ jobs:
       - name: codegen
         run: yarn codegen
       - name: update tsconfigs for workspace
-        run: .github/scripts/copy-ts-config.sh
+        run: ./.github/scripts/copy-ts-config.sh
       - name: build
         run: yarn build
