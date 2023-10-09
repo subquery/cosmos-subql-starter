@@ -21,7 +21,7 @@ network:
   # When developing your project we suggest getting a private API key
   endpoint: ["https://rpc-persistent-ia.cosmosia.notional.ventures/"]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-  chainTypes: # This feature allows support for any Cosmos chain by importing the correct protobuf messages
+  chaintypes: # This feature allows support for any Cosmos chain by importing the correct protobuf messages
     cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward: #CIRCUMVENTING VIA ORDER
       file: ./proto/cosmos/distribution/v1beta1/tx.proto
       messages:

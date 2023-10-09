@@ -15,6 +15,7 @@ jobs:
           node-version: 18
       - name: setup workspace
         run: cp .github/scripts/ci.package.json package.json
+      # Do this before yarn to avoid node_modules directory
       - name: update tsconfigs for workspace
         run: ./.github/scripts/copy-ts-config.sh
       - run: yarn

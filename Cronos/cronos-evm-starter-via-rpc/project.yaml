@@ -22,7 +22,7 @@ network:
   endpoint: ["https://rpc.cronos.org/"]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   dictionary: "https://api.subquery.network/sq/subquery/cosmos-cronos-dictionary"
-  chainTypes:
+  chaintypes:
     ethermint.evm.v1:
       file: "./proto/ethermint/evm/v1/tx.proto"
       messages:

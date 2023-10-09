@@ -23,7 +23,7 @@ network:
   endpoint: ["https://cosmos-mainnet-archive.allthatnode.com:26657"]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   dictionary: "https://api.subquery.network/sq/subquery/cosmos-hub-dictionary"
-  chainTypes:
+  chaintypes:
     cosmos.slashing.v1beta1:
       file: ./proto/cosmos/slashing/v1beta1/tx.proto
       messages:

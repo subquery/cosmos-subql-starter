@@ -25,7 +25,7 @@ network:
     - https://rpc.akashnet.net:443
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   # dictionary: "https://api.subquery.network/sq/subquery/cosmos-sei-dictionary"
-  chainTypes:
+  chaintypes:
     # This feature allows support for any Cosmos chain by importing the correct protobuf messages
     akash.staking.v1beta3:
       file: ./proto/akash/staking/v1beta3/params.proto

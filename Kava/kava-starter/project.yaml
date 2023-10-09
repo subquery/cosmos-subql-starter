@@ -21,7 +21,7 @@ network:
   endpoint: ["https://kava-rpc.ibs.team"]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   # dictionary: "https://api.subquery.network/sq/subquery/injective-hub-dictionary"
-  chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
+  chaintypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
     cosmos.bank.v1beta1.MsgSend: # Key is not used, it matches the one above and is inferred from the file
       file: ./proto/cosmos/bank/v1beta1/tx.proto
       messages:

@@ -22,7 +22,7 @@ network:
   endpoint: ["https://rpc.ninerealms.com/"]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   # dictionary: "https://api.subquery.network/sq/subquery/cosmos-hub-dictionary"
-  chainTypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
+  chaintypes: # This is a beta feature that allows support for any Cosmos chain by importing the correct protobuf messages
     thorchain.message.observed.out: # Key is not used, it matches the one above and is inferred from the file
       file: ./proto/thorchain/v1/x/thorchain/types/msg_observed_txout.proto
       messages:
