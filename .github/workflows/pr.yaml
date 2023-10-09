@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: 18
       - name: setup workspace
-        run: cp ci.package.json package.json
+        run: cp .github/scripts/ci.package.json package.json
       - run: yarn
       - name: codegen
         run: yarn codegen
