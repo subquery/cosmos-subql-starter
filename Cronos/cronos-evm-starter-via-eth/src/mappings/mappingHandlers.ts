@@ -28,6 +28,7 @@ export async function handleTransaction(
   approveCallTransaction: EthereumTransaction<ApproveCallArgs>
 ): Promise<void> {
   logger.info("approval: " + approveCallTransaction.hash);
+  assert(approveCallTransaction.args, 'Missing approveCallTransaction.args')
   const approval = Approval.create({
     id: approveCallTransaction.hash,
     owner: approveCallTransaction.from,
