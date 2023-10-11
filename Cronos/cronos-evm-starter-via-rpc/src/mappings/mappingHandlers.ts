@@ -34,6 +34,7 @@ export async function handleEthermintEvmCall(
 ): Promise<void> {
   logger.info("approval: " + call.hash);
   assert(call.args, 'Missing call.args')
+  assert(call.to, 'Missing call.to')
   const approval = Approval.create({
     id: call.hash,
     owner: call.from,
