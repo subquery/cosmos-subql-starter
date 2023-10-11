@@ -17,6 +17,7 @@ export async function handleEthermintEvmEvent(
 ): Promise<void> {
   logger.info("transaction: " + event.transactionHash);
   assert(event.args, 'Missing event.args')
+  assert(event.transactionHash, 'Missing event.transactionHash')
   const transaction = Transaction.create({
     id: event.transactionHash,
     value: event.args.wad.toBigInt(),
