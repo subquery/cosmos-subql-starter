@@ -52,34 +52,3 @@ export async function handleMessage(
     await swapRoute.save();
   }
 }
-
-/*
-export async function handleBlock(block: CosmosBlock): Promise<void> {
-  // If you want to index each block in Cosmos (Osmosis), you could do that here
-}
-*/
-
-/*
-export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
-  // If you want to index each transaction in Cosmos (Osmosis), you could do that here
-  const transactionRecord = Transaction.create({
-    id: tx.hash,
-    blockHeight: BigInt(tx.block.block.header.height),
-    timestamp: tx.block.block.header.time,
-  });
-  await transactionRecord.save();
-}
-*/
-
-/*
-export async function handleEvent(event: CosmosEvent): Promise<void> {
-  const eventRecord = ExecuteEvent.create({
-    id: `${event.tx.hash}-${event.msg.idx}-${event.idx}`,
-    blockHeight: BigInt(event.block.block.header.height),
-    txHash: event.tx.hash,
-    contractAddress: event.event.attributes.find(attr => attr.key === '_contract_address').value
-  });
-
-  await eventRecord.save();
-}
-*/
