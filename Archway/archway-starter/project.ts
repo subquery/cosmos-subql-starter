@@ -96,4 +96,5 @@ const project: CosmosProject = {
   ],
 };
 
+// Must set default to the project instance
 export default project;

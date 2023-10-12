@@ -81,4 +81,5 @@ const project: EthereumProject = {
   repository: "https://github.com/subquery/ethereum-subql-starter",
 };
 
+// Must set default to the project instance
 export default project;
