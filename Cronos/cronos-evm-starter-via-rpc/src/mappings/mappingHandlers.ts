@@ -16,8 +16,8 @@ export async function handleEthermintEvmEvent(
   event: EthermintEvmEvent<TransferEvent["args"]>
 ): Promise<void> {
   logger.info("transaction: " + event.transactionHash);
-  assert(event.args, 'Missing event.args')
-  assert(event.transactionHash, 'Missing event.transactionHash')
+  assert(event.args, "Missing event.args");
+  assert(event.transactionHash, "Missing event.transactionHash");
   const transaction = Transaction.create({
     id: event.transactionHash,
     value: event.args.wad.toBigInt(),
@@ -33,8 +33,8 @@ export async function handleEthermintEvmCall(
   call: EthermintEvmCall<ApproveCallArgs>
 ): Promise<void> {
   logger.info("approval: " + call.hash);
-  assert(call.args, 'Missing call.args')
-  assert(call.to, 'Missing call.to')
+  assert(call.args, "Missing call.args");
+  assert(call.to, "Missing call.to");
   const approval = Approval.create({
     id: call.hash,
     owner: call.from,

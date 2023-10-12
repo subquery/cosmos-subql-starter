@@ -12,7 +12,7 @@ type ApproveCallArgs = [string, BigNumber] & {
 
 export async function handleLog(transferLog: TransferLog): Promise<void> {
   logger.info("transaction: " + transferLog.transactionHash);
-  assert(transferLog.args, 'Missing transferLog.args')
+  assert(transferLog.args, "Missing transferLog.args");
   const transaction = Transaction.create({
     id: transferLog.transactionHash,
     value: transferLog.args.wad.toBigInt(),
@@ -28,7 +28,7 @@ export async function handleTransaction(
   approveCallTransaction: EthereumTransaction<ApproveCallArgs>
 ): Promise<void> {
   logger.info("approval: " + approveCallTransaction.hash);
-  assert(approveCallTransaction.args, 'Missing approveCallTransaction.args')
+  assert(approveCallTransaction.args, "Missing approveCallTransaction.args");
   const approval = Approval.create({
     id: approveCallTransaction.hash,
     owner: approveCallTransaction.from,
