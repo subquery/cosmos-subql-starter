@@ -47,7 +47,7 @@ const project: CosmosProject = {
         },
       ],
       [
-        "cosmos.gov.v1beta1",
+        "cosmos.gov.v1beta1.tx",
         {
           file: "./proto/cosmos/gov/v1beta1/tx.proto",
           messages: ["MsgVoteWeighted"],
