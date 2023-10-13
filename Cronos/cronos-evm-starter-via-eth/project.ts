@@ -32,7 +32,7 @@ const project: EthereumProject = {
      * When developing your project we suggest getting a private API key
      * We suggest providing an array of endpoints for increased speed and reliability
      */
-    endpoint: ["https://evm.cronos.org/"],
+    endpoint: ["https://evm.cronos.org"],
     dictionary:
       "https://api.subquery.network/sq/subquery/cosmos-cronos-dictionary",
   },

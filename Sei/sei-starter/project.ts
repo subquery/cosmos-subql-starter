@@ -33,7 +33,10 @@ const project: CosmosProject = {
      * When developing your project we suggest getting a private API key
      * We suggest providing an array of endpoints for increased speed and reliability
      */
-    endpoint: ["https://rpc-sei-testnet.rhinostake.com/"],
+    endpoint: [
+      "https://rpc.ankr.com/sei",
+      "https://rpc-sei-testnet.rhinostake.com/",
+    ],
     // Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
     dictionary:
       "https://api.subquery.network/sq/subquery/cosmos-sei-dictionary",
