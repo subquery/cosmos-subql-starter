@@ -1,6 +1,6 @@
 import {
-  SubqlCosmosDatasourceKind,
-  SubqlCosmosHandlerKind,
+  CosmosDatasourceKind,
+  CosmosHandlerKind,
   CosmosProject,
 } from "@subql/types-cosmos";
 
@@ -61,7 +61,7 @@ const project: CosmosProject = {
   },
   dataSources: [
     {
-      kind: SubqlCosmosDatasourceKind.Runtime,
+      kind: CosmosDatasourceKind.Runtime,
       startBlock: 11628269,
       mapping: {
         file: "./dist/index.js",
@@ -70,11 +70,11 @@ const project: CosmosProject = {
           //     Using block handlers slows your project down as they can be executed with each and every block.
           //     Only use if you need to
           //     handler: 'handleEvent',
-          //     kind: SubqlCosmosHandlerKind.Block,
+          //     kind: CosmosHandlerKind.Block,
           // },
           {
             handler: "handleEvent",
-            kind: SubqlCosmosHandlerKind.Event,
+            kind: CosmosHandlerKind.Event,
             filter: {
               type: "transfer",
               messageFilter: {
@@ -84,7 +84,7 @@ const project: CosmosProject = {
           },
           {
             handler: "handleMessage",
-            kind: SubqlCosmosHandlerKind.Message,
+            kind: CosmosHandlerKind.Message,
             filter: {
               type: "/cosmos.bank.v1beta1.MsgSend",
             },

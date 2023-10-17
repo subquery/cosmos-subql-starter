@@ -1,6 +1,6 @@
 import {
-  SubqlCosmosDatasourceKind,
-  SubqlCosmosHandlerKind,
+  CosmosDatasourceKind,
+  CosmosHandlerKind,
   CosmosProject,
 } from "@subql/types-cosmos";
 
@@ -54,14 +54,14 @@ const project: CosmosProject = {
   },
   dataSources: [
     {
-      kind: SubqlCosmosDatasourceKind.Runtime,
+      kind: CosmosDatasourceKind.Runtime,
       startBlock: 22186475,
       mapping: {
         file: "./dist/index.js",
         handlers: [
           {
             handler: "handleMessage",
-            kind: SubqlCosmosHandlerKind.Message,
+            kind: CosmosHandlerKind.Message,
             filter: {
               type: "/injective.exchange.v1beta1.MsgCreateSpotLimitOrder",
             },

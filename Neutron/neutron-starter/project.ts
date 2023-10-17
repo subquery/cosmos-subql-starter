@@ -1,6 +1,6 @@
 import {
-  SubqlCosmosDatasourceKind,
-  SubqlCosmosHandlerKind,
+  CosmosDatasourceKind,
+  CosmosHandlerKind,
   CosmosProject,
 } from "@subql/types-cosmos";
 
@@ -41,14 +41,14 @@ const project: CosmosProject = {
   },
   dataSources: [
     {
-      kind: SubqlCosmosDatasourceKind.Runtime,
+      kind: CosmosDatasourceKind.Runtime,
       startBlock: 1,
       mapping: {
         file: "./dist/index.js",
         handlers: [
           {
             handler: "handleAirdropClaim",
-            kind: SubqlCosmosHandlerKind.Message,
+            kind: CosmosHandlerKind.Message,
             filter: {
               type: "/cosmwasm.wasm.v1.MsgExecuteContract",
               contractCall: "claim",

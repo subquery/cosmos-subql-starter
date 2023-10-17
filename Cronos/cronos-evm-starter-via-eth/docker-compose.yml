@@ -18,7 +18,7 @@ services:
       retries: 5
 
   subquery-node:
-    image: onfinality/subql-node-ethereum:latest
+    image: subquerynetwork/subql-node-cosmos:latest
     depends_on:
       "postgres":
         condition: service_healthy
@@ -35,10 +35,9 @@ services:
       - ${SUB_COMMAND:-} # set SUB_COMMAND env variable to "test" to run tests
       - -f=/app
       - --db-schema=app
-      - --workers=1
-      - --batch-size=2
+      - --workers=4
+      - --batch-size=30
       - --unfinalized-blocks=true
-      - --log-level=debug
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
       interval: 3s

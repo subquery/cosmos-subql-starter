@@ -1,6 +1,6 @@
 import {
-  SubqlCosmosDatasourceKind,
-  SubqlCosmosHandlerKind,
+  CosmosDatasourceKind,
+  CosmosHandlerKind,
   CosmosProject,
 } from "@subql/types-cosmos";
 
@@ -59,14 +59,14 @@ const project: CosmosProject = {
   },
   dataSources: [
     {
-      kind: SubqlCosmosDatasourceKind.Runtime,
+      kind: CosmosDatasourceKind.Runtime,
       startBlock: 1338,
       mapping: {
         file: "./dist/index.js",
         handlers: [
           {
             handler: "handleRewardsWithdrawEvent",
-            kind: SubqlCosmosHandlerKind.Event,
+            kind: CosmosHandlerKind.Event,
             filter: {
               type: "archway.rewards.v1.RewardsWithdrawEvent",
               messageFilter: {
@@ -81,7 +81,7 @@ const project: CosmosProject = {
           },
           {
             handler: "handleSetContractMetadata",
-            kind: SubqlCosmosHandlerKind.Message,
+            kind: CosmosHandlerKind.Message,
             filter: {
               /*
                                 Filter to only messages with the MsgSetContractMetadata function call

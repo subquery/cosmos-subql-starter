@@ -1,6 +1,6 @@
 import {
-  SubqlCosmosDatasourceKind,
-  SubqlCosmosHandlerKind,
+  CosmosDatasourceKind,
+  CosmosHandlerKind,
   CosmosProject,
 } from "@subql/types-cosmos";
 
@@ -39,14 +39,14 @@ const project: CosmosProject = {
   },
   dataSources: [
     {
-      kind: SubqlCosmosDatasourceKind.Runtime,
+      kind: CosmosDatasourceKind.Runtime,
       startBlock: 5262,
       mapping: {
         file: "./dist/index.js",
         handlers: [
           {
             handler: "handleEvent",
-            kind: SubqlCosmosHandlerKind.Event,
+            kind: CosmosHandlerKind.Event,
             filter: {
               type: "depositConfirmation",
             },

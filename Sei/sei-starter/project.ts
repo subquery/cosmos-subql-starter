@@ -1,6 +1,6 @@
 import {
-  SubqlCosmosDatasourceKind,
-  SubqlCosmosHandlerKind,
+  CosmosDatasourceKind,
+  CosmosHandlerKind,
   CosmosProject,
 } from "@subql/types-cosmos";
 
@@ -26,7 +26,7 @@ const project: CosmosProject = {
   },
   network: {
     /* The genesis hash of the network (hash of block 0) */
-    chainId: "atlantic-2",
+    chainId: "pacific-1",
     /**
      * These endpoint(s) should be non-pruned archive nodes
      * Public nodes may be rate limited, which can affect indexing speed
@@ -35,7 +35,6 @@ const project: CosmosProject = {
      */
     endpoint: [
       "https://rpc.ankr.com/sei",
-      "https://rpc-sei-testnet.rhinostake.com/",
     ],
     // Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
     dictionary:
@@ -53,14 +52,14 @@ const project: CosmosProject = {
   },
   dataSources: [
     {
-      kind: SubqlCosmosDatasourceKind.Runtime,
+      kind: CosmosDatasourceKind.Runtime,
       startBlock: 24596905,
       mapping: {
         file: "./dist/index.js",
         handlers: [
           {
             handler: "handleFundingRateChangeEvent",
-            kind: SubqlCosmosHandlerKind.Event,
+            kind: CosmosHandlerKind.Event,
             filter: {
               // https://sei.explorers.guru/transaction/9A5D1FB99CDFB03282459355E4C7221D93D9971160AE79E201FA2B2895952878
               type: "wasm-funding-rate-change",
@@ -71,7 +70,7 @@ const project: CosmosProject = {
           },
           {
             handler: "handleSpotPriceEvent",
-            kind: SubqlCosmosHandlerKind.Event,
+            kind: CosmosHandlerKind.Event,
             filter: {
               type: "wasm-spot-price",
               messageFilter: {
