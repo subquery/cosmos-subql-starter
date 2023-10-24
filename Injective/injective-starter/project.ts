@@ -33,7 +33,13 @@ const project: CosmosProject = {
      * When developing your project we suggest getting a private API key
      * We suggest providing an array of endpoints for increased speed and reliability
      */
-    endpoint: ["http://archival-sentry-equinix-2.injective.dev:26657"],
+    endpoint: [
+      "https://injective-rpc.quickapi.com:443",
+      "https://rpc-injective.goldenratiostaking.net",
+      "https://rpc-injective-ia.cosmosia.notional.ventures/",
+      "https://injective-mainnet-rpc.autostake.com:443",
+      "https://rpc.injective.posthuman.digital:443",
+    ],
     chaintypes: new Map([
       [
         // Key is not used, it matches the one above and is inferred from the fil
@@ -55,7 +61,7 @@ const project: CosmosProject = {
   dataSources: [
     {
       kind: CosmosDatasourceKind.Runtime,
-      startBlock: 22186475,
+      startBlock: 43768217,
       mapping: {
         file: "./dist/index.js",
         handlers: [
