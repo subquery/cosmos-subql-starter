@@ -1,0 +1,36 @@
+{
+  "name": "okx-starter",
+  "version": "0.0.1",
+  "description": "This project can be use as a starting point for developing your Cosmos (Kava) based SubQuery project via the Etheruem API",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "subql build",
+    "codegen": "subql codegen",
+    "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
+    "dev": "subql codegen && subql build && docker-compose pull && docker-compose up --remove-orphans",
+    "prepack": "rm -rf dist && npm run build",
+    "test": "subql build && subql-node-cosmos test"
+  },
+  "homepage": "https://github.com/subquery/cosmos-subql-starter",
+  "repository": "github:subquery/cosmos-subql-starter",
+  "files": [
+    "dist",
+    "schema.graphql",
+    "project.yaml"
+  ],
+  "author": "SubQuery Team",
+  "license": "MIT",
+  "dependencies": {
+    "@subql/common": "latest",
+    "@subql/types-ethereum": "latest",
+    "@subql/validator": "latest",
+    "assert": "^2.0.0"
+  },
+  "devDependencies": {
+    "@subql/cli": "latest",
+    "@subql/testing": "latest",
+    "@subql/node-cosmos": "latest",
+    "@subql/types": "latest",
+    "typescript": "^5.2.2"
+  }
+}
