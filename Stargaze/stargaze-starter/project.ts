@@ -34,7 +34,6 @@ const project: CosmosProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: ["https://rpc-persistent-ia.cosmosia.notional.ventures/"],
-    // # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
     chaintypes: new Map([
       [
         "cosmos.slashing.v1beta1",

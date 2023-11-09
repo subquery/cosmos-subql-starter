@@ -34,8 +34,6 @@ const project: CosmosProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: ["https://cosmos-mainnet-archive.allthatnode.com:26657"],
-    dictionary:
-      "https://api.subquery.network/sq/subquery/cosmos-hub-dictionary",
     chaintypes: new Map([
       [
         "cosmos.slashing.v1beta1",

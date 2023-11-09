@@ -34,9 +34,6 @@ const project: CosmosProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: ["https://osmosis.api.onfinality.io/public"],
-    // # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-    dictionary:
-      "https://api.subquery.network/sq/subquery/cosmos-osmosis-dictionary",
     chaintypes: new Map([
       [
         "osmosis.gamm.v1beta1",
