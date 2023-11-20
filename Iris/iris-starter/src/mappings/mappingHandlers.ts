@@ -28,6 +28,7 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 export async function handleMessage(
   msg: CosmosMessage<MsgSend>
 ): Promise<void> {
+  logger.info(`Messsage found at ${msg.block.blockId}`);
   const messageRecord = Message.create({
     id: `${msg.tx.hash}-${msg.idx}`,
     blockHeight: BigInt(msg.block.block.header.height),
@@ -41,6 +42,7 @@ export async function handleMessage(
 }
 
 export async function handleEvent(event: CosmosEvent): Promise<void> {
+  logger.info(`Event found at ${event.block.blockId}`);
   const eventRecord = TransferEvent.create({
     id: `${event.tx.hash}-${event.msg.idx}-${event.idx}`,
     blockHeight: BigInt(event.block.block.header.height),
