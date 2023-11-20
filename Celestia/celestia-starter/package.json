@@ -1,5 +1,5 @@
 {
-  "name": "celestia",
+  "name": "Celestia",
   "version": "0.0.1",
   "description": "desc",
   "main": "dist/index.js",
@@ -18,7 +18,7 @@
     "schema.graphql",
     "project.yaml"
   ],
-  "author": "tonymoon",
+  "author": "SubQuery Team",
   "license": "MIT",
   "devDependencies": {
     "@cosmjs/stargate": "^0.28.9",

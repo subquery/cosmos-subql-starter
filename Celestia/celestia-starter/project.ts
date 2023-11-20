@@ -8,7 +8,7 @@ import {
 const project: CosmosProject = {
   specVersion: "1.0.0",
   version: "0.0.1",
-  name: "Celestia-starter",
+  name: "celestia-starter",
   description:
     "This project can be use as a starting point for developing your Cosmos Celestia based SubQuery project",
   runner: {
@@ -26,15 +26,17 @@ const project: CosmosProject = {
   },
   network: {
     /* The genesis hash of the network (hash of block 0) */
-    chainId: "mocha-4",
+    chainId: "celestia",
     /**
      * These endpoint(s) should be non-pruned archive nodes
      * Public nodes may be rate limited, which can affect indexing speed
      * When developing your project we suggest getting a private API key
      * We suggest providing an array of endpoints for increased speed and reliability
      */
-    endpoint: ["http://65.108.238.61:13657"],
-    dictionary: "http://localhost:26657",
+    endpoint: [
+      "https://public-celestia-rpc.numia.xyz",
+      "https://celestia-rpc.mesa.newmetric.xyz",
+    ],
     chaintypes: new Map([
       [
         "cosmos.slashing.v1beta1",

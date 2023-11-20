@@ -25,16 +25,17 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 */
 
 export async function handleEvent(event: CosmosEvent): Promise<void> {
+  logger.info(`Found transfer event at ${event.block.blockId}`);
   const newTransfers = new Transfers(
     `${event.tx.hash}-${event.msg.idx}-${event.idx}`
   );
 
- newTransfers.blockHeight = BigInt(event.block.block.header.height);
- newTransfers.txHash = event.tx.hash;
- newTransfers.fromAddress = event.msg.msg.decodedMsg.fromAddress;
- newTransfers.toAddress = event.msg.msg.decodedMsg.toAddress;
- newTransfers.amount = event.msg.msg.decodedMsg.amount;
- newTransfers.denomination = event.msg.msg.decodedMsg.denomination; 
+  newTransfers.blockHeight = BigInt(event.block.block.header.height);
+  newTransfers.txHash = event.tx.hash;
+  newTransfers.fromAddress = event.msg.msg.decodedMsg.fromAddress;
+  newTransfers.toAddress = event.msg.msg.decodedMsg.toAddress;
+  newTransfers.amount = event.msg.msg.decodedMsg.amount;
+  newTransfers.denomination = event.msg.msg.decodedMsg.denomination;
 
- await newTransfers.save();
+  await newTransfers.save();
 }

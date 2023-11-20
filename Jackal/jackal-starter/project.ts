@@ -8,7 +8,7 @@ import {
 const project: CosmosProject = {
   specVersion: "1.0.0",
   version: "0.0.1",
-  name: "Jackal-starter",
+  name: "jackal-starter",
   description:
     "This project can be use as a starting point for developing your Cosmos Jackal based SubQuery project",
   runner: {
@@ -26,15 +26,18 @@ const project: CosmosProject = {
   },
   network: {
     /* The genesis hash of the network (hash of block 0) */
-    chainId: "lupulella-2",
+    chainId: "jackal-1",
     /**
      * These endpoint(s) should be non-pruned archive nodes
      * Public nodes may be rate limited, which can affect indexing speed
      * When developing your project we suggest getting a private API key
      * We suggest providing an array of endpoints for increased speed and reliability
      */
-    endpoint: ["http://65.109.93.152:31657"],
-    /* dictionary: "http://localhost:26657", */
+    endpoint: [
+      "https://rpc.jackalprotocol.com",
+      "https://jackal-rpc.lavenderfive.com:443",
+      "https://jackal.rpc.silknodes.io",
+    ],
     chaintypes: new Map([
       [
         "cosmos.slashing.v1beta1",
@@ -62,7 +65,7 @@ const project: CosmosProject = {
   dataSources: [
     {
       kind: CosmosDatasourceKind.Runtime,
-      startBlock: 3688866,
+      startBlock: 4953001,
       mapping: {
         file: "./dist/index.js",
         handlers: [
