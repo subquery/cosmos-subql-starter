@@ -1,0 +1,41 @@
+# // Auto-generated , DO NOT EDIT
+specVersion: 1.0.0
+version: 0.0.1
+name: kava-cosmos-starter
+description: >-
+  This project can be use as a starting point for developing your Cosmos kava
+  based SubQuery project
+runner:
+  node:
+    name: "@subql/node-cosmos"
+    version: ">=3.0.0"
+  query:
+    name: "@subql/query"
+    version: "*"
+schema:
+  file: ./schema.graphql
+network:
+  chainId: kava_2222-10
+  endpoint:
+    - https://kava-rpc.ibs.team
+  chaintypes:
+    cosmos.bank.v1beta1.MsgSend:
+      file: ./proto/cosmos/bank/v1beta1/tx.proto
+      messages:
+        - MsgSend
+    cosmos.base.v1beta1.Coin:
+      file: ./proto/cosmos/base/v1beta1/coin.proto
+      messages:
+        - Coin
+dataSources:
+  - kind: cosmos/Runtime
+    startBlock: 5397233
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - handler: handleCosmosEvent
+          kind: cosmos/EventHandler
+          filter:
+            type: coin_spent
+            messageFilter:
+              type: /cosmos.bank.v1beta1.MsgSend

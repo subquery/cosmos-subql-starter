@@ -1,0 +1,44 @@
+# // Auto-generated , DO NOT EDIT
+specVersion: 1.0.0
+version: 0.0.1
+name: kava-evm-starter
+description: >-
+  This project can be use as a starting point for developing your Cosmos (Kava)
+  based SubQuery project via the Ethereum API
+runner:
+  node:
+    name: '@subql/node-ethereum'
+    version: '>=3.0.0'
+  query:
+    name: '@subql/query'
+    version: '*'
+schema:
+  file: ./schema.graphql
+network:
+  chainId: '2222'
+  endpoint:
+    - https://evm.kava.io
+    - https://evm.data.kava.io
+    - https://evm.data.kava.chainstacklabs.com
+dataSources:
+  - kind: ethereum/Runtime
+    startBlock: 5391456
+    options:
+      abi: erc20
+      address: '0x919C1c267BC06a7039e03fcc2eF738525769109c'
+    assets:
+      erc20:
+        file: ./abis/erc20.abi.json
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - kind: ethereum/TransactionHandler
+          handler: handleEVMTransaction
+          filter:
+            function: approve(address spender, uint256 value)
+        - kind: ethereum/LogHandler
+          handler: handleEVMLog
+          filter:
+            topics:
+              - Transfer(address from, address to, uint256 value)
+repository: https://github.com/subquery/ethereum-subql-starter
