@@ -64,7 +64,6 @@ services:
       - --db-schema=multi-transfers
       - --disable-historical
       - -f=app/cosmoshub.yaml
-      - --batch-size=1
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
       interval: 3s
