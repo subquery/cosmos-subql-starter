@@ -1,7 +1,7 @@
 {
   "name": "kava-evm-cosmos-multi-chain",
   "version": "0.0.1",
-  "description": "This project can be use as a starting point for developing your Cosmos (Cosmos Hub) based SubQuery project",
+  "description": "This project tracks USDT transactions and approvals on Kava EVM Network, along with all transfers sent on Kava Cosmos Co-chain",
   "main": "dist/index.js",
   "scripts": {
     "build": "subql build",

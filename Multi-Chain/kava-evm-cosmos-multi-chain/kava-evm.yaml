@@ -1,21 +1,19 @@
-# // Auto-generated , DO NOT EDIT
 specVersion: 1.0.0
 version: 0.0.1
 name: kava-evm-starter
 description: >-
-  This project can be use as a starting point for developing your Cosmos (Kava)
-  based SubQuery project via the Ethereum API
+  In this manifest file, we set up the SubQuery indexer to fetch all USDT transactions on the Kava EVM Network
 runner:
   node:
-    name: '@subql/node-ethereum'
-    version: '>=3.0.0'
+    name: "@subql/node-ethereum"
+    version: ">=3.0.0"
   query:
-    name: '@subql/query'
-    version: '*'
+    name: "@subql/query"
+    version: "*"
 schema:
   file: ./schema.graphql
 network:
-  chainId: '2222'
+  chainId: "2222"
   endpoint:
     - https://evm.kava.io
     - https://evm.data.kava.io
@@ -25,7 +23,7 @@ dataSources:
     startBlock: 5391456
     options:
       abi: erc20
-      address: '0x919C1c267BC06a7039e03fcc2eF738525769109c'
+      address: "0x919C1c267BC06a7039e03fcc2eF738525769109c"
     assets:
       erc20:
         file: ./abis/erc20.abi.json

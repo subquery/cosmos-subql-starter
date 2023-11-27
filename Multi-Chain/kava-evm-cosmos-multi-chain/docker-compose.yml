@@ -37,7 +37,6 @@ services:
       - --db-schema=multi-chain
       - --disable-historical
       - -f=app/kava-cosmos.yaml
-      - --batch-size=1
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
       interval: 3s
@@ -64,7 +63,6 @@ services:
       - --db-schema=multi-chain
       - --disable-historical
       - -f=app/kava-evm.yaml
-      - --batch-size=1
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
       interval: 3s

@@ -1,10 +1,8 @@
-# // Auto-generated , DO NOT EDIT
 specVersion: 1.0.0
 version: 0.0.1
 name: kava-cosmos-starter
 description: >-
-  This project can be use as a starting point for developing your Cosmos kava
-  based SubQuery project
+  In this manifest file, we set up the SubQuery indexer to fetch all transfers sent on Kava Cosmos Co-chain
 runner:
   node:
     name: "@subql/node-cosmos"
