@@ -1,0 +1,40 @@
+specVersion: 1.0.0
+name: cosmoshub-ibc
+version: 0.0.1
+runner:
+  node:
+    name: "@subql/node-cosmos"
+    version: "*"
+  query:
+    name: "@subql/query"
+    version: "*"
+repository: "https://github.com/subquery/juno-subql-starter"
+schema:
+  file: ./schema.graphql
+network:
+  chainId: cosmoshub-4
+  # This endpoint must be a public non-pruned archive node
+  # We recommend providing more than one endpoint for improved reliability, performance, and uptime
+  # Public nodes may be rate limited, which can affect indexing speed
+  # When developing your project we suggest getting a private API key
+  endpoint: ["https://cosmos-rpc.publicnode.com:443"]
+  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
+  dictionary: "https://api.subquery.network/sq/subquery/cosmos-hub-dictionary"
+dataSources:
+  - kind: cosmos/Runtime
+    startBlock: 17934016
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - handler: handleCosmosHubSendEvent
+          kind: cosmos/EventHandler
+          filter:
+            type: send_packet
+            messageFilter:
+              type: /ibc.applications.transfer.v1.MsgTransfer
+        - handler: handleCosmosHubReceiveEvent
+          kind: cosmos/EventHandler
+          filter:
+            type: recv_packet
+            messageFilter:
+              type: /ibc.core.channel.v1.MsgRecvPacket
