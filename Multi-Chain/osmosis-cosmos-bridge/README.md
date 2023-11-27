@@ -40,7 +40,7 @@ For this project, you can try to query with the following GraphQL code to get a 
 
 ```graphql
 query {
-  cosmosToOsmosisBridges {
+  BridgeEvents {
     nodes {
       id
       senderId

@@ -1,5 +1,5 @@
 import { CosmosEvent } from "@subql/types-cosmos";
-import { User, CosmosToOsmosisBridge } from "../types";
+import { User, BridgeEvent } from "../types";
 
 interface EssentialValues {
   sender?: string;
@@ -50,9 +50,9 @@ async function populateValuesFromSource(
   sequence: string,
   event: CosmosEvent
 ) {
-  let bridgeTransactionRecord = await CosmosToOsmosisBridge.get(sequence);
+  let bridgeTransactionRecord = await BridgeEvent.get(sequence);
   if (!bridgeTransactionRecord) {
-    bridgeTransactionRecord = CosmosToOsmosisBridge.create({
+    bridgeTransactionRecord = BridgeEvent.create({
       id: sequence,
       senderId: (await checkGetUser(sender)).id,
       receiverId: (await checkGetUser(receiver)).id,
@@ -74,9 +74,9 @@ async function populateValuesFromDestination(
   sequence: string,
   event: CosmosEvent
 ) {
-  let bridgeTransactionRecord = await CosmosToOsmosisBridge.get(sequence);
+  let bridgeTransactionRecord = await BridgeEvent.get(sequence);
   if (!bridgeTransactionRecord) {
-    bridgeTransactionRecord = CosmosToOsmosisBridge.create({
+    bridgeTransactionRecord = BridgeEvent.create({
       id: sequence,
       senderId: (await checkGetUser(sender)).id,
       receiverId: (await checkGetUser(receiver)).id,

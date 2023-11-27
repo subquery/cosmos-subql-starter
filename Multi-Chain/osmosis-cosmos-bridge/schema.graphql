@@ -2,7 +2,7 @@
 # Add the `@index` or `@index(unique: true)` annotation after any non-key field
 # https://academy.subquery.network/build/graphql.html#indexing-by-non-primary-key-field
 
-type CosmosToOsmosisBridge @entity {
+type BridgeEvent @entity {
   id: ID!
   sender: User!
   receiver: User!
