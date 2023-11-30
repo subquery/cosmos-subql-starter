@@ -30,10 +30,6 @@ dataSources:
     mapping:
       file: ./dist/index.js
       handlers:
-        - kind: ethereum/TransactionHandler
-          handler: handleEVMTransaction
-          filter:
-            function: approve(address spender, uint256 value)
         - kind: ethereum/LogHandler
           handler: handleEVMLog
           filter:
