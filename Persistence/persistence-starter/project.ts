@@ -28,10 +28,12 @@ const project: CosmosProject = {
     /* The genesis hash of the network (hash of block 0) */
     chainId: "core-1",
     /**
-     * These endpoint(s) should be non-pruned archive nodes
+     * These endpoint(s) should be public non-pruned archive node
+     * We recommend providing more than one endpoint for improved reliability, performance, and uptime
      * Public nodes may be rate limited, which can affect indexing speed
      * When developing your project we suggest getting a private API key
-     * We suggest providing an array of endpoints for increased speed and reliability
+     * If you use a rate limited endpoint, adjust the --batch-size and --workers parameters
+     * These settings can be found in your docker-compose.yaml, they will slow indexing but prevent your project being rate limited
      */
     endpoint: ["https://rpc-persistent-ia.cosmosia.notional.ventures/"],
     chaintypes: new Map([
