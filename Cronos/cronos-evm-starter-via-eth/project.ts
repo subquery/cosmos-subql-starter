@@ -27,14 +27,14 @@ const project: EthereumProject = {
   network: {
     chainId: "25",
     /**
-     * These endpoint(s) should be non-pruned archive nodes
+     * These endpoint(s) should be public non-pruned archive node
+     * We recommend providing more than one endpoint for improved reliability, performance, and uptime
      * Public nodes may be rate limited, which can affect indexing speed
      * When developing your project we suggest getting a private API key
-     * We suggest providing an array of endpoints for increased speed and reliability
+     * If you use a rate limited endpoint, adjust the --batch-size and --workers parameters
+     * These settings can be found in your docker-compose.yaml, they will slow indexing but prevent your project being rate limited
      */
     endpoint: ["https://evm.cronos.org"],
-    dictionary:
-      "https://api.subquery.network/sq/subquery/cosmos-cronos-dictionary",
   },
   dataSources: [
     {
