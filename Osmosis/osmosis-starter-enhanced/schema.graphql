@@ -1,0 +1,40 @@
+enum Direction {
+  IN
+  OUT
+}
+
+enum Message {
+  MsgSwapExactAmountIn
+  MsgSwapExactAmountOut
+  MsgJoinSwapShareAmountOut
+}
+
+type Swap @entity {
+  id: ID!
+  sender: String!
+  direction: Direction!
+  txHash: String!
+  blockHeight: BigInt!
+  datetime: Date!
+  message: Message!
+  tokenInDenom: String
+  tokenInAmount: BigInt
+  tokenOutMin: BigInt
+  tokenOutDenom: String
+  tokenOutAmount: BigInt
+  tokenInMax: BigInt
+  swapRoutes: [SwapRoute] @derivedFrom(field: "swap") #This is virtual field
+}
+
+type SwapRoute @entity {
+  id: ID!
+  pool: Pool!
+  swap: Swap!
+  tokenInDenom: String
+  tokenOutDenom: String
+}
+
+type Pool @entity {
+  id: ID!
+  swapRoutes: [SwapRoute] @derivedFrom(field: "pool") #This is virtual field
+}
