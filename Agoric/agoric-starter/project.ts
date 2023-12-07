@@ -34,7 +34,6 @@ const project: CosmosProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: ["https://agoric-rpc.stakely.io"],
-    dictionary: "https://api.subquery.network/sq/subquery/agoric-dictionary",
     chaintypes: new Map([
       [
         "cosmos.slashing.v1beta1",

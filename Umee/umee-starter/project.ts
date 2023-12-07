@@ -34,7 +34,6 @@ const project: CosmosProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: ["https://rpc-1.umee.nodes.guru"],
-    dictionary: "https://api.subquery.network/sq/subquery/umee-dictionary",
     chaintypes: new Map([
       [
         "cosmos.slashing.v1beta1",

@@ -37,7 +37,6 @@ const project: CosmosProject = {
       "https://rpc-akash.ecostake.com:443",
       "https://rpc.akashnet.net:443",
     ],
-    // dictionary: "https://api.subquery.network/sq/subquery/cosmos-sei-dictionary",
     chaintypes: new Map([
       [
         "akash.staking.v1beta3",

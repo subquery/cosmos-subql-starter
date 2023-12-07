@@ -34,8 +34,6 @@ const project: CosmosProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: ["https://rpc.cheqd.nodestake.top"],
-    // Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-    dictionary: "https://api.subquery.network/sq/subquery/cheqd-dictionary",
     chaintypes: new Map([
       [
         "cosmos.slashing.v1beta1",

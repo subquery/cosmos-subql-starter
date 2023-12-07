@@ -38,8 +38,6 @@ const project: CosmosProject = {
       // "https://rpc-archway.cosmos-spaces.cloud",
       // "https://rpc-1.archway.nodes.guru",
     ],
-    // Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-    // dictionary: "https://api.subquery.network/sq/subquery/cosmos-archway-dictionary"
     chaintypes: new Map([
       [
         "cosmwasm.wasm.v1.MsgSetContractMetadata",

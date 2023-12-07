@@ -31,8 +31,6 @@ const project: CosmosProject<EthermintEvmDatasource> = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: ["https://rpc.cronos.org/"],
-    dictionary:
-      "https://api.subquery.network/sq/subquery/cosmos-cronos-dictionary",
     chaintypes: new Map([
       [
         "ethermint.evm.v1",

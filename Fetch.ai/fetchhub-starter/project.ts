@@ -34,8 +34,6 @@ const project: CosmosProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: ["https://rpc-fetchhub.fetch.ai"],
-    dictionary:
-      "https://api.subquery.network/sq/subquery/cosmos-fetch-ai-dictionary",
     chaintypes: new Map([
       [
         "cosmos.slashing.v1beta1",

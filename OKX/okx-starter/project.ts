@@ -33,7 +33,6 @@ const project: EthereumProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: ["https://exchainrpc.okex.org/"],
-    // dictionary: "https://api.subquery.network/sq/subquery/cosmos-okx-dictionary"
   },
   dataSources: [
     {

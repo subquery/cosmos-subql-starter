@@ -34,8 +34,6 @@ const project: CosmosProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: ["https://rpc-juno.whispernode.com"],
-    dictionary:
-      "https://api.subquery.network/sq/subquery/cosmos-juno-dictionary",
   },
   dataSources: [
     {

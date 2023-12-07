@@ -34,10 +34,6 @@ const project: CosmosProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: ["https://omniflix.rpc.stake2.me"],
-
-    // # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-    dictionary:
-      "https://api.subquery.network/sq/subquery/omniflixhub-dictionary",
     chaintypes: new Map([
       [
         "cosmos.slashing.v1beta1",

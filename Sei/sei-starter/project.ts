@@ -33,12 +33,7 @@ const project: CosmosProject = {
      * When developing your project we suggest getting a private API key
      * We suggest providing an array of endpoints for increased speed and reliability
      */
-    endpoint: [
-      "https://rpc.ankr.com/sei",
-    ],
-    // Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-    dictionary:
-      "https://api.subquery.network/sq/subquery/cosmos-sei-dictionary",
+    endpoint: ["https://rpc.ankr.com/sei"],
     chaintypes: new Map([
       // This feature allows support for any Cosmos chain by importing the correct protobuf messages
       [

@@ -33,8 +33,6 @@ const project: EthereumProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: ["https://evm.cronos.org"],
-    dictionary:
-      "https://api.subquery.network/sq/subquery/cosmos-cronos-dictionary",
   },
   dataSources: [
     {

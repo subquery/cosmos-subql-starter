@@ -16,7 +16,6 @@ network:
   endpoint:
     - >-
       https://osmosis-rpc.publicnode.com:443
-  dictionary: https://api.subquery.network/sq/subquery/cosmos-osmosis-dictionary
 dataSources:
   - kind: cosmos/Runtime
     startBlock: 12427162

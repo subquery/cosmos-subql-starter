@@ -18,8 +18,6 @@ network:
   # Public nodes may be rate limited, which can affect indexing speed
   # When developing your project we suggest getting a private API key
   endpoint: ["https://cosmos-rpc.publicnode.com:443"]
-  # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
-  dictionary: "https://api.subquery.network/sq/subquery/cosmos-hub-dictionary"
 dataSources:
   - kind: cosmos/Runtime
     startBlock: 17934016
