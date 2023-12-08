@@ -10,7 +10,7 @@ const project: CosmosProject = {
   version: "0.0.1",
   name: "osmosis-starter",
   description:
-    "This project can be use as a starting point for developing your Cosmos osmosis based SubQuery project",
+    "This project can be use as a starting point for developing your Cosmos Osmosis based SubQuery project. It indexes all swaps in the Osmosis DEX",
   runner: {
     node: {
       name: "@subql/node-cosmos",
@@ -33,27 +33,29 @@ const project: CosmosProject = {
      * When developing your project we suggest getting a private API key
      * We suggest providing an array of endpoints for increased speed and reliability
      */
-    endpoint: ["https://osmosis.api.onfinality.io/public"],
+    endpoint: ["https://rpc.osmosis.zone:443"],
     chaintypes: new Map([
       [
         "osmosis.gamm.v1beta1",
         {
           file: "./proto/osmosis/gamm/v1beta1/tx.proto",
-          messages: ["MsgSwapExactAmountIn"],
+          messages: [
+            "MsgSwapExactAmountIn",
+            "MsgSwapExactAmountOut",
+            "MsgJoinSwapShareAmountOut",
+          ],
         },
       ],
       [
         " osmosis.poolmanager.v1beta1",
         {
-          // needed by MsgSwapExactAmountIn
           file: "./proto/osmosis/poolmanager/v1beta1/swap_route.proto",
-          messages: ["SwapAmountInRoute"],
+          messages: ["SwapAmountOutRoute", "SwapAmountInRoute"],
         },
       ],
       [
         "cosmos.base.v1beta1",
         {
-          // needed by MsgSwapExactAmountIn
           file: "./proto/cosmos/base/v1beta1/coin.proto",
           messages: ["Coin"],
         },
@@ -63,15 +65,29 @@ const project: CosmosProject = {
   dataSources: [
     {
       kind: CosmosDatasourceKind.Runtime,
-      startBlock: 9798050,
+      startBlock: 12678493,
       mapping: {
         file: "./dist/index.js",
         handlers: [
           {
-            handler: "handleMessage",
+            handler: "handleMsgSwapExactAmountIn",
             kind: CosmosHandlerKind.Message,
             filter: {
               type: "/osmosis.gamm.v1beta1.MsgSwapExactAmountIn",
+            },
+          },
+          {
+            handler: "handleMsgSwapExactAmountOut",
+            kind: CosmosHandlerKind.Message,
+            filter: {
+              type: "/osmosis.gamm.v1beta1.MsgSwapExactAmountOut",
+            },
+          },
+          {
+            handler: "handleMsgJoinSwapShareAmountOut",
+            kind: CosmosHandlerKind.Message,
+            filter: {
+              type: "/osmosis.gamm.v1beta1.MsgJoinSwapShareAmountOut",
             },
           },
         ],
