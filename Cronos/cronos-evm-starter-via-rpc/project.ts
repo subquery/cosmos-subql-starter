@@ -22,7 +22,7 @@ const project: CosmosProject<EthermintEvmDatasource> = {
     file: "./schema.graphql",
   },
   network: {
-    /* The genesis hash of the network (hash of block 0) */
+    /* The unique chainID of the Cosmos Zone */
     chainId: "cronosmainnet_25-1",
     /**
      * These endpoint(s) should be public non-pruned archive node
