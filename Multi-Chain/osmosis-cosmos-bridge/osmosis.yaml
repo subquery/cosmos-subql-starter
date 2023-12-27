@@ -1,0 +1,36 @@
+# // Auto-generated , DO NOT EDIT
+specVersion: 1.0.0
+version: 0.0.1
+name: osmosis-ibc
+runner:
+  node:
+    name: "@subql/node-cosmos"
+    version: ">=3.0.0"
+  query:
+    name: "@subql/query"
+    version: "*"
+schema:
+  file: ./schema.graphql
+network:
+  chainId: osmosis-1
+  endpoint:
+    - >-
+      https://osmosis-rpc.publicnode.com:443
+dataSources:
+  - kind: cosmos/Runtime
+    startBlock: 12427162
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - handler: handleOsmosisReceiveEvent
+          kind: cosmos/EventHandler
+          filter:
+            type: recv_packet
+            messageFilter:
+              type: /ibc.core.channel.v1.MsgRecvPacket
+        - handler: handleOsmosisSendEvent
+          kind: cosmos/EventHandler
+          filter:
+            type: send_packet
+            messageFilter:
+              type: /ibc.applications.transfer.v1.MsgTransfer

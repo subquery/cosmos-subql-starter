@@ -1,3 +1,4 @@
+
 # These are some examples of commonly ignored file patterns.
 # You should customize this list as applicable to your project.
 # Learn more about .gitignore:
@@ -23,10 +24,11 @@ package-lock.json
 # Package files
 *.jar
 
-# Maven
+# Generated files
 target/
 dist/
 src/types
+project.yaml
 
 # JetBrains IDE
 .idea/
@@ -54,3 +56,4 @@ Thumbs.db
 *.wmv
 
 .data
+dist

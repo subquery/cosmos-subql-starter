@@ -1,0 +1,38 @@
+{
+  "name": "cosmos-subql-starters",
+  "private": true,
+  "workspaces": [
+    "Agoric/*",
+    "Akash/*",
+    "Archway/*",
+    "Axelar/*",
+    "Cheqd/*",
+    "Comdex/*",
+    "CosmosHub/*",
+    "Dymension/*",
+    "Evmos/*",
+    "Fetch.ai/*",
+    "Injective/*",
+    "Iris/*",
+    "Jackal/*",
+    "Juno/*",
+    "Kava/kava-starter",
+    "Kujira/*",
+    "Mars/*",
+    "Migaloo/*",
+    "Multi-Chain/*",
+    "Neutron/*",
+    "Omniflixhub/*",
+    "Osmosis/*",
+    "Persistence/*",
+    "Sei/*",
+    "Secret/*",
+    "Stargaze/*",
+    "Thorchain/*",
+    "UmeeX/*"
+  ],
+  "scripts": {
+    "codegen": "yarn workspaces run codegen",
+    "build": "yarn workspaces run build"
+  }
+}

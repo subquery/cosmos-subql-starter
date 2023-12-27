@@ -1,0 +1,18 @@
+# To improve query performance, we strongly suggest adding indexes to any field that you plan to filter or sort by
+# Add the `@index` or `@index(unique: true)` annotation after any non-key field
+# https://academy.subquery.network/build/graphql.html#indexing-by-non-primary-key-field
+
+type BridgeEvent @entity {
+  id: ID!
+  sender: User!
+  receiver: User!
+  sourceChain: String
+  sourceChainTransaction: String
+  destinationChain: String
+  destinationChainTransaction: String
+  amount: BigInt
+}
+
+type User @entity {
+  id: ID! # Wallet Address
+}

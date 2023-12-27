@@ -1,85 +1,138 @@
-import { MsgSwapExactAmountInMessage } from "../types/CosmosMessageTypes";
-import { Pool, Swap, SwapRoute } from "../types";
+import * as messages from "../types/CosmosMessageTypes";
+import { Pool, Swap, SwapRoute, Direction, Message } from "../types";
+import { CosmosBlock } from "@subql/types-cosmos";
 
-async function checkGetPool(id: string): Promise<Pool> {
+async function checkGetPool(id: string, block: CosmosBlock): Promise<Pool> {
   // Check that the pool exists and create new ones if now
   let pool = await Pool.get(id);
   if (!pool) {
-    pool = new Pool(id);
+    pool = Pool.create({
+      id,
+      createdBlockHeight: BigInt(block.header.height),
+      created: new Date(block.header.time.toISOString()),
+    });
     await pool.save();
   }
   return pool;
 }
 
-export async function handleMessage(
-  msg: MsgSwapExactAmountInMessage
-): Promise<void> {
-  // You can see an example record here https://www.mintscan.io/osmosis/txs/6A22C6C978A96D99FCB08826807C6EB1DCBDCEC6044C35105B624A81A1CB6E24?height=9798771
-  logger.info(`New Swap Message received at block ${msg.block.header.height}`);
-  // logger.info(JSON.stringify(msg.tx.tx.events)); // You can use this to preview the data
-
-  // We first create a new swap record
-  const swap = Swap.create({
+function createSwap(
+  msg:
+    | messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountInMessage
+    | messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage
+    | messages.osmosis.gamm.v1beta1.tx.MsgJoinSwapShareAmountOutMessage,
+  direction: Direction,
+  message: Message
+): Swap {
+  return Swap.create({
     id: `${msg.tx.hash}-${msg.idx}`,
     txHash: msg.tx.hash,
-    blockHeight: BigInt(msg.block.block.header.height),
+    blockHeight: BigInt(msg.block.header.height),
     sender: msg.msg.decodedMsg.sender,
-    tokenInDenom: msg.msg.decodedMsg.tokenIn?.denom,
-    tokenInAmount: msg.msg.decodedMsg.tokenIn
-      ? BigInt(msg.msg.decodedMsg.tokenIn.amount)
-      : undefined,
-    tokenOutMin: BigInt(msg.msg.decodedMsg.tokenOutMinAmount),
+    direction,
+    message,
+    date: new Date(msg.block.header.time.toISOString()),
   });
+}
+
+export async function handleMsgSwapExactAmountIn(
+  msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountInMessage
+): Promise<void> {
+  logger.info(
+    `Processing MsgSwapExactAmountIn at block ${msg.block.header.height.toString()}`
+  );
+  // We first create a new swap record
+  const swap = createSwap(msg, Direction.IN, Message.MsgSwapExactAmountIn);
+  swap.tokenInDenom = msg.msg.decodedMsg.tokenIn?.denom;
+  swap.tokenInAmount = msg.msg.decodedMsg.tokenIn
+    ? BigInt(msg.msg.decodedMsg.tokenIn.amount)
+    : undefined;
+  swap.tokenOutMin = BigInt(msg.msg.decodedMsg.tokenOutMinAmount);
 
   // Save this to the DB
   await swap.save();
 
   // Create swap routes from the array on the message
-  let lastTokenOutDenom = swap.tokenInDenom;
+  let currentTokenInDenom = swap.tokenInDenom;
   for (const route of msg.msg.decodedMsg.routes) {
     const index = msg.msg.decodedMsg.routes.indexOf(route);
     // Check that the pool aready exists
-    const pool = await checkGetPool(route.poolId.toString());
+    const pool = await checkGetPool(route.poolId.toString(), msg.block);
 
     const swapRoute = SwapRoute.create({
       id: `${msg.tx.hash}-${msg.idx}-${index}`,
       poolId: pool.id,
       swapId: swap.id,
-      tokenInDenom: lastTokenOutDenom,
+      tokenInDenom: currentTokenInDenom,
       tokenOutDenom: route.tokenOutDenom,
     });
-    lastTokenOutDenom = route.tokenOutDenom;
+    currentTokenInDenom = route.tokenOutDenom;
     await swapRoute.save();
   }
 }
 
-/*
-export async function handleBlock(block: CosmosBlock): Promise<void> {
-  // If you want to index each block in Cosmos (Osmosis), you could do that here
-}
-*/
+export async function handleMsgSwapExactAmountOut(
+  msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage
+): Promise<void> {
+  logger.info(
+    `Processing MsgSwapExactAmountOut at block ${msg.block.header.height.toString()}`
+  );
+  // We first create a new swap record
+  const swap = createSwap(msg, Direction.OUT, Message.MsgSwapExactAmountOut);
+  swap.tokenOutDenom = msg.msg.decodedMsg.tokenOut.denom;
+  swap.tokenOutAmount = msg.msg.decodedMsg.tokenOut
+    ? BigInt(msg.msg.decodedMsg.tokenOut.amount)
+    : undefined;
+  swap.tokenInMax = BigInt(msg.msg.decodedMsg.tokenInMaxAmount);
 
-/*
-export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
-  // If you want to index each transaction in Cosmos (Osmosis), you could do that here
-  const transactionRecord = Transaction.create({
-    id: tx.hash,
-    blockHeight: BigInt(tx.block.block.header.height),
-    timestamp: tx.block.block.header.time,
+  // Save this to the DB
+  await swap.save();
+
+  // Create swap routes from the array on the message
+  let currentTokenOutDenom = swap.tokenOutDenom;
+  for (const route of msg.msg.decodedMsg.routes) {
+    const index = msg.msg.decodedMsg.routes.indexOf(route);
+    // Check that the pool aready exists
+    const pool = await checkGetPool(route.poolId.toString(), msg.block);
+
+    const swapRoute = SwapRoute.create({
+      id: `${msg.tx.hash}-${msg.idx}-${index}`,
+      poolId: pool.id,
+      swapId: swap.id,
+      tokenInDenom: route.tokenInDenom,
+      tokenOutDenom: currentTokenOutDenom,
+    });
+    currentTokenOutDenom = route.tokenInDenom;
+    await swapRoute.save();
+  }
+}
+
+export async function handleMsgJoinSwapShareAmountOut(
+  msg: messages.osmosis.gamm.v1beta1.tx.MsgJoinSwapShareAmountOutMessage
+): Promise<void> {
+  logger.info(
+    `Processing MsgJoinSwapShareAmountOut at block ${msg.block.header.height.toString()}`
+  );
+  // We first create a new swap record
+  const swap = createSwap(msg, Direction.IN, Message.MsgJoinSwapShareAmountOut);
+  swap.tokenInDenom = msg.msg.decodedMsg.tokenInDenom;
+  swap.tokenInMax = BigInt(msg.msg.decodedMsg.tokenInMaxAmount);
+  swap.tokenOutAmount = BigInt(msg.msg.decodedMsg.shareOutAmount);
+
+  // Save this to the DB
+  await swap.save();
+
+  // Create swap routes from the array on the message
+  const pool = await checkGetPool(
+    msg.msg.decodedMsg.poolId.toString(),
+    msg.block
+  );
+
+  const swapRoute = SwapRoute.create({
+    id: `${msg.tx.hash}-${msg.idx}`,
+    poolId: pool.id,
+    swapId: swap.id,
+    tokenInDenom: msg.msg.decodedMsg.tokenInDenom,
   });
-  await transactionRecord.save();
+  await swapRoute.save();
 }
-*/
-
-/*
-export async function handleEvent(event: CosmosEvent): Promise<void> {
-  const eventRecord = ExecuteEvent.create({
-    id: `${event.tx.hash}-${event.msg.idx}-${event.idx}`,
-    blockHeight: BigInt(event.block.block.header.height),
-    txHash: event.tx.hash,
-    contractAddress: event.event.attributes.find(attr => attr.key === '_contract_address').value
-  });
-
-  await eventRecord.save();
-}
-*/

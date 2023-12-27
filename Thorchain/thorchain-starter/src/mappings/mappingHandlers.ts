@@ -1,5 +1,5 @@
 import { Coin, Deposit, DepositCoin } from "../types";
-import { MsgDepositMessage } from "../types/CosmosMessageTypes";
+import * as messages from "../types/CosmosMessageTypes";
 
 /*
 export async function handleBlock(block: CosmosBlock): Promise<void> {
@@ -19,7 +19,7 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 }
 */
 
-export async function handleMessage(msg: MsgDepositMessage): Promise<void> {
+export async function handleMessage(msg: messages.thorchain.v1.x.thorchain.types.msg_deposit.MsgDepositMessage): Promise<void> {
   // Create Deposit record
   const depositEntity = Deposit.create({
     id: `${msg.tx.hash}-${msg.idx}`,

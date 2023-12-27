@@ -1,0 +1,44 @@
+syntax = "proto3";
+package canine_chain.storage;
+
+option go_package = "github.com/jackalLabs/canine-chain/x/storage/types";
+
+message Providers {
+  string address = 1;
+  string ip = 2;
+  string totalspace = 3;
+  string burned_contracts = 4;
+  string creator = 5;
+  string keybase_identity = 6;
+  repeated string auth_claimers = 7;
+}
+
+message ActiveProviders {
+  string address = 1;
+}
+
+message Attestation {
+  string provider = 1;
+  bool complete = 2;
+}
+
+message AttestationForm {
+  repeated Attestation attestations = 1;
+  string prover = 2;
+  bytes merkle = 3; // The merkle root is unique to every file based on its contents.
+  string owner = 4;
+  int64 start = 5; // Marks the block height the file started on.
+}
+
+message ReportForm {
+  repeated Attestation attestations = 1;
+  string prover = 2;
+  bytes merkle = 3; // The merkle root is unique to every file based on its contents.
+  string owner = 4;
+  int64 start = 5; // Marks the block height the file started on.
+}
+
+message Collateral {
+  string address = 1;
+  int64 amount = 2;
+}

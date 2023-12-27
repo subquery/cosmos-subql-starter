@@ -18,7 +18,7 @@ services:
       retries: 5
 
   subquery-node:
-    image: onfinality/subql-node-cosmos:latest
+    image: subquerynetwork/subql-node-cosmos:latest
     depends_on:
       "postgres":
         condition: service_healthy
@@ -32,11 +32,11 @@ services:
     volumes:
       - ./:/app
     command:
-      - ${SUB_COMMAND} # set SUB_COMMAND env variable to "test" to run tests
+      - ${SUB_COMMAND:-} # set SUB_COMMAND env variable to "test" to run tests
       - -f=/app
       - --db-schema=app
-      - --workers=4
-      - --batch-size=30
+      - --workers=1
+      - --batch-size=2
       - --unfinalized-blocks=true
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
@@ -45,7 +45,7 @@ services:
       retries: 10
 
   graphql-engine:
-    image: onfinality/subql-query:latest
+    image: subquerynetwork/subql-query:latest
     ports:
       - 3000:3000
     depends_on:
