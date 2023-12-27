@@ -26,6 +26,7 @@
     "Osmosis/*",
     "Persistence/*",
     "Sei/*",
+    "Secret/*",
     "Stargaze/*",
     "Thorchain/*",
     "UmeeX/*"
