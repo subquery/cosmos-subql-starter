@@ -19,7 +19,8 @@ network:
   # We recommend providing more than one endpoint for improved reliability, performance, and uptime
   # Public nodes may be rate limited, which can affect indexing speed
   # When developing your project we suggest getting a private API key
-  endpoint: ["https://phoenix-rpc.terra.dev:443"]
+  endpoint:
+    ["https://phoenix-rpc.terra.dev:443", "https://terra-rpc.polkachu.com"]
   # Optionally provide the HTTP endpoint of a full chain dictionary to speed up processing
   # dictionary: "https://api.subquery.network/sq/subquery/terra2-dictionary"
   chainTypes:
