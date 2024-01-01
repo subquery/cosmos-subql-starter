@@ -1,0 +1,27 @@
+# To improve query performance, we strongly suggest adding indexes to any field that you plan to filter or sort by
+# Add the `@index` or `@index(unique: true)` annotation after any non-key field
+# https://academy.subquery.network/build/graphql.html#indexing-by-non-primary-key-field
+
+type CosmosTransfers @entity {
+  id: ID!
+  blockHeight: BigInt
+  txHash: String
+  fromAddress: Address!
+  toAddress: Address!
+  amount: String
+  denomination: String
+}
+
+type EVMTransfers @entity {
+  id: ID! # Transaction hash
+  value: BigInt!
+  to: Address!
+  from: Address!
+  contractAddress: Address!
+}
+
+type Address @entity {
+  id: ID!
+  cosmosAddress: String!
+  evmAddress: String!
+}
