@@ -1,8 +1,4 @@
-import {
-  MsgSwapExactAmountInMessage,
-  MsgSwapExactAmountOutMessage,
-  MsgJoinSwapShareAmountOutMessage,
-} from "../types/CosmosMessageTypes";
+import * as messages from "../types/CosmosMessageTypes";
 import { Pool, Swap, SwapRoute, Direction, Message } from "../types";
 import { CosmosBlock } from "@subql/types-cosmos";
 
@@ -22,9 +18,9 @@ async function checkGetPool(id: string, block: CosmosBlock): Promise<Pool> {
 
 function createSwap(
   msg:
-    | MsgSwapExactAmountInMessage
-    | MsgSwapExactAmountOutMessage
-    | MsgJoinSwapShareAmountOutMessage,
+    | messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountInMessage
+    | messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage
+    | messages.osmosis.gamm.v1beta1.tx.MsgJoinSwapShareAmountOutMessage,
   direction: Direction,
   message: Message
 ): Swap {
@@ -40,7 +36,7 @@ function createSwap(
 }
 
 export async function handleMsgSwapExactAmountIn(
-  msg: MsgSwapExactAmountInMessage
+  msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountInMessage
 ): Promise<void> {
   logger.info(
     `Processing MsgSwapExactAmountIn at block ${msg.block.header.height.toString()}`
@@ -76,7 +72,7 @@ export async function handleMsgSwapExactAmountIn(
 }
 
 export async function handleMsgSwapExactAmountOut(
-  msg: MsgSwapExactAmountOutMessage
+  msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage
 ): Promise<void> {
   logger.info(
     `Processing MsgSwapExactAmountOut at block ${msg.block.header.height.toString()}`
@@ -112,7 +108,7 @@ export async function handleMsgSwapExactAmountOut(
 }
 
 export async function handleMsgJoinSwapShareAmountOut(
-  msg: MsgJoinSwapShareAmountOutMessage
+  msg: messages.osmosis.gamm.v1beta1.tx.MsgJoinSwapShareAmountOutMessage
 ): Promise<void> {
   logger.info(
     `Processing MsgJoinSwapShareAmountOut at block ${msg.block.header.height.toString()}`

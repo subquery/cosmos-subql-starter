@@ -8,9 +8,9 @@ import {
 const project: CosmosProject = {
   specVersion: "1.0.0",
   version: "0.0.1",
-  name: "Umee-starter",
+  name: "kujira-starter",
   description:
-    "This project can be use as a starting point for developing your Cosmos Umee based SubQuery project",
+    "This project can be use as a starting point for developing your Cosmos Kujira based SubQuery project",
   runner: {
     node: {
       name: "@subql/node-cosmos",
@@ -25,8 +25,8 @@ const project: CosmosProject = {
     file: "./schema.graphql",
   },
   network: {
-    /* The genesis hash of the network (hash of block 0) */
-    chainId: "umee-1",
+    /* The unique chain ID of the network */
+    chainId: "kaiyo-1",
     /**
      * These endpoint(s) should be public non-pruned archive node
      * We recommend providing more than one endpoint for improved reliability, performance, and uptime
@@ -35,7 +35,11 @@ const project: CosmosProject = {
      * If you use a rate limited endpoint, adjust the --batch-size and --workers parameters
      * These settings can be found in your docker-compose.yaml, they will slow indexing but prevent your project being rate limited
      */
-    endpoint: ["https://rpc-1.umee.nodes.guru"],
+    endpoint: [
+      "https://rpc-kujira.whispernode.com:443",
+      "https://rpc.kaiyo.kujira.setten.io",
+      "https://kujira-rpc.publicnode.com:443",
+    ],
     chaintypes: new Map([
       [
         "cosmos.slashing.v1beta1",
@@ -63,7 +67,7 @@ const project: CosmosProject = {
   dataSources: [
     {
       kind: CosmosDatasourceKind.Runtime,
-      startBlock: 8148041,
+      startBlock: 16241234,
       mapping: {
         file: "./dist/index.js",
         handlers: [
