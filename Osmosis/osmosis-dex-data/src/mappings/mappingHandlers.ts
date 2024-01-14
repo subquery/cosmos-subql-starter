@@ -18,11 +18,11 @@ function convertToCustomFormat(isoDateString: Date): string {
   return `${year}-${month}-${day}`;
 }
 
-function getObjectByDate(
+async function getObjectByDate(
   targetDate: string,
   dataArray: DataItem[]
-): number | undefined {
-  let selectedObject: number | undefined = undefined;
+): Promise<number | undefined> {
+  let selectedObject: number | undefined;
 
   dataArray.forEach((data) => {
     if (data.time === targetDate) {
@@ -33,16 +33,13 @@ function getObjectByDate(
   return selectedObject;
 }
 
-async function getCurrentLiquidity(
-  currentBlockDate: string,
-  dateArray: DataItem[]
-) {}
-
 async function getLiquidityPool(pool_id: string) {
-  let content = await (
-    await fetch(`https://api.osmosis.zone/pools/v2/liquidity/${pool_id}/chart`)
-  ).json();
-
+  // logger.warn(`Pool id: ${pool_id}`);
+  let response = await fetch(
+    `https://api.osmosis.zone/pools/v2/liquidity/${pool_id}/chart`
+  );
+  let content = await response.json();
+  // logger.warn(`Response status ${response.status}`);
   const parsedContent: DataItem[] = JSON.parse(JSON.stringify(content));
   return parsedContent;
 }
@@ -51,9 +48,11 @@ async function checkGetPool(
   id: string,
   block: CosmosBlock
 ): Promise<[Pool, number | undefined]> {
+  // logger.warn("Fetching Pool from database");
   let pool = await Pool.get(id);
 
   if (!pool) {
+    logger.warn("Pool is not present");
     pool = Pool.create({
       id,
       createdBlockHeight: BigInt(block.header.height),
@@ -62,17 +61,30 @@ async function checkGetPool(
     await pool.save();
     await cache.set(id, await getLiquidityPool(id));
   }
+
   const blockDate = convertToCustomFormat(
     new Date(block.header.time.toISOString())
   );
-  let liquidity = getObjectByDate(blockDate, await cache.get(id));
+  let liquidity: number | undefined;
+  let cachedLiquidity = await cache.get(id);
+  // logger.warn(`Cached liquidity (1st check): ${cachedLiquidity}`);
+  if (cachedLiquidity == undefined) {
+    // logger.warn("Cache is undefined (possibly due to a reboot)");
+    let pool_liquidity = await getLiquidityPool(id);
+    // logger.warn(`Liquidity pool: ${pool_liquidity}`);
+    await cache.set(id, pool_liquidity);
+  }
+
+  cachedLiquidity = await cache.get(id);
+  // logger.warn(`Cached liquidity (2nd check): ${cachedLiquidity}`);
+  liquidity = await getObjectByDate(blockDate, cachedLiquidity);
 
   if (liquidity == undefined) {
     logger.warn(
       "Failed to locate the liquidity for the associated pool on the swap date. Refreshing the cache and attempting the operation again"
     );
     await cache.set(id, await getLiquidityPool(id));
-    liquidity = getObjectByDate(blockDate, await cache.get(id));
+    liquidity = await getObjectByDate(blockDate, await cache.get(id));
   }
 
   return [pool, liquidity];
