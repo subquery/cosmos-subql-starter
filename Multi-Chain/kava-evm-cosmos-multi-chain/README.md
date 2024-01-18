@@ -40,33 +40,30 @@ For this project, you can try to query with the following GraphQL code to get a 
 
 ```graphql
 query {
-  transactions {
-    nodes {
-      id
-      value
-      to
-      from
-      contractAddress
-    }
-  }
-  approvals {
-    nodes {
-      id
-      value
-      owner
-      spender
-      contractAddress
-    }
-  }
-  transfers {
+  cosmosTransfers(first: 1) {
     nodes {
       id
       blockHeight
       txHash
-      fromAddress
-      toAddress
+      fromAddressId
+      toAddressId
       amount
       denomination
+    }
+  }
+  eVMTransfers(first: 1) {
+    nodes {
+      id
+      value
+      fromId
+      contractAddressId
+    }
+  }
+  addresses(first: 1) {
+    nodes {
+      id
+      cosmosAddress
+      evmAddress
     }
   }
 }
