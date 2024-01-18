@@ -8,7 +8,7 @@ import {
 const project: CosmosProject = {
   specVersion: "1.0.0",
   version: "0.0.1",
-  name: "iris-starter",
+  name: "humansai-starter",
   description:
     "This project can be use as a starting point for developing your Cosmos Iris based SubQuery project",
   runner: {
