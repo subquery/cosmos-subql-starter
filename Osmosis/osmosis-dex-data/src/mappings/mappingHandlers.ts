@@ -106,6 +106,7 @@ function createSwap(
     sender: msg.msg.decodedMsg.sender,
     direction,
     message,
+    msgType: msg.msg.typeUrl.toString(),
     date: new Date(msg.block.header.time.toISOString()),
   });
 }
@@ -157,7 +158,9 @@ async function createSwapRoutes(msg: CosmosMessage, swap: Swap) {
 }
 
 export async function handleMsgSwapExactAmountIn(
-  msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountInMessage
+  msg:
+    | messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountInMessage
+    | messages.osmosis.poolmanager.v1beta1.tx.MsgSwapExactAmountInMessage
 ): Promise<void> {
   logger.info(
     `Processing MsgSwapExactAmountIn at block ${msg.block.header.height.toString()}`
@@ -173,7 +176,9 @@ export async function handleMsgSwapExactAmountIn(
 }
 
 export async function handleMsgSwapExactAmountOut(
-  msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage
+  msg:
+    | messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage
+    | messages.osmosis.poolmanager.v1beta1.tx.MsgSwapExactAmountOutMessage
 ): Promise<void> {
   logger.info(
     `Processing MsgSwapExactAmountOut at block ${msg.block.header.height.toString()}`

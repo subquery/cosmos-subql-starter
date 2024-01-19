@@ -21,6 +21,7 @@ type Swap @entity {
   blockHeight: BigInt!
   date: Date!
   message: Message!
+  msgType: String!
   tokenInDenom: String
   tokenInAmount: BigInt
   tokenOutMin: BigInt
