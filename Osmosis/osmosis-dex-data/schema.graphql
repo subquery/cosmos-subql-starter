@@ -34,9 +34,11 @@ type SwapRoute @entity {
   id: ID!
   pool: Pool!
   swap: Swap!
-  tokenInDenom: String
-  tokenOutDenom: String
+  # tokenInDenom: String
+  # tokenOutDenom: String
   poolLiquidity: Float
+  tokensIn: String
+  tokensOut: String
 }
 
 type Pool @entity {

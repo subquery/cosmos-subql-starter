@@ -1,7 +1,8 @@
 import * as messages from "../types/CosmosMessageTypes";
 import { Pool, Swap, SwapRoute, Direction, Message } from "../types";
-import { CosmosBlock } from "@subql/types-cosmos";
+import { CosmosBlock, CosmosMessage } from "@subql/types-cosmos";
 import fetch from "node-fetch";
+import { Event } from "../types/proto-interfaces/tendermint/abci/types";
 
 interface DataItem {
   time: string;
@@ -109,44 +110,66 @@ function createSwap(
   });
 }
 
+async function createSwapRoutes(msg: CosmosMessage, swap: Swap) {
+  let stringified = msg.tx.tx.log;
+  if (stringified != undefined) {
+    let parsed = JSON.parse(stringified);
+    for (const obj of parsed) {
+      const { _, events } = obj;
+      let eventIndex: number = 0;
+      for (const event of events) {
+        const typedEvent = event as Event;
+        if (typedEvent.type === "token_swapped") {
+          // logger.warn(`eventIndex ${eventIndex}`);
+          let poolId: string = "";
+          let tokensIn: string = "";
+          let tokensOut: string = "";
+          for (const attr of typedEvent.attributes) {
+            // logger.warn(`key: ${attr.key}, value: ${attr.value}`);
+            switch (attr.key.toString()) {
+              case "pool_id":
+                poolId = attr.value.toString();
+                break;
+              case "tokens_in":
+                tokensIn = attr.value.toString();
+                break;
+              case "tokens_out":
+                tokensOut = attr.value.toString();
+                break;
+            }
+          }
+          const [pool, liquidity] = await checkGetPool(poolId, msg.block);
+          const swapRoute = SwapRoute.create({
+            id: `${msg.tx.hash}-${msg.idx}-${eventIndex}`,
+            poolId: pool.id,
+            swapId: swap.id,
+            poolLiquidity: liquidity,
+            tokensIn: tokensIn,
+            tokensOut: tokensOut,
+          });
+          await swapRoute.save();
+          logger.info(msg.tx.hash);
+          eventIndex += 1;
+        }
+      }
+    }
+  }
+}
+
 export async function handleMsgSwapExactAmountIn(
   msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountInMessage
 ): Promise<void> {
   logger.info(
     `Processing MsgSwapExactAmountIn at block ${msg.block.header.height.toString()}`
   );
-  // We first create a new swap record
   const swap = createSwap(msg, Direction.IN, Message.MsgSwapExactAmountIn);
   swap.tokenInDenom = msg.msg.decodedMsg.tokenIn?.denom;
   swap.tokenInAmount = msg.msg.decodedMsg.tokenIn
     ? BigInt(msg.msg.decodedMsg.tokenIn.amount)
     : undefined;
   swap.tokenOutMin = BigInt(msg.msg.decodedMsg.tokenOutMinAmount);
-
-  // Save this to the DB
   await swap.save();
-
-  // Create swap routes from the array on the message
-  let currentTokenInDenom = swap.tokenInDenom;
-  for (const route of msg.msg.decodedMsg.routes) {
-    const index = msg.msg.decodedMsg.routes.indexOf(route);
-    // Check that the pool aready exists
-    const [pool, liquidity] = await checkGetPool(
-      route.poolId.toString(),
-      msg.block
-    );
-
-    const swapRoute = SwapRoute.create({
-      id: `${msg.tx.hash}-${msg.idx}-${index}`,
-      poolId: pool.id,
-      swapId: swap.id,
-      tokenInDenom: currentTokenInDenom,
-      tokenOutDenom: route.tokenOutDenom,
-      poolLiquidity: liquidity,
-    });
-    currentTokenInDenom = route.tokenOutDenom;
-    await swapRoute.save();
-  }
+  createSwapRoutes(msg, swap);
 }
 
 export async function handleMsgSwapExactAmountOut(
@@ -155,38 +178,14 @@ export async function handleMsgSwapExactAmountOut(
   logger.info(
     `Processing MsgSwapExactAmountOut at block ${msg.block.header.height.toString()}`
   );
-  // We first create a new swap record
   const swap = createSwap(msg, Direction.OUT, Message.MsgSwapExactAmountOut);
   swap.tokenOutDenom = msg.msg.decodedMsg.tokenOut.denom;
   swap.tokenOutAmount = msg.msg.decodedMsg.tokenOut
     ? BigInt(msg.msg.decodedMsg.tokenOut.amount)
     : undefined;
   swap.tokenInMax = BigInt(msg.msg.decodedMsg.tokenInMaxAmount);
-
-  // Save this to the DB
   await swap.save();
-
-  // Create swap routes from the array on the message
-  let currentTokenOutDenom = swap.tokenOutDenom;
-  for (const route of msg.msg.decodedMsg.routes) {
-    const index = msg.msg.decodedMsg.routes.indexOf(route);
-    // Check that the pool aready exists
-    const [pool, liquidity] = await checkGetPool(
-      route.poolId.toString(),
-      msg.block
-    );
-
-    const swapRoute = SwapRoute.create({
-      id: `${msg.tx.hash}-${msg.idx}-${index}`,
-      poolId: pool.id,
-      swapId: swap.id,
-      tokenInDenom: route.tokenInDenom,
-      tokenOutDenom: currentTokenOutDenom,
-      poolLiquidity: liquidity,
-    });
-    currentTokenOutDenom = route.tokenInDenom;
-    await swapRoute.save();
-  }
+  createSwapRoutes(msg, swap);
 }
 
 export async function handleMsgJoinSwapShareAmountOut(
@@ -195,27 +194,10 @@ export async function handleMsgJoinSwapShareAmountOut(
   logger.info(
     `Processing MsgJoinSwapShareAmountOut at block ${msg.block.header.height.toString()}`
   );
-  // We first create a new swap record
   const swap = createSwap(msg, Direction.IN, Message.MsgJoinSwapShareAmountOut);
   swap.tokenInDenom = msg.msg.decodedMsg.tokenInDenom;
   swap.tokenInMax = BigInt(msg.msg.decodedMsg.tokenInMaxAmount);
   swap.tokenOutAmount = BigInt(msg.msg.decodedMsg.shareOutAmount);
-
-  // Save this to the DB
   await swap.save();
-
-  // Create swap routes from the array on the message
-  const [pool, liquidity] = await checkGetPool(
-    msg.msg.decodedMsg.poolId.toString(),
-    msg.block
-  );
-
-  const swapRoute = SwapRoute.create({
-    id: `${msg.tx.hash}-${msg.idx}`,
-    poolId: pool.id,
-    swapId: swap.id,
-    tokenInDenom: msg.msg.decodedMsg.tokenInDenom,
-    poolLiquidity: liquidity,
-  });
-  await swapRoute.save();
+  createSwapRoutes(msg, swap);
 }
