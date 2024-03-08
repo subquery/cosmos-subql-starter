@@ -35,7 +35,12 @@ const project: CosmosProject = {
      * If you use a rate limited endpoint, adjust the --batch-size and --workers parameters
      * These settings can be found in your docker-compose.yaml, they will slow indexing but prevent your project being rate limited
      */
-    endpoint: ["https://rpc-eu-1.kyve.network"],
+    endpoint: [
+      "https://rpc-kyve.ecostake.com",
+      "https://kyve.rpc.liveraven.net",
+      "https://rpc-kyve.imperator.co",
+      "https://kyve-rpc.ibs.team",
+    ],
     chaintypes: new Map([
       [
         "cosmos.slashing.v1beta1",
