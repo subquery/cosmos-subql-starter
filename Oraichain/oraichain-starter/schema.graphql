@@ -29,4 +29,6 @@ type Message @entity {
   from: String!
   to: String!
   amount: String!
+  status: String!
+  timestamp: String!
 }

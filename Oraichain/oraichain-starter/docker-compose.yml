@@ -26,7 +26,7 @@ services:
     environment:
       DB_USER: postgres
       DB_PASS: postgres
-      DB_DATABASE: postgres
+      DB_DATABASE: my_db
       DB_HOST: postgres
       DB_PORT: 5432
     volumes:
@@ -36,7 +36,7 @@ services:
       - -f=/app
       - --db-schema=app
       - --workers=4
-      - --batch-size=30
+      - --batch-size=1000
       - --unfinalized-blocks=true
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
@@ -57,7 +57,7 @@ services:
     environment:
       DB_USER: postgres
       DB_PASS: postgres
-      DB_DATABASE: postgres
+      DB_DATABASE: my_db
       DB_HOST: postgres
       DB_PORT: 5432
     command:

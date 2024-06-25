@@ -1,10 +1,5 @@
 import { TransferEvent, Message } from "../types";
-import {
-  CosmosEvent,
-  CosmosBlock,
-  CosmosMessage,
-  CosmosTransaction,
-} from "@subql/types-cosmos";
+import { CosmosEvent, CosmosBlock, CosmosMessage, CosmosTransaction } from "@subql/types-cosmos";
 
 /*
 export async function handleBlock(block: CosmosBlock): Promise<void> {
@@ -25,6 +20,13 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 */
 
 export async function handleMessage(msg: CosmosMessage): Promise<void> {
+  console.log("handleMessage");
+  const data = {
+    status: msg.tx.tx.code,
+    timestamp: msg.block.block.header.time.nanoseconds,
+  };
+  console.dir({ data }, { depth: null });
+
   const messageRecord = Message.create({
     id: `${msg.tx.hash}-${msg.idx}`,
     blockHeight: BigInt(msg.block.block.header.height),
@@ -32,11 +34,14 @@ export async function handleMessage(msg: CosmosMessage): Promise<void> {
     from: msg.msg.decodedMsg.fromAddress,
     to: msg.msg.decodedMsg.toAddress,
     amount: JSON.stringify(msg.msg.decodedMsg.amount),
+    status: msg.tx.tx.code.toString(),
+    timestamp: msg.block.block.header.time.nanoseconds?.toString() ?? "0",
   });
   await messageRecord.save();
 }
 
 export async function handleEvent(event: CosmosEvent): Promise<void> {
+  console.log("handleEvent");
   const eventRecord = TransferEvent.create({
     id: `${event.tx.hash}-${event.msg.idx}-${event.idx}`,
     blockHeight: BigInt(event.block.block.header.height),
