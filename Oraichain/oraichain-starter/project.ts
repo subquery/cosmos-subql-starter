@@ -59,7 +59,8 @@ const project: CosmosProject = {
   dataSources: [
     {
       kind: CosmosDatasourceKind.Runtime,
-      startBlock: 25350000,
+      // startBlock: 25380000,
+      startBlock: 25497767,
       mapping: {
         file: "./dist/index.js",
         handlers: [
@@ -78,6 +79,13 @@ const project: CosmosProject = {
             kind: CosmosHandlerKind.Message,
             filter: {
               type: "/cosmos.bank.v1beta1.MsgSend",
+            },
+          },
+          {
+            handler: "handleMsgExecuteContract",
+            kind: CosmosHandlerKind.Message,
+            filter: {
+              type: "/cosmwasm.wasm.v1.MsgExecuteContract",
             },
           },
         ],

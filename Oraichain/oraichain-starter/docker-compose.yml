@@ -26,7 +26,7 @@ services:
     environment:
       DB_USER: postgres
       DB_PASS: postgres
-      DB_DATABASE: my_db
+      DB_DATABASE: postgres
       DB_HOST: postgres
       DB_PORT: 5432
     volumes:
@@ -57,7 +57,7 @@ services:
     environment:
       DB_USER: postgres
       DB_PASS: postgres
-      DB_DATABASE: my_db
+      DB_DATABASE: postgres
       DB_HOST: postgres
       DB_PORT: 5432
     command:
