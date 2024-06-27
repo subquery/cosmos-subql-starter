@@ -20,9 +20,6 @@ type TransferEvent @entity {
   recipient: String!
   sender: String!
   amount: String!
-  status: String!
-  fee: String!
-  timestamp: String!
 }
 
 type Message @entity {
@@ -31,11 +28,5 @@ type Message @entity {
   txHash: String!
   from: String!
   to: String!
-  type: String
   amount: String!
-  status: String!
-  fee: String!
-  timestamp: String!
-  tokenContractAddress: String
-  denom: String
 }

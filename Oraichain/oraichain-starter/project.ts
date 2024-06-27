@@ -1,4 +1,8 @@
-import { CosmosDatasourceKind, CosmosHandlerKind, CosmosProject } from "@subql/types-cosmos";
+import {
+  CosmosDatasourceKind,
+  CosmosHandlerKind,
+  CosmosProject,
+} from "@subql/types-cosmos";
 
 // Can expand the Datasource processor types via the genreic param
 const project: CosmosProject = {
@@ -59,8 +63,7 @@ const project: CosmosProject = {
   dataSources: [
     {
       kind: CosmosDatasourceKind.Runtime,
-      // startBlock: 25380000,
-      startBlock: 25497767,
+      startBlock: 1,
       mapping: {
         file: "./dist/index.js",
         handlers: [
@@ -79,13 +82,6 @@ const project: CosmosProject = {
             kind: CosmosHandlerKind.Message,
             filter: {
               type: "/cosmos.bank.v1beta1.MsgSend",
-            },
-          },
-          {
-            handler: "handleMsgExecuteContract",
-            kind: CosmosHandlerKind.Message,
-            filter: {
-              type: "/cosmwasm.wasm.v1.MsgExecuteContract",
             },
           },
         ],
