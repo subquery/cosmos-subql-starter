@@ -94,8 +94,7 @@ async function checkGetPool(id: string, block: CosmosBlock): Promise<[Pool, numb
 function createSwap(
   msg:
     | messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountInMessage
-    | messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage
-    | messages.osmosis.gamm.v1beta1.tx.MsgJoinSwapShareAmountOutMessage,
+    | messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage,
   direction: Direction,
   message: Message
 ): Swap {
