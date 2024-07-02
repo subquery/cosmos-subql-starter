@@ -122,6 +122,9 @@ export async function handleMsgSwapExactAmountIn(
     : undefined;
   swap.tokenOutMin = BigInt(msg.msg.decodedMsg.tokenOutMinAmount);
 
+  const lastRoute = msg.msg.decodedMsg.routes[msg.msg.decodedMsg.routes.length - 1];
+  swap.tokenOutDenom = lastRoute?.tokenOutDenom;
+
   // Save this to the DB
   await swap.save();
 
@@ -156,6 +159,9 @@ export async function handleMsgSwapExactAmountOut(
     ? BigInt(msg.msg.decodedMsg.tokenOut.amount)
     : undefined;
   swap.tokenInMax = BigInt(msg.msg.decodedMsg.tokenInMaxAmount);
+
+  const lastRoute = msg.msg.decodedMsg.routes[msg.msg.decodedMsg.routes.length - 1];
+  swap.tokenInDenom = lastRoute?.tokenInDenom;
 
   // Save this to the DB
   await swap.save();
