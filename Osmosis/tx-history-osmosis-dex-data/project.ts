@@ -31,7 +31,8 @@ const project: CosmosProject = {
      * If you use a rate limited endpoint, adjust the --batch-size and --workers parameters
      * These settings can be found in your docker-compose.yaml, they will slow indexing but prevent your project being rate limited
      */
-    endpoint: ["https://osmosis.rpc.orai.io"],
+    // endpoint: ["https://osmosis.rpc.orai.io"],
+    endpoint: ["https://rpc.osmosis.zone:443"],
     chaintypes: new Map([
       [
         "osmosis.gamm.v1beta1",
@@ -41,12 +42,27 @@ const project: CosmosProject = {
         },
       ],
       [
-        " osmosis.poolmanager.v1beta1",
+        "osmosis.poolmanager.v1beta1",
         {
           file: "./proto/osmosis/poolmanager/v1beta1/swap_route.proto",
           messages: ["SwapAmountOutRoute", "SwapAmountInRoute"],
         },
       ],
+      [
+        "osmosis.poolmanager.v1beta1.tx",
+        {
+          file: "./proto/osmosis/poolmanager/v1beta1/tx.proto",
+          messages: ["MsgSwapExactAmountIn"],
+        },
+      ],
+      [
+        "cosmwasm.wasm.v1",
+        {
+          file: "./proto/cosmwasm/wasm/v1/tx.proto",
+          messages: ["MsgExecuteContract"],
+        },
+      ],
+
       [
         "cosmos.base.v1beta1",
         {
@@ -59,10 +75,12 @@ const project: CosmosProject = {
   dataSources: [
     {
       kind: CosmosDatasourceKind.Runtime,
-      startBlock: 17427380,
+      startBlock: 17463400,
+
       mapping: {
         file: "./dist/index.js",
         handlers: [
+          // swap exact in with gamm (done)
           {
             handler: "handleMsgSwapExactAmountIn",
             kind: CosmosHandlerKind.Message,
@@ -70,6 +88,26 @@ const project: CosmosProject = {
               type: "/osmosis.gamm.v1beta1.MsgSwapExactAmountIn",
             },
           },
+
+          // swap in osmosis app via pool ( done )
+          {
+            handler: "handlePoolManagerMsgSwapExactAmountIn",
+            kind: CosmosHandlerKind.Message,
+            filter: {
+              type: "/osmosis.poolmanager.v1beta1.MsgSwapExactAmountIn",
+            },
+          },
+
+          // swap in oraidex with MsgExecuteContract (done)
+          {
+            handler: "handleMsgExecuteContractForSwap",
+            kind: CosmosHandlerKind.Message,
+            filter: {
+              type: "/cosmwasm.wasm.v1.MsgExecuteContract",
+            },
+          },
+
+          // swap exact out with gamm (done)
           {
             handler: "handleMsgSwapExactAmountOut",
             kind: CosmosHandlerKind.Message,

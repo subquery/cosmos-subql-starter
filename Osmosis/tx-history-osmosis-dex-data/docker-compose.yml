@@ -36,9 +36,8 @@ services:
       - -f=/app
       - --db-schema=app
       - --unfinalized-blocks=true
-      - --batch-size=10
+      - --batch-size=5
       - --unsafe
-      - --log-level=debug
     healthcheck:
       test: ["CMD", "curl", "-f", "http://subquery-node:3000/ready"]
       interval: 3s

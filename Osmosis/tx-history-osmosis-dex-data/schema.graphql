@@ -10,7 +10,7 @@ enum Direction {
 enum Message {
   MsgSwapExactAmountIn
   MsgSwapExactAmountOut
-  MsgJoinSwapShareAmountOut
+  MsgExecuteContract
 }
 
 type Swap @entity {

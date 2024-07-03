@@ -24,11 +24,12 @@ async function getObjectByDate(
 ): Promise<number | undefined> {
   let selectedObject: number | undefined;
 
-  dataArray.forEach((data) => {
-    if (data.time === targetDate) {
-      selectedObject = data.value;
-    }
-  });
+  Array.isArray(dataArray) &&
+    dataArray.forEach((data) => {
+      if (data.time === targetDate) {
+        selectedObject = data.value;
+      }
+    });
 
   return selectedObject;
 }
@@ -43,7 +44,6 @@ async function getLiquidityPool(pool_id: string) {
     let content = await response.json();
     logger.warn(`Response status ${response.status}`);
     const parsedContent: DataItem[] = JSON.parse(JSON.stringify(content));
-    logger.info("parsedContent: ", parsedContent);
     return parsedContent;
   } catch (error) {
     logger.error(`Error at getLiquidityPool: ${error}`);
@@ -94,7 +94,9 @@ async function checkGetPool(id: string, block: CosmosBlock): Promise<[Pool, numb
 function createSwap(
   msg:
     | messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountInMessage
-    | messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage,
+    | messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage
+    | messages.cosmwasm.wasm.v1.tx.MsgExecuteContractMessage
+    | messages.osmosis.poolmanager.v1beta1.tx.MsgSwapExactAmountInMessage,
   direction: Direction,
   message: Message
 ): Swap {
@@ -109,10 +111,34 @@ function createSwap(
   });
 }
 
+type AnyObject = {
+  [key: string]: any;
+};
+
+function convertBigIntToString(obj: AnyObject): AnyObject {
+  const newObj: AnyObject = {};
+
+  for (const key in obj) {
+    if (typeof obj[key] === "bigint") {
+      newObj[key] = obj[key].toString();
+    } else if (typeof obj[key] === "object" && obj[key] !== null) {
+      // Recursively convert nested objects
+      newObj[key] = convertBigIntToString(obj[key]);
+    } else {
+      // Copy values as-is for non-bigint types
+      newObj[key] = obj[key];
+    }
+  }
+
+  return newObj;
+}
+
 export async function handleMsgSwapExactAmountIn(
   msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountInMessage
 ): Promise<void> {
-  logger.info(`Processing MsgSwapExactAmountIn at block ${msg.block.header.height.toString()}`);
+  logger.info(
+    `Processing handleMsgSwapExactAmountIn at block ${msg.block.header.height.toString()}`
+  );
   logger.info(`infotokne: ${JSON.stringify(msg.msg.decodedMsg)}`);
   // We first create a new swap record
   const swap = createSwap(msg, Direction.IN, Message.MsgSwapExactAmountIn);
@@ -148,10 +174,102 @@ export async function handleMsgSwapExactAmountIn(
   }
 }
 
+export async function handlePoolManagerMsgSwapExactAmountIn(
+  msg: messages.osmosis.poolmanager.v1beta1.tx.MsgSwapExactAmountInMessage
+): Promise<void> {
+  logger.info(
+    `Processing handlePoolManagerMsgSwapExactAmountIn at block ${msg.block.header.height.toString()}`
+  );
+  // We first create a new swap record
+  const swap = createSwap(msg, Direction.IN, Message.MsgSwapExactAmountIn);
+  swap.tokenInDenom = msg.msg.decodedMsg.tokenIn?.denom;
+  swap.tokenInAmount = msg.msg.decodedMsg.tokenIn
+    ? BigInt(msg.msg.decodedMsg.tokenIn.amount)
+    : undefined;
+  swap.tokenOutMin = BigInt(msg.msg.decodedMsg.tokenOutMinAmount);
+
+  const lastRoute = msg.msg.decodedMsg.routes[msg.msg.decodedMsg.routes.length - 1];
+  swap.tokenOutDenom = lastRoute?.tokenOutDenom;
+
+  // Save this to the DB
+  await swap.save();
+
+  // Create swap routes from the array on the message
+  let currentTokenInDenom = swap.tokenInDenom;
+  for (const route of msg.msg.decodedMsg.routes) {
+    const index = msg.msg.decodedMsg.routes.indexOf(route);
+    // Check that the pool aready exists
+    const [pool, liquidity] = await checkGetPool(route.poolId.toString(), msg.block);
+
+    const swapRoute = SwapRoute.create({
+      id: `${msg.tx.hash}-${msg.idx}-${index}`,
+      poolId: pool.id,
+      swapId: swap.id,
+      tokenInDenom: currentTokenInDenom,
+      tokenOutDenom: route.tokenOutDenom,
+      poolLiquidity: liquidity,
+    });
+    currentTokenInDenom = route.tokenOutDenom;
+    await swapRoute.save();
+  }
+}
+
+export async function handleMsgExecuteContractForSwap(
+  msg: messages.cosmwasm.wasm.v1.tx.MsgExecuteContractMessage
+): Promise<void> {
+  if (!("swap_and_action" in msg.msg.decodedMsg.msg)) return;
+
+  const convertedObject = convertBigIntToString(msg);
+  logger.info(
+    `Processing handleMsgExecuteContractForSwap at block ${msg.block.header.height.toString()}`
+  );
+
+  // We first create a new swap record
+  const swap = createSwap(msg, Direction.IN, Message.MsgExecuteContract);
+
+  // @ts-ignore
+  const routes = msg.msg.decodedMsg.msg.swap_and_action.user_swap.swap_exact_asset_in.operations;
+
+  swap.tokenInDenom = msg.msg.decodedMsg.funds ? msg.msg.decodedMsg.funds[0].denom : "";
+
+  swap.tokenInAmount = msg.msg.decodedMsg.funds
+    ? BigInt(msg.msg.decodedMsg.funds[0].amount)
+    : undefined;
+
+  // @ts-ignore
+  swap.tokenOutDenom = msg.msg.decodedMsg.msg.swap_and_action.min_asset?.native?.denom;
+  // @ts-ignore
+  swap.tokenOutAmount = msg.msg.decodedMsg.msg.swap_and_action.min_asset?.native?.amount;
+
+  // Save this to the DB
+  await swap.save();
+
+  // Create swap routes from the array on the message
+  // let currentTokenInDenom = swap.tokenInDenom;
+  // for (const route of msg.msg.decodedMsg.routes) {
+  //   const index = msg.msg.decodedMsg.routes.indexOf(route);
+  //   // Check that the pool aready exists
+  //   const [pool, liquidity] = await checkGetPool(route.poolId.toString(), msg.block);
+
+  //   const swapRoute = SwapRoute.create({
+  //     id: `${msg.tx.hash}-${msg.idx}-${index}`,
+  //     poolId: pool.id,
+  //     swapId: swap.id,
+  //     tokenInDenom: currentTokenInDenom,
+  //     tokenOutDenom: route.tokenOutDenom,
+  //     poolLiquidity: liquidity,
+  //   });
+  //   currentTokenInDenom = route.tokenOutDenom;
+  //   await swapRoute.save();
+  // }
+}
+
 export async function handleMsgSwapExactAmountOut(
   msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage
 ): Promise<void> {
-  logger.info(`Processing MsgSwapExactAmountOut at block ${msg.block.header.height.toString()}`);
+  logger.info(
+    `Processing handleMsgSwapExactAmountOut at block ${msg.block.header.height.toString()}`
+  );
   // We first create a new swap record
   const swap = createSwap(msg, Direction.OUT, Message.MsgSwapExactAmountOut);
   swap.tokenOutDenom = msg.msg.decodedMsg.tokenOut.denom;
