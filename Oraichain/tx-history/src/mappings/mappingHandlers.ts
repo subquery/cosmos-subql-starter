@@ -51,13 +51,13 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
   for (const attr of event.event.attributes) {
     switch (attr.key) {
       case "recipient":
-        eventRecord.recipient = attr.value;
+        eventRecord.recipient = attr.value as any;
         break;
       case "amount":
-        eventRecord.amount = attr.value;
+        eventRecord.amount = attr.value as any;
         break;
       case "sender":
-        eventRecord.sender = attr.value;
+        eventRecord.sender = attr.value as any;
         break;
       default:
         break;
@@ -66,7 +66,9 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
   await eventRecord.save();
 }
 
-export async function handleMsgExecuteContract(msg: CosmosMessage): Promise<void> {
+export async function handleMsgExecuteContract(
+  msg: CosmosMessage
+): Promise<void> {
   const decodedData = msg.msg.decodedMsg;
 
   const basicTxData = {
@@ -79,8 +81,10 @@ export async function handleMsgExecuteContract(msg: CosmosMessage): Promise<void
     timestamp: msg.block.block.header.time?.valueOf().toString() ?? "0",
   };
 
-  let mainData: Pick<Message, "from" | "to" | "tokenContractAddress" | "amount" | "type"> | null =
-    null;
+  let mainData: Pick<
+    Message,
+    "from" | "to" | "tokenContractAddress" | "amount" | "type"
+  > | null = null;
 
   // send cw20
   if (decodedData.msg && "send" in decodedData.msg) {
