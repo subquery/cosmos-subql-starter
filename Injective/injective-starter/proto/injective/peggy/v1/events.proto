@@ -40,12 +40,10 @@ message EventValsetUpdateRequest {
   uint64 valset_height = 2;
   repeated BridgeValidator valset_members = 3;
   string reward_amount = 4 [
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
   string reward_token = 5;
-
-
 }
 message EventSetOrchestratorAddresses {
   string validator_address = 1;
@@ -78,7 +76,6 @@ message EventConfirmBatch {
   string orchestrator_address = 2;
 }
 
-
 message EventAttestationVote {
   uint64 event_nonce = 1;
   bytes attestation_id = 2;
@@ -93,7 +90,7 @@ message EventDepositClaim {
   string cosmos_receiver = 5;
   string token_contract = 6;
   string amount = 7 [
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
   string orchestrator_address = 8;
@@ -128,18 +125,24 @@ message EventValsetUpdateClaim {
   uint64 valset_nonce = 4;
   repeated BridgeValidator valset_members = 5;
   string reward_amount = 6 [
-    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
     (gogoproto.nullable) = false
   ];
   string reward_token = 7;
   string orchestrator_address = 8;
 }
 
-message EventCancelSendToEth {
-  uint64 outgoing_tx_id = 1;
-}
+message EventCancelSendToEth { uint64 outgoing_tx_id = 1; }
 
 message EventSubmitBadSignatureEvidence {
   string bad_eth_signature = 1;
   string bad_eth_signature_subject = 2;
+}
+
+message EventValidatorSlash {
+  int64 power = 1;
+  string reason = 2;
+  string consensus_address = 3;
+  string operator_address = 4;
+  string moniker = 5;
 }
