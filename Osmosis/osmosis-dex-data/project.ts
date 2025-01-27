@@ -38,7 +38,7 @@ const project: CosmosProject = {
     endpoint: ["https://rpc.osmosis.zone:443"],
     chaintypes: new Map([
       [
-        "osmosis.gamm.v1beta1",
+        "osmosis.gamm.v1beta1Swaps",
         {
           file: "./proto/osmosis/gamm/v1beta1/tx.proto",
           messages: [
@@ -46,6 +46,13 @@ const project: CosmosProject = {
             "MsgSwapExactAmountOut",
             "MsgJoinSwapShareAmountOut",
           ],
+        },
+      ],
+      [
+        " osmosis.poolmanager.v1beta1Swaps",
+        {
+          file: "./proto/osmosis/poolmanager/v1beta1/tx.proto",
+          messages: ["MsgSwapExactAmountIn", "MsgSwapExactAmountOut"],
         },
       ],
       [
@@ -67,7 +74,7 @@ const project: CosmosProject = {
   dataSources: [
     {
       kind: CosmosDatasourceKind.Runtime,
-      startBlock: 13200000,
+      startBlock: 13338625,
       mapping: {
         file: "./dist/index.js",
         handlers: [
@@ -79,10 +86,24 @@ const project: CosmosProject = {
             },
           },
           {
+            handler: "handleMsgSwapExactAmountIn",
+            kind: CosmosHandlerKind.Message,
+            filter: {
+              type: "/osmosis.poolmanager.v1beta1.MsgSwapExactAmountIn",
+            },
+          },
+          {
             handler: "handleMsgSwapExactAmountOut",
             kind: CosmosHandlerKind.Message,
             filter: {
               type: "/osmosis.gamm.v1beta1.MsgSwapExactAmountOut",
+            },
+          },
+          {
+            handler: "handleMsgSwapExactAmountOut",
+            kind: CosmosHandlerKind.Message,
+            filter: {
+              type: "/osmosis.poolmanager.v1beta1.MsgSwapExactAmountOut",
             },
           },
           {
