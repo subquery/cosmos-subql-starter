@@ -20,7 +20,7 @@ export async function handleLog(transferLog: TransferLog): Promise<void> {
 }
 
 export async function handleTransaction(
-  approveCallTransaction: ApproveTransaction
+  approveCallTransaction: ApproveTransaction,
 ): Promise<void> {
   logger.info("approval: " + approveCallTransaction.hash);
   assert(approveCallTransaction.args, "Expected args to exist");

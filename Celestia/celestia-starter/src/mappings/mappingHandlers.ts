@@ -27,7 +27,7 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 export async function handleEvent(event: CosmosEvent): Promise<void> {
   logger.info(`Found transfer event at ${event.block.blockId}`);
   const newTransfers = new Transfers(
-    `${event.tx.hash}-${event.msg.idx}-${event.idx}`
+    `${event.tx.hash}-${event.msg.idx}-${event.idx}`,
   );
 
   newTransfers.blockHeight = BigInt(event.block.block.header.height);

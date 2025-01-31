@@ -26,7 +26,7 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 */
 
 export async function handleMessage(
-  msg: CosmosMessage<MsgSend>
+  msg: CosmosMessage<MsgSend>,
 ): Promise<void> {
   const messageRecord = Message.create({
     id: `${msg.tx.hash}-${msg.idx}`,

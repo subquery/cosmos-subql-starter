@@ -10,7 +10,7 @@ import {
 
 function kavaToEthAddress(kavaAddress: string) {
   return ethers.utils.getAddress(
-    ethers.utils.hexlify(bech32.fromWords(bech32.decode(kavaAddress).words))
+    ethers.utils.hexlify(bech32.fromWords(bech32.decode(kavaAddress).words)),
   );
 }
 
@@ -18,14 +18,14 @@ function ethToKavaAddress(ethereumAddress: string) {
   return bech32.encode(
     "kava",
     bech32.toWords(
-      ethers.utils.arrayify(ethers.utils.getAddress(ethereumAddress))
-    )
+      ethers.utils.arrayify(ethers.utils.getAddress(ethereumAddress)),
+    ),
   );
 }
 
 async function checkGetUserAddress(
   cosmosAddress: string,
-  evmAddress: string
+  evmAddress: string,
 ): Promise<Address> {
   let addressId = `${cosmosAddress}-${evmAddress}`;
   let userRecord = await Address.get(addressId);
@@ -56,7 +56,7 @@ export async function handleEVMLog(transferLog: TransferLog): Promise<void> {
     contractAddressId: (
       await checkGetUserAddress(
         ethToKavaAddress(contractAddress),
-        contractAddress
+        contractAddress,
       )
     ).id.toString(),
   });

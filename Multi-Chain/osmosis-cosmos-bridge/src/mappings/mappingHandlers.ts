@@ -20,7 +20,7 @@ async function checkGetUser(user: string): Promise<User> {
 }
 
 async function getEssensialValues(
-  event: CosmosEvent
+  event: CosmosEvent,
 ): Promise<EssentialValues> {
   let sender;
   let amount;
@@ -48,7 +48,7 @@ async function populateValuesFromSource(
   amount: string,
   receiver: string,
   sequence: string,
-  event: CosmosEvent
+  event: CosmosEvent,
 ) {
   let bridgeTransactionRecord = await BridgeEvent.get(sequence);
   if (!bridgeTransactionRecord) {
@@ -72,7 +72,7 @@ async function populateValuesFromDestination(
   amount: string,
   receiver: string,
   sequence: string,
-  event: CosmosEvent
+  event: CosmosEvent,
 ) {
   let bridgeTransactionRecord = await BridgeEvent.get(sequence);
   if (!bridgeTransactionRecord) {
@@ -93,15 +93,14 @@ async function populateValuesFromDestination(
 }
 
 export async function handleOsmosisReceiveEvent(
-  event: CosmosEvent
+  event: CosmosEvent,
 ): Promise<void> {
   logger.info(
-    `Handling an incoming transfer event on Osmosis from ${event.tx.hash.toString()}`
+    `Handling an incoming transfer event on Osmosis from ${event.tx.hash.toString()}`,
   );
 
-  const { sender, amount, receiver, sequence } = await getEssensialValues(
-    event
-  );
+  const { sender, amount, receiver, sequence } =
+    await getEssensialValues(event);
   logger.info(sender);
   logger.info(sequence);
   logger.info(receiver);
@@ -112,42 +111,40 @@ export async function handleOsmosisReceiveEvent(
       amount.toString(),
       receiver,
       sequence,
-      event
+      event,
     );
   }
 }
 
 export async function handleCosmosHubReceiveEvent(
-  event: CosmosEvent
+  event: CosmosEvent,
 ): Promise<void> {
   logger.info(
-    `Handling an incoming transfer event on Cosmos Hub from ${event.tx.hash.toString()}`
+    `Handling an incoming transfer event on Cosmos Hub from ${event.tx.hash.toString()}`,
   );
 
-  const { sender, amount, receiver, sequence } = await getEssensialValues(
-    event
-  );
+  const { sender, amount, receiver, sequence } =
+    await getEssensialValues(event);
   if (sequence && sender && receiver && amount) {
     populateValuesFromDestination(
       sender,
       amount.toString(),
       receiver,
       sequence,
-      event
+      event,
     );
   }
 }
 
 export async function handleCosmosHubSendEvent(
-  event: CosmosEvent
+  event: CosmosEvent,
 ): Promise<void> {
   logger.info(
-    `Handling an outgoing transfer event on Cosmos Hub from ${event.tx.hash.toString()}`
+    `Handling an outgoing transfer event on Cosmos Hub from ${event.tx.hash.toString()}`,
   );
 
-  const { sender, amount, receiver, sequence } = await getEssensialValues(
-    event
-  );
+  const { sender, amount, receiver, sequence } =
+    await getEssensialValues(event);
 
   if (sequence && sender && receiver && amount) {
     populateValuesFromSource(
@@ -155,21 +152,20 @@ export async function handleCosmosHubSendEvent(
       amount.toString(),
       receiver,
       sequence,
-      event
+      event,
     );
   }
 }
 
 export async function handleOsmosisSendEvent(
-  event: CosmosEvent
+  event: CosmosEvent,
 ): Promise<void> {
   logger.info(
-    `Handling an outgoing transfer event on Osmosis from ${event.tx.hash.toString()}`
+    `Handling an outgoing transfer event on Osmosis from ${event.tx.hash.toString()}`,
   );
 
-  const { sender, amount, receiver, sequence } = await getEssensialValues(
-    event
-  );
+  const { sender, amount, receiver, sequence } =
+    await getEssensialValues(event);
 
   if (sequence && sender && receiver && amount) {
     populateValuesFromSource(
@@ -177,7 +173,7 @@ export async function handleOsmosisSendEvent(
       amount.toString(),
       receiver,
       sequence,
-      event
+      event,
     );
   }
 }

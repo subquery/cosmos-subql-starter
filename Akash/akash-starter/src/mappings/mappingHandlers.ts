@@ -25,14 +25,14 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 
 export async function handleReward(event: CosmosEvent): Promise<void> {
   logger.info(
-    `New Reward Withdraw event at block ${event.block.header.height.toString()}`
+    `New Reward Withdraw event at block ${event.block.header.height.toString()}`,
   );
 
   const recordAmountString = event.event.attributes.find(
-    (a) => a.key === "amount"
+    (a) => a.key === "amount",
   )?.value;
   const validatorAddress = event.event.attributes.find(
-    (a) => a.key === "validator"
+    (a) => a.key === "validator",
   )?.value;
   const delegatorAddress = event.tx.tx.events
     .find((e) => e.type === "coins_received")
@@ -46,7 +46,7 @@ export async function handleReward(event: CosmosEvent): Promise<void> {
   // Confirm we have all required values
   assert(
     rewardBigInt && validatorAddress && delegatorAddress,
-    "No reward or no msg found"
+    "No reward or no msg found",
   );
 
   const rewardRecord = DelegatorReward.create({
@@ -76,7 +76,7 @@ async function handleDelegator(reward: bigint, delegatorAddress: string) {
       totalRewards: reward,
     });
     logger.info(
-      "New delegator" + delegatorAddress + "with reward" + reward.toString()
+      "New delegator" + delegatorAddress + "with reward" + reward.toString(),
     );
   } else {
     // Update delegators total

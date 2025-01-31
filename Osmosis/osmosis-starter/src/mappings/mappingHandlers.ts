@@ -22,7 +22,7 @@ function createSwap(
     | messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage
     | messages.osmosis.gamm.v1beta1.tx.MsgJoinSwapShareAmountOutMessage,
   direction: Direction,
-  message: Message
+  message: Message,
 ): Swap {
   return Swap.create({
     id: `${msg.tx.hash}-${msg.idx}`,
@@ -36,10 +36,10 @@ function createSwap(
 }
 
 export async function handleMsgSwapExactAmountIn(
-  msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountInMessage
+  msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountInMessage,
 ): Promise<void> {
   logger.info(
-    `Processing MsgSwapExactAmountIn at block ${msg.block.header.height.toString()}`
+    `Processing MsgSwapExactAmountIn at block ${msg.block.header.height.toString()}`,
   );
   // We first create a new swap record
   const swap = createSwap(msg, Direction.IN, Message.MsgSwapExactAmountIn);
@@ -72,10 +72,10 @@ export async function handleMsgSwapExactAmountIn(
 }
 
 export async function handleMsgSwapExactAmountOut(
-  msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage
+  msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage,
 ): Promise<void> {
   logger.info(
-    `Processing MsgSwapExactAmountOut at block ${msg.block.header.height.toString()}`
+    `Processing MsgSwapExactAmountOut at block ${msg.block.header.height.toString()}`,
   );
   // We first create a new swap record
   const swap = createSwap(msg, Direction.OUT, Message.MsgSwapExactAmountOut);
@@ -108,10 +108,10 @@ export async function handleMsgSwapExactAmountOut(
 }
 
 export async function handleMsgJoinSwapShareAmountOut(
-  msg: messages.osmosis.gamm.v1beta1.tx.MsgJoinSwapShareAmountOutMessage
+  msg: messages.osmosis.gamm.v1beta1.tx.MsgJoinSwapShareAmountOutMessage,
 ): Promise<void> {
   logger.info(
-    `Processing MsgJoinSwapShareAmountOut at block ${msg.block.header.height.toString()}`
+    `Processing MsgJoinSwapShareAmountOut at block ${msg.block.header.height.toString()}`,
   );
   // We first create a new swap record
   const swap = createSwap(msg, Direction.IN, Message.MsgJoinSwapShareAmountOut);
@@ -125,7 +125,7 @@ export async function handleMsgJoinSwapShareAmountOut(
   // Create swap routes from the array on the message
   const pool = await checkGetPool(
     msg.msg.decodedMsg.poolId.toString(),
-    msg.block
+    msg.block,
   );
 
   const swapRoute = SwapRoute.create({

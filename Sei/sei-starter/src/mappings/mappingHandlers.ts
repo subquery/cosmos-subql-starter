@@ -3,7 +3,7 @@ import { ExchangeRate, DailyAggregation } from "../types";
 
 async function updateDailyAggregation(
   date: Date,
-  priceUSD: number
+  priceUSD: number,
 ): Promise<void> {
   const id = date.toISOString().slice(0, 10);
   let aggregation = await DailyAggregation.get(id);
@@ -25,15 +25,15 @@ async function updateDailyAggregation(
 }
 
 export async function handleFundingRateChangeEvent(
-  event: CosmosEvent
+  event: CosmosEvent,
 ): Promise<void> {
   // We create a new entity using the transaction hash and message index as a unique ID
   logger.info(
-    `New funding rate change at block ${event.block.block.header.height}`
+    `New funding rate change at block ${event.block.block.header.height}`,
   );
 
   const contractAddress: string | undefined = event.event.attributes.find(
-    (a) => a.key === "_contract_address"
+    (a) => a.key === "_contract_address",
   )?.value;
 
   if (contractAddress) {
@@ -71,7 +71,7 @@ export async function handleFundingRateChangeEvent(
     if (exchangeRate.priceUSD) {
       await updateDailyAggregation(
         exchangeRate.timestamp,
-        exchangeRate.priceUSD
+        exchangeRate.priceUSD,
       );
     }
   }
@@ -80,10 +80,10 @@ export async function handleFundingRateChangeEvent(
 export async function handleSpotPriceEvent(event: CosmosEvent): Promise<void> {
   // We create a new entity using the transaction hash and message index as a unique ID
   logger.info(
-    `New spot price change at block ${event.block.block.header.height}`
+    `New spot price change at block ${event.block.block.header.height}`,
   );
   const contractAddress: string | undefined = event.event.attributes.find(
-    (a) => a.key === "_contract_address"
+    (a) => a.key === "_contract_address",
   )?.value;
 
   if (contractAddress) {
@@ -121,7 +121,7 @@ export async function handleSpotPriceEvent(event: CosmosEvent): Promise<void> {
     if (exchangeRate.priceUSD) {
       await updateDailyAggregation(
         exchangeRate.timestamp,
-        exchangeRate.priceUSD
+        exchangeRate.priceUSD,
       );
     }
   }

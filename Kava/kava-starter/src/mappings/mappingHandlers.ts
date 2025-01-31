@@ -3,7 +3,7 @@ import { CosmosEvent } from "@subql/types-cosmos";
 
 export async function handleEvent(event: CosmosEvent): Promise<void> {
   const newTransfers = new Transfers(
-    `${event.tx.hash}-${event.msg.idx}-${event.idx}`
+    `${event.tx.hash}-${event.msg.idx}-${event.idx}`,
   );
 
   logger.info(`New transfer event at block ${event.block.block.header.height}`);

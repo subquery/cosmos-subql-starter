@@ -13,7 +13,7 @@ type ApproveCallArgs = [string, BigNumber] & {
 };
 
 export async function handleEthermintEvmEvent(
-  event: EthermintEvmEvent<TransferEvent["args"]>
+  event: EthermintEvmEvent<TransferEvent["args"]>,
 ): Promise<void> {
   logger.info("transaction: " + event.transactionHash);
   assert(event.args, "Missing event.args");
@@ -30,7 +30,7 @@ export async function handleEthermintEvmEvent(
 }
 
 export async function handleEthermintEvmCall(
-  call: EthermintEvmCall<ApproveCallArgs>
+  call: EthermintEvmCall<ApproveCallArgs>,
 ): Promise<void> {
   logger.info("approval: " + call.hash);
   assert(call.args, "Missing call.args");

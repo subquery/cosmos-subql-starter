@@ -35,7 +35,7 @@ export async function handleEvent(event: CosmosEvent): Promise<void> {
   logger.warn("New Event: " + JSON.stringify(event.event));
   // Cosmos events code attributes as an array of key value pairs
   const actionAttribute = event.event.attributes.find(
-    (a) => a.key === "action"
+    (a) => a.key === "action",
   );
   if (actionAttribute && actionAttribute.value == "confirm") {
     // We are only looking for events with the confirm type

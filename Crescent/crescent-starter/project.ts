@@ -35,7 +35,10 @@ const project: CosmosProject = {
      * If you use a rate limited endpoint, adjust the --batch-size and --workers parameters
      * These settings can be found in your docker-compose.yaml, they will slow indexing but prevent your project being rate limited
      */
-    endpoint: ["https://mainnet.crescent.network:26657", "https://rpc-crescent.pupmos.network"],
+    endpoint: [
+      "https://mainnet.crescent.network:26657",
+      "https://rpc-crescent.pupmos.network",
+    ],
     chaintypes: new Map([
       [
         "cosmos.slashing.v1beta1",

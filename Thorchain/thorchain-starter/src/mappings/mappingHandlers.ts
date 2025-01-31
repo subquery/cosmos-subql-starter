@@ -19,7 +19,9 @@ export async function handleTransaction(tx: CosmosTransaction): Promise<void> {
 }
 */
 
-export async function handleMessage(msg: messages.thorchain.v1.x.thorchain.types.msg_deposit.MsgDepositMessage): Promise<void> {
+export async function handleMessage(
+  msg: messages.thorchain.v1.x.thorchain.types.msg_deposit.MsgDepositMessage,
+): Promise<void> {
   // Create Deposit record
   const depositEntity = Deposit.create({
     id: `${msg.tx.hash}-${msg.idx}`,

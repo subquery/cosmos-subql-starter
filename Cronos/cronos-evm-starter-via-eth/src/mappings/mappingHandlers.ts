@@ -25,7 +25,7 @@ export async function handleLog(transferLog: TransferLog): Promise<void> {
 }
 
 export async function handleTransaction(
-  approveCallTransaction: EthereumTransaction<ApproveCallArgs>
+  approveCallTransaction: EthereumTransaction<ApproveCallArgs>,
 ): Promise<void> {
   logger.info("approval: " + approveCallTransaction.hash);
   assert(approveCallTransaction.args, "Missing approveCallTransaction.args");

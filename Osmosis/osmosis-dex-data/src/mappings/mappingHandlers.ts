@@ -20,7 +20,7 @@ function convertToCustomFormat(isoDateString: Date): string {
 
 async function getObjectByDate(
   targetDate: string,
-  dataArray: DataItem[]
+  dataArray: DataItem[],
 ): Promise<number | undefined> {
   let selectedObject: number | undefined;
 
@@ -36,7 +36,7 @@ async function getObjectByDate(
 async function getLiquidityPool(pool_id: string) {
   // logger.warn(`Pool id: ${pool_id}`);
   let response = await fetch(
-    `https://api.osmosis.zone/pools/v2/liquidity/${pool_id}/chart`
+    `https://api.osmosis.zone/pools/v2/liquidity/${pool_id}/chart`,
   );
   let content = await response.json();
   // logger.warn(`Response status ${response.status}`);
@@ -46,7 +46,7 @@ async function getLiquidityPool(pool_id: string) {
 
 async function checkGetPool(
   id: string,
-  block: CosmosBlock
+  block: CosmosBlock,
 ): Promise<[Pool, number | undefined]> {
   // logger.warn("Fetching Pool from database");
   let pool = await Pool.get(id);
@@ -63,7 +63,7 @@ async function checkGetPool(
   }
 
   const blockDate = convertToCustomFormat(
-    new Date(block.header.time.toISOString())
+    new Date(block.header.time.toISOString()),
   );
   let liquidity: number | undefined;
   let cachedLiquidity = await cache.get(id);
@@ -81,7 +81,7 @@ async function checkGetPool(
 
   if (liquidity == undefined) {
     logger.warn(
-      "Failed to locate the liquidity for the associated pool on the swap date. Refreshing the cache and attempting the operation again"
+      "Failed to locate the liquidity for the associated pool on the swap date. Refreshing the cache and attempting the operation again",
     );
     await cache.set(id, await getLiquidityPool(id));
     liquidity = await getObjectByDate(blockDate, await cache.get(id));
@@ -96,7 +96,7 @@ function createSwap(
     | messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage
     | messages.osmosis.gamm.v1beta1.tx.MsgJoinSwapShareAmountOutMessage,
   direction: Direction,
-  message: Message
+  message: Message,
 ): Swap {
   return Swap.create({
     id: `${msg.tx.hash}-${msg.idx}`,
@@ -110,10 +110,10 @@ function createSwap(
 }
 
 export async function handleMsgSwapExactAmountIn(
-  msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountInMessage
+  msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountInMessage,
 ): Promise<void> {
   logger.info(
-    `Processing MsgSwapExactAmountIn at block ${msg.block.header.height.toString()}`
+    `Processing MsgSwapExactAmountIn at block ${msg.block.header.height.toString()}`,
   );
   // We first create a new swap record
   const swap = createSwap(msg, Direction.IN, Message.MsgSwapExactAmountIn);
@@ -133,7 +133,7 @@ export async function handleMsgSwapExactAmountIn(
     // Check that the pool aready exists
     const [pool, liquidity] = await checkGetPool(
       route.poolId.toString(),
-      msg.block
+      msg.block,
     );
 
     const swapRoute = SwapRoute.create({
@@ -150,10 +150,10 @@ export async function handleMsgSwapExactAmountIn(
 }
 
 export async function handleMsgSwapExactAmountOut(
-  msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage
+  msg: messages.osmosis.gamm.v1beta1.tx.MsgSwapExactAmountOutMessage,
 ): Promise<void> {
   logger.info(
-    `Processing MsgSwapExactAmountOut at block ${msg.block.header.height.toString()}`
+    `Processing MsgSwapExactAmountOut at block ${msg.block.header.height.toString()}`,
   );
   // We first create a new swap record
   const swap = createSwap(msg, Direction.OUT, Message.MsgSwapExactAmountOut);
@@ -173,7 +173,7 @@ export async function handleMsgSwapExactAmountOut(
     // Check that the pool aready exists
     const [pool, liquidity] = await checkGetPool(
       route.poolId.toString(),
-      msg.block
+      msg.block,
     );
 
     const swapRoute = SwapRoute.create({
@@ -190,10 +190,10 @@ export async function handleMsgSwapExactAmountOut(
 }
 
 export async function handleMsgJoinSwapShareAmountOut(
-  msg: messages.osmosis.gamm.v1beta1.tx.MsgJoinSwapShareAmountOutMessage
+  msg: messages.osmosis.gamm.v1beta1.tx.MsgJoinSwapShareAmountOutMessage,
 ): Promise<void> {
   logger.info(
-    `Processing MsgJoinSwapShareAmountOut at block ${msg.block.header.height.toString()}`
+    `Processing MsgJoinSwapShareAmountOut at block ${msg.block.header.height.toString()}`,
   );
   // We first create a new swap record
   const swap = createSwap(msg, Direction.IN, Message.MsgJoinSwapShareAmountOut);
@@ -207,7 +207,7 @@ export async function handleMsgJoinSwapShareAmountOut(
   // Create swap routes from the array on the message
   const [pool, liquidity] = await checkGetPool(
     msg.msg.decodedMsg.poolId.toString(),
-    msg.block
+    msg.block,
   );
 
   const swapRoute = SwapRoute.create({
