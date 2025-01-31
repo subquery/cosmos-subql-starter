@@ -31,6 +31,6 @@
     "@subql/testing": "latest",
     "@subql/node-cosmos": "latest",
     "@subql/types": "latest",
-    "typescript": "^5.2.2"
+    "typescript": "latest"
   }
 }

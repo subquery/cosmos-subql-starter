@@ -26,7 +26,7 @@
     "@subql/testing": "latest",
     "@subql/node-cosmos": "latest",
     "@subql/types-ethereum": "latest",
-    "typescript": "^5.2.2",
+    "typescript": "latest",
     "abab": "^2.0.6"
   },
   "dependencies": {

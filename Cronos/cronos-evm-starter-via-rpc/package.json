@@ -25,7 +25,7 @@
     "@subql/cli": "latest",
     "@subql/testing": "latest",
     "@subql/node-cosmos": "latest",
-    "typescript": "^5.2.2"
+    "typescript": "latest"
   },
   "dependencies": {
     "@subql/ethermint-evm-processor": "latest",

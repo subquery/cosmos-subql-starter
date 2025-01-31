@@ -25,7 +25,7 @@
     "@subql/cli": "latest",
     "@subql/node-cosmos": "latest",
     "@subql/testing": "latest",
-    "typescript": "^5.2.2",
+    "typescript": "latest",
     "@types/node-fetch": "latest"
   },
   "dependencies": {
