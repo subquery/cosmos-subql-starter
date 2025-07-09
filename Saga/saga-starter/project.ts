@@ -33,7 +33,7 @@ const project: CosmosProject = {
      * Public nodes may be rate limited, which can affect indexing speed
      * When developing your project we suggest getting a private API key
      * If you use a rate limited endpoint, adjust the --batch-size and --workers parameters
-     * These settings can be found in your docker-compose.yaml, they will slow indexing but prevent your project being rate limited
+     * These settings can be found in your docker compose.yaml, they will slow indexing but prevent your project being rate limited
      */
     endpoint: ["https://rpc.saga.nodestake.org"],
     chaintypes: new Map([
