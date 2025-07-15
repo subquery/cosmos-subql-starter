@@ -1,0 +1,23 @@
+# To improve query performance, we strongly suggest adding indexes to any field that you plan to filter or sort by
+# Add the `@index` or `@index(unique: true)` annotation after any non-key field
+# https://academy.subquery.network/build/graphql.html#indexing-by-non-primary-key-field
+
+type ContractMetadata @entity {
+  id: ID! # contractAddress
+  createdBlockHeight: BigInt!
+  createdDate: Date!
+  createdTxHash: String!
+  contractAddress: String!
+  ownerAddress: String!
+  rewardsAddress: String!
+}
+
+type RewardWithdrawl @entity {
+  id: ID!
+  blockHeight: BigInt!
+  date: Date!
+  txHash: String!
+  rewardAddress: String!
+  denom: String!
+  amount: BigInt!
+}
